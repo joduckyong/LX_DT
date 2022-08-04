@@ -27,9 +27,9 @@
 	              <div class="cont_title_box">
 	                <h3></h3>
 	                <div class="right_btns">
-	                	<a class="btn btn-primary" href="javascript:listPage();">API 데이터 설정 </a>
+	                	<a class="btn btn-primary" href="javascript:openModal('apiDataSet');">API 데이터 설정 </a>
 	                	<a class="btn btn-success" href="javascript:listPage();">목록 </a>
-	                	<a class="btn btn-primary" href="javascript:listPage();">저장 </a>
+	                	<a class="btn btn-primary" href="javascript:dpIngestAdapterItMatchSave();">저장 </a>
 	                </div>
 	              </div>
 				  <div class="border_rows">
@@ -38,7 +38,7 @@
                         <div class="control-label">PK데이터 설정</div>
                         <div class="form-control_box">	
                             <div class="right_btns">
-                           		<a class="btn btn-primary" href="javascript:listPage();">ID설정</a>
+                           		<a class="btn btn-primary" href="javascript:openModal('idSet');">ID설정</a>
                             </div>
                             <h3></h3>
                             <input class="form-control" type="text" name="pk_data_set" id="pk_data_set">
@@ -76,18 +76,7 @@
                           <th>예시</th>
                         </tr>
                       </thead>
-                      <tbody>
-                        <tr>
-                          <td>C_NAME_01</td>
-                          <td>String</td>
-                          <td><select></select></td>
-                          <td><input class="form-control" type="text" name="pk_data_set" id="pk_data_set"></td>
-                          <td> 
-                           	<select></select>
-                          </td>
-                          <td rowspan="2"><input class="form-control" type="text" name="pk_data_set" id="pk_data_set"></td>
-                          <td rowspan="2"><input class="form-control" type="text" name="pk_data_set" id="pk_data_set"></td>
-                        </tr>
+                      <tbody id="dpIngestAdapterItMatchList">
                       </tbody>
                     </table>
                   </div>
@@ -97,217 +86,117 @@
           </div>
         </div>
 
-        <!-- download_modal -->
-        <div class="modal fade add_modal" id="add_modal" tabindex="-1" role="dialog" aria-hidden="true">
-          <div class="modal-dialog modal-lg" style="max-width: 1000px;">
+        <!-- ID 설정 modal -->
+        <div class="modal fade idSetting_modal" id="idSet" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
             <div class="modal-content">
               <div class="modal-header">
-                <h2 class="modal-title" id="myModalLabel"><span id="modelLabel">Instance 등록</span></h2>
+                <h3 class="modal-title" id="myModalLabel">ID 설정</h3>
                 <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
               </div>
               <div class="modal-body">
-				<div class="x_content">
-                  <div class="cont_title_box">
-                    <h3><span id="instanceTitle">인스턴스 등록</span></h3>
-                    <div class="right_btns">
-                    	<a class="btn btn-primary" id="btnAdd" href="javascript:dpIngestAdapterItSave('A');">저장 </a>
-                    	<a class="btn btn-success" id="btnUpdate" href="javascript:dpIngestAdapterItSave('U');">수정 </a>
-                    	<a class="btn btn-danger"  id="btnDel" href="javascript:dpIngestAdapterItDelChk();">삭제 </a>
-                    </div>
-                  </div>
-                  <div class="border_rows">
-                    <div class="row">
-                      <div class="form-group row col-12 col-md-6">
-                        <div class="control-label" style="text-align: center;">인스턴스 명</div>
-                        <div class="form-control_box"><input class="form-control" type="text" name="instance_nm" id="instance_nm"></div>
+                <div class="main-container">
+                  <ul class="columns">
+                    <li class="column to-do-column">
+                      <div class="column-header">
+                        <h4>ID 목록</h4>
                       </div>
-                      <div class="form-group row col-12 col-md-6">
-                        <div class="control-label" style="text-align: center;">데이터 셋 명</div>
-                        <div class="form-control_box">
-                        	<div class="col-md-9">
-                        		<input class="form-control" type="text" name="dset_korean_nm" id="dset_korean_nm">
-                        		<input type="hidden" name="dset_idntfc_id" id="dset_idntfc_id" >
-                        	</div>
-                        	<div class="col-md-3">
-	                        	<button class="btn btn-primary" onclick="openModal('dataSet');"> <i class="glyphicon glyphicon-search"></i></button>
-	                        </div>
-                        </div>
+                      <div class="column-header">
+                        <h4>ID명(영문) | ID명(국문) | Type | Length</h4>
                       </div>
-                    </div>
-                    <div class="row">
-                      <div class="form-group row col-12 col-md-6">
-                        <div class="control-label" style="text-align: center;">수집방식</div>
-                        <div class="form-control_box">
-							<select class="form-control" id="clct_mthd" name="clct_mthd" onchange="clctMthdType(this.value, '');">
-                            </select>                        
-                        </div>
+                      <ul class="task-list" id="drakeLeft">
+                        <li class="task">
+                          <p>C_NAME_03(Double)</p>
+                        </li>
+                        <li class="task">
+                          <p>C_NAME_05(Date)</p>
+                        </li>
+                      </ul>
+                    </li>
+                    <li class="column doing-column">
+                      <div class="column-header">
+                        <h4>선택 ID</h4>
                       </div>
-                      <div class="form-group row col-12 col-md-6">
-                        <div class="control-label" style="text-align: center;">수집유형</div>
-                        <div class="form-control_box">
-                            <select class="form-control" id="clct_ty" name="clct_ty">
-                              <option>선택</option>
-                            </select>                          
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="form-group row col-12 col-md-6">
-                        <div class="control-label" style="text-align: center;">보관주기</div>
-                        <div class="form-control_box">
-                        	<div class="col-md-6">
-	                        	<input class="form-control" type="text" id="storage_cycle" name="storage_cycle" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
-	                        </div>
-	                        <div class="col-md-6">
-							    <select class="form-control" id="storage_type" name="storage_type">
-	                              <option value= "">선택</option>
-	                              <option value="년">년</option>
-	                              <option value="월">월</option>
-	                              <option value="일">일</option>
-	                            </select>	          
-                            </div>              
-                        </div>
-                      </div>
-                      <div class="form-group row col-12 col-md-6">
-                        <div class="control-label" style="text-align: center;">시계열 데이터</div>
-	  					   <div class="form-control_box">
-                             <div class="radio radio_inline">
-                               <label class="">
-                                   <input class="" type="radio" name="time_data_yn" id="time_data_yn_y" value="Y" checked="">예
-                               </label>
-                             </div>
-                             <div class="radio radio_inline">
-                               <label>
-                                   <input class="" type="radio" name="time_data_yn"id="time_data_yn_n"  value="N">아니오
-                               </label>
-                             </div>
-                           </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="form-group row col-12 col-md-6">
-                        <div class="control-label" style="text-align: center;">수집 스케줄 유형</div>
-                        <div class="form-control_box" id="div_schedule_type">
-                        </div>
-                      </div>
-                      <div class="form-group row col-12 col-md-6">
-                        <div class="control-label" style="text-align: center;">사용여부</div>
-	 					   <div class="form-control_box">
-                             <div class="radio radio_inline">
-                               <label class="">
-                                   <input class="" type="radio" name="useYn" id="useYn_Y" value="Y" checked>사용
-                               </label>
-                             </div>
-                             <div class="radio radio_inline">
-                               <label>
-                                   <input class="" type="radio" name="useYn" id="useYn_N" value="N">사용안함
-                               </label>
-                             </div>
-                           </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="form-group row col-12 col-md-12">
-                        <div class="control-label" style="text-align: center;">수집 스케줄 설정</div>
-	 					   <div class="form-control_box">
-	 					     <div class="radio radio_inline" id="ymdh"></div>
-                             <div class="radio radio_inline">
-		 					   <div class="form-control_box">
-                                 <select name="year" id="schedule_year" style="display:none;">
-                                 </select><span id="schedule_yearTxt" style="display:none;">년</span>		 					   
-                                 <select name="month" id="schedule_month">
-                                 </select><span id="schedule_monthTxt">월</span>
-                                 <select name="day" id="schedule_day">
-                                 </select><span id="schedule_dayTxt">일</span>
-                                 <select name="day2" id="schedule_week" style="display:none;">
-                                 </select><span id="schedule_weekTxt" style="display:none;">요일</span>
-                                 <select name="hour" id="schedule_hour">
-                                 </select><span id="schedule_hourTxt">시</span>
-                                 <select name="minute" id="schedule_minute">
-                                 </select><span id="schedule_minuteTxt">분 </span>
-                                 <input class="" type="checkbox" name="schedule_now_exe" id="schedule_now_exe" value="Y" ><label>즉시실행</label>
-	                           </div>
-	                         </div> 
-                           </div>
-                      </div>
-                    </div>                    
-                    <div class="row">
-                      <div class="form-group row col-12 col-md-12">
-                        <div class="control-label" style="text-align: center;">비고</div>
-                        <div class="form-control_box"> 
-                        	<input class="form-control" type="text" name="etc_note" id="etc_note">
-                        </div>
-                      </div>
-                    </div>
-                    
-                  </div>
+                      <div class="column-header">
+                        <h4>ID명(영문) | ID명(국문) | Type | Length</h4>
+                      </div>                      
+                      <ul class="task-list" id="drakeRight">
+                        <li class="task">
+                          <p>C_NAME_02(Integer)</p>
+                        </li>
+                        <li class="task">
+                          <p>C_NAME_01(String)</p>
+                        </li>
+                        <li class="task">
+                          <p>C_NAME_04(Integer)</p>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
                 </div>
+                <div class="drake_result_box">
+                  <div class="drake_title">ID</div>
+                  <div class="drake_result">C_NAME_02.C_NAME_01.C_NAME_04</div>
+                  <button class="btn btn-danger m-0">초기화</button>
+                </div>
+              </div>
+              <div class="modal-footer"> 
+                <button class="btn btn-primary" type="button">적용</button>
               </div>
             </div>
           </div>
-        </div>
+        </div>        
         
-        <div class="modal fade add_modal" id="dataSet" tabindex="-1" role="dialog" aria-hidden="true">
-          <div class="modal-dialog modal-lg" style="max-width: 600px;">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h3 class="modal-title" id="myModalLabel">데이터셋 선택</h3>
-                <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
-              </div>
-              <div class="modal-body">
-				<div class="x_content">
-                  <div class="border_rows">
-                    <div class="row">
-                      <div class="form-group row col-12 col-md-12">
-                        <div class="col-md-12">
-	                        <div class="form-control_box"> 
-	                        	<input class="form-control" type="text" name="searchNm" id="searchNm" onkeypress="enterkey(event);">
-	                        </div>
-                        </div>
-                      </div>
-                      <div class="form-group row col-12 col-md-12">
-	                      <div class="col-md-12">
-	                        <div class="form-control_box"> 
-	                        	<div class="right_btns"><a class="btn btn-primary" href="javascript:dpIngestPopupDset01();">검색 </a></div>
-	                        </div>
-	                      </div>
-                     </div>
-					 <div class="row">
-                       <div class="col-md-12">
-                         <div class="x_panel">
-                           <div class="x_content" style="width:100%;max-height:400px; overflow-y:auto;">
-                             <div class="table_responsive">
-                               <table class="table table-striped table-bordered bulk_action" >
-                                 <colgroup>
-                                 </colgroup>
-                                 <thead>
-                                 <tr>
-                                   <th rowspan="2" style="text-align: center;">데이터 셋 명</th>
-                                   <th colspan="2" style="text-align: center;">테이블</th>
-                                 </tr>
-                                 <tr>
-                                   <th style="text-align: center;">한글 명</th>
-                                   <th style="text-align: center;">영문 명</th>
-                                 </tr>
-                                 </thead>
-                                 <tbody id="dataSetInfo">
-                                 </tbody>
-                               </table>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>					
-					                  
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <!-- API 데이터 설정 modal -->
+        <div class="modal fade add_modal" id="apiDataSet" tabindex="-1" role="dialog" aria-hidden="true">
+	      <div class="modal-dialog modal-xl"  style="max-width: 600px;">
+	        <div class="modal-content">
+	          <div class="modal-header">
+	            <h3 class="modal-title" id="apiDataSetTxt">API 데이터 설정</h3>
+	            <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
+	          </div>
+	          <div class="modal-body">
+	          	<div class="x_content">
+	            	<div class="row">
+	            		<div class="table_responsive">
+		                    <table class="table" style="text-align: center;">
+		                      <colgroup> 
+		                      	<col width="70px">     
+		                      	<col width="400px">     
+		                      	<col width="100px">     
+		                      </colgroup>
+		                      <thead>
+		                        <tr> 
+		                          <th>선택</th>
+		                          <th>수신 경로</th>
+		                          <th>항목명</th>
+		                        </tr>
+		                      </thead>
+		                      <tbody id="dpIngestPopupPpPath">
+		                      </tbody>
+		                    </table>
+		               	</div>
+	             	</div>
+	             </div>
+	           </div>
+	           <div class="modal-footer" id="modal_footer">
+	           	<button class="btn btn-primary" type="button">선택</button>
+	           </div>
+	         </div>
+	       </div>
        </div>
+       
+       
        <div id="divForm"></div>
-        
+       <input type="hidden" name="dset_idntfc_id" id="dset_idntfc_id">
+       <input type="hidden" name="url_mix" id="url_mix">
+       <input type="hidden" name="id_mix" id="id_mix">
+       <input type="hidden" name="clct_mthd" id="clct_mthd">
+       <input type="hidden" name="clct_ty" id="clct_ty">
+       <input type="hidden" name="subfolder_yn" id="subfolder_yn">
+       <input type="hidden" name="api_mix" id="api_mix">
+       <input type="hidden" name="table_eng_nm" id="table_eng_nm">
+       
 {{>layout/footer}}        
 
 <script>
@@ -345,15 +234,16 @@ const dpIngestAdapterItMatchList = function(){
     		     	    let insertTr = '';
     		     	    let i = 0;
     			  	    $.each(data.contents, function (idx, el) {
-    			  	    	el.instance_id;
-    			  	    	el.column_eng_nm;
-    			  	    	el.column_stre_type;
-    			  	    	el.source_id;
-    			  	    	el.source_path;
-    			  	    	el.pre_nm;
-    			  	    	el.property_type;
-    			  	    	el.pre_after;
-    			  	    	el.pre_id;
+  		     	          insertTr += '<tr>';
+		     		      insertTr += ' <td>'+el.column_eng_nm+'</td>';
+		     		      insertTr += ' <td>'+el.column_stre_type+'</td>';
+		     		      insertTr += ' <td><select id="source_id_'+i+'"><option value="'+el.source_id+'">'+el.source_id+'</option></select></td>';
+		     		      insertTr += ' <td><input type=text value='+el.source_path+' id=source_path_'+i+' name=source_path></td>';
+		     		      insertTr += ' <td><select id="pre_id_'+i+'"><option value=""'+el.pre_id+'"">'+el.pre_nm+'</option></select></td>';
+		     		      insertTr += ' <td><input type=text value='+el.property_type+' id=property_type_'+i+' name=property_type></td>';
+		     		      insertTr += ' <td><input type=text value='+el.pre_after+' id=pre_after_'+i+' name=pre_after></td>';
+		                  insertTr += '</tr>';
+		                  i++;
     			  	    });
     	          	    $("#dpIngestAdapterItMatchList").append(insertTr);		  
 			  	   		
@@ -389,16 +279,14 @@ const dpIngestAdapterItMatch = function(){
 			  	   		$("#instance_nm_txt").text(data.contents[0].instance_nm);
 			  	   		$("#dset_korean_nm_txt").text(data.contents[0].dset_korean_nm);
 			  	   		
-					//  	  instance_nm
-					//  	  dset_idntfc_id
-					//  	  url_mix
-					//  	  dset_korean_nm
-					//  	  id_mix
-					//  	  clct_mthd
-					//  	  clct_ty
-					//  	  subfolder_yn
-					//  	  table_eng_nm
-					//  	  api_mix
+			  	   		$("#dset_idntfc_id").val(data.contents[0].dset_idntfc_id);
+			  	   		$("#url_mix").val(data.contents[0].url_mix);
+			  	   		$("#id_mix").val(data.contents[0].id_mix);
+			  	   		$("#clct_mthd").val(data.contents[0].clct_mthd);
+			  	   		$("#clct_ty").val(data.contents[0].clct_ty);
+			  	   		$("#subfolder_yn").val(data.contents[0].subfolder_yn);
+			  	   		$("#table_eng_nm").val(data.contents[0].table_eng_nm);
+			  	   		$("#api_mix").val(data.contents[0].api_mix);
 			  	   		
 			  	   	}
 		  	  }
@@ -434,12 +322,12 @@ const dpIngestAdapterItMatchSave = function(){
     const data = {
 	   		url: '/dp/ingest/adapter/instance/match/save',
 	   		instance_id: '{{instance_id}}',	
-	   		id_mix: id_mix,
-	   		dset_idntfc_id: dset_idntfc_id,
-	   		clct_mthd: clct_mthd,
-	   		clct_ty: clct_ty,
-	   		subfolder_yn: subfolder_yn,
-	   		table_eng_nm: table_eng_nm,
+	   		id_mix: $("#id_mix").val(),
+	   		dset_idntfc_id: $("#dset_idntfc_id").val(),
+	   		clct_mthd: $("#clct_mthd").val(),
+	   		clct_ty: $("#clct_ty").val(),
+	   		subfolder_yn: $("#subfolder_yn").val(),
+	   		table_eng_nm: $("#table_eng_nm").val(),
 	   		user_id: 'user00',	
 	   		menu_id: 'menu_id',
 	   		contents: contentsData,
@@ -467,6 +355,7 @@ const dpIngestAdapterItMatchSave = function(){
 }
 
 //데이터 모델 속성 정보 조회
+/*
 const dpIngestDataModelsPp = function(){
 	
     const data = {
@@ -493,7 +382,9 @@ const dpIngestDataModelsPp = function(){
 	        alert(JSON.stringify(error));
 	    });			
 }
+*/
 //전처리 조회
+/*
 const dpIngestAdapterItPre = function(){
 	
     const data = {
@@ -530,43 +421,10 @@ const dpIngestAdapterItPre = function(){
 	        alert(JSON.stringify(error));
 	    });		
 }
-
-//ID 설정 Source 조회
-const dpIngestAdapterItSource = function(){
-	
-    const data = {
-	   		url: '/dp/ingest/adapter/instance/source',
-	   		instance_id: '{{instance_id}}',	
-	   		user_id: 'user00',	
-	   		menu_id: 'menu_id',
-	    };		
-	    
-	    $.ajax({
-	        type: 'POST',
-	        url: url+'/dpIngestAdapterItSource',
-	        dataType: 'json',
-	        contentType: 'application/json; charset-utf-8',
-	        data: JSON.stringify(data)
-	    }).done(function (data) {
-		  	  if (data != null) {
-			  	   	if(data.contents != ""){    	
-	  		     	    let insertTr = '';
-	  			  	    $.each(data.contents, function (idx, el) {
-	  		     	         el.instance_id;
-	  		     	         el.source_id;
-	  		     	         el.source_path;
-	  		     	         el.choice_yn;
-	  		     	         el.match_yn;
-	  			  	    });
-			  	   	}
-		  	  }
-	    	  
-	    }).fail(function (error) {
-	        alert(JSON.stringify(error));
-	    });		
-}
+*/
 
 //API 데이터 구조 조회
+/*
 const dpIngestAdapterItPath = function(){
 
     const data = {
@@ -586,6 +444,46 @@ const dpIngestAdapterItPath = function(){
 		  	  if (data != null) {
 			  	   	if(data.contents != ""){    
 				  	   	data.contents[0].api_mix;
+			  	   	}
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });		
+}
+*/
+
+//ID 설정 Source 조회
+const dpIngestAdapterItSource = function(){
+	
+	$("#dpIngestAdapterItSource").empty;		
+    const data = {
+	   		url: '/dp/ingest/adapter/instance/source',
+	   		instance_id: '{{instance_id}}',	
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',
+	    };		
+	    
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestAdapterItSource',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+		  	  if (data != null) {
+			  	   	if(data.contents != ""){    	
+	  			  	    
+    		     	    let insertTr = '';
+    			  	    $.each(data.contents, function (idx, el) {
+  		     	          insertTr += '<tr>';
+		     		      insertTr += ' <td><input type=checkbox value="Y" id="choice_yn" name="choice_yn" '+(el.choice_yn === 'Y'?'checked':'')+'></td>';
+		     		      insertTr += ' <td>'+el.source_id+'<input type="hidden" name="source_id" id="source_id" value="'+el.source_id+'"></td>';
+		     		      insertTr += ' <td>'+el.source_path+'<input type="hidden" name="source_path" id="source_path" value="'+el.source_path+'"><input type="hidden" name="match_yn" id="match_yn" value="'+el.match_yn+'"></td>';
+		                  insertTr += '</tr>';
+		                  i++;
+    			  	    });	  			  	    
+	  	          	    $("#dpIngestAdapterItSource").append(insertTr);		  	  			  	    
 			  	   	}
 		  	  }
 	    	  
@@ -642,6 +540,7 @@ const dpIngestPopupPpPathSave = function(){
 }
 
 //수신경로 조회(API 설정정보를 조합하여 조회)
+
 const dpIngestPopupPpPath = function(){
 	
 	$("#dpIngestPopupPpPath").empty();	
@@ -662,20 +561,36 @@ const dpIngestPopupPpPath = function(){
 	    }).done(function (data) {
 		  	  if (data != null) {
 			  	   	if(data.contents != ""){    	
-	  		     	    let insertTr = '';
-	  			  	    $.each(data.contents, function (idx, el) {
-	  		     	         el.source_id;
-	  		     	         el.source_path;
-	  			  	    });
+    		     	    let i = 0;
+    		     	    let insertTr = '';
+    			  	    $.each(data.contents, function (idx, el) {
+  		     	          insertTr += '<tr>';
+		     		      insertTr += ' <td><input type=checkbox value='+el.source_id+' name=source_id></td>';
+		     		      insertTr += ' <td>'+el.source_id+'</td>';
+		     		      insertTr += ' <td>'+el.source_path+'</td>';
+		                  insertTr += '</tr>';
+		                  i++;
+    			  	    });	  			  	    
 	  	          	    $("#dpIngestPopupPpPath").append(insertTr);		  
 			  	   	}
 		  	  }
 	    	  
+		  	  
 	    }).fail(function (error) {
 	        alert(JSON.stringify(error));
 	    });		
 }
 
+//모달 열기
+const openModal = function(modalId){
+	
+	if(modalId === 'idSet'){
+		
+	}else if(modalId === 'apiDataSet'){
+		dpIngestAdapterItSource();
+	}
+	$('#'+modalId).modal('show');
+}
 
 
 dpIngestAdapterItMatch();
