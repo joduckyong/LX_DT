@@ -1,0 +1,759 @@
+{{>layout/header}}
+
+	<div class="right_col" role="main">
+	    <div class="row">
+	        <div class="col-md-12">
+	            <div class="x_panel">
+	                <div class="x_title"> 
+	                  <h2>HOME > 시스템 관리 > 코드 관리</h2>
+	                  <div class="clearfix"> </div>
+	                </div>
+	                <div class="x_title">
+		                <h3>코드 그룹</h3>
+		            </div>
+	                <div class="x_content">
+	                	<div class="right_btns"> 
+		                	<div class="row port_search">
+		                      <div class="form-group row">
+		                        <div class="form-control_box">
+		                          <input class="form-control" type="text" name="query1" id="query1" onkeypress="enterkey1(event);">
+		                        </div>
+		                      </div>
+		                      <button class="btn btn-primary btn-sm" onclick="btnSearch1();">검색</button>
+		                    </div>
+		            	</div>
+		            	<div class="table_btns mt-4">
+	                    	<button class="btn btn-primary" type="button" onclick="codeGroup_addModal('I');">추가</button>
+                    	</div>
+		            	<div class="table_responsive">
+		                	<div class="talbel_total">총 <span class="red bold" id="total_count1"></span>건</div>
+		                    <table class="table table-striped" style="text-align: center;">
+		                        <colgroup>
+		                        </colgroup>
+		                        <thead>
+		                            <tr>
+		                            	<th>분류명</th>
+		                            	<th>분류코드</th>
+		                            	<th>코드그룹ID</th>
+		                            	<th>코드그룹명</th>
+		                            	<th>사용여부</th>
+		                            	<th>코드그룹설명</th>
+		                            </tr>
+		                        </thead>
+		                        <tbody id="codeGroupList">
+		                        </tbody>
+		                    </table>
+		                    <div class="nav justify-content-center"> 
+		                      <ul id="pagingul" class="pagination">
+							  	</ul> 
+		                    </div>
+		                </div>
+	            	</div>
+	        	</div>
+	    	</div>
+		</div>
+		<div class="row">
+	        <div class="col-md-12">
+	            <div class="x_panel">
+	                <div class="x_title">
+		                <h3>코드</h3>
+		            </div>
+	                <div class="x_content">
+	                	<div class="right_btns"> 
+		                	<div class="row port_search">
+		                      <div class="form-group row">
+		                        <div class="form-control_box">
+		                          <input class="form-control" type="text" name="query2" id="query2" onkeypress="enterkey2(event);" >
+		                        </div>
+		                      </div>
+		                      <button class="btn btn-primary btn-sm" onclick="btnSearch2();">검색</button>
+		                    </div>
+		            	</div>
+		            	<div class="table_btns mt-4">
+	                    	<button class="btn btn-primary" type="button" onclick="code_addModal('I');">추가</button>
+                    	</div>
+		            	<div class="table_responsive">
+		                	<div class="talbel_total">총 <span class="red bold" id="total_count2"></span>건</div>
+		                    <table class="table table-striped" style="text-align: center;">
+		                        <colgroup>
+		                        </colgroup>
+		                        <thead>
+		                            <tr>
+		                            	<th>코드그룹ID</th>
+		                            	<th>코드ID</th>
+		                            	<th>코드명</th>
+		                            	<th>사용여부</th>
+		                            	<th>코드설명</th>
+		                            	<th>기타코드</th>
+		                            </tr>
+		                        </thead>
+		                        <tbody id="codeList">
+		                        </tbody>
+		                    </table>
+		                    <div class="nav justify-content-center"> 
+		                      <ul id="pagingul2" class="pagination">
+							  	</ul> 
+		                    </div>
+		                </div>
+	            	</div>
+	        	</div>
+	    	</div>
+		</div>
+	</div>
+	
+	<!-- modal -->
+	<div class="modal fade add_modal" id="codeGroup_add_modal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="codeGroup_myModalLabel">코드그룹 등록</h4>
+					<button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
+				</div>
+				<div class="modal-body">
+					<div class=x_content>
+						<div class="border_rows">
+							<div class="row">
+								<div class="form-group row col-12 col-md-6">
+			                        <div class="control-label">분류명</div>
+			                        <div class="form-control_box">
+			                        	<input class="form-control" type="text" name="cl_nm" id="cl_nm">
+			                        </div>
+								</div>
+								<div class="form-group row col-12 col-md-6">
+			                        <div class="control-label">분류코드</div>
+			                        <div class="form-control_box">
+			                        	<input class="form-control" type="text" name="cl_code" id="cl_code">
+			                        </div>
+								</div>
+		                    </div>
+		                    <div class="row">
+								<div class="form-group row col-12 col-md-6">
+			                        <div class="control-label">코드그룹ID</div>
+			                        <div class="form-control_box">
+			                        	<input class="form-control" type="text" name="group_code" id="group_code">
+			                        </div>
+								</div>
+								<div class="form-group row col-12 col-md-6">
+			                        <div class="control-label">코드그룹명</div>
+			                        <div class="form-control_box">
+			                        	<input class="form-control" type="text" name="group_code_nm" id="group_code_nm">
+			                        </div>
+								</div>
+		                    </div>
+		                    <div class="row">
+								<div class="form-group row col-12 col-md-6">
+			                        <div class="control-label">사용여부</div>
+			                        <div class="form-control_box">
+			                        	 <select class="form-control" name="use_at" id="use_at">
+			                        	 	<option value="Y">사용</option>
+			                        	 	<option value="N">미사용</option>
+			                        	 </select>
+			                        </div>
+								</div>
+								<div class="form-group row col-12 col-md-6">
+			                        <div class="control-label">순번</div>
+			                        <div class="form-control_box">
+			                        	<input class="form-control" type="text" name="ordr" id="ordr">
+			                        </div>
+								</div>
+		                    </div>
+		                    <div class="row">
+								<div class="form-group row col-12 col-md-12">
+			                        <div class="control-label">코드그룹설명</div>
+			                        <div class="form-control_box">
+			                        	<input class="form-control" type="text" name="crud_dc" id="crud_dc">
+			                        </div>
+								</div>
+		                    </div>
+						</div>
+					</div>
+              	</div>
+              	<div class="modal-footer" id="codeGroupFooter">
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- modal -->
+	<div class="modal fade add_modal" id="code_add_modal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="code_myModalLabel">코드 등록</h4>
+					<button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
+				</div>
+				<div class="modal-body">
+					<div class=x_content>
+						<div class="border_rows">
+							<div class="row">
+								<div class="form-group row col-12 col-md-6">
+			                        <div class="control-label">코드그룹ID</div>
+			                        <div class="form-control_box">
+			                        	<input class="form-control" type="text" name="group_code2" id="group_code2">
+			                        </div>
+								</div>
+								<div class="form-group row col-12 col-md-6">
+			                        <div class="control-label">코드ID</div>
+			                        <div class="form-control_box">
+			                        	<input class="form-control" type="text" name="dtl_code" id="dtl_code">
+			                        </div>
+								</div>
+		                    </div>
+		                    <div class="row">
+								<div class="form-group row col-12 col-md-6">
+			                        <div class="control-label">코드명</div>
+			                        <div class="form-control_box">
+			                        	<input class="form-control" type="text" name="dtl_code_nm" id="dtl_code_nm">
+			                        </div>
+								</div>
+								<div class="form-group row col-12 col-md-6">
+			                        <div class="control-label">정렬순서</div>
+			                        <div class="form-control_box">
+			                        	<input class="form-control" type="text" name="ordr2" id="ordr2">
+			                        </div>
+								</div>
+		                    </div>
+		                    <div class="row">
+								<div class="form-group row col-12 col-md-6">
+			                        <div class="control-label">사용여부</div>
+			                        <div class="form-control_box">
+			                        	<select class="form-control" name="use_at2" id="use_at2">
+			                        	 	<option value="Y">사용</option>
+			                        	 	<option value="N">미사용</option>
+			                        	 </select>
+			                        </div>
+								</div>
+								<div class="form-group row col-12 col-md-6">
+			                        <div class="control-label">기타코드</div>
+			                        <div class="form-control_box">
+			                        	<input class="form-control" type="text" name="etc_code" id="etc_code">
+			                        </div>
+								</div>
+		                    </div>
+		                    <div class="row">
+								<div class="form-group row col-12 col-md-12">
+			                        <div class="control-label">코드설명</div>
+			                        <div class="form-control_box">
+			                        	<input class="form-control" type="text" name="crud_dc2" id="crud_dc2">
+			                        </div>
+								</div>
+		                    </div>
+						</div>
+					</div>
+              	</div>
+              	<div class="modal-footer" id="codeFooter">
+				</div>
+			</div>
+		</div>
+	</div>
+	<input type="hidden" name="old_dtl_code" id="old_dtl_code"/>
+	<input type="hidden" name="old_group_code" id="old_group_code"/>
+	<input type="hidden" name="old_group_code2" id="old_group_code2"/>
+        
+{{>layout/footer}}        
+
+<script>
+
+const commonUrl = '/common';
+const url = '/systemMgmt';
+
+let init_page = 1;				//초기 페이지
+let page = 1;					//페이지
+let init_size_per_page = 10;	//초기 개수
+let size_per_page = 10;	 		//가져올 개수
+let pageCount = 10;		 		//페이징에 나타낼 페이지 수
+
+//코드그룹ID, 코드 그룹명 으로 검색
+const dpCmCodes = function (page, size_per_page) {
+	
+	if(!page){
+		page = init_page;
+	}
+	if(!size_per_page){
+		size_per_page = init_size_per_page;
+	}	
+	
+	let query = $("#query1").data("search");
+	$("#query1").val(query);	//검색어 갱신(검색버튼 클릭시)
+	
+	const data = {
+   		url: '/dp/cm/codes',
+   		user_id: 'user00',
+   		search: query,
+   		page_current: String(page),
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpCmCodes',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		$("#codeGroupList").empty();
+	  		$("#total_count1").text(data.totalcount);
+  	    	if(data.contents != ""){
+  	    		let insertTr = '';
+		  	    $.each(data.contents, function (idx, el) {
+		  	    	let cl_nm = isEmpty(el.cl_nm);
+		  	    	let cl_code = isEmpty(el.cl_code);
+		  	    	let group_code = isEmpty(el.group_code);
+		  	    	let group_code_nm = isEmpty(el.group_code_nm);
+		  	    	let use_at = isEmpty(el.use_at);
+		  	    	let crud_dc = isEmpty(el.crud_dc);
+		  	    	let ordr = isEmpty(el.ordr);
+		  	    	
+		  	    	insertTr += '<tr>';
+		  	    	insertTr += '	<td>'+cl_nm+'</td>';
+		  	    	insertTr += '	<td>'+cl_code+'</td>';
+		  	    	insertTr += '	<td><span class="blue bold" style="cursor:pointer" onclick="dpCmCodesDetail(\''+cl_nm+'\', \''+cl_code+'\', \''+group_code+'\', \''+group_code_nm+'\', \''+use_at+'\', \''+crud_dc+'\', \''+ordr+'\');">'+group_code+'</span></td>';
+		  	    	insertTr += '	<td>'+group_code_nm+'</td>';
+		  	    	insertTr += '	<td>'+use_at+'</td>';
+		  	    	insertTr += '	<td>'+crud_dc+'</td>';
+		  	    	insertTr += '</tr>';
+		  	    	
+		  	    });
+		  	  $("#codeGroupList").html(insertTr);
+  	    	}
+  	    	//페이징 보여줌
+  	    	paging(data.totalcount, size_per_page, pageCount, page);
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//코드ID, 코드명 으로 검색
+const dpCmCodesDt = function (page, size_per_page) {
+	
+	if(!page){
+		page = init_page;
+	}
+	if(!size_per_page){
+		size_per_page = init_size_per_page;
+	}	
+	
+	let query = $("#query2").data("search");
+	$("#query2").val(query);	//검색어 갱신(검색버튼 클릭시)
+	
+	const data = {
+   		url: '/dp/cm/codes/detail',
+   		user_id: 'user00',
+   		search: query,
+   		page_current: String(page),
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpCmCodesDt',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		$("#codeList").empty();
+	  		$("#total_count2").text(data.totalcount);
+  	    	if(data.contents != ""){
+  	    		let insertTr = '';
+		  	    $.each(data.contents, function (idx, el) {
+		  	    	let group_code = isEmpty(el.group_code);
+		  	    	let dtl_code = isEmpty(el.dtl_code);
+		  	    	let dtl_code_nm = isEmpty(el.dtl_code_nm);
+		  	    	let ordr = isEmpty(el.ordr);
+		  	    	let use_at = isEmpty(el.use_at);
+		  	    	let etc_code = isEmpty(el.etc_code);
+		  	    	let crud_dc = isEmpty(el.crud_dc);
+		  	    	
+		  	    	insertTr += '<tr>';
+		  	    	insertTr += '	<td>'+group_code+'</td>';
+		  	    	insertTr += '	<td><span class="blue bold" style="cursor:pointer" onclick="dpCmCodesDtDetail(\''+group_code+'\', \''+dtl_code+'\', \''+dtl_code_nm+'\', \''+ordr+'\', \''+use_at+'\', \''+etc_code+'\', \''+crud_dc+'\');">'+dtl_code+'</span></td>';
+		  	    	insertTr += '	<td>'+dtl_code_nm+'</td>';
+		  	    	insertTr += '	<td>'+use_at+'</td>';
+		  	    	insertTr += '	<td>'+crud_dc+'</td>';
+		  	    	insertTr += '	<td>'+etc_code+'</td>';
+		  	    	insertTr += '</tr>';
+		  	    	
+		  	    });
+		  	  $("#codeList").html(insertTr);
+  	    	}
+  	    	//페이징 보여줌
+  	    	paging2(data.totalcount, size_per_page, pageCount, page);
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//코드그룹 저장
+const dpCmCodesSave = function () {
+	
+	let cl_nm = $("#cl_nm").val();
+	let cl_code = $("#cl_code").val();
+	let group_code = $("#group_code").val();
+	let group_code_nm = $("#group_code_nm").val();
+	let use_at = $("#use_at").val();
+	let ordr = $("#ordr").val();
+	let crud_dc = $("#crud_dc").val();
+	
+	const data = {
+   		url: '/dp/cm/codes/save',
+   		user_id: 'user00',
+   	    menu_id: 'menu_id',
+   	    cl_nm : cl_nm,
+   	    cl_code: cl_code,
+   	    ordr : Number(ordr),
+   	    group_code : group_code,
+   	    group_code_nm : group_code_nm,
+   	    crud_se : 'Y',
+   	    crud_dc : crud_dc,
+    };
+	
+	if(confirm("등록 하시겠습니까?")){
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpCmCodesSave',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	alert("저장 되었습니다.");
+	    	dpCmCodes();
+	    	closeModal();
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	}
+}
+
+//코드 저장
+const dpCmCodesDtSave = function () {
+	
+	let group_code = $("#group_code2").val();
+	let dtl_code = $("#dtl_code").val();
+	let dtl_code_nm = $("#dtl_code_nm").val();
+	let ordr = $("#ordr2").val();
+	let use_at = $("#use_at2").val();
+	let etc_code = $("#etc_code").val();
+	let crud_dc = $("#crud_dc2").val();
+	
+	const data = {
+   		url: '/dp/cm/codes/detail/save',
+   		user_id: 'user00',
+   	    menu_id: 'menu_id',
+   	 	group_code : group_code,
+   	 	dtl_code: dtl_code,
+   	 	dtl_code_nm: dtl_code_nm,
+   	    ordr : Number(ordr),
+   	 	use_at : use_at,
+   	 	etc_code : etc_code,
+   	    crud_se : 'Y',
+   	    crud_dc : crud_dc,
+    };
+	
+	if(confirm("등록 하시겠습니까?")){
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpCmCodesDtSave',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	alert("저장 되었습니다.");
+	    	dpCmCodesDt();
+	    	closeModal();
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	}
+}
+
+//코드그룹 수정
+const dpCmCodesUpdate = function () {
+	
+	let cl_nm = $("#cl_nm").val();
+	let cl_code = $("#cl_code").val();
+	let group_code = $("#group_code").val();
+	let group_code_nm = $("#group_code_nm").val();
+	let use_at = $("#use_at").val();
+	let ordr = $("#ordr").val();
+	let crud_dc = $("#crud_dc").val();
+	let old_group_code = $("#old_group_code").val();
+	
+	const data = {
+   		url: '/dp/cm/codes/update',
+   		user_id: 'user00',
+   	    menu_id: 'menu_id',
+   	    cl_nm : cl_nm,
+   	    cl_code: cl_code,
+   	    ordr : Number(ordr),
+   	 	use_at : use_at,
+   	    group_code : group_code,
+   	    group_code_nm : group_code_nm,
+   	    crud_se : 'Y',
+   	    crud_dc : crud_dc,
+   	 	old_group_code : old_group_code,
+    };
+	
+	if(confirm("수정 하시겠습니까?")){
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpCmCodesUpdate',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	alert("수정 되었습니다.");
+	    	dpCmCodes();
+	    	closeModal();
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	}
+}
+
+//코드 수정
+const dpCmCodesDtUpdate = function () {
+	
+	let group_code = $("#group_code2").val();
+	let dtl_code = $("#dtl_code").val();
+	let dtl_code_nm = $("#dtl_code_nm").val();
+	let ordr = $("#ordr2").val();
+	let use_at = $("#use_at2").val();
+	let etc_code = $("#etc_code").val();
+	let crud_dc = $("#crud_dc2").val();
+	let old_dtl_code = $("#old_dtl_code").val();
+	let old_group_code = $("#old_group_code2").val();
+	
+	const data = {
+   		url: '/dp/cm/codes/detail/update',
+   		user_id: 'user00',
+   	    menu_id: 'menu_id',
+   	 	group_code : group_code,
+   	 	dtl_code: dtl_code,
+   	 	dtl_code_nm: dtl_code_nm,
+   	    ordr : Number(ordr),
+   	 	use_at : use_at,
+   	 	etc_code : etc_code,
+   	    crud_se : 'Y',
+   	    crud_dc : crud_dc,
+   	 	old_dtl_code: old_dtl_code,
+   	 	old_group_code: old_group_code,
+    };
+	
+	if(confirm("수정 하시겠습니까?")){
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpCmCodesDtUpdate',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	alert("수정 되었습니다.");
+	    	dpCmCodesDt();
+	    	closeModal();
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	}
+}
+
+//코드그룹 삭제
+const dpCmCodesDel = function () {
+	
+	let group_code = $("#group_code").val();
+	
+	const data = {
+   		url: '/dp/cm/codes/delete',
+   		user_id: 'user00',
+   	    menu_id: 'menu_id',
+   	    group_code : group_code,
+    };
+	
+	if(confirm("삭제 하시겠습니까?")){
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpCmCodesDel',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	alert("삭제 되었습니다.");
+	    	dpCmCodes();
+	    	closeModal();
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	}
+}
+
+//코드 삭제
+const dpCmCodesDtDel = function () {
+	
+	let group_code = $("#group_code2").val();
+	let dtl_code = $("#dtl_code").val();
+	
+	const data = {
+   		url: '/dp/cm/codes/detail/delete',
+   		user_id: 'user00',
+   	    menu_id: 'menu_id',
+   	 	group_code : group_code,
+   	 	dtl_code: dtl_code,
+    };
+	
+	if(confirm("삭제 하시겠습니까?")){
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpCmCodesDtDel',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	alert("삭제 되었습니다.");
+	    	dpCmCodesDt();
+	    	closeModal();
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	}
+}
+
+//코드그룹 모달 상세
+const dpCmCodesDetail = function(cl_nm, cl_code, group_code, group_code_nm, use_at, crud_dc, ordr){
+	$("#cl_nm").val(cl_nm);
+  	$("#cl_code").val(cl_code);
+  	$("#group_code").val(group_code);
+  	$("#group_code_nm").val(group_code_nm);
+  	$("#use_at").val(use_at).prop("selected", true);
+  	$("#ordr").val(ordr);
+  	$("#crud_dc").val(crud_dc);
+  	$("#old_group_code").val(group_code);
+  	
+  	codeGroup_addModal('U');
+}
+
+//코드 모달 상세
+const dpCmCodesDtDetail = function(group_code, dtl_code, dtl_code_nm, ordr, use_at, etc_code, crud_dc){
+	$("#group_code2").val(group_code);
+  	$("#dtl_code").val(dtl_code);
+  	$("#dtl_code_nm").val(dtl_code_nm);
+  	$("#ordr2").val(ordr);
+  	$("#use_at2").val(use_at).prop("selected", true);
+  	$("#etc_code").val(etc_code);
+  	$("#crud_dc2").val(crud_dc);
+  	$("#old_dtl_code").val(dtl_code);
+  	$("#old_group_code2").val(group_code);
+  	
+  	code_addModal('U');
+}
+
+//검색 버튼(코드그룹)
+const btnSearch1 = function(){
+	let query = $("#query1").val();
+	$("#query1").data("search", query);
+	dpCmCodes();
+}
+
+//검색 버튼(코드)
+const btnSearch2 = function(){
+	let query = $("#query2").val();
+	$("#query2").data("search", query);
+	dpCmCodesDt();
+}
+
+//코드그룹 모달 추가
+const codeGroup_addModal = function(type){
+	let str = '';
+	if(type == 'I'){
+		initCodeGroup();
+		$("#codeGroup_myModalLabel").text("코드그룹 등록");
+		str += '<button class="btn btn-primary" type="button" onclick="dpCmCodesSave();">저장</button>';
+	}else if(type == 'U'){
+		$("#codeGroup_myModalLabel").text("코드그룹 상세");
+		str += '<button class="btn btn-primary" type="button" onclick="dpCmCodesUpdate();">수정</button>';
+		str += '<button class="btn btn-danger" type="button" onclick="dpCmCodesDel();">삭제</button>';
+	}
+	
+	$("#codeGroupFooter").html(str);
+	$('#codeGroup_add_modal').modal('show');
+}
+
+//코드 모달 추가
+const code_addModal = function(type){
+	let str = '';
+	if(type == 'I'){
+		initCode();
+		$("#code_myModalLabel").text("코드 등록");
+		str += '<button class="btn btn-primary" type="button" onclick="dpCmCodesDtSave();">저장</button>';
+	}else if(type == 'U'){
+		$("#code_myModalLabel").text("코드 상세");
+		str += '<button class="btn btn-primary" type="button" onclick="dpCmCodesDtUpdate();">수정</button>';
+		str += '<button class="btn btn-danger" type="button" onclick="dpCmCodesDtDel();">삭제</button>';
+	}
+	
+	$("#codeFooter").html(str);
+	$('#code_add_modal').modal('show');
+}
+
+//모달 닫기
+const closeModal = function(){
+	$('#codeGroup_add_modal').modal('hide');
+	$('#code_add_modal').modal('hide');
+}
+
+//코드그룹 초기화
+const initCodeGroup = function(){
+	$("#cl_nm").val("");
+  	$("#cl_code").val("");
+  	$("#group_code").val("");
+  	$("#group_code_nm").val("");
+  	$("#use_at").val("Y").prop("selected", true);
+  	$("#ordr").val("");
+  	$("#crud_dc").val("");
+}
+
+//코드 초기화
+const initCode = function(){
+	$("#group_code2").val("");
+  	$("#dtl_code").val("");
+  	$("#dtl_code_nm").val("");
+  	$("#ordr2").val("");
+  	$("#use_at2").val("Y").prop("selected", true);
+  	$("#etc_code").val("");
+  	$("#crud_dc2").val("");
+}
+
+//페이징 함수 호출
+const pagingFun = function(page, size_per_page){
+	dpCmCodes(page, size_per_page);
+}
+
+//페이징 함수 호출
+const pagingFun2 = function(page, size_per_page){
+	dpCmCodesDt(page, size_per_page);
+}
+
+//엔터키가 눌렸을 때(코드그룹)
+const enterkey1 = function(e) {
+	if (e.keyCode == 13) {
+		btnSearch1();
+    }
+}
+
+//엔터키가 눌렸을 때(코드)
+const enterkey2 = function(e) {
+	if (e.keyCode == 13) {
+		btnSearch2();
+    }
+}
+
+dpCmCodes();
+
+dpCmCodesDt();
+
+</script>
+

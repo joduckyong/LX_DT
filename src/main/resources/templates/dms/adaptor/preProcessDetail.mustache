@@ -1,0 +1,345 @@
+{{>layout/header}}
+
+		<div class="right_col" role="main">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="x_panel"> 
+                <div class="x_title"> 
+                  <h2>HOME > Adapotr 관리 > 전처리 목록</h2>
+                  <div class="clearfix"> </div>
+                </div>
+                <div class="x_content"> <br>
+                
+                  <div class="form-horizontal form-label-left">
+                    <div class="cont_title_box"> 
+                      <h3>전처리 상세</h3>
+                      <div class="right_btns"> 
+                        <a class="btn btn-success" href="javascript:listPage();">목록</a>
+                        <a class="btn btn-danger" href="javascript:dpIngestPreIdDelChk('U');">삭제</a>
+                        <button class="btn btn-primary" onclick="dpIngestPreIdDelChk('D');">수정</button>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-6">
+                        <label class="control-label">전처리 명</label>
+                        <div class="form-control_box">
+                          <input class="form-control" type="text" name="pre_nm" id="pre_nm">
+                          <input type="hidden" name="chk_yn" id="chk_yn">
+                        </div>
+                      </div>
+                      <div class="form-group row col-12 col-md-6">
+                      </div>
+                    </div>
+                    <div class="row"> 
+                      <div class="form-group row col-12 col-md-6">
+                        <label class="control-label">속성유형</label>
+                        <div class="form-control_box">
+                          <select class="form-control" name="property_type" id="property_type">
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group row col-12 col-md-6" id="div_number_digit">
+                        <div class="control-label">자리수</div>
+                        <div class="form-control_box">
+                          <input class="form-control" type="text" name="number_digit" id="number_digit" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                        </div>
+                      </div>
+                      <div class="form-group row col-12 col-md-6" id="div_change_word" style="display:none;">
+                        <div class="control-label">변경단어</div>
+                        <div class="form-control_box">
+                          <input class="form-control" type="text" name="change_word" id="change_word" >
+                        </div>
+                      </div>                      
+                    </div>
+                    <div class="row"> 
+                      <div class="form-group row col-12 col-md-6">
+                        <label class="control-label">변경유형</label>
+                        <div class="form-control_box">
+                          <select class="form-control" id="chang_type" onchange="changeType(this.value)">
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group row col-12 col-md-6 type2" id="div_change_shape">
+                        <label class="control-label">변경모양</label>
+                        <div class="form-control_box">
+                          <input class="form-control" type="text" name="change_shape" id="change_shape">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row type2" id="div_digit"> 
+                      <div class="form-group row col-12 col-md-6">
+                        <label class="control-label">시작 자리수</label>
+                        <div class="form-control_box">
+                          <input class="form-control" type="text" name="start_digit" id="start_digit" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                        </div>
+                      </div>
+                      <div class="form-group row col-12 col-md-6">
+                        <label class="control-label">끝 자리수</label>
+                        <div class="form-control_box">
+                          <input class="form-control" type="text" name="end_digit" id="end_digit" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row"> 
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label">전처리 전</div>
+                        <div class="form-control_box repeat_box">
+                          <input class="form-control" type="text" name="pre_before" id="pre_before">
+                        </div>
+                      </div>
+                      <div class="form-group row col-12 col-md-6">
+                        <label class="control-label">전처리 후</label>
+                        <div class="form-control_box">
+                          <input class="form-control" type="text" name="pre_after" id="pre_after">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        
+{{>layout/footer}}
+
+<script>
+const commonUrl = '/common';
+const url = '/adaptor';
+
+//선택 변경
+const changeType = function(val){
+	if(val == "D38002"){
+		$("#div_change_shape").hide();
+		$("#div_digit").hide();
+	}else if(val == "D38001"){
+		$("#div_change_shape").show();
+		$("#div_digit").show();		
+	}else if(val == "D38003"){
+		$("#div_number_digit").hide();
+		$("#div_change_word").show();
+		$("#div_change_shape").show();
+		$("#div_digit").hide();
+	}
+}
+
+//변경유형
+const dpCmCodesClctTy = function (group_code, id) {
+	
+	$("#"+id).empty();
+	
+    const data = {
+   		url: '/dp/cm/codes/clct_ty?group_code='+group_code,
+    };		
+    
+    $.ajax({
+        type: 'POST',
+        url: commonUrl+'/dpCmCodesClctTy',
+        dataType: 'json',
+        contentType: 'application/json; charset-utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+		  	   	if(data.contents != ""){    	    	
+   					 let selOp = '<option value="">선택</option>';  
+	    	   		 $.each(data.contents, function (idx, el) {
+ 	    				selOp += '<option value="'+el.dtl_code+'">' + el.dtl_code_nm + '</option>';
+	 	     	     });
+		 	     	 $("#"+id).append(selOp);        	
+		  	   	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });
+    
+}
+
+//전처리 수정
+const dpIngestPreUpdate = function(){
+	
+	const data = {
+	   		url: '/dp/ingest/pre/update/{{pre_id}}',
+	   		pre_id: "{{pre_id}}",		
+	   		pre_nm:	$("#pre_nm").val(),
+	   		property_type: $("#property_type").val(),	
+	   		number_digit: $("#number_digit").val(),	
+	   		change_shape: $("#change_shape").val(),	
+	   		pre_before: $("#pre_before").val(),	
+	   		pre_after: $("#pre_after").val(),	
+	   		start_digit: $("#start_digit").val(),	
+	   		end_digit: $("#end_digit").val(),	
+//	   		integer: $("#integer").val(),	
+//	   		decimal_point: $("#decimal_point").val(),	
+	   		change_word: $("#change_word").val(),	
+	   		chang_type: $("#chang_type").val(),	
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	   		
+	    };		
+	
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestPreUpdate',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+  		
+	  	  if (data != null) {
+		  		let message = JSON.stringify(data.return_msg);
+		  		alert(message.replace(/\"/gi, ''));
+	  	  }
+		  	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+}
+
+//전처리 삭제
+const dpIngestPreDel = function(){
+	
+	const data = {
+	   		url: '/dp/ingest/pre/delete',
+	   		pre_id: "{{pre_id}}",		
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',
+	    };		
+	
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestPreDel',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+  		
+	  	  if (data != null) {
+		  		let message = JSON.stringify(data.return_msg);
+		  		alert(message.replace(/\"/gi, ''));
+	  	  }
+		  	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+}
+
+//전처리 사용 체크
+const dpIngestPreIdDelChk = function(type){
+	
+	let message = '수정 하시겠습니까?';
+	if(type === 'D'){
+		message = '삭제 하시겠습니까?';
+	}
+	
+	if(confirm(message)) {
+	    if($("#pre_nm").val() == '') {
+	        alert('전처리 명을 입력하세요!');
+	        $("#pre_nm").focus();
+	        return;
+	    }
+	    if($("#property_type").val() == '') {
+	        alert('속성유형을 선택하세요!');
+	        $("#property_type").focus();
+	        return;
+	    }
+	    if($("#chang_type").val() == '') {
+	        alert('변경유형을 선택하세요!');
+	        $("#chang_type").focus();
+	        return;
+	    }
+	    
+		const data = {
+		   		url: '/dp/ingest/pre/id/delete/check',
+		   		pre_id: "{{pre_id}}",		
+		   		user_id: 'user00',	
+		   		menu_id: 'menu_id',
+		    };		
+		
+		    $.ajax({
+		        type: 'POST',
+		        url: url+'/dpIngestPreSave',
+		        dataType: 'json',
+		        contentType: 'application/json; charset-utf-8',
+		        data: JSON.stringify(data)
+		    }).done(function (data) {
+	  		
+		  	  if (data != null) {
+			  		let message = JSON.stringify(data.return_msg);
+			  		alert(message.replace(/\"/gi, ''));
+			  	   	if(data.contents != ""){    	
+		    	   		 $.each(data.contents, function (idx, el) {
+		     	   			if(el.chk_yn == 'N'){
+		     	   				if(type == "U"){
+		     	   					//수정
+			     	   				dpIngestPreUpdate();
+		     	   				}else{
+		     	   					//삭제
+				     	   			dpIngestPreDel();
+		     	   				}
+		    	   			}
+			 	     	 });			  	   		
+			  	   	}
+		  	  }
+			  	  
+		    }).fail(function (error) {
+		        alert(JSON.stringify(error));
+		    });	
+	}
+}
+
+//전처리 상세 조회
+const dpIngestPreDt = function(){
+	
+	const data = {
+	   		url: '/dp/ingest/pre/detail',
+	   		pre_id: "{{pre_id}}",		
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',
+	    };		
+	
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestPreDt',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+  		
+	  	  if (data != null) {
+		  		let message = JSON.stringify(data.return_msg);
+		  		alert(message.replace(/\"/gi, ''));
+		  	   	if(data.contents != ""){    	
+	    	   		 $.each(data.contents, function (idx, el) {
+	    	   			$("#pre_nm").val(el.pre_nm);
+	    	   			$("#property_type").val(el.property_type);
+	    	   			$("#number_digit").val(el.number_digit);
+	    	   			$("#change_shape").val(el.change_shape);
+	    	   			$("#pre_before").val(el.pre_before);
+	    	   			$("#pre_after").val(el.pre_after);
+	    	   			$("#start_digit").val(el.start_digit);
+	    	   			$("#end_digit").val(el.end_digit);
+	    	//   			$("#integer").val(el.integer);
+	    	//   			$("#decimal_point").val(el.decimal_point);
+	    	   			$("#change_word").val(el.change_word);
+	    	   			$("#chang_type").val(el.chang_type);
+		 	     	 });			  	   		
+		  	   	}
+	  	  }
+		  	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+}
+
+//목록 페이지
+const listPage = function(){
+	location.href = url+'/preProcessList';
+}
+
+dpCmCodesClctTy('D07', 'property_type');
+dpCmCodesClctTy('D38', 'chang_type');
+dpIngestPreDt();
+</script>
+

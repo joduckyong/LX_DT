@@ -1,0 +1,680 @@
+{{>layout/header}}
+
+		<div class="right_col" role="main">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="x_panel"> 
+                <div class="x_title"> 
+                  <h2>HOME > 데이터 분석 > 샌드박스 관리 > 샌드박스 등록</h2>
+                  <div class="clearfix"> </div>
+                </div>
+                <div class="x_content"> <br>
+                  <div class="scenario_depth"> 
+                    <ul>
+                      <li id="ps1" style="cursor:pointer" onclick="step1();">샌드박스 설정</li>
+                      <li id="ps2" style="cursor:pointer" onclick="step2();">시나리오 선택</li>
+                      <li id="ps3">분석 방식 선택</li>
+                    </ul>
+                  </div>
+                  <div class="progress_tab">
+                    <div class="tab_item" id="tab-0">
+                      <h3 class="mb-4">분석 시나리오 조회 및 선택<span class="red">*</span></h3>
+	                  <div class="right_btns"> 
+	                    <div class="row port_search">
+	                      <input class="form-control mr-1" type="text" value="{{anals_use_prpos_cd_nm}}" readonly>
+	                      <select class="form-control" name="commonCodeAnalysisScenarioSetting" id="commonCodeAnalysisScenarioSetting"> 
+	                      </select>
+	                      <input class="form-control mr-1" type="text" name="query" id="query">
+	                      <button class="btn btn-primary btn-sm" onclick="sandboxScenarioGet();">조회</button>
+	                    </div>
+	                  </div>                      
+                      <div class="row">
+                        <div class="col-12 col-md-3 mx-0">
+                          <h4 class="center_title">분석 시나리오 선택<span class="red">*</span></h4>
+                          <div class="table_responsive">
+                            <table class="table table-striped table-bordered bulk_action">
+                              <colgroup>
+                                <col width="55px">
+                              </colgroup>
+                              <thead>
+                                <tr>
+                                  <th style="text-align: center;">선택</th>
+                                  <th style="text-align: center;">시나리오명</th>
+                                  <th style="text-align: center;">생성 일자</th>
+                                </tr>
+                              </thead>
+                              <tbody id="sandboxScenarioGet">
+                              </tbody>
+                            </table>
+                          </div>
+                          <h4>시나리오 설명</h4>
+                          <div class="table_responsive">
+                            <table class="table table-striped table-bordered bulk_action">
+                              <colgroup>
+                                <col width="55px">
+                              </colgroup>
+                              <thead>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>
+                                  	<textarea class="w-100" name="scenario_desc" id="scenario_desc"></textarea>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <div class="col-12 col-md-9 mx-0">
+                          <h4 class="center_title">분석 시나리오 정보</h4>
+                          <div class="table_responsive">
+                            <table class="table table-striped table-bordered bulk_action" id="analysisTargetImages">
+                              <thead>
+                                <tr>
+                                  <th style="text-align: center;">데이터 전처리 모델명</th>
+                                  <th style="text-align: center;">분석 모델명</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                              </tbody>
+                            </table>
+                          </div>
+                          <div class="table_responsive">
+                            <table class="table table-striped table-bordered bulk_action">
+                              <thead>
+                                <tr>
+                                  <th style="text-align: center;">파라미터</th>
+                                  <th style="text-align: center;">정의</th>
+                                  <th style="text-align: center;">값</th>
+                                </tr>
+                              </thead>
+                              <tbody id="analysisTargetImagesDetail">
+                              </tbody>
+                            </table>
+                          </div>
+                          <div class="table_responsive" id="div_B13001_2">
+                            <table class="table table-striped table-bordered bulk_action">
+                              <colgroup>
+                                <col width="50px">
+                                <col width="115px">
+                                <col width="115px">
+                                <col width="40px">
+                                <col width="40px">
+                                <col width="40px">
+                              </colgroup>                                 
+                              <thead>
+                                <tr>
+                                  <th style="text-align: center;">스키마</th>
+                                  <th style="text-align: center;">테이블명</th>
+                                  <th style="text-align: center;">컬럼명</th>
+                                  <th style="text-align: center;">Input<br>Data</th>
+                                  <th style="text-align: center;">Output<br>Data</th>
+                                  <th style="text-align: center;">데이터<br>기준 컬럼</th>
+                                </tr>
+                              </thead>
+                              <tbody id="analysisTargetImagesDetail_B13001_2">
+                              </tbody>
+                            </table>
+                            <table>
+                            <tr>
+	                            <td>※테이블명을 클릭하면 샘플 데이터를 볼 수 있습니다.</td>
+                            </tr>
+                            </table>
+                           </div>         
+                                          
+                           <div class="table_responsive" id="div_B13002">
+                            <table class="table table-striped table-bordered bulk_action table_center">
+                              <colgroup>
+                                <col width="50px">
+                                <col width="150px">
+                                <col width="50px">
+                                <col width="50px">
+                                <col width="50px">
+                                <col width="100px">
+                              </colgroup>                            
+                              <thead>
+                                <tr>
+                                  <th rowspan= "2" style="text-align: center;">#</th>
+                                  <th rowspan= "2" style="text-align: center;">이미지 데이터셋 이름</th>
+                                  <th colspan= "3" style="text-align: center;">파일 수(용량, MB)</th>
+                                  <th rowspan= "2" style="text-align: center;">최종 등록 일자</th>
+                                </tr>
+                                <tr>
+                                  <th style="text-align: center;">학습</th>
+                                  <th style="text-align: center;">검증</th>
+                                  <th style="text-align: center;">테스트</th>
+                                </tr>
+                              </thead>
+                              <tbody id="analysisTargetImagesDetail_B13002">
+                              </tbody>
+                            </table>
+                          </div>                         
+                        </div>
+                      </div>
+                      
+                      <div class="right_btns mt-4">
+                        <button class="btn btn-warning" onclick="sandboxScenarioSettingUpdate('B06001');">임시저장</button>
+                        <button class="btn btn-success" onclick="sandboxScenarioSettingUpdate('B06002');">다음</button>
+                        <button class="btn btn-primary" onclick="list();">목록</button>
+                      </div>
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>      
+        
+        <!-- code_modal -->
+        <div class="modal fade sample_modal" id="sample_modal" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-lg" style="max-width: 600px;">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">샘플 데이터 팝업</h4>
+                <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
+              </div>
+              <div class="modal-body">
+                <div class="x_content"> 
+                  <h5>테이블 정보</h5>
+                  <div class="table_responsive">
+                    <table class="table table-striped">
+                      <colgroup>
+						<col width="30px">
+						<col width="50px">
+					  </colgroup>
+                      <thead>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>스키마</td>
+                          <td><span id="spanSchema"></span></td>
+                        </tr>
+                        <tr>
+                          <td>테이블명</td>
+                          <td><span id="spanTableNm"></span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <br>
+                  <h5>샘플 데이터</h5>
+                  <div class="table_responsive" style="max-height:330px; overflow-x:auto;overflow-y:auto;">
+                    <table class="table table-striped" >
+                      <colgroup id="sampleSize">
+					  </colgroup>
+                      <thead id="sampleKey">
+                      </thead>
+                      <tbody id="sampleData">
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-dark" type="button" onclick="closeModal('sample_modal');">닫기</button>
+              </div>                 
+            </div>
+          </div>
+        </div>     
+		<input type="hidden" name="sandbox_setup_status_cd" id="sandbox_setup_status_cd"/>
+	    <input type="hidden" name="scenario_setup_status_cd" id="scenario_setup_status_cd"/>
+	    <input type="hidden" name="anals_method_status_cd" id="anals_method_status_cd"/>   
+	                    
+{{>layout/footer}}        
+
+<script>
+const commonUrl = '/sandbox/common';
+const url = '/sandbox/sand/analysisSandbox';
+
+const progressCd1 = 'B06001';	//등록 중
+const progressCd2 = 'B06002';	//등록 완료
+
+//분석_시나리오_설정_코드
+const commonCodeAnalysisScenarioSetting = function (){
+	const data = {
+       		url: '/services/sandbox/common-code/analysis-scenario-setting',
+        };		
+        $.ajax({
+            type: 'POST',
+            url: commonUrl+'/commonCodeAnalysisScenarioSetting',
+            dataType: 'json',
+            contentType: 'application/json; charset-utf-8',
+            data: JSON.stringify(data)
+        }).done(function (data) {
+ 		  	if (data != null) {
+ 		  	   	if(data.contents != ""){    	    	
+					 $("#commonCodeAnalysisScenarioSetting").empty();
+    				 let selOp = '<option value="">선택</option>';  
+	    	   		 $.each(data.contents, function (idx, el) {
+  	    					selOp += '<option value='+el.dtl_code+'>' + el.dtl_code_nm + '</option>';
+	 	     	     });
+		 	     	 $("#commonCodeAnalysisScenarioSetting").append(selOp);        	
+ 		  	   	}
+ 		  	}
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });		
+}
+
+//샌드박스 설정 - 프로그램 상세 정보 조회
+const sandboxScenarioGet = function (){
+	
+	/*
+	let commonCodeAnalysisScenarioSetting = $("#commonCodeAnalysisScenarioSetting").val();
+	
+	if(commonCodeAnalysisScenarioSetting == ''){
+		alert("선택해주세요!");
+		$("#commonCodeAnalysisScenarioSetting").focus();
+		return;
+	}    
+	*/
+	
+	let query = $("#query").val() != null ? $("#query").val() : '';
+	let commonCodeAnalysisScenarioSetting = $("#commonCodeAnalysisScenarioSetting").val() != null ? $("#commonCodeAnalysisScenarioSetting").val() : '';
+	
+	const data = {
+			url: '/services/sandbox/sandboxes/scenarios/{{anals_use_prpos_cd}}/get?search=anals_scenario_setup_cd:'+commonCodeAnalysisScenarioSetting+',scenario_nm_kor:'+query,
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	         				
+        };		
+        $.ajax({
+            type: 'POST',
+            url: url+'/sandboxScenarioGet',
+            dataType: 'json',
+            contentType: 'application/json; charset-utf-8',
+            data: JSON.stringify(data)
+        }).done(function (data) {
+	    	  $("#sandboxScenarioGet").empty();
+		  	  if (data != null) {
+		  	    	if(data.contents != ""){
+		     	        let insertTr = '';
+				  	    $.each(data.contents, function (idx, el) {
+			     	          insertTr += '<tr>';
+			                  insertTr += ' <td style="text-align: center;"><input class="flat" type="radio" name="scenario_id" onclick=snadboxScenarioSettingDetail("'+el.scenario_id+'"); value="'+el.scenario_id+'"></td>';
+			                  insertTr += ' <td style="text-align: center;">'+el.scenario_nm_kor+'</td>';
+			                  insertTr += ' <td style="text-align: center;">'+el.creat_datetime+'</td>';
+			                  insertTr += '</tr>';
+				  	    });
+	         	   	    $("#sandboxScenarioGet").append(insertTr);
+		  	    	}
+		  	  }
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });		
+}
+
+//시나리오 선택 - 샌드박스 시나리오 선택 상세 조회
+const snadboxScenarioSettingDetail = function (scenario_id){
+	
+	const data = {
+       		url: '/services/sandbox/sandboxes/'+scenario_id+'/scenario-setting/detail',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	        		
+        };		
+        $.ajax({
+            type: 'POST',
+            url: url+'/snadboxScenarioSettingDetail',
+            dataType: 'json',
+            contentType: 'application/json; charset-utf-8',
+            data: JSON.stringify(data)
+        }).done(function (data) {
+ 		  	if (data != null) {
+ 		  	   	if(data.contents != ""){    	    	
+					 $("#scenario_desc").val("");
+		 	     	 $("#scenario_desc").val(data.contents.scenario_desc);        	
+ 		  	   	}
+ 		  	}
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });		
+        
+        analysisTargetImagesDetail(scenario_id);        
+}
+
+//시나리오 선택 - 샌드박스 분석 시나리오 정보 조회
+const analysisTargetImagesDetail = function(scenario_id){
+	
+	const data = {
+       		url: '/services/sandbox/sandboxes/scenarios/{{anals_use_prpos_cd}}/'+scenario_id+'/detail',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	         				
+        };		
+        $.ajax({
+            type: 'POST',
+            url: url+'/analysisTargetImagesDetail',
+            dataType: 'json',
+            contentType: 'application/json; charset-utf-8',
+            data: JSON.stringify(data)
+        }).done(function (data) {
+        	
+			  if('{{anals_use_prpos_cd}}' == 'B13001'){
+		    	  $("#analysisTargetImagesDetail_B13001_2").empty();
+			  }        	
+			  if('{{anals_use_prpos_cd}}' == 'B13002'){
+		    	  $("#analysisTargetImagesDetail_B13002").empty();
+			  }        	
+	    	  
+		  	  if (data != null) {
+		  		  
+		  	    	if(data.contents != ""){
+		  	    		
+		  	    		$("#analysisTargetImages").empty();
+		  	    		$("#analysisTargetImagesDetail").empty();
+		  	    		
+		  	    		let dataTr;
+		  	    		dataTr += '<thead>';	
+		  	    		dataTr += '<tr>';	
+		  	    		dataTr += '<th style="text-align: center;">데이터 전처리 모델명</th>';	
+		  	    		dataTr += '<th style="text-align: center;">분석 모델명</th>';	
+		  	    		if('{{anals_use_prpos_cd}}' == 'B13002' && $("#commonCodeAnalysisScenarioSetting").val() == 'B01002'){
+		  	    			dataTr += '<th style="text-align: center;">모델 정확도</th>';
+		  	    		}
+		  	    		dataTr += '</tr>';	
+		  	    		dataTr += '</thead>';	
+		  	    		dataTr += '<tbody>';	
+		  	    		dataTr += '<tr>';	
+		  	    		if($("#commonCodeAnalysisScenarioSetting").val() == 'B01002'){
+			  	    		dataTr += '<td style="text-align: center;">'+data.contents.pretreat_model_nm+'</td>';	
+			  	    		dataTr += '<td style="text-align: center;">'+data.contents.anals_model_nm+'</td>';	
+		  	    		}
+		  	    		if('{{anals_use_prpos_cd}}' == 'B13002' && $("#commonCodeAnalysisScenarioSetting").val() == 'B01002'){
+		  	    			dataTr += '<td style="text-align: center;">'+isEmpty(data.contents.accuracy)+'</td>';	
+		  	    		}
+		  	    		dataTr += '</tr>';	
+		  	    		dataTr += '</tbody>';			
+		  	    		$("#analysisTargetImages").html(dataTr);
+						 
+			  	        let i = 0;	
+		     	        let insertTr;
+		     	        let insertTr2;
+		     	        
+		     	        let train_cnt = 0;
+		     	        let valid_cnt = 0;
+		     	        let test_cnt = 0;
+		     	       
+		     	        //파라미터 정의 값
+		     	        if($("#commonCodeAnalysisScenarioSetting").val() == 'B01002'){
+			     	       $.each(data.contents.anals_model_info, function (idx, el) {
+			     	    	   
+								  insertTr += '<tr>';		
+				                  insertTr += ' <td style="text-align: center;">'+el.anals_model_stage+'</td>';
+				                  insertTr += ' <td style="text-align: center;">'+el.anals_model_dfn+'</td>';
+				                  insertTr += ' <td style="text-align: center;">'+el.anals_model_desc+'</td>';
+				                  insertTr += '</tr>';
+					  	    });
+	   						$("#analysisTargetImagesDetail").append(insertTr);
+		     	        }
+		     	        
+   						if('{{anals_use_prpos_cd}}' == 'B13001'){
+	   					    //프로그램 상세 정보 조회
+					  	    $.each(data.contents.time_sequential_data, function (idx, el) {
+	     						
+	     				 		  insertTr2 += '<tr>';		
+				                  insertTr2 += ' <td style="text-align: center;">'+el.tbl_id.substring(0, el.tbl_id.indexOf('.'))+'</td>';
+				                  insertTr2 += ' <td style="text-align: center; cursor:pointer;" onclick=analysisTargetSampleData("'+el.tbl_id+'");><span class="blue bold">'+el.tbl_id.substring(el.tbl_id.indexOf('.')+1)+'</span></td>';
+				                  insertTr2 += ' <td style="text-align: center;">'+el.col_id+'</td>';
+				                  insertTr2 += ' <td style="text-align: center;"><input class="flat"  type="checkbox" '+(el.input_data_yn == 'Y'?'checked':'')+' disabled></td>';
+				                  insertTr2 += ' <td style="text-align: center;"><input class="flat"  type="checkbox" '+(el.output_data_yn == 'Y'?'checked':'')+' disabled></td>';
+				                  insertTr2 += ' <td style="text-align: center;"><input class="flat"  type="checkbox" '+(el.batch_std == 'Y'?'checked':'')+' disabled></td>';
+				                  insertTr2 += '</tr>';
+				                  
+					  	    });
+					  	    
+					  	 	$("#analysisTargetImagesDetail_B13001_2").append(insertTr2);
+					  	 	
+   						}else if('{{anals_use_prpos_cd}}' == 'B13002'){
+	   					    //이미지 데이터 셋 이름
+					  	    $.each(data.contents.object_detect_data, function (idx, el) {
+	     						
+	     				 		  insertTr2 += '<tr>';		
+								  insertTr2 += ' <td style="text-align: center;">'+(++i)+'</td>';
+				                  insertTr2 += ' <td style="text-align: center;">'+el.image_dataset_nm+'</td>';
+				                  insertTr2 += ' <td style="text-align: center;">'+el.train_cnt+'</td>';
+				                  insertTr2 += ' <td style="text-align: center;">'+el.valid_cnt+'</td>';
+				                  insertTr2 += ' <td style="text-align: center;">'+el.test_cnt+'</td>';
+				                  insertTr2 += ' <td style="text-align: center;">'+isEmpty(el.creat_datetime)+'</td>';
+				                  insertTr2 += '</tr>';
+				                  
+				                  train_cnt += el.train_cnt;
+				                  valid_cnt += el.valid_cnt;
+				                  test_cnt += el.test_cnt;
+					  	    });
+
+ 							insertTr2 += '<tr>';	
+ 							insertTr2 += ' <td colspan="2" style="text-align: center;">총 데이터셋</td>';
+ 							insertTr2 += ' <td style="text-align: center;">'+train_cnt+'</td>';
+ 							insertTr2 += ' <td style="text-align: center;">'+valid_cnt+'</td>';
+ 							insertTr2 += ' <td style="text-align: center;">'+test_cnt+'</td>';
+ 							insertTr2 += ' <td style="text-align: center;"></td>';
+ 							insertTr2 += '</tr>';
+	 	         	   	    $("#analysisTargetImagesDetail_B13002").append(insertTr2);
+ 						}
+ 						
+ 						
+		  	    	}
+		  	    	
+		  	    	
+		  	  }
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });	
+}
+
+//시나리오 선택 임시저장 & 저장
+const sandboxScenarioSettingUpdate = function(val){
+
+	let confirmMsg = '';
+	if(val == 'B06001'){	//임시 저장
+		confirmMsg = '임시저장 하시겠습니까?';
+	}else {		//다음
+		confirmMsg = '저장 후 다음으로 이동하시겠습니까?';
+	}
+	
+	let scenario_id = $("input[name='scenario_id']:checked").val();
+	let commonCodeAnalysisScenarioSetting = $("#commonCodeAnalysisScenarioSetting").val();
+	
+	if(scenario_id == ''){
+		alert('시나리오를 선택하세요!');
+		return;
+	}
+
+	if(commonCodeAnalysisScenarioSetting == ''){
+		alert("선택해주세요!");
+		$("#commonCodeAnalysisScenarioSetting").focus();
+		return;
+	} 
+	
+	const data = {
+       		url: '/services/sandbox/sandboxes/{{sandbox_id}}/scenario-setting/update',
+       		scenario_id: scenario_id,	
+       		scenario_setup_status_cd: val,	
+       		modifier_id: 'modifier_id',	
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	        		
+        };		
+	
+	console.log(JSON.stringify(data));
+	
+	if(confirm(confirmMsg)){
+        $.ajax({
+            type: 'POST',
+            url: url+'/sandboxScenarioSettingUpdate',
+            dataType: 'json',
+            contentType: 'application/json; charset-utf-8',
+            data: JSON.stringify(data)
+        }).done(function (data) {
+      		let message = JSON.stringify(data.return_msg);
+      		alert(message.replace(/\"/gi, ''));    	
+      		
+	        if(val == 'B06002'){
+		        step3();   
+	        }else{
+	      		sandboxEnrollStatus();
+	        }
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });		
+	}
+    
+}
+
+//분석 대상 설정 테이블 조회
+const analysisTargetSampleData = function(tbl_id){
+	
+	$("#spanTableNm").text(tbl_id); 
+	$("#sampleSize").empty(); 
+	$("#sampleKey").empty(); 
+	$("#sampleData").empty(); 
+	
+	const data = {
+       		url: '/services/sandbox/{{sandbox_id}}/scenarios/analysis-target/tables/'+tbl_id+'/sample/get',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	        		
+        };		
+        $.ajax({
+            type: 'POST',
+            url: url+'/analysisTargetSampleData',
+            dataType: 'json',
+            contentType: 'application/json; charset-utf-8',
+            data: JSON.stringify(data)
+        }).done(function (data) {
+ 		  	if (data != null) {
+ 		  	   	if(data.contents != ""){    	
+ 		  	   	   let insertSize;		
+ 		  	   	   let insertTh;
+ 		  	   	   let insertTr;
+	     	       $.each(data.contents, function (idx, el) {
+	     	    	  if(idx == 0){
+		     	    	  $.each(el, function (idx2, el2) {
+		     	    		 insertSize += '<col width="130px">';
+		     	    		 insertTh += ' <th style="text-align: center;" width=30>'+idx2+'</th>';
+		     	    	  });
+	     	    	  }
+			  	   });
+    	    	   $("#sampleSize").append(insertSize); 
+    	    	   $("#sampleKey").append(insertTh); 
+	     	       $.each(data.contents, function (idx, el) {
+	     	    	  insertTr += ' <tr>';
+	     	    	  $.each(el, function (idx2, el2) {
+	     	    		 insertTr += ' <td style="text-align: center;" width=30>'+el2+'</td>';
+	     	    	  });
+     	    		  insertTr += ' </tr>';
+			  	   });
+				   $("#sampleData").append(insertTr);   	
+ 		  	   	}
+ 		  	}
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });	
+        
+        openModal('sample_modal');   
+}
+
+//진행상태 표시 바
+const progressBar = function(){
+	let sandbox_setup_status_cd = $("#sandbox_setup_status_cd").val();
+	let scenario_setup_status_cd = $("#scenario_setup_status_cd").val();
+	let anals_method_status_cd = $("#anals_method_status_cd").val();
+	
+	if(sandbox_setup_status_cd == progressCd1){
+		$("#ps1").addClass("temporary_storage");
+	}else if(sandbox_setup_status_cd == progressCd2){
+		$("#ps1").addClass("save");
+	}
+	
+	if(scenario_setup_status_cd == progressCd1){
+		$("#ps2").addClass("temporary_storage");
+	}else{
+		$("#ps2").addClass("now_depth");
+	}
+	
+	if(anals_method_status_cd == progressCd1){
+		$("#ps3").addClass("temporary_storage");
+	}else if(anals_method_status_cd == progressCd2){
+		$("#ps3").addClass("save");
+	}
+}
+
+//샌드박스 단계별 등록 상태
+const sandboxEnrollStatus = function(){
+	const data = {
+       		url: '/services/sandbox/sandboxes/{{sandbox_id}}/enroll-status',
+       		user_id: 'user00',	
+       		menu_id: 'menu_id',
+       	};		
+        $.ajax({
+            type: 'POST',
+            url: url+'/sandboxEnrollStatus',
+            dataType: 'json',
+            contentType: 'application/json; charset-utf-8',
+            data: JSON.stringify(data)
+        }).done(function (data) {
+        	
+   	    	if(data.contents != ""){
+   	    		$("#sandbox_setup_status_cd").val(data.contents.sandbox_setup_status_cd);
+   	    		$("#scenario_setup_status_cd").val(data.contents.scenario_setup_status_cd);
+   	    		$("#anals_method_status_cd").val(data.contents.anals_method_status_cd);
+   	    		
+   	    		progressBar();   	    		
+   	    	}
+   	    	
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });	
+}
+
+//모달 열기
+const openModal = function(modalId){
+	$('#'+modalId).modal('show');
+}
+
+//모달 닫기
+const closeModal = function(modalId){
+	$('#'+modalId).modal('hide');
+}
+
+//샌드박스 설정
+const step1 = function(){
+	location.href = url+'/update_step1/{{sandbox_id}}';
+}
+//시나리오 선택
+const step2 = function(){
+	location.href = '/sandbox/sand/analysisSandbox/step2/{{sandbox_id}}/{{anals_use_prpos_cd}}/{{anals_use_prpos_cd_nm}}';
+	
+}
+//분석 방식 선택
+const step3 = function(){
+	
+	let commonCodeAnalysisScenarioSetting = $("#commonCodeAnalysisScenarioSetting").val();
+	
+	if(commonCodeAnalysisScenarioSetting == ''){
+		alert("선택해주세요!");
+		$("#commonCodeAnalysisScenarioSetting").focus();
+		return;
+	} 
+	
+	location.href = url+'/step3/{{sandbox_id}}/{{anals_use_prpos_cd}}/'+commonCodeAnalysisScenarioSetting;
+}
+//분석 시나리오 관리
+const list = function(){
+	location.href = url+'/list';
+}
+
+const divShow = function(){
+	if('{{anals_use_prpos_cd}}' == 'B13001'){
+		//시계열
+		$("#div_B13001_2").show();
+		$("#div_B13002").hide();
+	}else{
+		//객체		
+		$("#div_B13001_2").hide();
+		$("#div_B13002").show();
+	}
+}
+
+divShow();
+commonCodeAnalysisScenarioSetting();
+sandboxEnrollStatus();
+
+</script>

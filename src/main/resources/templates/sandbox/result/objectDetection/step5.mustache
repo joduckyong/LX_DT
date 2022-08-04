@@ -1,0 +1,218 @@
+{{>layout/header}}
+
+		<style>
+			.swiper-container {
+				height:420px;
+				border:5px solid silver;
+			}
+			.swiper-slide {
+				text-align:center;
+				display:flex; /* 내용을 중앙정렬 하기위해 flex 사용 */
+				align-items:center; /* 위아래 기준 중앙정렬 */
+				justify-content:center; /* 좌우 기준 중앙정렬 */
+			}
+			.swiper-slide img {
+				box-shadow:0 0 5px #555;
+				max-width:100%; /* 이미지 최대너비를 제한, 슬라이드에 이미지가 여러개가 보여질때 필요 */
+				/* 이 예제에서 필요해서 설정했습니다. 상황에따라 다를 수 있습니다. */
+			}
+		</style>
+
+        <div class="right_col" role="main">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="x_panel"> 
+                <div class="x_title"> 
+                  <h2>HOME > 데이터 분석 > 데이터 분석 결과 조회 > 데이터 분석 결과 상세 조회</h2>
+                  <div class="clearfix"> </div>
+                </div>
+                <div class="x_content"> <br>
+                  <div class="scenario_depth"> 
+                    <ul>
+                      <li class="now_depth" onclick="step1();" style="cursor:pointer">데이터 로딩</li>
+                      <li class="save" onclick="step5();" style="cursor:pointer">데이터 분석 결과</li>
+                    </ul>
+                  </div>
+                  <div class="progress_tab">
+                    <div class="tab_item" id="tab-0">  
+                      <h3><b>데이터 분석 결과</b> </h3>
+                      <div class="row">
+                        <div class="col-12 col-md-4 mx-0">
+                          <h4 class="center_title">분석 파일 리스트</h4>
+                          <div class="table_responsive">
+                            <table class="table table-striped table-bordered">
+                              <colgroup>
+                              </colgroup>
+                              <thead>
+                                <tr>
+                                  <th style="text-align: center;">#</th>
+                                  <th style="text-align: center;">파일명</th>
+                                  <th style="text-align: center;">등록 일자</th>
+                                </tr>
+                              </thead>                            
+                              <tbody>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <div class="col-12 col-md-8 mx-0">
+	                      <h4 class="center_title">분석 결과</h4>
+	     				  <div class="right_btns">
+		                      <button class="btn btn-primary" onclick="sandboxResultDownload();">다운로드</button>
+		                      <button class="btn btn-primary" >모델 정보</button>
+		                  </div> 	                      
+	                      <div class="swiper-container">
+							<div class="swiper-wrapper" id="div_slider">
+							</div>
+	                      	<div class="swiper-button-next"></div><!-- 다음 버튼 (오른쪽에 있는 버튼) -->
+							<div class="swiper-button-prev"></div><!-- 이전 버튼 -->
+							<div class="swiper-pagination"></div><!-- 페이징 -->
+                        </div>
+                      </div>
+                    </div>
+                    <div class="right_btns mt-4">
+                      <button class="btn btn-primary" onclick="result();">완료</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+                        
+{{>layout/footer}}        
+
+<script>
+const commonUrl = '/sandbox/common';
+const url = '/sandbox/result/objectDetection';
+
+//슬라이드
+const swiperInit = function(){
+	
+	new Swiper('.swiper-container', {
+
+		slidesPerView : 2, // 동시에 보여줄 슬라이드 갯수
+		spaceBetween : 30, // 슬라이드간 간격
+		slidesPerGroup : 2, // 그룹으로 묶을 수, slidesPerView 와 같은 값을 지정하는게 좋음
+
+		// 그룹수가 맞지 않을 경우 빈칸으로 메우기
+		// 3개가 나와야 되는데 1개만 있다면 2개는 빈칸으로 채워서 3개를 만듬
+		loopFillGroupWithBlank : true,
+
+		loop : true, // 무한 반복
+
+		pagination : { // 페이징
+			el : '.swiper-pagination',
+			clickable : true, // 페이징을 클릭하면 해당 영역으로 이동, 필요시 지정해 줘야 기능 작동
+		},
+		navigation : { // 네비게이션
+			nextEl : '.swiper-button-next', // 다음 버튼 클래스명
+			prevEl : '.swiper-button-prev', // 이번 버튼 클래스명
+		},
+	});	
+}
+//샌드박스 결과 조회
+const sandboxResultsAnalysisResult = function(){
+	
+	const data = {
+	   		url: '/services/sandbox/sandboxes/{{sandbox_id}}/results/{{result_id}}/data-analysis-result/get',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	   		
+	    };		
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/sandboxResultsAnalysisResult',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	  $("#div_slider").empty();
+		  	  if (data != null) {
+		  	    	if(data.contents != ""){
+			    	    let insertDiv1 = '';
+			    	    let insertDiv2 = '';
+			    	    let insertDiv3 = '';
+		     	        
+			    	    var array1 = new Array();
+			    	    var array2 = new Array();
+			    	    let origin_file_path = data.contents.contents.origin_file_path;
+			    	    origin_file_path = origin_file_path.replace('{{resourcePath}}', '{{uploadPath}}');
+			    	    
+			    	    let result_file_path = data.contents.contents.result_file_path;
+			    	    result_file_path = result_file_path.replace('{{resourcePath}}', '{{uploadPath}}');
+			    	    
+				  	    $.each(data.contents.contents.origin_file_list, function (idx, el) {
+				  	    	insertDiv1 = '<div class="swiper-slide"><img src='+origin_file_path+el.file_nm+' ></div>';
+				  	    	array1.push(insertDiv1);
+				  	    });
+			  	    	
+				  	    $.each(data.contents.contents.result_file_list, function (idx, el) {
+				  	    	insertDiv2 = '<div class="swiper-slide"><img src='+result_file_path+el.file_nm+' ></div>';
+				  	    	array2.push(insertDiv2);
+				  	    });
+				  	    
+					  	for (var i = 0; i < array1.length; i++) {
+					  		insertDiv3 += array1[i] + array2[i];
+					  	}
+	         	   	    $("#div_slider").append(insertDiv3);
+					  	
+		  	    	}
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });		
+}
+
+//샌드박스 - 분석 모델 파일 다운로드
+const sandboxResultDownload = function(){
+	
+	let sandbox_id = $('#sandbox_id').val();
+	
+	const data = {
+			url: '/services/sandbox/sandboxes/{{sandbox_id}}/results/{{result_id}}/download',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	   				
+	    };		
+	    $.ajax({
+	        type: 'POST',
+	        url: commonUrl+'/download/sandboxResultDownload',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data),
+	    }).done(function (data) {
+	    }).fail(function (error) {
+		    location.href = commonUrl+'/urlDownload/'+JSON.stringify(error.responseText).replace(/\"/gi, '');
+	    });		
+	    
+}
+
+//조회
+sandboxResultsAnalysisResult();
+
+setTimeout(function() {
+	  swiperInit();
+}, 100);
+	
+const step1 = function(){
+	location.href = url+'/step1/{{sandbox_id}}/{{result_id}}';
+}
+const step2 = function(){
+	location.href = url+'/step2/{{sandbox_id}}/{{result_id}}';
+}
+const step3 = function(){
+	location.href = url+'/step3/{{sandbox_id}}/{{result_id}}';
+}
+const step4 = function(){
+	location.href = url+'/step4/{{sandbox_id}}/{{result_id}}';
+}
+const step5 = function(){
+	location.href = location.href;
+}
+const result = function(){
+	location.href = '/sandbox/sand/analysisSandbox/list';
+}
+
+</script>
+
+

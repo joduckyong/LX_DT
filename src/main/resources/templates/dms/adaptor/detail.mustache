@@ -1,0 +1,1227 @@
+{{>layout/header}}
+
+        <div class="right_col" role="main">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="x_panel"> 
+                <div class="x_title"> 
+                  <h2>HOME > Adapter 관리</h2>
+                  <div class="clearfix"> </div>
+                </div>
+                <div class="x_content"> <br>
+                  <div class="cont_title_box">
+                    <h3>Adapter 상세</h3>
+                    <div class="right_btns"><a class="btn btn-success" href="javascript:listPage();">목록 </a></div>
+                  </div>
+                  <div class="border_rows">
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label" style="text-align: center;">Adapter 명</div>
+                        <div class="form-control_box"><span id="adapter_nm"></span></div>
+                      </div>
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label" style="text-align: center;">Adapter 유형</div>
+                        <div class="form-control_box"><span id="adapter_type_nm"></span></div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-12">
+                        <div class="control-label" style="text-align: center;">사용 여부</div>
+                        <div class="form-control_box"><span id="use_yn"></span></div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="cont_title_box">
+                    <h3>Instance 목록</h3>
+                    <div class="right_btns"><button class="btn btn-primary" onclick="openModal('add_modal');">등록</button></div>
+                  </div>
+                                    
+                  <div class="table_responsive">
+                    <div class="talbel_total">총 <span id="total_count"></span>1건</div>
+                    <table class="table table-striped">
+                      <colgroup> 
+                        <col width="5px">                      
+                        <col width="10px">                      
+                        <col width="15px">                      
+                        <col width="22px">                      
+                        <col width="10px">                      
+                        <col width="10px">                      
+                        <col width="10px">                      
+                        <col width="10px">                      
+                        <col width="8px">                      
+                      </colgroup>
+                      <thead>
+                        <tr> 
+                          <th style="text-align: center;">순번</th>
+                          <th style="text-align: center;">Instance 명</th>
+                          <th style="text-align: center;">데이터 셋 명</th>
+                          <th style="text-align: center;">접속설정/매칭정보</th>
+                          <th style="text-align: center;">수집방식</th>
+                          <th style="text-align: center;">수집유형</th>
+                          <th style="text-align: center;">수집스케줄 유형</th>
+                          <th style="text-align: center;">시계열 데이터</th>
+                          <th style="text-align: center;">사용여부</th>
+                        </tr>
+                      </thead>
+                      <tbody id="dpIngestAdapterIt">
+                      </tbody>
+                    </table>
+                    <div class="nav justify-content-center"> 
+					  <ul id="pagingul" class="pagination">
+					  </ul>                    
+                    </div>   
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- download_modal -->
+        <div class="modal fade add_modal" id="add_modal" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-lg" style="max-width: 1000px;">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h2 class="modal-title" id="myModalLabel"><span id="modelLabel">Instance 등록</span></h2>
+                <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
+              </div>
+              <div class="modal-body">
+				<div class="x_content">
+                  <div class="cont_title_box">
+                    <h3><span id="instanceTitle">인스턴스 등록</span></h3>
+                    <div class="right_btns">
+                    	<a class="btn btn-primary" id="btnAdd" href="javascript:dpIngestAdapterItSave('A');">저장 </a>
+                    	<a class="btn btn-success" id="btnUpdate" href="javascript:dpIngestAdapterItSave('U');">수정 </a>
+                    	<a class="btn btn-danger"  id="btnDel" href="javascript:dpIngestAdapterItDelChk();">삭제 </a>
+                    </div>
+                  </div>
+                  <div class="border_rows">
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label" style="text-align: center;">인스턴스 명</div>
+                        <div class="form-control_box"><input class="form-control" type="text" name="instance_nm" id="instance_nm"></div>
+                      </div>
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label" style="text-align: center;">데이터 셋 명</div>
+                        <div class="form-control_box">
+                        	<div class="col-md-9">
+                        		<input class="form-control" type="text" name="dset_korean_nm" id="dset_korean_nm">
+                        		<input type="hidden" name="dset_idntfc_id" id="dset_idntfc_id" >
+                        	</div>
+                        	<div class="col-md-3">
+	                        	<button class="btn btn-primary" onclick="openModal('dataSet');"> <i class="glyphicon glyphicon-search"></i></button>
+	                        </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label" style="text-align: center;">수집방식</div>
+                        <div class="form-control_box">
+							<select class="form-control" id="clct_mthd" name="clct_mthd" onchange="clctMthdType(this.value, '');">
+                            </select>                        
+                        </div>
+                      </div>
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label" style="text-align: center;">수집유형</div>
+                        <div class="form-control_box">
+                            <select class="form-control" id="clct_ty" name="clct_ty">
+                              <option>선택</option>
+                            </select>                          
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label" style="text-align: center;">보관주기</div>
+                        <div class="form-control_box">
+                        	<div class="col-md-6">
+	                        	<input class="form-control" type="text" id="storage_cycle" name="storage_cycle" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+	                        </div>
+	                        <div class="col-md-6">
+							    <select class="form-control" id="storage_type" name="storage_type">
+	                              <option value= "">선택</option>
+	                              <option value="년">년</option>
+	                              <option value="월">월</option>
+	                              <option value="일">일</option>
+	                            </select>	          
+                            </div>              
+                        </div>
+                      </div>
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label" style="text-align: center;">시계열 데이터</div>
+	  					   <div class="form-control_box">
+                             <div class="radio radio_inline">
+                               <label class="">
+                                   <input class="" type="radio" name="time_data_yn" id="time_data_yn_y" value="Y" checked="">예
+                               </label>
+                             </div>
+                             <div class="radio radio_inline">
+                               <label>
+                                   <input class="" type="radio" name="time_data_yn"id="time_data_yn_n"  value="N">아니오
+                               </label>
+                             </div>
+                           </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label" style="text-align: center;">수집 스케줄 유형</div>
+                        <div class="form-control_box" id="div_schedule_type">
+                        </div>
+                      </div>
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label" style="text-align: center;">사용여부</div>
+	 					   <div class="form-control_box">
+                             <div class="radio radio_inline">
+                               <label class="">
+                                   <input class="" type="radio" name="useYn" id="useYn_Y" value="Y" checked>사용
+                               </label>
+                             </div>
+                             <div class="radio radio_inline">
+                               <label>
+                                   <input class="" type="radio" name="useYn" id="useYn_N" value="N">사용안함
+                               </label>
+                             </div>
+                           </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-12">
+                        <div class="control-label" style="text-align: center;">수집 스케줄 설정</div>
+	 					   <div class="form-control_box">
+	 					     <div class="radio radio_inline" id="ymdh"></div>
+                             <div class="radio radio_inline">
+		 					   <div class="form-control_box">
+                                 <select name="year" id="schedule_year" style="display:none;">
+                                 </select><span id="schedule_yearTxt" style="display:none;">년</span>		 					   
+                                 <select name="month" id="schedule_month">
+                                 </select><span id="schedule_monthTxt">월</span>
+                                 <select name="day" id="schedule_day">
+                                 </select><span id="schedule_dayTxt">일</span>
+                                 <select name="day2" id="schedule_week" style="display:none;">
+                                 </select><span id="schedule_weekTxt" style="display:none;">요일</span>
+                                 <select name="hour" id="schedule_hour">
+                                 </select><span id="schedule_hourTxt">시</span>
+                                 <select name="minute" id="schedule_minute">
+                                 </select><span id="schedule_minuteTxt">분 </span>
+                                 <input class="" type="checkbox" name="schedule_now_exe" id="schedule_now_exe" value="Y" ><label>즉시실행</label>
+	                           </div>
+	                         </div> 
+                           </div>
+                      </div>
+                    </div>                    
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-12">
+                        <div class="control-label" style="text-align: center;">비고</div>
+                        <div class="form-control_box"> 
+                        	<input class="form-control" type="text" name="etc_note" id="etc_note">
+                        </div>
+                      </div>
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="modal fade add_modal" id="dataSet" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-lg" style="max-width: 600px;">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h3 class="modal-title" id="myModalLabel">데이터셋 선택</h3>
+                <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
+              </div>
+              <div class="modal-body">
+				<div class="x_content">
+                  <div class="border_rows">
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-12">
+                        <div class="col-md-12">
+	                        <div class="form-control_box"> 
+	                        	<input class="form-control" type="text" name="searchNm" id="searchNm" onkeypress="enterkey(event);">
+	                        </div>
+                        </div>
+                      </div>
+                      <div class="form-group row col-12 col-md-12">
+	                      <div class="col-md-12">
+	                        <div class="form-control_box"> 
+	                        	<div class="right_btns"><a class="btn btn-primary" href="javascript:dpIngestPopupDset01();">검색 </a></div>
+	                        </div>
+	                      </div>
+                     </div>
+					 <div class="row">
+                       <div class="col-md-12">
+                         <div class="x_panel">
+                           <div class="x_content" style="width:100%;max-height:400px; overflow-y:auto;">
+                             <div class="table_responsive">
+                               <table class="table table-striped table-bordered bulk_action" >
+                                 <colgroup>
+                                 </colgroup>
+                                 <thead>
+                                 <tr>
+                                   <th rowspan="2" style="text-align: center;">데이터 셋 명</th>
+                                   <th colspan="2" style="text-align: center;">테이블</th>
+                                 </tr>
+                                 <tr>
+                                   <th style="text-align: center;">한글 명</th>
+                                   <th style="text-align: center;">영문 명</th>
+                                 </tr>
+                                 </thead>
+                                 <tbody id="dataSetInfo">
+                                 </tbody>
+                               </table>
+                             </div>
+                           </div>
+                         </div>
+                       </div>
+                     </div>					
+					                  
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+       </div>
+       <div class="modal fade add_modal" id="modal_hidden" tabindex="-1" role="dialog" aria-hidden="true">
+       	<div class="modal-dialog modal-lg" style="max-width: 1000px;"></div>
+       </div>
+       <input type="hidden" name="instance_id" id="instance_id">
+       <div id="divForm"></div>
+        
+{{>layout/footer}}        
+
+<script>
+const commonUrl = '/common';
+const url = '/adaptor';
+
+
+//수집방식
+const dpCmCodesClctMthd = function (group_code, id) {
+	
+	$("#"+id).empty();
+	
+    const data = {
+   		url: '/dp/cm/codes/clct_mthd?group_code='+group_code,
+    };		
+    
+    $.ajax({
+        type: 'POST',
+        url: commonUrl+'/dpCmCodesClctMthd',
+        dataType: 'json',
+        contentType: 'application/json; charset-utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+		  	   	if(data.contents != ""){    	    	
+   					 let selOp = '<option value="">선택</option>';  
+	    	   		 $.each(data.contents, function (idx, el) {
+ 	    				selOp += '<option value="'+el.dtl_code+'|'+el.etc_code+'">' + el.dtl_code_nm + '</option>';
+	 	     	     });
+		 	     	 $("#"+id).append(selOp);        	
+		  	   	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });
+    
+}
+
+//수집방식 선택 
+const clctMthdType = function(val, sel){
+//	console.log('val'+val);
+	let group_code = val.substring(val.indexOf('|')+1);
+	dpCmCodesClctTy(group_code, 'clct_ty', sel);
+}
+
+//수집유형
+const dpCmCodesClctTy = function (group_code, id, sel) {
+	
+	console.log('id:'+id+', group_code:'+group_code);
+	$("#"+id).empty();
+	
+    const data = {
+   		url: '/dp/cm/codes/clct_ty?group_code='+group_code,
+    };		
+    
+    $.ajax({
+        type: 'POST',
+        url: commonUrl+'/dpCmCodesClctTy',
+        dataType: 'json',
+        contentType: 'application/json; charset-utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+		  	   	if(data.contents != ""){    	
+		  	   		 let selOp;
+		  	   		 if(group_code === 'D40'){
+   					     selOp = '';  
+		    	   		 $.each(data.contents, function (idx, el) {
+	 	    				selOp += '<div class="radio radio_inline type2"><label><input type="radio" onclick=scheduleTimeTypeSel(); name="schedule_time_type" id="schedule_time_type_'+el.dtl_code+'" value="'+el.dtl_code+'" '+(idx===0 && 'checked')+'>'+el.dtl_code_nm+'</label></div>';
+		 	     	     });
+		  	   		 }else if(group_code === 'D39'){
+   					     selOp = '';  
+		    	   		 $.each(data.contents, function (idx, el) {
+	 	    				selOp += '<div class="radio radio_inline"><label><input type="radio" onclick=jsScheduleType(); name="schedule_type" id="schedule_type_'+el.dtl_code+'" value="'+el.dtl_code+'" '+(idx===0 && 'checked')+'>'+el.dtl_code_nm+'</label></div>';
+		 	     	     });
+		  	   		 }else{
+	   					 selOp = '<option value="">선택</option>';  
+		    	   		 $.each(data.contents, function (idx, el) {
+	 	    				selOp += '<option value="'+el.dtl_code+'" '+(el.dtl_code === sel ? 'selected':'')+'>' + el.dtl_code_nm + '</option>';
+		 	     	     });		  	   			 
+		  	   		 }
+		 	     	 $("#"+id).append(selOp);        	
+		  	   	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });
+}
+
+//수집방식
+const dpCmCodesClctMthdInput = function (group_code) {
+	
+    const data = {
+   		url: '/dp/cm/codes/clct_mthd?group_code='+group_code,
+    };		
+    
+    $.ajax({
+        type: 'POST',
+        url: commonUrl+'/dpCmCodesClctMthdInput',
+        dataType: 'json',
+        contentType: 'application/json; charset-utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+	  	  if (data != null) {
+		  	   	if(data.contents != ""){    	   
+	    	   		 $.each(data.contents, function (idx, el) {
+		    	   		 $("#divForm").append($("<input type='hidden' value='"+el.dtl_code_nm+"' id='"+el.dtl_code+"'>"));
+		    	   		 
+		    	   		 dpCmCodesClctTyInput(el.etc_code);
+	 	     	     });
+		  	   	}
+	  	  }
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });
+    
+}
+
+//수집유형
+const dpCmCodesClctTyInput = function (group_code) {
+	
+    const data = {
+   		url: '/dp/cm/codes/clct_ty?group_code='+group_code,
+    };		
+    
+    $.ajax({
+        type: 'POST',
+        url: commonUrl+'/dpCmCodesClctTyInput',
+        dataType: 'json',
+        contentType: 'application/json; charset-utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+		  	   	if(data.contents != ""){    	    	
+	    	   		 $.each(data.contents, function (idx, el) {
+	    	   			$("#divForm").append($("<input type='hidden' value='"+el.dtl_code_nm+"' id='"+el.dtl_code+"'>"));
+	 	     	     });
+		  	   	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });
+    
+}
+
+//Instance 목록 조회
+const dpIngestAdapterIt = function(){
+	
+    const data = {
+	   		url: '/dp/ingest/adapter/instance',
+	   		adapter_id: "{{adapter_id}}",	
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',
+	    };		
+	    
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestAdapterIt',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	
+			  $("#dpIngestAdapterIt").empty();
+		  	  if (data != null) {
+	  	    	$("#total_count").text(data.total_count);
+	  	    	
+	  	    	if(data.contents != ""){
+	  	    		
+		     	    let insertTr = '';
+		     	    let i = 0;	
+			  	    $.each(data.contents, function (idx, el) {
+
+		     	          insertTr += '<tr>';
+		     		      insertTr += '	<td style="text-align: center;">'+(++i)+'</td>';
+		     		      insertTr += ' <td style="text-align: center;"><span class="blue bold" style="cursor:pointer" onclick=modModal("'+el.instance_id+'");>'+isEmpty(el.instance_nm)+'</span></td>';
+		     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.dset_korean_nm)+'</td>';
+		     		      insertTr += ' <td style="text-align: center;">';
+		     		      insertTr += '	<button class="btn btn-sm btn-primary" onclick=operationPage("'+el.instance_id+'")>접속설정</button>';
+		     		      insertTr += '	<button class="btn btn-sm btn-primary" onclick=matchingPage("'+el.instance_id+'")>매칭정보</button>';
+		     		      insertTr += ' </td>';	     		      
+		                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.clct_mthd)+'</td>';
+		                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.clct_ty)+'</td>';
+		                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.schedule_type)+'</td>';
+		                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.time_data_yn)+'</td>';
+		                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.use_yn)+'</td>';
+		                  insertTr += '</tr>';
+		                  
+			  	    });
+	          	    $("#dpIngestAdapterIt").append(insertTr);
+	  	    	}
+	  	    	
+	  	    	
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });
+}
+
+//Adapter 상세 조회
+const dpIngestAdapterDt = function(){
+	
+    const data = {
+	   		url: '/dp/ingest/adapter/detail',
+	   		adapter_id: "{{adapter_id}}",	
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',
+	    };		
+	    
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestAdapterDt',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	
+	    	  let adapter_id;
+	    	  let adapter_nm;
+	    	  let adapter_type_id;
+	    	  let adapter_type_nm;
+	    	  let use_yn;
+		  	  if (data != null) {
+			  	   	if(data.contents != ""){    	
+		    	   		 $.each(data.contents, function (idx, el) {
+		    	   			adapter_id = el.adapter_id;
+		    	   			adapter_nm = el.adapter_nm;
+		    	   			adapter_type_id = el.adapter_type_id;
+		    	   			adapter_type_nm = el.adapter_type_nm;
+		    	   			use_yn = el.use_yn;
+		 	     	     });
+			  	   	}
+		  	  }
+		  	  
+   	   		  $("#adapter_nm").text(adapter_nm);
+   	   		  $("#adapter_type_nm").text(adapter_type_nm);
+   	   		  $("#use_yn").text(useYnText(use_yn));
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });
+	    
+	    dpIngestAdapterIt();
+}
+
+//text 
+const useYnText = function(use_yn){
+
+	if(use_yn === "Y"){
+		return "사용"
+	}else{
+		return "사용안함"
+	}
+}
+
+//모달 열기
+const openModal = function(modalId){
+	
+	if(modalId == 'add_modal'){
+		$("#modelLabel").text("Instance 등록");
+		$("#instanceTitle").text("인스턴스 등록");
+		$("#btnAdd").show();
+		$("#btnUpdate").hide();
+		$("#btnDel").hide();
+		dpIngestAdapterItIdChk();
+	}else if(modalId == 'dataSet'){
+		$('footer').hide();
+	}
+	
+	$('#'+modalId).modal('show');
+}
+
+//모달 수정
+const modModal = function(instance_id){
+	
+	
+	$("#modelLabel").text("Instance 수정");
+	$("#instanceTitle").text("인스턴스 수정");
+	$("#btnAdd").hide();
+	$("#btnUpdate").show();
+	$("#btnDel").show();	
+	$("#instance_id").val(instance_id);
+	$('#add_modal').modal('show');
+	dpIngestAdapterItDt();
+	
+}
+
+// 모달 창 닫기
+const closeModal = function(modalId){
+	$('#'+modalId).modal('hide');
+}
+
+//목록
+const listPage = function(){
+	location.href = url+'/config';
+}
+
+//접속설정
+const operationPage = function(instance_id){
+	location.href = url+'/connectionSet/{{adapter_id}}/'+instance_id;
+}
+
+//매칭정보
+const matchingPage = function(instance_id){
+	location.href = url+'/machingInfo/{{adapter_id}}/'+instance_id;
+}
+
+// 레이어 날짜 셋팅
+const instancePopupInit = function() {
+
+    //월
+    let monthHTML = "";
+    monthHTML += `<option value="">선택</option>`;
+    for (let i = 1; i < 13; i++) {
+    	monthHTML += `<option value="`+i+`">`+i+`</option>`;
+    }
+    $("#schedule_month").append(monthHTML);
+    
+    //일
+    let dayHTML = "";
+    dayHTML += `<option value="">선택</option>`;
+    for (let i = 1; i < 32; i++) {
+      dayHTML += `<option value="`+i+`">`+i+`</option>`;
+    }
+    $("#schedule_day").append(dayHTML);
+
+    //분
+    let minuteHTML = "";
+    minuteHTML += `<option value="">선택</option>`;
+    for (let i = 0; i < 60; i++) {
+      minuteHTML += `<option value="`+i+`">`+i+`</option>`;
+    }
+    $("#schedule_minute").append(minuteHTML);
+    
+    //시
+    let hourHTML = "";
+    hourHTML += `<option value="">선택</option>`;
+    for (let i = 1; i < 25; i++) {
+      hourHTML += `<option value="`+i+`">`+i+`</option>`;
+    }
+    $("#schedule_hour").append(hourHTML);
+
+    //년
+    let date0 = new Date();
+    let date1 = new Date();
+    date1.setFullYear(date1.getFullYear() + 6);    
+    
+    let yearHTML = "";
+    yearHTML += `<option value="">선택</option>`;
+    for (let i = date0.getFullYear(); i < date1.getFullYear(); i++) {
+    	yearHTML += `<option value="`+i+`">`+i+`</option>`;
+    }
+    $("#schedule_year").append(yearHTML);
+}
+
+// 레이어 수집 스케줄 설정 
+const jsScheduleType = function() {
+		
+	let schedule_typeVal = $('input:radio[name="schedule_type"]:checked').val();
+	
+    if(schedule_typeVal === "D39001"){
+        $(".type2").show();
+        $("#schedule_year").hide();
+        $("#schedule_yearTxt").hide();
+    }else{
+        $(".type2").hide();
+        $("#schedule_year").show();
+        $("#schedule_yearTxt").show();
+		$("#schedule_month").show();
+		$("#schedule_monthTxt").show();
+		$("#schedule_day").show();
+		$("#schedule_dayTxt").show();
+		$("#schedule_week").hide();
+		$("#schedule_weekTxt").hide();
+		$("#schedule_hour").show();
+		$("#schedule_hourTxt").show();
+		$("#schedule_minute").show();
+		$("#schedule_minuteTxt").show();        
+    }
+}
+
+const scheduleTimeTypeSel = function(){
+	let schedule_time_type = $("input:radio[name='schedule_time_type']:checked").val();
+	
+	if(schedule_time_type === "D40001"){
+		$("#schedule_year").hide();
+		$("#schedule_yearTxt").hide();
+		$("#schedule_month").show();
+		$("#schedule_monthTxt").show();
+		$("#schedule_day").show();
+		$("#schedule_dayTxt").show();
+		$("#schedule_week").hide();
+		$("#schedule_weekTxt").hide();
+		$("#schedule_hour").show();
+		$("#schedule_hourTxt").show();
+		$("#schedule_minute").show();
+		$("#schedule_minuteTxt").show();
+    }else if(schedule_time_type === "D40002"){
+		$("#schedule_year").hide();
+		$("#schedule_yearTxt").hide();
+		$("#schedule_month").hide();
+		$("#schedule_monthTxt").hide();
+		$("#schedule_day").show();
+		$("#schedule_dayTxt").show();
+		$("#schedule_week").hide();
+		$("#schedule_weekTxt").hide();		
+		$("#schedule_hour").show();
+		$("#schedule_hourTxt").show();
+		$("#schedule_minute").show();
+		$("#schedule_minuteTxt").show();
+    }else if(schedule_time_type === "D40003"){
+		$("#schedule_year").hide();
+		$("#schedule_yearTxt").hide();
+		$("#schedule_month").hide();
+		$("#schedule_monthTxt").hide();
+		$("#schedule_day").hide();
+		$("#schedule_dayTxt").hide();
+		$("#schedule_week").show();
+		$("#schedule_weekTxt").show();		
+		$("#schedule_hour").show();
+		$("#schedule_hourTxt").show();
+		$("#schedule_minute").show();
+		$("#schedule_minuteTxt").show();
+    }else if(schedule_time_type === "D40004"){
+		$("#schedule_year").hide();
+		$("#schedule_yearTxt").hide();
+		$("#schedule_month").hide();
+		$("#schedule_monthTxt").hide();
+		$("#schedule_day").hide();
+		$("#schedule_dayTxt").hide();
+		$("#schedule_week").hide();
+		$("#schedule_weekTxt").hide();		
+		$("#schedule_hour").show();
+		$("#schedule_hourTxt").show();
+		$("#schedule_minute").show();
+		$("#schedule_minuteTxt").show();
+    }else if(schedule_time_type === "D40005"){
+		$("#schedule_year").hide();
+		$("#schedule_yearTxt").hide();
+		$("#schedule_month").hide();
+		$("#schedule_monthTxt").hide();
+		$("#schedule_day").hide();
+		$("#schedule_dayTxt").hide();
+		$("#schedule_week").hide();
+		$("#schedule_weekTxt").hide();		
+		$("#schedule_hour").hide();
+		$("#schedule_hourTxt").hide();
+		$("#schedule_minute").show();
+		$("#schedule_minuteTxt").show();
+    }
+}
+
+// 레이어 Instance ID 자동증가
+const dpIngestAdapterItIdChk = function(){
+	
+	$("#instance_nm").val("");	
+ 	$("#dset_idntfc_id").val("");
+ 	$("#dset_korean_nm").val("");
+ 	$("#storage_cycle").val("");		
+ 	$("#storage_type").val("");	
+ 	$("#etc_note").val("");	
+ 	$("#clct_mthd").val("");	
+ 	$("#clct_ty").val("");	    
+
+    const data = {
+	   		url: '/dp/ingest/adapter/instance/id/check',
+	    };		
+	    
+	    $.ajax({
+	        type: 'POST',
+	        url: commonUrl+'/dpIngestAdapterItIdChk',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+		  	  if (data != null) {
+			  	   	if(data.contents != ""){    	
+		    	    	 $("#instance_id").val(data.contents[0].instance_id);
+			  	   	}
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });
+	    
+}
+
+// 레이어 Instance 저장
+const dpIngestAdapterItSave = function(type){
+	
+	let message = "등록 하시겠습니까?";
+	if(type === 'U'){
+		message = "수정 하시겠습니까?";
+	}
+	
+	if(confirm(message)) {
+	    if($("#instance_nm").val() == '') {
+	        alert('인스턴스 명을 입력하세요!');
+	        $("#instance_nm").focus();
+	        return;
+	    }
+	    if($("#dset_korean_nm").val() == '') {
+	        alert('데이터 셋 명을 선택하세요!');
+	        $("#dset_korean_nm").focus();
+	        return;
+	    }
+	    if($("#clct_mthd").val() == '') {
+	        alert('수집방식을 선택하세요!');
+	        $("#clct_mthd").focus();
+	        return;
+	    }
+	    if($("#clct_ty").val() == '') {
+	        alert('수집유형을 선택하세요!');
+	        $("#clct_ty").focus();
+	        return;
+	    }
+	    if($("#storage_cycle").val() == '') {
+	        alert('보관주기를 입력하세요!');
+	        $("#storage_cycle").focus();
+	        return;
+	    }
+	    
+	    console.log('storage_type : '+$("#storage_type").val());
+	    if($("#storage_type").val() == '') {
+	        alert('보관주기를 선택하세요!');
+	        $("#storage_type").focus();
+	        return;
+	    }
+	    
+	//    let scheduleType = null;
+	//    let scheduleTimeTpe = null;
+	//    let scheduleYear = null;
+	//    let scheduleMonth = null;
+	//    let scheduleDay = null;
+	//    let scheduleWeek = null;
+	//    let scheduleHour = null;
+	//    let scheduleMinute = null;
+	
+	    let schedule_time_type = $("input:radio[name='schedule_time_type']:checked").val();
+	    let schedule_type = $("input:radio[name='schedule_type']:checked").val();
+	    let clct_mthd = $('#clct_mthd').val().substring(0,$('#clct_mthd').val().indexOf('|'));
+	    
+	    console.log('schedule_type : '+schedule_type);
+	    if(schedule_type === "D39001"){
+	//      scheduleType = "반복";
+	      if(schedule_time_type === "D40001"){
+	//        scheduleTimeTpe = "year";
+	
+	        if($("#schedule_month").val() == '') {
+	            alert('월을 선택하세요!');
+	            $("#schedule_month").focus();
+	            return;
+	        }
+	        if($("#schedule_day").val() == '') {
+	            alert('일을 선택하세요!');
+	            $("#schedule_day").focus();
+	            return;
+	        }
+	        if($("#schedule_hour").val() == '') {
+	            alert('시를 선택하세요!');
+	            $("#schedule_hour").focus();
+	            return;
+	        }    	
+	        if($("#schedule_minute").val() == '') {
+	            alert('분을 선택하세요!');
+	            $("#schedule_minute").focus();
+	            return;
+	        }  
+	        
+	      }else if(schedule_time_type === "D40002"){
+	    	  
+	          if($("#schedule_day").val() == '') {
+	              alert('일을 선택하세요!');
+	              $("#schedule_day").focus();
+	              return;
+	          }
+	          if($("#schedule_hour").val() == '') {
+	              alert('시를 선택하세요!');
+	              $("#schedule_hour").focus();
+	              return;
+	          }    	
+	          if($("#schedule_minute").val() == '') {
+	              alert('분을 선택하세요!');
+	              $("#schedule_minute").focus();
+	              return;
+	          }      	  
+	//        scheduleTimeTpe = "month";
+	
+	      }else if(schedule_time_type === "D40003"){
+	//        scheduleTimeTpe = "week";
+	
+	        if($("#schedule_week").val() == '') {
+	            alert('요일을 선택하세요!');
+	            $("#schedule_week").focus();
+	            return;
+	        }
+	        if($("#schedule_hour").val() == '') {
+	            alert('시를 선택하세요!');
+	            $("#schedule_hour").focus();
+	            return;
+	        }    	
+	        if($("#schedule_minute").val() == '') {
+	            alert('분을 선택하세요!');
+	            $("#schedule_minute").focus();
+	            return;
+	        }  
+	
+	      }else if(schedule_time_type === "D40004"){
+	//        scheduleTimeTpe = "day";
+	        if($("#schedule_hour").val() == '') {
+	            alert('시를 선택하세요!');
+	            $("#schedule_hour").focus();
+	            return;
+	        }    	
+	        if($("#schedule_minute").val() == '') {
+	            alert('분을 선택하세요!');
+	            $("#schedule_minute").focus();
+	            return;
+	        } 
+	
+	      }else if(schedule_time_type === "D40005"){
+	//        scheduleTimeTpe = "hour";
+	
+	        if($("#schedule_minute").val() == '') {
+	            alert('분을 선택하세요!');
+	            $("#schedule_minute").focus();
+	            return;
+	        } 
+	        
+	      }
+	    }else{
+	
+	        if($("#schedule_year").val() == '') {
+	            alert('년을 선택하세요!');
+	            $("#schedule_year").focus();
+	            return;
+	        }
+	        if($("#schedule_month").val() == '') {
+	            alert('월을 선택하세요!');
+	            $("#schedule_month").focus();
+	            return;
+	        }
+	        if($("#schedule_day").val() == '') {
+	            alert('일을 선택하세요!');
+	            $("#schedule_day").focus();
+	            return;
+	        }
+	        if($("#schedule_hour").val() == '') {
+	            alert('시를 선택하세요!');
+	            $("#schedule_hour").focus();
+	            return;
+	        }    	
+	        if($("#schedule_minute").val() == '') {
+	            alert('분을 선택하세요!');
+	            $("#schedule_minute").focus();
+	            return;
+	        }    	
+	//      scheduleType = "미반복";
+	    }
+	    
+	    let schedule_now_exe = $("input:checkbox[name='schedule_now_exe']:checked").val();
+	    if(schedule_now_exe !== 'Y'){
+	    	schedule_now_exe = null;
+	    }
+	    
+	    let pageUrl = '/dp/ingest/adapter/instance/save';
+	    if(type === 'U'){
+	    	pageUrl = '/dp/ingest/adapter/instance/update';
+	    }
+	    
+		const data = {
+		   		url: pageUrl,
+		   		adapter_id: "{{adapter_id}}",	
+		   		instance_id: $("#instance_id").val(),	
+		   		instance_nm: $("#instance_nm").val(),	
+		   		dset_idntfc_id:	$("#dset_idntfc_id").val(),
+		   		dset_korean_nm:	$("#dset_korean_nm").val(),
+		   		use_yn:	$('input:radio[name="useYn"]:checked').val(),
+		   		storage_cycle: $("#storage_cycle").val(),		
+		   		storage_type: $("#storage_type").val(),		
+		   		schedule_type: schedule_type,
+		   		schedule_time_type:	schedule_time_type,
+		   		schedule_now_exe: schedule_now_exe,	
+		   		schedule_year: $("#schedule_year").val(),	
+		   		schedule_month:	$("#schedule_month").val(), 
+		   		schedule_day: $("#schedule_day").val(),	
+		   		schedule_hour: $("#schedule_hour").val(),	
+		   		schedule_minute: $("#schedule_minute").val(),	
+		   		schedule_week: $("#schedule_week").val(),	
+		   		etc_note: $("#etc_note").val(),	
+		   		time_data_yn: $("input:radio[name='time_data_yn']:checked").val(),	
+		   		subfolder_yn: null,	
+		   		url_mix: null,	
+		   		clct_mthd: clct_mthd,	
+		   		clct_ty: $("#clct_ty").val(),	
+		   		user_id: 'user00',	
+		   		menu_id: 'menu_id',
+		    };		
+			console.log('data : '+ JSON.stringify(data));
+			
+		    $.ajax({
+		        type: 'POST',
+		        url: url+'/dpIngestAdapterItSave',
+		        dataType: 'json',
+		        contentType: 'application/json; charset-utf-8',
+		        data: JSON.stringify(data)
+		    }).done(function (data) {
+		  		
+		  		let message = JSON.stringify(data.return_msg);
+		  		alert(message.replace(/\"/gi, ''));
+		  		closeModal('add_modal');
+		  		
+		   		$("#instance_id").val("");	
+		   		$("#instance_nm").val("");	
+		   		$("#dset_idntfc_id").val("");
+		   		$("#dset_korean_nm").val("");
+		   		$("#storage_cycle").val("");		
+		   		$("#storage_type").val("");	
+		   		$("#etc_note").val("");	
+		   		$("#clct_mthd").val("");	
+		   		$("#clct_ty").val("");
+		   		
+		  		dpIngestAdapterDt();
+		  		
+		    }).fail(function (error) {
+		        alert(JSON.stringify(error));
+		    });	
+	}
+}
+
+//Instance 삭제
+const dpIngestAdapterItDel = function(instance_id){
+	
+	const data = {
+	   		url: '/dp/ingest/adapter/instance/delete',
+	   		instance_id: instance_id,	
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',
+	    };		
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestAdapterItDel',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	  		
+	  		let message = JSON.stringify(data.return_msg);
+	  		alert(message.replace(/\"/gi, ''));
+	  		dpIngestAdapterDt();
+	    	
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });		
+}
+
+//Instance 삭제 전 체크
+const dpIngestAdapterItDelChk = function(){
+	
+	let instance_id = $("#instance_id").val();
+	
+	if(confirm('삭제 하시겠습니까?')) {
+		const data = {
+		   		url: '/dp/ingest/adapter/instance/delete/check',
+		   		instance_id: instance_id,	
+		   		user_id: 'user00',	
+		   		menu_id: 'menu_id',
+		    };		
+		    $.ajax({
+		        type: 'POST',
+		        url: url+'/dpIngestAdapterItDelChk',
+		        dataType: 'json',
+		        contentType: 'application/json; charset-utf-8',
+		        data: JSON.stringify(data)
+		    }).done(function (data) {
+		  		
+		    	if (data != null) {
+			  	   	if(data.contents != ""){    	
+		    	   		 $.each(data.contents, function (idx, el) {
+		    	   			if(el.chk_yn == 'N'){
+		    	   				dpIngestAdapterItDel(instance_id);
+		    	   			}
+		 	     	     });
+			  	   	}
+		  	  } 
+		    	
+		    	
+		    }).fail(function (error) {
+		        alert(JSON.stringify(error));
+		    });		
+	}
+}
+
+//Instance 상세 조회
+const dpIngestAdapterItDt = function(){
+	
+	let instance_id = $("#instance_id").val();
+	
+    const data = {
+	   		url: '/dp/ingest/adapter/instance/detail',
+	   		instance_id: instance_id,	
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',
+	    };		
+	    
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestAdapterItDt',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	
+		  	  if (data != null) {
+			  	   	if(data.contents != ""){    	
+			  	   		
+			  	   		$("#instance_nm").val(data.contents[0].instance_nm);
+			  	   		$("#dset_idntfc_id").val(data.contents[0].dset_idntfc_id);
+			  	   		$("#dset_korean_nm").val(data.contents[0].dset_korean_nm);
+			  	   		let clct_mthd_nm = $("#"+data.contents[0].clct_mthd).val();
+			  	   		$("select[name='clct_mthd'] option:contains('"+clct_mthd_nm+"')").prop("selected", true);
+			  	   		clctMthdType($("#clct_mthd").val(), data.contents[0].clct_ty);
+			  	   		$("#storage_cycle").val(data.contents[0].storage_cycle);
+			  	   		$("#storage_type").val(data.contents[0].storage_type);
+			  	   		$("input:radio[id='useYn_"+data.contents[0].use_yn+"']").prop("checked", true); 
+			  	   		$("input:radio[id='schedule_type_"+data.contents[0].schedule_type+"']").prop("checked", true); 
+			  	   																				
+				  	   	jsScheduleType();
+			  	   		$("input:radio[id='schedule_time_type_"+data.contents[0].schedule_time_type+"']").prop("checked", true); 
+			  	   		if(data.contents[0].schedule_now_exe === 'Y'){
+			  	   			$('input:checkbox[name="schedule_now_exe"]').prop('checked',true);
+			  	   		}else{
+			  	   			$('input:checkbox[name="schedule_now_exe"]').prop('checked',false);
+			  	   		}
+			  	   		$("#schedule_year").val(data.contents[0].schedule_year);
+			  	   		$("#schedule_month").val(data.contents[0].schedule_month);
+			  	   		$("#schedule_day").val(data.contents[0].schedule_day);
+			  	   		$("#schedule_hour").val(data.contents[0].schedule_hour);
+			  	   		$("#schedule_minute").val(data.contents[0].schedule_minute);
+			  	   		$("#etc_note").val(data.contents[0].etc_note);
+			  	   		$("#schedule_week").val(data.contents[0].schedule_week);
+			  	   		
+			  	   	}
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+}
+
+
+//엔터키가 눌렸을 때
+const enterkey = function(e) {
+	if (e.keyCode == 13) {
+		dpIngestPopupDset01();
+    }
+}
+
+// 데이터 셋 값 셋팅
+const dataSetId = function(dset_idntfc_id, dset_korean_nm){
+	
+	$("#dset_idntfc_id").val(dset_idntfc_id);		    
+	$("#dset_korean_nm").val(dset_korean_nm);		 
+	
+	closeModal('dataSet');
+	$('footer').show();
+	
+	setTimeout(function() {
+		openModal('modal_hidden');
+		$('.modal-backdrop').remove();
+	}, 1000);	
+	
+}
+
+// 데이터 셋 명 검색
+const dpIngestPopupDset01 = function(){
+	
+    const data = {
+	   		url: '/dp/ingest/popup/dataset01',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',
+	   		search: $("#searchNm").val(),	
+	    };		
+	    
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestPopupDset01',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	  $("#dataSetInfo").empty();
+		  	  if (data != null) {
+			  	   	if(data.contents != ""){    	
+    		     	    let insertTr = '';
+    			  	    $.each(data.contents, function (idx, el) {
+    		     	          insertTr += '<tr>';
+    		     		      insertTr += ' <td style="text-align: center;cursor:pointer" ondblclick=dataSetId("'+ el.rl_dset_idntfc_id +'","'+ el.dset_korean_nm +'")>'+isEmpty(el.dset_korean_nm)+'</td>';
+    		     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.table_korean_nm)+'</td>';
+    		     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.table_eng_nm)+'</td>';
+    		                  insertTr += '</tr>';
+    			  	    });
+    	          	    $("#dataSetInfo").append(insertTr);		    	   			 
+			  	   	}
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });
+}
+
+//수집방식
+dpCmCodesClctMthdInput('D34');
+//수집 스케줄 유형
+dpCmCodesClctTyInput('D39');
+
+dpCmCodesClctMthd('D34', 'clct_mthd');
+dpCmCodesClctTy('D40', 'ymdh', '');
+dpCmCodesClctTy('D39', 'div_schedule_type', '');
+dpCmCodesClctTy('D41', 'schedule_week', '');
+instancePopupInit();
+setTimeout(dpIngestAdapterDt, 300);
+
+</script>
+

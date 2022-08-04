@@ -1,0 +1,517 @@
+{{>layout/header}}
+
+        <div class="right_col" role="main">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="x_panel"> 
+                <div class="x_title"> 
+                  <h2>HOME > 데이터 분석 > 분석 모델 관리 > 데이터 분석 모델  > 등록</h2>
+                  <div class="clearfix"> </div>
+                </div>
+                <div class="x_content"> <br>
+                  <div class="row"> 
+                    <div class="metatable_box col-6">
+                      <h4 class="center_title">데이터 분석 모델 이름</h4>
+                      <div class="form-group row">
+                        <label class="control-label">분석 모델명 <span class="red bold">*</span></label>
+                        <div class="form-control_box duplicate_box">
+                          <input class="form-control" type="text" name="anals_model_nm" id="anals_model_nm" placeholder="분석 모델명">
+                          <button class="btn btn-danger btn-sm" onclick="analysisModelsNameDupCheck();">중복조회</button>
+                        </div>
+                      </div>
+                      <h4 class="center_title">데이터 분석 모델 파일 등록</h4>
+                      <div class="row"> 
+                        <div class="table_responsive">
+                    <div class="table_btns mt-1">
+                      <button class="btn btn-primary" type="button" onclick="fileUploadBtn();">Upload</button>
+                      <button class="btn btn-danger" onclick="fileDelete();">삭제</button>
+                      <input type="file" id="files" multiple style="display: none;"/>
+                    </div>
+                    <table class="table table-striped">
+                      <colgroup> 
+                        <col width="10%">
+                        <col width="70%">
+                        <col width="20%">
+                      </colgroup>
+                      <thead>
+                        <tr> 
+                          <th><input id="chk_file" type="checkbox" onclick="checkAll(this);"></th>
+                          <th>분석 모델 파일명 <span class="red bold">*</span></th>
+                          <th>파일 사이즈</th>
+                        </tr>
+                      </thead>
+                      <tbody id="file_infos">
+                      </tbody>
+                    </table>
+                  </div>
+                      </div>
+                    </div>
+                    <div class="metatable_box col-5 col-lg-6">
+                      <h4 class="center_title">데이터 분석 모델 사용 용도</h4>
+                      <div class="form-group row">
+                        <table class="table table-bordered bulk_action table_center" id="sandboxTable">
+                       <colgroup> 
+                         <col width="50%">
+                       </colgroup>
+                       <thead>
+                         <tr id="anals_use_prpos_cd_radio"> 
+                         </tr>
+                         <tr id="anals_use_prpos_cd">
+                         </tr>
+                       </thead>
+                     </table>
+                      </div>
+                      <h4 class="center_title">데이터 분석 모델 기본 정보 등록</h4>
+                      <div class="row"> 
+                        <div class="table_responsive">
+                    <div class="table_btns">
+                      	<button class="btn btn-primary" onclick="addBasicInfo();">+ 추가</button>
+		                <button class="btn btn-danger" onclick="deleteBasicInfo();">- 삭제</button>
+                    </div>
+                    <table class="table table-striped">
+                      <colgroup> 
+                        <col width="10%">
+                        <col width="25%">
+                        <col width="40%">
+                        <col width="25%">
+                      </colgroup>
+                      <thead>
+                        <tr> 
+                          <th><input class="flat" id="check-all" type="checkbox"></th>
+                          <th>파라미터</th>
+                          <th>정의</th>
+                          <th>값</th>
+                        </tr>
+                      </thead>
+                      <tbody id="basic_infos">
+                      </tbody>
+                    </table>
+                  </div>
+                      </div>
+                      <div class="right_btns"> 
+                  <button class="btn btn-dark" onclick="addModal();">등록 가이드</button>
+                </div>
+                    </div>
+                  </div>
+                  <div class="row"> 
+                    <div class="metatable_box col-12">
+                      <h4 class="center_title">데이터 분석 모델 설명</h4>
+                      <div class="form-group row">
+                        <label class="control-label">데이터 분석 모델 설명</label>
+                        <div class="form-control_box duplicate_box">
+                          <input class="form-control" type="text" name="anals_model_desc" id="anals_model_desc" placeholder="데이터 분석 모델 설명">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="right_btns mt-4"> 
+                    <button class="btn btn-primary" onclick="analysisModelsEnroll();">저장</button>
+                    <button class="btn btn-danger" onclick="jsList();">취소</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- modal -->
+        <div class="modal fade add_modal" id="add_modal" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-md">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">데이터 분석 모델 등록 가이드</h4>
+                <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
+              </div>
+              <div class="modal-body">
+                <div class="x_content"> 
+                    <div class="table_responsive" style="height: 300px; overflow: auto">
+                    <table class="table table-striped" style="word-wrap: break-word;">
+                      <thead>
+                        <tr> 
+                          <th colspan="3">▣ 기본 정보 등록 예시</th>
+                        </tr>
+                        <tr> 
+                          <th>파라미터</th>
+                          <th>정의</th>
+                          <th>값</th>
+                        </tr>
+                      </thead>
+                      <tbody id="guide">
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-primary" type="button" data-dismiss="modal">확인</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        
+{{>layout/footer}}        
+
+<script>
+
+const commonUrl = '/sandbox/common';
+const url = '/sandbox/model/modelAnalysisModel';
+
+let fileNo = 0;
+let basicInfoNo = 0;
+let filesArr = new Array();
+let basicInfoArr = new Array();
+
+let duplicateYn = '';		//중복 체크 여부
+
+//분석 모델명 변경시 중복 체크 값 초기화
+$('#anals_model_nm').on('keyup', function(){
+	duplicateYn = '';
+});
+
+//분석_사용_용도_코드
+const commonCodeAnalysisUsePurpose = function (){
+	const data = {
+       		url: '/services/sandbox/common-code/analysis-usage',
+        };		
+        $.ajax({
+            type: 'POST',
+            url: commonUrl+'/commonCodeAnalysisUsePurpose',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data),
+            async: false
+        }).done(function (data) {
+ 		  	if (data != null) {
+ 		  	   	if(data.contents != ""){
+ 		  	   		 $("#anals_use_prpos_cd_radio").empty();
+					 $("#anals_use_prpos_cd").empty();
+    				 let radioOp = '';
+    				 let insertTr = '';
+	    	   		 $.each(data.contents, function (idx, el) {
+	    	   			radioOp += '<th>';
+	    	   			radioOp += '	<input id="radio'+idx +'" type="radio" name="anals_use_prpos_cd" onclick="checkPurpose();" value="'+el.dtl_code+'"';
+	    	   			if(idx==0){
+	    	   				radioOp += ' checked';
+	    	   			}
+	    	   			radioOp += '>';
+	    	   			radioOp += '</th>';
+	    	   			insertTr += '<th>'+el.dtl_code_nm+'</th>'
+	 	     	     });
+		 	     	 $("#anals_use_prpos_cd_radio").append(radioOp);        	
+		 	     	 $("#anals_use_prpos_cd").append(insertTr);        	
+ 		  	   	}
+ 		  	}
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+}
+
+//분석 모델명 중복 확인
+const analysisModelsNameDupCheck = function (){
+	let anals_model_nm = $("#anals_model_nm").val();
+	if(anals_model_nm == '') {
+        alert('분석 모델명을 입력하세요!');
+        $("#anals_model_nm").focus();
+        return true;
+    }
+	
+	const data = {
+       		url: '/services/sandbox/analysis-models/B04002/name/dup-check?anals_model_nm='+anals_model_nm,
+       		user_id: 'user00',	
+       		menu_id: 'menu_id',
+        };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/analysisModelsNameDupCheck',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data),
+    }).done(function (data) {
+ 	if (data != null) {
+ 	   	if(data.contents.duplicated){
+ 	   		duplicateYn = 'Y';
+	   		alert("동일한 분석 모델명이 있습니다.");
+	   		$("#anals_model_nm").focus();
+ 	   	}else{
+	 	   	duplicateYn = 'N';
+	   		alert("사용 가능합니다.");
+ 	   	}
+ 	}
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });
+    
+}
+
+//분석 모델 등록
+const analysisModelsEnroll = function (){
+	
+	if($('#anals_model_nm').val() == ''){
+		alert("분석 모델명을 입력하세요.");
+		$("#anals_model_nm").focus();
+		return;
+	}
+	
+	let formData = new FormData();
+    formData.append("url", '/services/sandbox/analysis-models/B04002/enroll');
+    formData.append("creator_id", 'creator');
+    formData.append("modifier_id", 'modifier');
+    formData.append("user_id", 'user_id');
+    formData.append("menu_id", 'menu_id');
+    
+  	//데이터 분석 모델 이름, 데이터 분석 모델 사용 용도, 데이터 분석 모델 설명
+    formData.append("analysis_model.anals_model_nm", $('#anals_model_nm').val());
+    formData.append("analysis_model.anals_use_prpos_cd", $('input:radio[name="anals_use_prpos_cd"]:checked').val());
+    formData.append("analysis_model.anals_model_desc", $('#anals_model_desc').val());
+    
+    
+  	//기본정보
+    let isValid = true;
+    $('#basic_infos > tr').each(function(index){
+    	let idx = $(this).data("code");
+    	let anals_model_stage = $("#anals_model_stage"+idx).val();
+    	let anals_model_dfn = $("#anals_model_dfn"+idx).val();
+    	let anals_model_desc = $("#anals_model_desc"+idx).val();
+    	
+    	if(anals_model_stage == ''){
+    		alert("파라미터를 입력하세요.");
+    		$("#anals_model_stage"+idx).focus();
+    		isValid = false;
+    		return isValid;
+    	}
+    	
+    	if(anals_model_dfn == ''){
+    		alert("정의를 입력하세요.");
+    		$("#anals_model_dfn"+idx).focus();
+    		isValid = false;
+    		return isValid;
+    	}
+    	
+    	if(anals_model_desc == ''){
+    		alert("값을 입력하세요.");
+    		$("#anals_model_desc"+idx).focus();
+    		isValid = false;
+    		return isValid;
+    	}
+    	
+    	formData.append("basic_infos["+index+"].anals_model_bass_id", index);
+    	formData.append("basic_infos["+index+"].anals_model_stage", $("#anals_model_stage"+idx).val());
+        formData.append("basic_infos["+index+"].anals_model_dfn", $("#anals_model_dfn"+idx).val());
+        formData.append("basic_infos["+index+"].anals_model_desc", $("#anals_model_desc"+idx).val());
+    });
+    
+    if(!isValid){
+    	return;
+    }
+    
+    let fileCnt = 0;
+  	//데이터 분석 모델 파일 등록
+    for (let i = 0; i < filesArr.length; i++) {
+    	if(!filesArr[i].is_delete){
+    		formData.append("files", filesArr[i]);
+    		fileCnt++;
+    	}
+    }
+  	
+    if(fileCnt == 0){
+  		alert("전처리 모델 파일을 등록하세요.");
+		return;
+  	}
+    
+    if(duplicateYn != 'N'){
+		if(duplicateYn == 'Y'){
+			alert("동일한 분석 모델명이 있습니다.");
+		}else{
+			alert("중복 체크를 해주세요.");
+		}
+		$("#anals_model_nm").focus();
+		return;
+	}
+  	
+    if(confirm("등록 하시겠습니까?")){
+	    $.ajax({
+	        type: 'POST',
+	        enctype: "multipart/form-data",
+	        url: url+'/add/analysisModelsEnroll',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: formData,
+	        processData: false,
+	   	    contentType: false,        
+	    }).done(function (data) {
+	  		let message = JSON.stringify(data.return_msg);
+	  		alert(message.replace(/\"/gi, ''));    	
+	  		jsList();
+	  		
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+    }
+	
+}
+
+//데이터 분석 모델 파일 등록 - 업로드 버튼
+const fileUploadBtn = function() {
+	$('#files').trigger("click");
+}
+
+//데이터 분석 모델 파일 등록 - 삭제 버튼
+const fileDelete = function (){
+	$('input:checkbox[name="chk_file"]:checked').each(function() {
+		$("#file"+$(this).val()).remove();
+		filesArr[$(this).val()].is_delete = true;
+   });
+}
+
+//데이터 분석 모델 등록 - 체크박스 전체
+const checkAll = function (obj){
+	let checked = $(obj).is(':checked');
+	if(checked){
+		$('input:checkbox[name="'+$(obj).attr("id")+'"]').prop('checked',true);
+	}else{
+		$('input:checkbox[name="'+$(obj).attr("id")+'"]').prop('checked',false);
+	}
+}
+
+//데이터 분석 모델 기본 정보 등록 - 기본정보 추가
+const addBasicInfo = function (){
+	let insertTr = '<tr id="basic_info'+basicInfoNo+'" data-code='+basicInfoNo+'>';
+		insertTr += '<td><input type="checkbox" name="chk_basic_infos" value="'+basicInfoNo+'"></td>';
+		insertTr += '<td><input class="form-control" type="text" name="anals_model_stage'+basicInfoNo+'" id="anals_model_stage'+basicInfoNo+'"></td>';
+		insertTr += '<td><input class="form-control" type="text" name="anals_model_dfn'+basicInfoNo+'" id="anals_model_dfn'+basicInfoNo+'"></td>';
+		insertTr += '<td><input class="form-control" type="text" name="anals_model_desc'+basicInfoNo+'" id="anals_model_desc'+basicInfoNo+'"></td>';
+	$("#basic_infos").append(insertTr);
+	basicInfoNo++;
+}
+
+//데이터 분석 모델 기본 정보 등록 - 기본정보 삭제
+const deleteBasicInfo = function (){
+	$('input:checkbox[name="chk_basic_infos"]:checked').each(function() {
+		$("#basic_info"+$(this).val()).remove();
+   });
+}
+
+//데이터 분석 모델 사용 용도 체크
+const checkPurpose = function (){
+	let val = $('input:radio[name="anals_use_prpos_cd"]:checked').val();
+	initBasicInfo(val);
+}
+
+//데이터 분석 모델 기본 정보 데이터
+const initBasicInfo = function (code){
+	basicInfoNo = 0;
+	
+	if(!code){
+		code = 'B13001';	//시계열 분석 초기
+	}
+	
+	const data = {
+   		url: '/services/sandbox/analysis-models/B04002/basic-infos/Y?anals_use_prpos_cd='+code,
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+    };
+	
+	$.ajax({
+        type: 'POST',
+        url: url+'/initBasicInfo',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+  	    	
+  	    	if(data.contents != ""){
+  	    		let insertTr = '';
+  	    		$("#basic_infos").empty();
+		  	    $.each(data.contents, function (idx, el) {
+		  	    	
+		  	    	insertTr += '<tr id="basic_info'+basicInfoNo+'" data-code='+basicInfoNo+'>';
+		  			insertTr += '	<td></td>';
+		  			insertTr += '	<td><input class="form-control" type="hidden" name="anals_model_stage'+basicInfoNo+'" id="anals_model_stage'+basicInfoNo+'" value="'+el.anals_model_stage+'">'+el.anals_model_stage+'</td>';
+		  			insertTr += '	<td><input class="form-control" type="hidden" name="anals_model_dfn'+basicInfoNo+'" id="anals_model_dfn'+basicInfoNo+'" value="'+el.anals_model_dfn+'">'+el.anals_model_dfn+'</td>';
+		  			insertTr += '	<td><input class="form-control" type="text" name="anals_model_desc'+basicInfoNo+'" id="anals_model_desc'+basicInfoNo+'" value=""></td>';
+		  			insertTr += '</tr>';
+		  			basicInfoNo++;
+		  	    });
+		  	  	$("#basic_infos").html(insertTr);
+  	    	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });
+			
+}
+
+//데이터 분석 모델 등록 가이드
+const analysisModelsGuide = function (){
+	let anals_use_prpos_cd = $('input:radio[name="anals_use_prpos_cd"]:checked').val();
+	const data = {
+   		url: '/services/sandbox/analysis-models/B04002/basic-infos/guide?anals_use_prpos_cd='+anals_use_prpos_cd,
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+    };		
+    $.ajax({
+        type: 'POST',
+        url: url+'/analysisModelsGuide',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data),
+        async: false
+    }).done(function (data) {
+ 	if (data != null) {
+ 	   	if(data.contents != ""){
+ 	   		 $("#guide").empty();
+				 let insertTr = '';
+ 	   		 $.each(data.contents, function (idx, el) {
+ 	   			insertTr += '<tr>';
+ 	   			insertTr += '	<td>'+el.anals_model_stage+'</td>';
+ 	   			insertTr += '	<td>'+el.anals_model_dfn+'</td>';
+ 	   			insertTr += '	<td>'+el.anals_model_desc+'</td>';
+ 	   			insertTr += '</tr>';
+    	     });
+     	 $("#guide").append(insertTr);        	
+ 	   	}
+ 	}
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });
+}
+
+$('#files').on('change',function(obj){
+	var fileReader = new FileReader();
+	  fileReader.readAsDataURL(obj.target.files[0]);
+	  fileReader.onload = function(e) {
+	    filesArr.push(obj.target.files[0]);
+	  }
+	  
+	  let insertTr = '<tr id="file'+fileNo+'">';
+		insertTr += '<td><input class="flat" name="chk_file" type="checkbox" value="'+fileNo+'"></td>';
+		insertTr += '<td>'+obj.target.files[0].name+'</td>';
+		insertTr += '<td>'+formatBytes(obj.target.files[0].size,3)+'</td>';
+		insertTr += '</tr>';
+		
+	$("#file_infos").append(insertTr);
+	
+	fileNo++;
+});
+
+//모달 추가
+const addModal = function(){
+	analysisModelsGuide();
+	$('#add_modal').modal('show');
+}
+
+//분석 모델 목록 페이지 이동
+const jsList = function(){
+	location.href = '/sandbox/model/modelAnalysisModel/list';
+}
+
+//공통코드
+commonCodeAnalysisUsePurpose();
+
+initBasicInfo();
+</script>
+

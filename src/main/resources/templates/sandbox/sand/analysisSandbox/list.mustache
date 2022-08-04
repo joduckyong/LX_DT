@@ -1,0 +1,850 @@
+{{>layout/header}}
+
+        <div class="right_col" role="main">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="x_panel"> 
+                <div class="x_title"> 
+                  <h2>HOME > 데이터 분석 > 샌드박스 관리</h2>
+                  <div class="clearfix"> </div>
+                </div>
+                <div class="x_content"> <br>
+                  <!-- div class="scenario_depth"> 
+                    <ul>
+                      <li class="now_depth">HOME</li>
+                      <li class="temporary_storage">데이터 분석</li>
+                      <li class="save">샌드박스 관리</li>
+                    </ul>
+                  </div-->
+                  
+	              <h3 class="mb-4">샌드박스 조회</h3>
+	              
+                  <div class="right_btns"> 
+                    <div class="row port_search">
+                      <select class="form-control" name="sandbox_status_cd" id="sandbox_status_cd"> 
+                        <option value="">선택</option>
+                      </select>
+                      <input class="form-control mr-1" type="text" id="query" name="query" onkeypress="enterkey(event);">
+                      <button class="btn btn-primary btn-sm" onclick="sandboxesGet();">조회</button>
+                    </div>
+                  </div>
+                  	              
+                  <div class="table_btns mt-4">
+                    <button class="btn btn-primary" type="button" onclick="btnAdd();">등록</button>
+                    <button class="btn btn-danger btn_remove" onclick="btnDel();">삭제</button>
+                  </div>
+                  
+                  <div class="table_responsive">
+                    <div class="talbel_total"><span class="red bold" id="total_count"></span>건이 조회되었습니다.</div>
+                    <table class="table table-bordered bulk_action table_center" id="sandboxTable">
+                      <colgroup> 
+                        <!-- col width="44px">
+                        <col spna="2" width="100px">
+                        <col span="8" width="90px">
+                        <col span="2" width="102px">
+                        <col span="2" width="90px">
+                        <col width="120px"-->
+                      </colgroup>
+                      <thead>
+                        <tr> 
+                          <th rowspan="2"> 
+                            선택
+                          </th>
+                          <th rowspan="2">샌드박스명</th>
+                          <th colspan="4">샌드박스 정보</th>
+                          <th rowspan="2">SANDBOX<br>실행 조작</th>
+                          <th colspan="3">분석조작</th>
+                          <th rowspan="2">분석<br>프로그램</th>
+                          <th rowspan="2">최종<br>상태</th>
+                          <th rowspan="2">생성자</th>
+                          <th>등록일자</th>
+                        </tr>
+                        <tr>
+                          <th>시나리오이름</th>
+                          <th>용도</th>
+                          <th>주기</th>
+                          <th>분석 모델</th>
+                          <th>실행 조작</th>
+                          <th>결과 조회</th>
+                          <th>파일업로드</th>
+                          <th>승인일자</th>
+                        </tr>
+                      </thead>
+                      <tbody id="sandboxesGet">
+                      </tbody>
+                    </table>
+                    <div class="nav justify-content-center"> 
+					  <ul id="pagingul" class="pagination">
+					  </ul>                    
+                    </div>                     
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- download_modal -->
+        <div class="modal fade data_upload" id="data_upload" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-md">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title">분석 데이터 업로드</h4>
+                <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
+              </div>
+              <div class="modal-body">
+                <div class="x_content"> 
+                  <div class="table_responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr> 
+                          <th colspan="4" style="text-align: center;">분석 이미지 데이터셋 업로드</th>
+                        </tr>
+                        <tr> 
+                          <th style="text-align: center;">이미지 데이터셋 이름</th>
+                          <th style="text-align: center;">데이터 구분</th>
+                          <th style="text-align: center;">파일 개수</th>
+                          <th style="text-align: center;">업로드</th>
+                        </tr>
+                      </thead>
+                      <tbody id="sandboxImageDatasetInfoGet">
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+	            <button class="btn btn-primary" type="button" onclick="sandboxAnalysisDataUpload();">업로드</button>
+                <button class="btn btn-secondary" data-dismiss="modal" onclick="closeModal('data_upload')">닫기 </button>
+              </div>
+            </div>
+          </div>
+        </div> 
+        
+        <!-- history_modal -->
+        <div class="modal fade program" id="program" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-lg" style="max-width: 400px;">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">프로그램 팝업</h4>
+                <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
+              </div>
+              <div class="modal-body">
+                <div class="x_content"> 
+                  <h5>▣ <span id="programId"></span></h5>
+                  <div class="table_responsive">
+                    <table class="table table-striped">
+                      <colgroup>
+						<col width="100px">
+						<col width="50px">
+					  </colgroup>
+                      <thead>
+                        <tr> 
+                          <th style="text-align: center;">프로그램</th>
+                          <th style="text-align: center;">열기</th>
+                        </tr>
+                      </thead>
+                      <tbody id="sandboxesPrograms">
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="right_btns">
+                    <button class="btn btn-secondary" data-dismiss="modal" onclick="closeModal('program')">닫기 </button>
+                  </div>                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>        
+        
+        <!-- modal -->
+        <div class="modal fade modelInfo" id="modelInfo" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" >[<span id="modelInfoTitle"></span>] 분석 모델 정보</h4>
+                <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
+              </div>
+              <div class="modal-body">
+                <div class="x_content">
+                  <ul class="nav nav-tabs bar_tabs">
+                    <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#analysisModel">분석 모델</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#preprocessing">전처리 모델</a></li>
+                  </ul>
+                  <div class="tab-content">
+                    <div class="tab-pane fade show active" id="analysisModel" role="tabpanel">
+	                  <h5>▣ 데이터 분석 모델 정보</h5>
+	                  <div class="table_responsive table-modal-height">
+                        <table class="table table-striped table_center">
+                          <colgroup> </colgroup>
+                          <thead>
+                            <tr> 
+                              <th>데이터 전처리 모델명</th>
+                              <th>생성 일자</th>
+                            </tr>
+                          </thead>
+                          <tbody id="analysisModelInfo">
+                          </tbody>
+                        </table>
+                      </div>
+	                    <div class="right_btns"> 
+		                    <a class="btn btn-primary" href="javascript:void(0);" onclick="sandboxAnalysisFileDownload();" >다운로드</a>
+		                    <a class="btn btn-primary" href="" data-dismiss="modal">확인</a>
+	                    </div>
+                    </div>
+                    <div class="tab-pane fade" id="preprocessing" role="tabpanel">
+	                  <h5>▣ 데이터 전처리 모델 정보</h5>
+	                  <div class="table_responsive table-modal-height">
+                        <table class="table table-striped table_center">
+                          <colgroup> </colgroup>
+                          <thead>
+                            <tr> 
+                              <th>데이터 전처리 모델명</th>
+                              <th>생성 일자</th>
+                            </tr>
+                          </thead>
+                          <tbody id="pretreatModelInfo">
+                          </tbody>
+                        </table>
+                      </div>
+	                    <div class="right_btns"> 
+		                    <a class="btn btn-primary" href="javascript:void(0);" onclick="sandboxPretreatFileDownload();">다운로드</a>
+		                    <a class="btn btn-primary" href="" data-dismiss="modal">확인</a>
+		                </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+                
+        <input type="hidden" name="dtl_code" id="dtl_code">
+        <input type="hidden" name="sandbox_id" id="sandbox_id">
+        <input type="hidden" name="image_dataset_id" id="image_dataset_id">
+        
+{{>layout/footer}}        
+
+<script>
+
+const commonUrl = '/sandbox/common';
+const url = '/sandbox/sand/analysisSandbox';
+
+let fileNo = 0;
+let dataFiles = new Array();
+let contents;
+
+let init_page = 1;				//초기 페이지
+let page = 1;					//페이지
+let init_size_per_page = 10;	//초기 개수
+let size_per_page = 10;	 		//가져올 개수
+let pageCount = 10;		 		//페이징에 나타낼 페이지 수
+
+//샌드박스 목록 조회
+const sandboxesGet = function(page, size_per_page){
+	
+	if(!page){
+		page = init_page;
+	}
+	if(!size_per_page){
+		size_per_page = init_size_per_page;
+	}
+	
+	console.log('page : '+page+' , size_per_page : '+size_per_page );     
+	
+	let query = $("#query").val() != null ? $("#query").val() : '';
+	let sandbox_status_cd = $("#sandbox_status_cd").val() != null ? $("#sandbox_status_cd").val() : '';
+	
+	const data = {
+	   		url: '/services/sandbox/sandboxes/get?search=sandbox_nm:'+query+',sandbox_status_cd:'+sandbox_status_cd+'&page_current='+page+'&size_per_page='+size_per_page+'&sort=sandbox_id:desc',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	   				
+	    };		
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/sandboxesGet',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	  $("#sandboxesGet").empty();
+		  	  if (data != null) {
+		      $("#total_count").text(data.total_count);
+		  	    	if(data.contents != ""){
+			    	    let insertTr = '';
+				  	    $.each(data.contents, function (idx, el) {
+				  	    	
+	                        insertTr += '<tr>';
+	                        insertTr += '  <td rowspan="2">';
+	                        insertTr += '    <input class="flat" type="radio" name="radio_sandbox_id" value="'+el.sandbox_id+'">';
+	                        insertTr += '  </td>';
+	                        insertTr += '  <td rowspan="2"><span class="blue bold" type="button" data-toggle="modal" onclick=btnUpdate("'+el.sandbox_id+'");>'+isEmpty(el.sandbox_nm)+'</span></td>';
+	                        insertTr += '  <td rowspan="2">'+isEmpty(el.scenario_nm_kor)+'</td>';
+	                        insertTr += '  <td rowspan="2">'+isEmpty(el.usage)+'</td>';
+	                        insertTr += '  <td rowspan="2">'+isEmpty(el.cycle)+'</td>';
+	                        insertTr += '  <td rowspan="2"><button class="btn btn-success btn-sm mx-0" type="button" data-toggle="modal" onclick=modelInfo("'+el.sandbox_id+'","'+isEmpty(el.sandbox_nm)+'")>확인</button></td>';
+	                        insertTr += '  <td rowspan="2">'; 
+	                        insertTr += '    <button class="btn_play" id="play_'+el.sandbox_id+'"  onclick=sandboxesRun("'+el.sandbox_id+'");>▶</button>';
+	                        insertTr += '    <button class="btn_pause red" id="pause_'+el.sandbox_id+'" onclick=sandboxesStop("'+el.sandbox_id+'");>■</button>';
+	                        insertTr += '  </td>';
+	                        insertTr += '  <td rowspan="2">'; 
+	                        insertTr += '    <button class="btn_play"  onclick=sandboxesAnalysisRun("'+el.sandbox_id+'");>▶</button>';
+	                        insertTr += '    <button class="btn_pause red"   onclick=sandboxesAnalysisStop("'+el.sandbox_id+'");>■</button>';
+	                        insertTr += '  </td>';
+	                        insertTr += '  <td rowspan="2"><span class="blue bold" style="cursor:pointer" onclick=resultPage("'+el.sandbox_id+'");>결과조회</span></td>';
+	                        if(el.anals_use_prpos_cd === 'B13002'){
+		                        insertTr += '  <td rowspan="2"><button class="btn btn-success btn-sm mx-0" type="button" data-toggle="modal" onclick=sandboxImageDatasetInfoGet("'+el.sandbox_id+'")>업로드</button></td>';
+	                        }else{
+		                        insertTr += '  <td rowspan="2"></td>';
+	                        }
+	                        insertTr += '  <td rowspan="2">';
+	                        insertTr += '    <button class="btn btn-success btn-sm mx-0" type="button" data-toggle="modal" onclick=sandboxesPrograms("'+el.sandbox_id+'","'+isEmpty(el.sandbox_nm)+'")>프로그램</button>';
+	                        insertTr += '  </td>';
+	                        insertTr += '  <td rowspan="2">'+isEmpty(el.sandbox_status)+'</td>';
+	                        insertTr += '  <td rowspan="2">'+isEmpty(el.creator_id)+'</td>';
+	                        insertTr += '  <td>'+isEmpty(el.creat_datetime)+'</td>';
+	                        insertTr += '</tr>';
+	                        insertTr += '<tr>';
+	                        insertTr += '  <td>'+isEmpty(el.approval_date)+'</td>';
+	                        insertTr += '</tr>';
+	                        
+				  	    });
+	         	   	    $("#sandboxesGet").append(insertTr);
+		  	    	}
+		  	    	
+	  	    		//페이징 보여줌
+	  	    		paging(data.total_count, size_per_page, pageCount, page);		
+		  	  }
+	    	  
+		  	sandboxHealthCheck();
+  	    	
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });		
+}
+
+//샌드박스 상태 코드 조회(샌드박스 저장, 임시저장 코드)
+const commonCodeSandboxLastStatus = function (){
+	const data = {
+       		url: '/services/sandbox/common-code/sandbox-last-status',
+        };		
+        $.ajax({
+            type: 'POST',
+            url: commonUrl+'/commonCodeSandboxLastStatus',
+            dataType: 'json',
+            contentType: 'application/json; charset-utf-8',
+            data: JSON.stringify(data)
+        }).done(function (data) {
+ 		  	if (data != null) {
+ 		  	   	if(data.contents != ""){    	    	
+					 $("#sandbox_status_cd").empty();
+    				 let selOp = '<option value="">선택</option>';  
+	    	   		 $.each(data.contents, function (idx, el) {
+  	    					selOp += '<option value='+el.dtl_code+'>' + el.dtl_code_nm + '</option>';
+	 	     	     });
+		 	     	 $("#sandbox_status_cd").append(selOp);        	
+ 		  	   	}
+ 		  	}
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });		
+}
+
+//샌드박스 실행
+const sandboxesRun = function (sandbox_id) {
+		
+	const data = {
+   		url: '/services/sandbox/sandboxes/'+sandbox_id+'/run',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+    };		
+    $.ajax({
+        type: 'POST',
+        url: url+'/sandboxesRun',
+        dataType: 'json',
+        contentType: 'application/json; charset-utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+  		let message = JSON.stringify(data.return_msg);
+  		alert(message.replace(/\"/gi, ''));
+  		
+  		//$('a').attr('onclick', '');
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//샌드박스 정지
+const sandboxesStop = function (sandbox_id) {
+		
+	const data = {
+   		url: '/services/sandbox/sandboxes/'+sandbox_id+'/stop',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+    };		
+    $.ajax({
+        type: 'POST',
+        url: url+'/sandboxesStop',
+        dataType: 'json',
+        contentType: 'application/json; charset-utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+  		let message = JSON.stringify(data.return_msg);
+  		alert(message.replace(/\"/gi, ''));
+  		
+//  	$('a').attr('onclick', '');
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//샌드박스 분석 실행
+const sandboxesAnalysisRun = function (sandbox_id) {
+		
+	const data = {
+   		url: '/services/sandbox/sandboxes/'+sandbox_id+'/analysis/start',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+    };		
+    $.ajax({
+        type: 'POST',
+        url: url+'/sandboxesAnalysisRun',
+        dataType: 'json',
+        contentType: 'application/json; charset-utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+  		let message = JSON.stringify(data.return_msg);
+  		alert(message.replace(/\"/gi, ''));
+  		
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//샌드박스 분석 정지
+const sandboxesAnalysisStop = function (sandbox_id) {
+		
+	const data = {
+   		url: '/services/sandbox/sandboxes/'+sandbox_id+'/analysis/stop',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+    };		
+    $.ajax({
+        type: 'POST',
+        url: url+'/sandboxesAnalysisStop',
+        dataType: 'json',
+        contentType: 'application/json; charset-utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+  		let message = JSON.stringify(data.return_msg);
+  		alert(message.replace(/\"/gi, ''));
+  		
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//샌드박스 health check
+const sandboxHealthCheck = function () {
+		
+	const data = {
+   		url: '/services/sandbox/sandboxes/health-check',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+    };		
+    $.ajax({
+        type: 'POST',
+        url: url+'/sandboxHealthCheck',
+        dataType: 'json',
+        contentType: 'application/json; charset-utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	if(data.contents != ""){
+	   		$.each(data.contents, function (idx, el) {
+	   			console.log('el : '+el);
+	   			$("#play_"+el).addClass("red"); 
+	   			$("#pause_"+el).removeClass("red"); 
+   	     	});
+	   		
+    	}
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//샌드박스 프로그램 조회
+const sandboxesPrograms = function(sandbox_id, sandbox_nm){
+	
+	const data = {
+	   		url: '/services/sandbox/sandboxes/'+sandbox_id+'/programs/get',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	   				
+	    };		
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/sandboxesPrograms',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	  $("#sandboxesPrograms").empty();
+		  	  if (data != null) {
+		  	    	if(data.contents != ""){
+			    	    let insertTr = '';
+				  	    $.each(data.contents, function (idx, el) {
+				  	    	
+	                        insertTr += '<tr>';
+	                        insertTr += '  <td style="text-align: center;">'+el.progrm_nm+'</td>';
+	                        insertTr += '  <td style="text-align: center;" class="td_btn"><a class="btn btn-primary btn-sm" href="'+el.progrm_url+'" target="_blank">열기</a> </td>';
+	                        insertTr += '</tr>';
+	                        
+				  	    });
+	         	   	    $("#sandboxesPrograms").append(insertTr);
+		  	    	}
+		  	    	
+		  	  }
+  	    	
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });		
+	
+	$("#programId").text(sandbox_nm);
+    openModal("program");   
+    
+}
+
+
+const modelInfo = function(sandbox_id, sandbox_nm){
+	
+    $("#analysisModelInfo").empty();
+    $("#pretreatModelInfo").empty();
+    
+    $('#sandbox_id').val(sandbox_id);
+    
+	const data1 = {
+	   		url: '/services/sandbox/sandboxes/'+sandbox_id+'/analysis-files/get',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	   				
+	    };		
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/sandboxAnalysisModelFileGet',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data1)
+	    }).done(function (data) {
+		  	  if (data != null) {
+		  	    	if(data.contents != ""){
+			    	    let insertTr = '';
+				  	    $.each(data.contents, function (idx, el) {
+				  	    	
+	                        insertTr += '<tr>';
+	                        insertTr += '  <td style="text-align: center;">'+el.file_name+'</td>';
+	                        insertTr += '  <td style="text-align: center;">'+el.creat_datetime+'</td>';
+	                        insertTr += '</tr>';
+	                        
+				  	    });
+	         	   	    $("#analysisModelInfo").append(insertTr);
+		  	    	}
+		  	  }
+  	    	
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	    
+	const data2 = {
+	   		url: '/services/sandbox/sandboxes/'+sandbox_id+'/pretreat-files/get',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	   				
+	    };		
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/sandboxPretreatFileGet',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data2)
+	    }).done(function (data) {
+		  	  if (data != null) {
+		  	    	if(data.contents != ""){
+			    	    let insertTr = '';
+				  	    $.each(data.contents, function (idx, el) {
+				  	    	
+	                        insertTr += '<tr>';
+	                        insertTr += '  <td style="text-align: center;">'+el.file_name+'</td>';
+	                        insertTr += '  <td style="text-align: center;">'+el.creat_datetime+'</td>';
+	                        insertTr += '</tr>';
+	                        
+				  	    });
+	         	   	    $("#pretreatModelInfo").append(insertTr);
+		  	    	}
+		  	  }
+  	    	
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	
+	
+	
+	$("#modelInfoTitle").text(sandbox_nm);
+	openModal("modelInfo");  
+}
+
+//샌드박스 - 분석 모델 파일 다운로드
+const sandboxAnalysisFileDownload = function(){
+	
+	let sandbox_id = $('#sandbox_id').val();
+	
+	const data = {
+	   		url: '/services/sandbox/sandboxes/'+sandbox_id+'/analysis-files/download',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	   				
+	    };		
+	    $.ajax({
+	        type: 'POST',
+	        url: commonUrl+'/download/sandboxAnalysisFileDownload',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data),
+	    }).done(function (data) {
+	    }).fail(function (error) {
+		    location.href = commonUrl+'/urlDownload/'+JSON.stringify(error.responseText).replace(/\"/gi, '');
+	    });		
+	    
+}
+
+//샌드박스 - 전처리 모델 파일 다운로드
+const sandboxPretreatFileDownload = function(){
+	
+	let sandbox_id = $('#sandbox_id').val();
+	
+	const data = {
+	   		url: '/services/sandbox/sandboxes/'+sandbox_id+'/pretreat-files/download',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	   	
+	    };		
+	    $.ajax({
+	        type: 'POST',
+	        url: commonUrl+'/download/sandboxPretreatFileDownload',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    }).fail(function (error) {
+	    	location.href = commonUrl+'/urlDownload/'+JSON.stringify(error.responseText).replace(/\"/gi, '');
+	    });		
+	    
+}
+
+//샌드박스 이미지 데이터셋 정보 조회
+const sandboxImageDatasetInfoGet = function(sandbox_id){
+	
+	const data = {
+	   		url: '/services/sandbox/sandboxes/'+sandbox_id+'/image-datasets/get',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	   				
+	    };		
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/sandboxImageDatasetInfoGet',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	  $("#sandboxImageDatasetInfoGet").empty();
+		  	  if (data != null) {
+		  	    	if(data.contents != ""){
+		  	    		contents = data.contents;
+		  	    		
+			    	    let insertTr = '';
+				  	    $.each(data.contents, function (idx, el) {
+				  	    	
+	                        insertTr += '<tr>';
+	                        insertTr += '  <td style="text-align: center;">'+el.image_dataset_nm+'</td>';
+	                        insertTr += '  <td style="text-align: center;">'+el.anals_data_sect_nm+'</td>';
+	                        insertTr += '  <td style="text-align: center;">'+el.file_cnt+'</td>';
+	                        insertTr += '  <td style="text-align: center;"><button id="btn_'+el.anals_data_sect_cd+el.image_dataset_id+'" class="btn btn-sm btn-primary" onclick=fileCheck("'+el.anals_data_sect_cd+el.image_dataset_id+'","'+el.anals_data_sect_cd+'","'+sandbox_id+'","'+el.image_dataset_id+'");>파일 업로드</button><input type="file" id="file_'+el.anals_data_sect_cd+el.image_dataset_id+'" onchange=addFile(this); multiple style="display:none;"></td>';
+	                        insertTr += '</tr>';
+	                        
+				  	    });
+	         	   	    $("#sandboxImageDatasetInfoGet").append(insertTr);
+		  	    	}
+		  	    	
+		  	  }
+  	    	
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });		
+	
+    openModal("data_upload");   
+    
+}
+
+/* 이미지 데이터셋 파일 업로드 */
+const sandboxAnalysisDataUpload = function() {
+	
+	
+   	if(!confirm('등록 하시겠습니까?')) {
+	}else{
+	    if(fileNo == 0){
+	    	alert("하나이상 첨부해주세요!");
+	    	return;
+	    }
+	    	
+	    var dtl_code = $('#dtl_code').val();
+	    var sandbox_id = $('#sandbox_id').val();
+	    var image_dataset_id = $('#image_dataset_id').val();
+	    
+	    let formData = new FormData();
+	    formData.append("url", '/services/sandbox/sandboxes/'+sandbox_id+'/analysis-files/upload');
+	    formData.append("creator_id", 'creator');
+	    formData.append("modifier_id", 'modifier');
+	    formData.append("user_id", 'user_id');
+	    formData.append("menu_id", 'menu_id');
+	    formData.append("image_dataset_id", image_dataset_id);
+	    formData.append("anals_data_sect_cd", dtl_code);
+	    
+	//    console.log('url : '+formData.get('url'));
+	    for (let i = 0; i < dataFiles.length; i++) {
+	        formData.append("upload_file", dataFiles[i]);
+	    }
+	    
+	    console.log('dataFiles.length : '+dataFiles.length);
+	    
+	    $.ajax({
+	        type: 'POST',
+	        enctype: "multipart/form-data",
+	        url: url+'/file/sandboxAnalysisDataUpload',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: formData,
+	        processData: false,
+	   	    contentType: false,        
+	    }).done(function (data) {
+	  		let message = JSON.stringify(data.return_msg);
+	  		alert(message.replace(/\"/gi, ''));    	
+	  		
+	  		fileNo = 0;
+	  		dataFiles = new Array();
+	  		closeModal('data_upload');
+	  		
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	}
+	    
+}
+
+//첨부파일 추가
+const addFile = function(obj){
+
+    for (const file of obj.files) {
+        // 파일 배열에 담기
+        let reader = new FileReader();
+        reader.onload = function () {
+        	dataFiles.push(file);
+        };
+        
+        reader.readAsDataURL(file);
+        fileNo++;
+	}	
+    
+}
+
+//샌드박스 삭제
+const sandboxDelete = function (sandbox_id) {
+		
+	const data = {
+   		url: '/services/sandbox/sandboxes/'+sandbox_id+'/delete',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+    };		
+    $.ajax({
+        type: 'POST',
+        url: url+'/sandboxDelete',
+        dataType: 'json',
+        contentType: 'application/json; charset-utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+  		let message = JSON.stringify(data.return_msg);
+  		alert(message.replace(/\"/gi, ''));
+  		sandboxesGet(page, size_per_page);
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//삭제버튼
+const btnDel = function(){
+	
+    if(!confirm('삭제 하시겠습니까?')) {
+    } else {
+        if($("input[name='radio_sandbox_id']:checked").length < 1) {
+            alert('선택 항목이 없습니다.');
+            return;
+        }
+
+        $("input[name='radio_sandbox_id']:checked").each(function (i) {
+        	sandboxDelete($(this).val());
+        });
+    }
+}
+
+//페이징 함수 호출
+const pagingFun = function(page, size_per_page){
+	sandboxesGet(page, size_per_page);
+}
+
+// 엔터키가 눌렸을 때
+const enterkey = function(e) {
+	if (e.keyCode == 13) {
+		sandboxesGet();
+    }
+}
+
+const fileCheck = function(id, dtl_code, sandbox_id, image_dataset_id){
+	$('#file_'+id).trigger("click");
+    $.each(contents, function (idx, el) {
+    	console.log('anals_data_sect_cd : '+el.anals_data_sect_cd);
+    	$('#btn_'+el.anals_data_sect_cd+el.image_dataset_id).attr("disabled",true); 
+ 	});	
+    $('#btn_'+id).removeAttr('disabled'); 
+    
+    $('#dtl_code').val(dtl_code);
+    $('#sandbox_id').val(sandbox_id);
+    $('#image_dataset_id').val(image_dataset_id);    
+}
+
+//모달 열기
+const openModal = function(modalId){
+	$('#'+modalId).modal('show');
+}
+
+//모달 닫기
+const closeModal = function(modalId){
+	$('#'+modalId).modal('hide');
+}
+
+//조회
+sandboxesGet(page, size_per_page);
+commonCodeSandboxLastStatus();
+
+//5초 마다 helth-check 호출
+setInterval(function () { 
+	sandboxHealthCheck(); 
+}, 5000);
+
+
+const resultPage = function(sandbox_id){
+	location.href = '/sandbox/result/analysisResult/list/'+sandbox_id;
+}
+
+const btnAdd = function(){
+	location.href = url+'/step1';
+}
+
+const btnUpdate = function(sandbox_id){
+	
+	location.href = url+'/update_step1/'+sandbox_id;
+}
+</script>

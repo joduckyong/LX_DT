@@ -1,0 +1,572 @@
+{{>layout/header}}
+
+        <div class="right_col" role="main">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="x_panel"> 
+                <div class="x_title"> 
+                  <h2>HOME > Adapter 관리 > Adapter 설정</h2>
+                  <div class="clearfix"> </div>
+                </div>
+                <div class="x_content"> <br>
+                  <div class="cont_title_box">
+                    <h3>Instance 상세</h3>
+                    <div class="right_btns"><a class="btn btn-success" href="javascript:listPage();">목록 </a></div>
+                  </div>
+                  <div class="border_rows">
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label" style="text-align: center;">인스턴스 명</div>
+                        <div class="form-control_box"><span id="instance_nm_txt"></span></div>
+                      </div>
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label" style="text-align: center;">데이터 셋 명</div>
+                        <div class="form-control_box"><span id="dset_korean_nm_txt"></span></div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label" style="text-align: center;">수집방식</div>
+                        <div class="form-control_box"><span id="clct_mthd_txt"></span></div>
+                      </div>
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label" style="text-align: center;">수집유형</div>
+                        <div class="form-control_box"><span id="clct_ty_txt"></span></div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label" style="text-align: center;">보관주기</div>
+                        <div class="form-control_box"><span id="storage_cycle_txt"></span><span id="storage_type_txt"></span></div>
+                      </div>
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label" style="text-align: center;">시계열 데이터</div>
+                        <div class="form-control_box"><span id="time_data_yn_txt"></span></div>
+                      </div>
+                    </div>
+                    <div class="row type2">
+                      <div class="form-group row col-12 col-md-12">
+                        <div class="control-label" style="text-align: center;">하위폴더 포함여부</div>
+                        <div class="form-control_box"><span id="subforder_yn_txt"></span></div>
+                      </div>
+                    </div>                    
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label" style="text-align: center;">수집 스케줄 유형</div>
+                        <div class="form-control_box"><span id="schedule_type_txt"></span></div>
+                      </div>
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label" style="text-align: center;">사용 여부</div>
+                        <div class="form-control_box"><span id="use_yn_txt"></span></div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-12">
+                        <div class="control-label" style="text-align: center;">수집 스케줄 설정</div>
+                        <div class="form-control_box">
+                        	<span id="schedule_time_type_txt"></span>
+                        	<span id="schedule_year_txt"></span>
+                        	<span id="schedule_month_txt"></span>
+                        	<span id="schedule_week_txt"></span>
+                        	<span id="schedule_day_txt"></span>
+                        	<span id="schedule_hour_txt"></span>
+                        	<span id="schedule_minute_txt"></span>
+                        	<span id="schedule_now_exe_txt"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-12">
+                        <div class="control-label" style="text-align: center;">비고</div>
+                        <div class="form-control_box"><span id="etc_note_txt"></span></div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="cont_title_box">
+                    <h3>접속정보 설정</h3>
+                    <div class="right_btns">
+                    	<button class="btn btn-success" onclick="matchingPage();">매칭정보설정</button>
+                    	<button class="btn btn-primary" onclick="dpIngestAdapterItPpTest();">저장</button>
+                    </div>
+                  </div>
+                                    
+                  <div class="table_responsive">
+                    <div class="table_btns mb-2">
+                    	<button class="btn btn-primary" onclick="connectionSetAdd();">추가</button>
+                    	<button class="btn btn-danger" onclick="dpIngestAdapterItPpDelChk();">삭제</button>
+                    </div>                    
+                    <table class="table table-striped" id="tbDpIngestAdapterItPp">
+                      <colgroup> 
+                        <col width="9px">                      
+                        <col width="17px">                      
+                        <col width="17px">                      
+                        <col width="40px">                      
+                        <col width="17px" class="type1">                      
+                      </colgroup>
+                      <thead>
+                        <tr> 
+                          <th style="text-align: center;">선택</th>
+                          <th style="text-align: center;">항목ID(key)</th>
+                          <th style="text-align: center;">항목명</th>
+                          <th style="text-align: center;">항목값(value)</th>
+                          <th style="text-align: center;" class="type1">항목설명</th>
+                        </tr>
+                      </thead>
+                      <tbody id="dpIngestAdapterItPp">
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+       <div id="divForm"></div>
+       <input type="hidden" name="clct_mthd" id="clct_mthd">
+       <input type="hidden" name="clct_ty" id="clct_ty">
+       <input type="hidden" name="adapter_type_id" id="adapter_type_id">
+{{>layout/footer}}        
+
+<script>
+const commonUrl = '/common';
+const url = '/adaptor';
+
+//Adapter 상세
+const listPage = function(){
+	location.href = url+'/detail/{{adapter_id}}';
+}
+
+//매칭정보
+const matchingPage = function(){
+	location.href = url+'/machingInfo/{{adapter_id}}/{{instance_id}}';
+}
+
+//수집방식
+const dpCmCodesClctMthdInput = function (group_code) {
+	
+    const data = {
+   		url: '/dp/cm/codes/clct_mthd?group_code='+group_code,
+    };		
+    
+    $.ajax({
+        type: 'POST',
+        url: commonUrl+'/dpCmCodesClctMthdInput',
+        dataType: 'json',
+        contentType: 'application/json; charset-utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+	  	  if (data != null) {
+		  	   	if(data.contents != ""){    	   
+	    	   		 $.each(data.contents, function (idx, el) {
+		    	   		 $("#divForm").append($("<input type='hidden' value='"+el.dtl_code_nm+"' id='"+el.dtl_code+"'>"));
+		    	   		 
+		    	   		 dpCmCodesClctTyInput(el.etc_code);
+	 	     	     });
+		  	   	}
+	  	  }
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });
+    
+}
+
+//수집유형
+const dpCmCodesClctTyInput = function (group_code) {
+	
+    const data = {
+   		url: '/dp/cm/codes/clct_ty?group_code='+group_code,
+    };		
+    
+    $.ajax({
+        type: 'POST',
+        url: commonUrl+'/dpCmCodesClctTyInput',
+        dataType: 'json',
+        contentType: 'application/json; charset-utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+		  	   	if(data.contents != ""){    	    	
+	    	   		 $.each(data.contents, function (idx, el) {
+	    	   			$("#divForm").append($("<input type='hidden' value='"+el.dtl_code_nm+"' id='"+el.dtl_code+"'>"));
+	 	     	     });
+		  	   	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });
+    
+}
+
+//Instance 상세 조회
+const dpIngestAdapterItDt = function(){
+    const data = {
+	   		url: '/dp/ingest/adapter/instance/detail',
+	   		instance_id: '{{instance_id}}',	
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',
+	    };		
+	    
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestAdapterItDt',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	
+		  	  if (data != null) {
+			  	   	if(data.contents != ""){    	
+			  	   		
+			  	   		if(data.contents[0].clct_mthd === 'D34003'){
+			  	   			$(".type1").hide();
+			  	   			$(".type2").show();
+			  	   		}else{
+			  	   			$(".type1").show();
+			  	   			$(".type2").hide();
+			  	   		}
+			  	   		$("#instance_nm_txt").text(data.contents[0].instance_nm);
+			  	   		$("#dset_korean_nm_txt").text(data.contents[0].dset_korean_nm);
+			  	   		$("#clct_mthd_txt").text($("#"+data.contents[0].clct_mthd).val());
+			  	   		$("#clct_mthd").val(data.contents[0].clct_mthd);
+			  	   		$("#clct_ty_txt").text($("#"+data.contents[0].clct_ty).val());
+			  	   		$("#clct_ty").val(data.contents[0].clct_ty);
+			  	   		$("#storage_cycle_txt").text(data.contents[0].storage_cycle);
+			  	   		$("#storage_type_txt").text(data.contents[0].storage_type);
+			  	   		$("#subforder_yn_txt").text(data.contents[0].subforder_yn === 'Y'?'포함':'미포함');
+			  	   		$("#use_yn_txt").text(data.contents[0].use_yn==='Y'?'사용':'사용안함');
+			  	   		$("#schedule_type_txt").text($("#"+data.contents[0].schedule_type).val());
+			  	   		$("#schedule_time_type_txt").text($("#"+data.contents[0].schedule_time_type).val());
+			  	   		$("#schedule_year_txt").text(data.contents[0].schedule_year !== ""? data.contents[0].schedule_year+'년':'');
+			  	   		$("#schedule_month_txt").text(data.contents[0].schedule_month !== ""? data.contents[0].schedule_month+'월':'');
+			  	   		$("#schedule_day_txt").text(data.contents[0].schedule_day !== ""? data.contents[0].schedule_day+'일':'');
+			  	   		$("#schedule_week_txt").text(data.contents[0].schedule_week !== ""? data.contents[0].schedule_week+'요일':'');
+			  	   		$("#schedule_hour_txt").text(data.contents[0].schedule_hour !== ""? data.contents[0].schedule_hour+'시':'');
+			  	   		$("#schedule_minute_txt").text(data.contents[0].schedule_minute !== ""? data.contents[0].schedule_minute+'분':'');
+			  	   		$("#schedule_now_exe_txt").text(data.contents[0].schedule_now_exe==='Y'?'즉시실행':'');
+			  	   		$("#etc_note_txt").text(data.contents[0].etc_note);
+			  	   		$("#adapter_type_id").text(data.contents[0].adapter_type_id);
+			  	   		
+			  	   		console.log(data.contents[0].subforder_yn);
+			  	   		
+			  	   	}
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });		
+	    
+	    dpIngestItPp();
+}
+
+//접속정보 설정 추가
+const connectionSetAdd = function(){
+	
+		let lengthCnt = $("#tbDpIngestAdapterItPp tbody tr").length;
+		let lengthCnt2 = lengthCnt+1;
+	    let insertTr = '';
+        insertTr += '<tr>';
+	    insertTr += ' <td><input class="tableInfo" type="checkbox" name="checkList" value=""></td>';
+	    insertTr += ' <td><input type=text value="" id="item_'+lengthCnt+'" name="item"></td>';
+	    insertTr += ' <td><input type=text value="" id="item_nm_'+lengthCnt+'" name="item_nm"></td>';
+	    insertTr += ' <td><input type=text value="" id="item_value_'+lengthCnt+'" name="item_value"></td>';
+	    insertTr += ' <td class=type2>';
+	    insertTr += ' <input type=text value="" id="item_described_'+lengthCnt+'" name="item_described">';
+	    insertTr += ' <input type=hidden value="" id=change_able_yn_'+lengthCnt+' name="change_able_yn">';
+	    insertTr += ' <input type=hidden value='+lengthCnt2+' id=display_seq_'+lengthCnt+' name="display_seq">';
+	    insertTr += ' <input type=hidden value="" id=essential_yn_'+lengthCnt+' name="essential_yn">';		    
+	    insertTr += ' </td>';		    
+        insertTr += '</tr>';
+  	    $("#dpIngestAdapterItPp").append(insertTr);
+  	    
+}
+
+//Adapter 유형별 접속정보 조회
+const dpIngestItPp = function(){
+	
+	$("#dpIngestAdapterItPp").empty();	
+	
+    const data = {
+	   		url: '/dp/ingest/instance/property',
+	   		adapter_type_id: $("#adapter_type_id").val(),	
+	   		clct_mthd: $("#clct_mthd").val(),
+	   		clct_ty: $("#clct_ty").val(),
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',
+	    };		
+	    
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestItPp',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	
+		  	  if (data != null) {
+			   	    console.log('data.contents : ' +data.contents);
+			  	   	if(data.contents != ""){    	
+    		     	    let insertTr = '';
+    		     	    let i = 0;
+    			  	    $.each(data.contents, function (idx, el) {
+    		     	          insertTr += '<tr>';
+    		     		      insertTr += ' <td><input class="tableInfo" type="checkbox" name="checkList" value="'+el.item+'"></td>';
+    		     		      insertTr += ' <td><input type=text value='+el.item+' id=item_'+i+' name=item></td>';
+    		     		      insertTr += ' <td><input type=text value='+el.item_nm+' id=item_nm_'+i+' name=item_nm></td>';
+    		     		      insertTr += ' <td><input type=text value='+el.value+' id=item_value_'+i+' name=item_value></td>';
+    		     		      insertTr += ' <td class=type1>';
+    		     		      insertTr += ' <input type=text value='+el.item_described+' id=item_described_'+i+' name=item_described>';
+    		     		      insertTr += ' <input type=hidden value='+el.change_able_yn+' id=change_able_yn_'+i+' name=change_able_yn>';
+    		     		      insertTr += ' <input type=hidden value='+el.display_seq+' id=display_seq_'+i+' name=display_seq>';
+    		     		      insertTr += ' <input type=hidden value='+el.essential_yn+' id=essential_yn_'+i+' name=essential_yn>';
+    		     		      insertTr += ' </td>';
+    		                  insertTr += '</tr>';
+    		                  
+    		                  i++;
+    			  	    });
+    	          	    $("#dpIngestAdapterItPp").append(insertTr);		  
+			  	   		
+			  	   	}else{
+				  		dpIngestAdapterItPp();
+			  	   	}
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });		
+}
+
+//접속정보 설정 조회
+const dpIngestAdapterItPp = function(){
+	
+	$("#dpIngestAdapterItPp").empty();	
+	
+    const data = {
+	   		url: '/dp/ingest/adapter/instance/property',
+	   		instance_id: '{{instance_id}}',	
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',
+	    };		
+	    
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestAdapterItPp',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	
+		  	  if (data != null) {
+			  	   	if(data.contents != ""){    	
+			  	   		
+    		     	    let insertTr = '';
+    		     	    let i = 0;
+    			  	    $.each(data.contents, function (idx, el) {
+    		     	          insertTr += '<tr>';
+    		     		      insertTr += ' <td><input class="tableInfo" type="checkbox" name="checkList" value="'+el.item+'"></td>';
+    		     		      insertTr += ' <td><input type=text value='+el.item+' id=item_'+i+' name=item></td>';
+    		     		      insertTr += ' <td><input type=text value='+el.item_nm+' id=item_nm_'+i+' name=item_nm></td>';
+    		     		      insertTr += ' <td><input type=text value='+el.value+' id=item_value_'+i+' name=item_value></td>';
+    		     		      insertTr += ' <td class=type1>';
+    		     		      insertTr += ' <input type=text value='+el.item_described+' id=item_described_'+i+' name=item_described>';
+    		     		      insertTr += ' <input type=hidden value='+el.change_able_yn+' id=change_able_yn_'+i+' name=change_able_yn>';
+    		     		      insertTr += ' <input type=hidden value='+el.display_seq+' id=display_seq_'+i+' name=display_seq>';
+    		     		      insertTr += ' <input type=hidden value='+el.essential_yn+' id=essential_yn_'+i+' name=essential_yn>';		     		      
+    		     		      insertTr += ' </td>';		     		      
+    		                  insertTr += '</tr>';
+    		                  
+    		                  i++;
+    			  	    });
+    	          	    $("#dpIngestAdapterItPp").append(insertTr);		  
+			  	   		
+			  	   	}
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });		
+}
+
+//Instance 설정정보 저장
+const dpIngestAdapterItPpSave = function(url_mix){
+	
+	let lengthCnt = 0;
+	let i = 1;
+	let contentsData = new Array();
+	$.each($("#tbDpIngestAdapterItPp tbody tr"), function(){
+		 
+		 let itemObject = new Object();
+		 console.log('lengthCnt : '+lengthCnt);
+		 itemObject.instance_id = '{{instance_id}}';
+		 itemObject.item = $(this).find("#item_"+lengthCnt).val();
+		 itemObject.item_nm = $(this).find("#item_nm_"+lengthCnt).val();
+		 itemObject.value = $(this).find("#item_value_"+lengthCnt).val();
+		 itemObject.item_described = $(this).find("#item_described_"+lengthCnt).val();
+		 itemObject.display_seq = ($(this).find("#display_seq_"+lengthCnt).val() === ''?i:$(this).find("#display_seq_"+lengthCnt).val());
+		 itemObject.essential_yn = $(this).find("#essential_yn_"+lengthCnt).val();
+		 itemObject.change_able_yn = $(this).find("#change_able_yn_"+lengthCnt).val();
+		 itemObject.clct_mthd = $("#clct_mthd").val();
+		 itemObject.clct_ty = $("#clct_ty").val();
+		 itemObject.user_id = 'user00';
+		 contentsData.push(itemObject);
+		 lengthCnt++;
+		 i++;
+	});
+	
+	console.log('contentsData : '+JSON.stringify(contentsData));
+	
+    const data = {
+	   		url: '/dp/ingest/adapter/instance/property/save',
+	   		url_mix: url_mix,	
+	   		instance_id: '{{instance_id}}',	
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',
+	   		contents: contentsData,
+	    };			
+        
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestAdapterItPpSave',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+        }).done(function (data) {
+  	  	  if (data != null) {
+		  	   	if(data.contents != ""){    	   
+	  	   			if(data.contents[0].successYn === 'Y'){
+	  	   				dpIngestAdapterItPpSave();
+	  	   			}
+		  	   	}
+	  	  }
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });		
+	    
+	    dpIngestItPp();
+}
+
+//저장전 접속정보 설정 접속테스트
+const dpIngestAdapterItPpTest = function(){
+	
+	let lengthCnt = 0;
+	let contentsData = new Array();
+	let itemObject = new Object();
+	$.each($("#tbDpIngestAdapterItPp tbody tr"), function(){
+		 console.log('item : '+$(this).find("#item_"+lengthCnt).val()+', item_value : '+$(this).find("#item_value_"+lengthCnt).val());
+ 		 itemObject[($(this).find("#item_"+lengthCnt).val())]=$(this).find("#item_value_"+lengthCnt).val();
+		 lengthCnt++;
+	});
+	
+	contentsData.push(itemObject);
+	console.log('contentsData:'+JSON.stringify(contentsData));
+	
+    const data = {
+	   		url: '/dp/ingest/adapter/instance/property/test',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',
+	   		contents: contentsData,
+	    };			
+        
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestAdapterItPpTest',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+        }).done(function (data) {
+  	  	  if (data != null) {
+		  	   	if(data.contents != ""){    	   
+	  	   	//		if(data.contents[0].successYn === 'Y'){
+	  	   				dpIngestAdapterItPpSave(data.contents[0].url_mix);
+	  	   	//		}else{
+		  	 // 	  		let message = JSON.stringify(data.return_msg);
+		  	//	  		alert(message.replace(/\"/gi, ''));
+	  	   	//		}
+		  	   	}
+	  	  }
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });	
+	    
+}
+
+//접속정보 설정 삭제
+const dpIngestAdapterItPpDel = function(item){
+
+    const data = {
+	   		url: '/dp/ingest/adapter/instance/property/delete',
+	   		instance_id: "{{instance_id}}",	
+	   		item: item,	
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',
+	    };			
+        
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestAdapterItPpDel',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+        }).done(function (data) {
+        	/*
+    	  	  if (data != null) {
+    		  		let message = JSON.stringify(data.return_msg);
+    		  		alert(message.replace(/\"/gi, ''));
+    	  	  }
+        	*/
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });	
+}
+
+//접속정보 설정 삭제 전 체크
+const dpIngestAdapterItPpDelChk = function(){
+	
+	if(confirm('삭제 하시겠습니까?')) {
+		
+		let item;
+	    $("input[name='checkList']:checked").each(function(e){
+	    	item = $(this).val();
+		    const data = {
+			   		url: '/dp/ingest/adapter/instance/property/delete/check',
+			   		instance_id: "{{instance_id}}",	
+			   		item: item,	
+			   		user_id: 'user00',	
+			   		menu_id: 'menu_id',
+			    };			
+		        
+			    $.ajax({
+			        type: 'POST',
+			        url: url+'/dpIngestAdapterItPpDelChk',
+			        dataType: 'json',
+			        contentType: 'application/json; charset-utf-8',
+			        data: JSON.stringify(data)
+		        }).done(function (data) {
+		    	  	  if (data != null) {
+		    		  	   	if(data.contents != ""){    	   
+			    	   			if(data.contents[0].chk_yn === 'N'){
+			    	   				dpIngestAdapterItPpDel(item);
+			    	   			}
+		    		  	   	}
+		    	  	  }
+		        }).fail(function (error) {
+		            alert(JSON.stringify(error));
+		        });	
+	    });	
+	    
+	    dpIngestItPp();
+	}
+}
+
+//수집방식
+dpCmCodesClctMthdInput('D34');
+//수집 스케줄 유형
+dpCmCodesClctTyInput('D39');
+dpCmCodesClctTyInput('D40');
+
+setTimeout(dpIngestAdapterItDt, 300);
+</script>
+

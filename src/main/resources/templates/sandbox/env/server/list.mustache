@@ -1,0 +1,437 @@
+{{>layout/header}}
+
+        <div class="right_col" role="main">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="x_panel"> 
+                <div class="x_title"> 
+                  <h2>HOME > 데이터 분석 > 분석 환경 관리 > 서버 관리</h2>
+                  <div class="clearfix"> </div>
+                </div>
+                <div class="x_content"> <br>
+                  <div class="right_btns"> 
+                    <div class="row port_search">
+                      <div class="form-group row">
+                        <div class="control-label">IP 주소</div>
+                        <div class="form-control_box">
+                          <input class="form-control" type="text" name="query" id="query" onkeypress="enterkey(event);">
+                        </div>
+                      </div>
+                      <button class="btn btn-primary btn-sm" onclick="serverListGet();">조회</button>
+                    </div>
+                  </div>
+                  <div class="table_btns mt-4">
+                    <button class="btn btn-primary" type="button" onclick="addModal();">서버 추가</button>
+                    <button class="btn btn-info" onclick="updateModal();">수정</button>
+                    <button class="btn btn-danger" onclick="serverDelete();">삭제</button>
+                  </div>
+                  <div class="table_responsive">
+                    <div class="talbel_total"><span class="red bold" id="total_count"></span>건이 조회되었습니다.</div>
+                    <table class="table table-striped bulk_action">
+                      <colgroup> 
+                        <col width="55px">
+                      </colgroup>
+                      <thead>
+                        <tr> 
+                          <th>선택</th>
+                          <th>서버 IP</th>
+                          <th>서버 이름</th>
+                          <th>서버 설명</th>
+                          <th>생성자 ID</th>
+                          <th>생성 일자</th>
+                          <th>최종 변경 일자</th>
+                        </tr>
+                      </thead>
+                      <tbody id="serverList">
+                      </tbody>
+                    </table>
+                    <div class="nav justify-content-center"> 
+                      <ul id="pagingul" class="pagination">
+					  	</ul> 
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- modal -->
+        <div class="modal fade add_modal" id="add_modal" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-md">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">서버 추가 팝업</h4>
+                <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
+              </div>
+              <div class="modal-body">
+              	<form class="form-horizontal form-label-left">
+	              	<div class="row">
+	                  <div class="form-group row col-12 col-md-12">
+	                    <label class="control-label">서버 IP</label>
+	                    <div class="form-control_box">
+	                      <input class="form-control" type="text" name="server_ip" id="server_ip">
+	                      <input class="form-control" type="hidden" name="temp_server_ip" id="temp_server_ip">
+	                    </div>
+	                  </div>
+	                </div>
+	                <div class="row">
+	                  <div class="form-group row col-12 col-md-12">
+	                    <label class="control-label">서버명</label>
+	                    <div class="form-control_box">
+	                      <input class="form-control" type="text" name="server_nm" id="server_nm">
+	                    </div>
+	                  </div>
+	                </div>
+	                <div class="row">
+	                  <div class="form-group row col-12 col-md-12">
+	                    <label class="control-label">서버 설명</label>
+	                    <div class="form-control_box">
+	                      <input class="form-control" type="text" name="server_desc" id="server_desc">
+	                    </div>
+	                  </div>
+	                </div>
+	            </form>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-primary" type="button" onclick="serverInsert();" id="btnTypeAdd">등록</button>
+                <button class="btn btn-primary" type="button" onclick="serverUpdate();" id="btnTypeUpdate">수정</button>
+                <button class="btn btn-danger" type="button" data-dismiss="modal">취소</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+{{>layout/footer}}
+
+<script>
+const commonUrl = '/sandbox/common';
+const url = '/sandbox/env/server';
+
+let init_page = 1;				//초기 페이지
+let page = 1;					//페이지
+let init_size_per_page = 10;	//초기 개수
+let size_per_page = 10;	 		//가져올 개수
+let pageCount = 10;		 		//페이징에 나타낼 페이지 수
+
+//서버 목록 조회
+const serverListGet = function (page, size_per_page) {
+	
+	if(!page){
+		page = init_page;
+	}
+	if(!size_per_page){
+		size_per_page = init_size_per_page;
+	}	
+	
+	let query = isEmpty($("#query").val());
+	
+	const data = {
+   		url: '/services/sandbox/servers/get?search=server_ip:'+query+'&page_current='+page+'&sizePerPage='+size_per_page+'&sort=server_ip:desc',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+    };		
+    $.ajax({
+        type: 'POST',
+        url: url+'/serverListGet',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		$("#serverList").empty();
+  	    	$("#total_count").text(data.total_count);
+  	    	
+  	    	if(data.contents != ""){
+  	    		let insertTr = '';
+		  	    $.each(data.contents, function (idx, el) {
+	     	      	insertTr += '<tr>';
+					insertTr += ' <td><input type="radio" name="server_id" value="'+el.server_id+'"></td>';
+					insertTr += ' <td><span class="blue bold" style="cursor:pointer" onclick=btnDetail('+el.server_id+');>'+el.server_ip+'</span></td>';
+					insertTr += ' <td>'+el.server_nm+'</td>';
+					insertTr += ' <td>'+el.server_desc+'</td>';
+					insertTr += ' <td>'+el.creator_id+'</td>';
+					insertTr += ' <td>'+el.creat_datetime+'</td>';
+					insertTr += ' <td>'+el.modify_datetime+'</td>';
+					insertTr += '</tr>';
+		  	    });
+		  	  $("#serverList").html(insertTr);
+  	    	}
+  	    	//페이징 보여줌
+  	    	paging(data.total_count, size_per_page, pageCount, page);
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//서버 IP 중복 확인
+const serverDupChk = function (){
+	let server_ip = $("#server_ip").val();
+	let temp_server_ip = $("#temp_server_ip").val();
+	let isDuplicate = false;
+	
+	const data = {
+			url: '/services/sandbox/servers/get?search=server_ip:'+server_ip,
+       		user_id: 'user00',	
+       		menu_id: 'menu_id',
+        };
+	
+	if(server_ip == temp_server_ip){
+		return false;
+	}
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/serverDupChk',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data),
+        async: false
+    }).done(function (data) {
+	 	if (data != null) {
+	 		if(data.total_count > 0){
+		   		isDuplicate = true;
+	 		}
+	 	}
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });
+    
+    return isDuplicate;
+}
+
+//서버 등록
+const serverInsert = function (){
+	let server_ip = $('#server_ip').val();
+	let server_nm = $('#server_nm').val();
+	let server_desc = $('#server_desc').val();
+	
+	if(!server_ip){
+		alert("서버 IP를 입력하세요.");
+		$('#server_ip').focus();
+		return;
+	}
+	
+	if(!server_nm){
+		alert("서버명을 입력하세요.");
+		$('#server_nm').focus();
+		return;
+	}
+	
+	if(!server_desc){
+		alert("서버 설명을 입력하세요.");
+		$('#server_desc').focus();
+		return;
+	}
+	
+	if(serverDupChk()){
+		alert("동일한 동일한 서버 IP가 있습니다.");
+		$("#server_ip").focus();
+		return;
+	}
+	
+	const data = {
+   		url: '/services/sandbox/servers/enroll',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+   		creator_id: 'creator',
+   		modifier_id: 'modifier_id',
+   		server_ip: server_ip,
+   		server_nm: server_nm,
+   		server_desc: server_desc,
+    };
+	
+	if(confirm("등록 하시겠습니까?")){
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/serverInsert',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data),
+	    }).done(function (data) {
+	  		let message = JSON.stringify(data.return_msg);
+	  		alert(message.replace(/\"/gi, ''));    	
+	  		jsList();
+	  		
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });
+	}
+	
+}
+
+//서버 수정
+const serverUpdate = function (){
+	let server_id = $('input:radio[name=server_id]:checked').val();
+	let server_ip = $('#server_ip').val();
+	let server_nm = $('#server_nm').val();
+	
+	if(!server_ip){
+		alert("서버 IP를 입력하세요.");
+		$('#server_ip').focus();
+		return;
+	}
+	
+	if(!server_nm){
+		alert("서버명을 입력하세요.");
+		$('#server_nm').focus();
+		return;
+	}
+	
+	if(serverDupChk()){
+		alert("동일한 동일한 서버 IP가 있습니다.");
+		$("#server_ip").focus();
+		return;
+	}
+	
+	const data = {
+   		url: '/services/sandbox/servers/'+server_id+'/update',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+   		modifier_id: 'modifier_id',
+   		server_ip: server_ip,
+   		server_nm: server_nm,
+    };
+	
+	if(confirm("수정 하시겠습니까?")){
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/serverUpdate',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data),
+	    }).done(function (data) {
+	  		let message = JSON.stringify(data.return_msg);
+	  		alert(message.replace(/\"/gi, ''));    	
+	  		jsList();
+	  		
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	}
+}
+
+//서버 삭제
+const serverDelete = function (){
+	let server_id = $('input:radio[name=server_id]:checked').val();
+	if(!server_id){
+		alert('서버 IP를 선택하세요.');
+		return;
+	}
+	
+	const data = {
+   		url: '/services/sandbox/servers/'+server_id+'/delete',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+    };
+	
+	if(confirm('삭제 하시겠습니까??')) {
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/serverDelete',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data),
+	    }).done(function (data) {
+	  		let message = JSON.stringify(data.return_msg);
+	  		alert(message.replace(/\"/gi, ''));    	
+	  		serverListGet(page, size_per_page);
+	  		
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });
+	}
+}
+
+//서버 상세조회
+const serverDetail = function (){
+	let server_id = $('input:radio[name=server_id]:checked').val();
+	
+	const data = {
+   		url: '/services/sandbox/servers/'+server_id+'/detail',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/serverDetail',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data),
+    }).done(function (data) {
+    	if (data != null) {
+	  	   	if(data.contents != ""){ 
+		  	   	$("#server_ip").val(data.contents.server_ip);
+		  	  	$("#temp_server_ip").val(data.contents.server_ip);
+		  	   	$("#server_nm").val(data.contents.server_nm);
+	  	   	}
+    	}
+  		
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//모달 추가
+const addModal = function(){
+	$('#server_ip').val('');
+	$("#temp_server_ip").val('');
+	$('#server_nm').val('');
+	$('#server_desc').val('');
+	$('#server_desc').prop('readonly',false);
+	$('#modelLabel').text('서버 추가 팝업');
+	$('#btnTypeUpdate').hide();
+	$('#btnTypeAdd').show();
+	$('#add_modal').modal('show');
+}
+
+//모달 수정
+const updateModal = function(){
+	let server_id = $('input:radio[name=server_id]:checked').val();
+	if(!server_id){
+		alert('서버 IP를 선택하세요.');
+		return;
+	}
+	
+	$('#server_ip').val('');
+	$("#temp_server_ip").val('');
+	$('#server_nm').val('');
+	$('#server_desc').val('');
+	$('#server_desc').prop('readonly',true);
+	$('#modelLabel').text('서버 수정 팝업');
+	$('#btnTypeAdd').hide();
+	$('#btnTypeUpdate').show();
+	serverDetail();
+	$('#add_modal').modal('show');
+	
+}
+
+//서버 목록 페이지 이동
+const jsList = function(){
+	location.href = '/sandbox/env/server/list';
+}
+
+//서버 상세 페이지 이동
+const btnDetail = function(server_id){
+	location.href = '/sandbox/env/server/detail/'+server_id;
+}
+
+//페이징 함수 호출
+const pagingFun = function(page, size_per_page){
+	serverListGet(page, size_per_page);
+}
+
+//엔터키가 눌렸을 때
+const enterkey = function(e) {
+	if (e.keyCode == 13) {
+		serverListGet();
+    }
+}
+
+//조회
+serverListGet();
+
+</script>

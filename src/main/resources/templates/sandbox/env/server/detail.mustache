@@ -1,0 +1,345 @@
+{{>layout/header}}
+
+        <div class="right_col" role="main">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="x_panel"> 
+                <div class="x_title"> 
+                  <h2>HOME > 데이터 분석 > 분석 환경 관리 > 서버 상세 페이지</h2>
+                  <div class="clearfix"> </div>
+                </div>
+                <div class="x_content"> <br>
+                  <div class="table_responsive">
+                  	<h3>▣ 서버 정보</h3>
+                    <table class="table table-striped bulk_action">
+                      <colgroup> 
+                        <col width="20%">
+                      </colgroup>
+                      <thead>
+                        <tr> 
+                          <th>서버 IP</th>
+                          <th>서버명</th>
+                          <th>생성자</th>
+                          <th>생성 일자</th>
+                          <th>최종 변경 일자</th>
+                        </tr>
+                      </thead>
+                      <tbody id="serverInfo">
+                      </tbody>
+                    </table>
+                    <table class="table table-bordered no_thead">
+                   	  <colgroup> 
+                        <col width="20%">
+                      </colgroup>
+					  <tbody>
+					    <tr>
+					      <th>설명</th>
+					      <td id="serverInfoDesc"></td>
+					    </tr>
+					  </tbody>
+					</table>
+                    <h3>▣ 포트 정보</h3>
+                    <div class="table_btns">
+	                    <button class="btn btn-primary" onclick="addModal();">추가</button>
+	                    <button class="btn btn-danger" onclick="serverPortsDelete();">삭제</button>
+	                  </div>
+                    <table class="table table-striped bulk_action">
+                      <colgroup> 
+                        <col width="60px">
+                      </colgroup>
+                      <thead>
+                        <tr> 
+                          <th>선택</th>
+                          <th>포트번호</th>
+                          <th>포트 상태</th>
+                          <th>등록일자</th>
+                          <th>수정일자</th>
+                        </tr>
+                      </thead>
+                      <tbody id="portInfo">
+                      </tbody>
+                    </table>
+                    <div class="nav justify-content-center"> 
+                      <ul id="pagingul" class="pagination">
+					  	</ul> 
+                    </div>
+                  </div>
+                  <div class="right_btns mt-4"> 
+                    <button class="btn btn-danger" onclick="jsList();">목록</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- modal -->
+        <div class="modal fade add_modal" id="add_modal" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-md">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">포트 추가 팝업</h4>
+                <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
+              </div>
+              <div class="modal-body">
+                <div class="x_content"> 
+                  <div class="right_btns mb-2"> 
+                    <button class="btn btn-primary btn-sm" onclick="addPortNum();">라인 추가</button>
+                  </div>
+                  <div class="table_responsive">
+                    <table class="table table-striped dataTables_empty">
+                      <colgroup> 
+                        <col>
+                        <col width="50%">
+                      </colgroup>
+                      <thead>
+                        <tr> 
+                          <th>포트번호</th>
+                          <th>제거</th>
+                        </tr>
+                      </thead>
+                      <tbody id="addPortLine">
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-primary" type="button" onclick="serverPortsInsert();">등록</button>
+                <button class="btn btn-danger" type="button" data-dismiss="modal">취소</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+{{>layout/footer}}
+
+<script>
+const commonUrl = '/sandbox/common';
+const url = '/sandbox/env/server';
+
+let init_page = 1;				//초기 페이지
+let page = 1;					//페이지
+let init_size_per_page = 10;	//초기 개수
+let size_per_page = 10;	 		//가져올 개수
+let pageCount = 10;		 		//페이징에 나타낼 페이지 수
+
+//서버 상세조회
+const serverDetail = function (){
+	
+	const data = {
+   		url: '/services/sandbox/servers/{{server_id}}/detail',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/serverDetail',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data),
+    }).done(function (data) {
+    	if (data != null) {
+	  	   	if(data.contents != ""){
+				let insertTr = "<tr>";
+					insertTr += ' <td>'+data.contents.server_ip+'</td>';
+					insertTr += ' <td>'+data.contents.server_nm+'</td>';
+					insertTr += ' <td>'+data.contents.creator_id+'</td>';
+					insertTr += ' <td>'+data.contents.creat_datetime+'</td>';
+					insertTr += ' <td></td>';
+					insertTr += '</tr>';
+				$("#serverInfo").html(insertTr);
+				$("#serverInfoDesc").html(data.contents.server_desc);
+	  	   	}
+    	}
+  		
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//서버 포트 리스트 조회
+const serverPortsListGet = function (page, size_per_page){
+	
+	if(!page){
+		page = init_page;
+	}
+	if(!size_per_page){
+		size_per_page = init_size_per_page;
+	}	
+	
+	const data = {
+   		url: '/services/sandbox/servers/{{server_id}}/ports/get?page_current='+page+'&sizePerPage='+size_per_page,
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/serverPortsListGet',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data),
+    }).done(function (data) {
+    	if (data != null) {
+	  	   	if(data.contents != ""){
+	  	   		let insertTr = '';
+	  	   		$.each(data.contents, function (idx, el) {
+					insertTr += '<tr>';
+					insertTr += ' <td>';
+					if(el.port_status_cd_nm == '사용가능'){
+						insertTr += '	<input type="checkbox" name="chk_port_num" value="'+el.port_num+'">';
+					}
+					insertTr += ' </td>';
+					insertTr += ' <td>'+el.port_num+'</td>';
+					insertTr += ' <td>'+el.port_status_cd_nm+'</td>';
+					insertTr += ' <td>'+el.creat_datetime+'</td>';
+					insertTr += ' <td>'+el.modify_datetime+'</td>';
+					insertTr += '</tr>';
+	  	   		});
+	  	   		$("#portInfo").html(insertTr);
+	  	   	}
+	  		//페이징 보여줌
+  	    	paging(data.total_count, size_per_page, pageCount, page);
+    	}
+  		
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//서버 포트 등록
+const serverPortsInsert = function (){
+	
+	let isValid = true;
+	let port_num_arr = new Array();
+	
+	if($('input[name="port_num"]').length == 0){
+		alert("포트를 추가하세요.");
+		return;
+	}
+	
+	$('input[name="port_num"]').each(function(index, item) {
+		let val = $(item).val();
+		if(!val){
+			alert("포트 번호를 입력하세요.");
+			$(this).focus();
+			isValid = false;
+			return false;
+		}
+		port_num_arr.push(val);
+   	});
+	
+	if(!isValid){
+		return;
+	}
+	
+	const data = {
+   		url: '/services/sandbox/servers/{{server_id}}/ports/enroll',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+   		creator_id: 'creator',
+   		modifier_id: 'modifier_id',
+   		port_num_list: port_num_arr,
+    };
+	
+	if(confirm("등록 하시겠습니까?")){
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/serverPortsInsert',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data),
+	    }).done(function (data) {
+	  		let message = JSON.stringify(data.return_msg);
+	  		alert(message.replace(/\"/gi, ''));    	
+	  		jsDetail();
+	  		
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	}
+	
+}
+
+//서버 포트 삭제
+const serverPortsDelete = function (){
+	
+	let port_num_arr = new Array();
+	if($('input:checkbox[name="chk_port_num"]:checked').length == 0){
+		alert("포트 번호를 선택하세요.");
+		return;
+	}
+	
+	$('input[name="chk_port_num"]:checked').each(function(index, item) {
+		let val = $(item).val();
+		port_num_arr.push(val);
+   	});
+	
+	const data = {
+   		url: '/services/sandbox/servers/{{server_id}}/ports/delete',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+   		delete_port_num_list: port_num_arr,
+    };
+	if(confirm('삭제 하시겠습니까?')) {
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/serverPortsDelete',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data),
+	    }).done(function (data) {
+	  		let message = JSON.stringify(data.return_msg);
+	  		alert(message.replace(/\"/gi, ''));    	
+	  		serverPortsListGet();
+	  		
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	}
+	
+}
+
+//포트 추가 팝업 - 라인 추가
+const addPortNum = function (){
+	let insertTr = '<tr>';
+		insertTr += '	<td><input type="number" name="port_num" min="0" max="65535"></td>';
+		insertTr += '	<td class="td_btn row_remove"><button class="btn btn-danger btn-sm" onclick="deletePortNum(this);">제거</button></td>';
+		insertTr += '</tr>'
+	$("#addPortLine").append(insertTr);
+}
+
+//포트 추가 팝업 - 라인 삭제
+const deletePortNum = function (obj){
+	$(obj).parent().parent().remove();
+}
+
+//모달 추가
+const addModal = function(){
+	$('#addPortLine').empty();
+	$('#add_modal').modal('show');
+}
+
+//서버 목록 페이지 이동
+const jsList = function(){
+	location.href = '/sandbox/env/server/list';
+}
+
+//서버 상세 페이지 이동
+const jsDetail = function(){
+	location.href = '/sandbox/env/server/detail/{{server_id}}';
+}
+
+//페이징 함수 호출
+const pagingFun = function(page, size_per_page){
+	serverPortsListGet(page, size_per_page);
+}
+
+//서버 정보
+serverDetail();
+
+//포트 정보
+serverPortsListGet();
+
+</script>

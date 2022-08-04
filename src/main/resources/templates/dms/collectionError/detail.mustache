@@ -1,0 +1,876 @@
+{{>layout/header}}
+
+	<div class="right_col" role="main">
+	    <div class="row">
+	        <div class="col-md-12">
+	            <div class="x_panel">
+	                <div class="x_title"> 
+	                  <h2>HOME > 수집오류</h2>
+	                  <div class="clearfix"> </div>
+	                </div>
+	                <div class="x_content">
+	                	<div class="cont_title_box">
+		                    <h3>수집오류 상세 정보</h3>
+		                    <div class="right_btns">
+		                      <button class="btn btn-dark" onclick="jsList();">목록</button>
+		                      <button class="btn btn-danger" onclick="dpIngestErrorsInstant();">즉시실행</button>
+		                    </div>
+		                  </div>
+		                <div class="border_rows">
+		                    <div class="row">
+		                      <div class="form-group row col-12 col-md-6">
+		                        <div class="control-label">Adapter명</div>
+		                        <div class="form-control_box" id="adapter_nm"></div>
+		                      </div>
+		                      <div class="form-group row col-12 col-md-6">
+		                        <div class="control-label">데이터셋명</div>
+		                        <div class="form-control_box" id="dset_korean_nm"></div>
+		                      </div>
+		                    </div>
+		                    <div class="row">
+		                      <div class="form-group row col-12 col-md-6">
+		                        <div class="control-label">수집방식</div>
+		                        <div class="form-control_box" id="clct_mthd"></div>
+		                      </div>
+		                      <div class="form-group row col-12 col-md-6">
+		                        <div class="control-label">수집유형</div>
+		                        <div class="form-control_box" id="clct_ty"></div>
+		                      </div>
+		                    </div>
+		                    <div class="row">
+		                      <div class="form-group row col-12 col-md-6">
+		                        <div class="control-label">대분류</div>
+		                        <div class="form-control_box" id="dset_lclas"></div>
+		                      </div>
+		                      <div class="form-group row col-12 col-md-6">
+		                        <div class="control-label">Instance명</div>
+		                        <div class="form-control_box" id="instance_nm"></div>
+		                      </div>
+		                    </div>
+		                    <div class="row">
+		                      <div class="form-group row col-12 col-md-6">
+		                        <div class="control-label">중분류</div>
+		                        <div class="form-control_box" id="dset_mclas"></div>
+		                      </div>
+		                      <div class="form-group row col-12 col-md-6">
+		                        <div class="control-label">테이블명</div>
+		                        <div class="form-control_box" id="table_eng_nm"></div>
+		                      </div>
+		                    </div>
+		                    <div class="row">
+		                      <div class="form-group row col-12 col-md-6">
+		                        <div class="control-label">소분류</div>
+		                        <div class="form-control_box" id="dset_sclas"></div>
+		                      </div>
+		                      <div class="form-group row col-12 col-md-6">
+		                        <div class="control-label">수집상태</div>
+		                        <div class="form-control_box" id="schedule_yn"></div>
+		                      </div>
+		                    </div>
+		                    <div class="row">
+		                      <div class="form-group row col-12 col-md-12">
+		                        <div class="control-label">오류사항</div>
+		                        <div class="form-control_box" id="error_described"></div>
+		                      </div>
+		                    </div>
+		                    <div class="row">
+		                      <div class="form-group row col-12 col-md-12">
+		                        <div class="control-label">오류처리</div>
+		                        <div class="form-control_box">
+		                        	<table class="table table-bordered bulk_action table_center">
+		                        		<colgroup>
+	                        				<col width="80%;">
+	                        			</colgroup>
+		                        		<thead>
+		                        			<tr>
+		                        				<th>바로가기</th>
+		                        				<th>처리여부</th>
+		                        			</tr>
+		                        		</thead>
+		                        		<tbody>
+		                        			<tr>
+		                        				<td><ol><li><a class="btn btn-primary" href="javascript:void(0);" onclick="table_addModal();">테이블 컬럼 변경</a></li></ol></td>
+		                        				<td id="table_process_yn"></td>
+		                        			</tr>
+		                        			<tr>
+		                        				<td><ol><li><a class="btn btn-primary" href="javascript:void(0);" onclick="instance_addModal();">Instance 매칭정보</a></li></ol></td>
+		                        				<td id="match_process_yn"></td>
+		                        			</tr>
+		                        		</tbody>
+		                        	</table>
+		                        </div>
+		                      </div>
+		                    </div>
+		                  </div>
+	            	</div>
+	        	</div>
+	    	</div>
+		</div>
+	</div>
+	<!-- 테이블 컬럼 변경 modal -->
+    <div class="modal fade add_modal" id="table_add_modal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="table_myModalLabel">테이블 컬럼 변경</h4>
+            <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
+          </div>
+          <div class="modal-body">
+          	<div class="x_content">
+          		<div class="border_rows">
+                 <div class="row">
+                   <div class="form-group row col-12 col-md-6">
+                     <div class="control-label">테이블 한글명</div>
+                     <div class="form-control_box" id="pop_table_korean_nm"></div>
+                   </div>
+                   <div class="form-group row col-12 col-md-6">
+                     <div class="control-label">테이블 영문명</div>
+                     <div class="form-control_box" id="pop_table_eng_nm"></div>
+                   </div>
+                 </div>
+               </div>
+             <div class="row"> 
+          	<div class="metatable_box col-5">
+          		<div class="row"> 
+                      <div class="table_responsive" style="height: 500px; overflow: auto">
+                    <div class="table_btns mt-1">
+                      <button class="btn btn-info" type="button" onclick="metaTblRemakeBtn();">테이블 수정</button>
+<!--                       <button class="btn btn-primary">추가</button> -->
+                    </div>
+                    <div class="talbel_total">총 <span class="red bold" id="total_count"></span>건</div>
+                    <table class="table table-striped" style="word-break: break-all;">
+                      <colgroup> 
+                        <col width="55px;">
+                      </colgroup>
+                      <thead>
+                        <tr> 
+                          <th>상태</th>
+                          <th>한글명</th>
+                          <th>영문명</th>
+                          <th>데이터타입</th>
+                          <th>데이터길이</th>
+                        </tr>
+                      </thead>
+                      <tbody id="columnInfo">
+                      </tbody>
+                    </table>
+                		</div>
+                   </div>
+          	</div>
+          	<div class="metatable_box col-5 col-lg-7">
+          		<div class="row"> 
+                     	<div class="table_responsive">
+                     		<div class="table_btns mt-1">
+		                      <button class="btn btn-primary" onclick="dpIngestMetaTblSaveCol();">저장</button>
+		                    </div>
+		            		<table class="table table-bordered bulk_action table_center">
+		                        <colgroup>
+		                        	<col width="15%">
+		                        	<col width="35%">
+		                        	<col width="15%">
+		                        	<col width="35%">
+		                        </colgroup>
+		                        <thead>
+			                        <tr>
+			                            <th>한글명</th>
+			                            <th>
+			                                <input class="form-control" type="text" name="column_korean_nm" id="column_korean_nm">
+			                            </th>
+			                            <th>영문명</th>
+			                            <th>
+			                                <input class="form-control" type="text" name="column_eng_nm" id="column_eng_nm">
+			                            </th>
+			                        </tr>
+			                        <tr>
+			                            <th>데이터타입</th>
+			                            <th>
+			                                <select class="form-control" name="data_type" id="data_type">
+			                                    <option value="VARCHAR">VARCHAR</option>
+												<option value="INTEGER">INTEGER</option>
+												<option value="NUMERIC">NUMERIC</option>
+												<option value="TIMESTAMPTZ">TIMESTAMPTZ</option>
+			                                </select>
+			                            </th>
+			                            <th>데이터 길이</th>
+			                            <th>
+			                                <input class="form-control" type="text" name="data_lt" id="data_lt">
+			                            </th>
+			                        </tr>
+			                        <tr>
+			                            <th>Not null 여부</th>
+			                            <th>
+			                                <select class="form-control" name="not_null_at" id="not_null_at">
+			                                    <option value="Y">예</option>
+												<option value="N">아니오</option>
+			                                </select>
+			                            </th>
+			                            <th>데이터셋 종류</th>
+			                            <th>
+			                                <select class="form-control" name="dset_knd" id="dset_knd">
+			                                    <option value="D">데이터</option>
+												<option value="M">메타정보</option>
+			                                </select>
+			                            </th>
+			                        </tr>
+			                        <tr>
+			                            <th>PK 정보</th>
+			                            <th>
+			                                <select class="form-control">
+			                                    <option value="">선택</option>
+			                                </select>
+			                            </th>
+			                            <th>FK 정보</th>
+			                            <th>
+			                                <select class="form-control">
+			                                    <option value="">선택</option>
+			                                </select>
+			                            </th>
+			                        </tr>
+			                        <tr>
+			                            <th>참조 테이블 식별자</th>
+			                            <th>
+			                            	<div class="form-control_box">
+				                            	<input class="form-control mr-1" type="text" name="refrn_table_idntfc_id" id="refrn_table_idntfc_id" readonly="readonly" style="display: inline-block; width: 70%;">
+				                            	<button class="btn-sm btn-primary" onclick="addModal();"> <i class="glyphicon glyphicon-search"></i></button>
+			                            	</div>
+			                            </th>
+			                            <th>참조 테이블명</th>
+			                            <th>
+			                                <input class="form-control" type="text" name="refrn_table_idntfc_id_nm" id="refrn_table_idntfc_id_nm" readonly="readonly">
+			                            </th>
+			                        </tr>
+			                        <tr>
+			                            <th>참조 컬럼 식별자</th>
+			                            <th>
+			                            	<input class="form-control" type="text"  name="refrn_column_idntfc_id" id="refrn_column_idntfc_id" readonly="readonly">
+			                            </th>
+			                            <th>참조 컬럼명</th>
+			                            <th>
+			                                <input class="form-control" type="text" name="refrn_column_idntfc_id_eng_nm" id="refrn_column_idntfc_id_eng_nm" readonly="readonly">
+			                            </th>
+			                        </tr>
+			                        <tr>
+			                            <th>개인정보 여부</th>
+			                            <th>
+			                            	<select class="form-control" name="indvdl_info_at" id="indvdl_info_at">
+			                                    <option value="Y">예</option>
+												<option value="N">아니오</option>
+			                                </select>
+			                            </th>
+			                            <th>암호화 여부</th>
+			                            <th>
+			                            	<select class="form-control" name="encpt_at" id="encpt_at">
+			                                    <option value="Y">예</option>
+												<option value="N">아니오</option>
+			                                </select>
+			                            </th>
+			                        </tr>
+			                        <tr>
+			                            <th>컬럼 저장 타입</th>
+			                            <th>
+			                            	<input class="form-control" type="text" name="column_stre_type" id="column_stre_type" readonly="readonly">
+			                            </th>
+			                            <th>정렬 순서</th>
+			                            <th>
+			                            	<input class="form-control" type="text" name="ordr" id="ordr">
+			                            </th>
+			                        </tr>
+			                        <tr>
+			                            <th>사용여부</th>
+			                            <th>
+			                            	<select class="form-control" name="use_at" id="use_at">
+												<option value="Y">예</option>
+												<option value="N">아니오</option>
+											</select>
+			                            </th>
+			                            <th>CRUD 구분</th>
+			                            <th>
+			                            	<input class="form-control" type="text" name="crud_se" id="crud_se">
+			                            </th>
+			                        </tr>
+			                        <tr>
+			                            <th>컬럼 설명</th>
+			                            <th>
+			                            	<textarea name="column_dc" id="column_dc" rows="4" style="width: 100%;"></textarea>
+			                            </th>
+			                            <th>CRUD 설명</th>
+			                            <th>
+			                            	<textarea name="crud_dc" id="crud_dc" rows="4" style="width: 100%;"></textarea>
+						                </th>
+						            </tr>
+			                        </thead>
+			                    </table>
+	                    	</div>
+	                    </div>
+	            	</div>
+             	</div>
+             </div>
+           </div>
+         </div>
+       </div>
+	</div>
+	
+	<!-- Instance 매칭정보 modal -->
+    <div class="modal fade add_modal" id="instance_add_modal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="instance_myModalLabel">Instance 매칭정보 변경</h4>
+            <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
+          </div>
+          <div class="modal-body">
+          	<div class="x_content">
+            	<div class="row">
+            		<div class="table_responsive">
+            			<div class="table_btns mt-1">
+	                      <button class="btn btn-primary">API 데이터 설정</button>
+	                    </div>
+	                    <table class="table" style="text-align: center;">
+	                      <colgroup> 
+	                      </colgroup>
+	                      <thead>
+	                      	<tr> 
+	                          <th colspan="2">데이터 모델</th>
+	                          <th colspan="2">Source</th>
+	                          <th colspan="2">전처리</th>
+	                        </tr>
+	                        <tr> 
+	                          <th>속성ID</th>
+	                          <th>속성값</th>
+	                          <th>ID</th>
+	                          <th>수신경로</th>
+	                          <th>속성</th>
+	                          <th>예시</th>
+	                        </tr>
+	                      </thead>
+	                      <tbody>
+	                      	<tr>
+	                      		<td>C_NAME_01</td>
+	                      		<td>String</td>
+	                      		<td>
+	                      			<select class="form-control clct_mthd1" disabled>
+	                                	<option val="">선택</option>
+	                            	</select>
+	                      		</td>
+	                      		<td><input class="form-control" type="text" readonly="readonly"></td>
+	                      		<td>
+	                      			<select class="form-control clct_mthd1" disabled>
+	                                	<option val="">C_NAME_01</option>
+	                            	</select>
+	                      		</td>
+	                      		<td><input class="form-control" type="text" readonly="readonly"></td>
+	                      	</tr>
+	                      	<tr>
+	                      		<td>C_NAME_02</td>
+	                      		<td>Integer</td>
+	                      		<td>
+	                      			<select class="form-control clct_mthd1" disabled>
+	                                	<option val="">C_NAME_02</option>
+	                            	</select>
+	                      		</td>
+	                      		<td><input class="form-control" type="text" readonly="readonly"></td>
+	                      		<td>
+	                      			<select class="form-control clct_mthd1" disabled>
+	                                	<option val="">선택</option>
+	                            	</select>
+	                      		</td>
+	                      		<td><input class="form-control" type="text" readonly="readonly"></td>
+	                      	</tr>
+	                      	<tr>
+	                      		<td>C_NAME_03</td>
+	                      		<td>String</td>
+	                      		<td>
+	                      			<select class="form-control clct_mthd1">
+	                                	<option val="">C_NAME_03</option>
+	                            	</select>
+	                      		</td>
+	                      		<td><input class="form-control" type="text" readonly="readonly"></td>
+	                      		<td>
+	                      			<select class="form-control clct_mthd1">
+	                                	<option val="">선택</option>
+	                            	</select>
+	                      		</td>
+	                      		<td><input class="form-control" type="text"></td>
+	                      	</tr>
+	                      </tbody>
+	                    </table>
+	               	</div>
+             	</div>
+             </div>
+           </div>
+           <div class="modal-footer" id="modal_footer">
+           	<button class="btn btn-primary" type="button">수정</button>
+           </div>
+         </div>
+       </div>
+	</div>
+	<!-- 참조 테이블 식별자 modal -->
+    <div class="modal fade add_modal" id="add_modal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-md">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">참조 테이블 검색</h4>
+            <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
+          </div>
+          <div class="modal-body">
+          	<div class="form-horizontal">
+           	<div class="row">
+               <div class="form-group row col-12 col-md-10">
+                 <input class="form-control" type="text" name="query" id="query" onkeypress="enterkey(event);">
+               </div>
+                 <button class="btn-sm btn-primary" type="button" onclick="dpIngestPopupMetaTbl();">검색</button>
+             </div>
+             <div class="table_responsive" style="height: 300px; overflow: auto">
+                <table class="table table-striped" style="text-align: center;">
+                  <thead>
+                    <tr> 
+                      <th rowspan="2" style="vertical-align: middle;">데이터셋 한글</th>
+                      <th colspan="2">테이블명</th>
+                    </tr>
+                    <tr>
+                      <th>영문</th>
+                      <th>국문</th>
+                    </tr>
+                  </thead>
+                  <tbody id="popupMetaTbl">
+                  </tbody>
+                </table>
+              </div>
+         </div>
+          </div>
+        </div>
+      </div>
+    </div>
+	<input type="hidden" name="table_idntfc_id" id="table_idntfc_id"/>
+        
+{{>layout/footer}}        
+
+<script>
+
+const commonUrl = '/common';
+const url = '/collectionError';
+
+//다중 모달 닫을때 스크롤 비활성화 되는 문제 해결
+$('body').on('hidden.bs.modal', function () {
+	if ($('.modal:visible').length > 0) { 
+        $('body').addClass('modal-open'); 
+    }
+});
+
+//수집오류 상세 조회
+const dpIngestErrorsDt = function () {
+	
+	let instance_id = '{{instance_id}}';
+	
+	const data = {
+   		url: '/dp/ingest/errors/detail',
+   		user_id: 'user00',	
+   		instance_id: instance_id,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpIngestErrorsDt',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		  
+  	    	if(data.contents != ""){
+  	    		$("#adapter_nm").text(data.contents[0].adapter_nm);
+  	    		$("#dset_korean_nm").text(data.contents[0].dset_korean_nm);
+  	    		$("#clct_mthd").text(data.contents[0].clct_mthd);
+  	    		$("#clct_ty").text(data.contents[0].clct_ty);
+  	    		$("#dset_lclas").text(data.contents[0].dset_lclas);
+  	    		$("#instance_nm").text(data.contents[0].instance_nm);
+  	    		$("#dset_mclas").text(data.contents[0].dset_mclas);
+  	    		$("#table_eng_nm").text(data.contents[0].table_eng_nm);
+  	    		$("#dset_sclas").text(data.contents[0].dset_sclas);
+  	    		$("#schedule_yn").text(data.contents[0].schedule_yn);
+  	    		$("#error_described").text(data.contents[0].error_described);
+  	    		$("#table_process_yn").text(data.contents[0].table_process_yn);
+  	    		$("#match_process_yn").text(data.contents[0].match_process_yn);
+  	    		$("#table_idntfc_id").val(data.contents[0].table_idntfc_id);
+  	    	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//오류 처리된 내용을 정상 스케줄실행 스케줄로 처리하며 한번 스케줄 실행
+const dpIngestErrorsInstant = function () {
+	
+	let instance_id = '{{instance_id}}';
+	
+	const data = {
+   		url: '/dp/ingest/errors/instant',
+   		user_id: 'user00',	
+   		instance_id: instance_id,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpIngestErrorsInstant',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		  
+  	    	if(data.contents != ""){
+  	    		alert("정상 처리되었습니다.");
+  	    	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//테이블 조회
+const dpIngestAdapterItTbl = function() {
+	let table_idntfc_id = $("#table_idntfc_id").val();
+	
+	const data = {
+   		url: '/dp/ingest/adapter/instance/table',
+   		user_id: 'user00',	
+   		table_idntfc_id: table_idntfc_id,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpIngestAdapterItTbl',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+  	    	if(data.contents != ""){
+  	    		$("#pop_table_korean_nm").text(data.contents[0].table_korean_nm);
+  	    		$("#pop_table_eng_nm").text(data.contents[0].table_eng_nm);
+  	    	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//메타테이블 컬럼 항목
+const dpIngestMetaTblCol = function () {
+	
+	let table_idntfc_id = $("#table_idntfc_id").val();
+	
+	const data = {
+   		url: '/dp/ingest/meta/tables/column',
+   		user_id: 'user00',	
+   		table_idntfc_id: table_idntfc_id,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpIngestMetaTblCol',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		$("#total_count").text(data.totalCount);
+  	    	if(data.contents != ""){
+  	    		let insertTr = '';
+  	    		$.each(data.contents, function (idx, el) {
+	  	    		insertTr += '<tr>';
+	  	    		
+	  	    		if(el.creat_table_at == 'N'){
+	  	    			insertTr += '	<td>신규</td>';
+	  	    		}else{
+	  	    			insertTr += '	<td></td>';
+	  	    		}
+		  	    	insertTr += '	<td>'+el.column_korean_nm+'</td>';
+		  	    	insertTr += '	<td>'+el.column_eng_nm+'</td>';
+		  	    	insertTr += '	<td>'+el.data_type+'</td>';
+		  	    	insertTr += '	<td>'+el.data_lt+'</td>';
+		  	    	insertTr += '</tr>';
+		  	    	
+  	    		});
+  	    		$("#columnInfo").html(insertTr);
+  	    	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//메타테이블 컬럼등록
+const dpIngestMetaTblSaveCol = function (){
+	let table_idntfc_id = $("#table_idntfc_id").val();
+	let column_korean_nm = $("#column_korean_nm").val();
+	let refrn_table_idntfc_id = $("#refrn_table_idntfc_id").val();
+	let column_eng_nm = $("#column_eng_nm").val();
+	let refrn_table_idntfc_id_nm = $("#refrn_table_idntfc_id_nm").val();
+	let data_type = $("#data_type").val();
+	let data_lt = $("#data_lt").val();
+	let refrn_column_idntfc_id = $("#refrn_column_idntfc_id").val();
+	let not_null_at = $("#not_null_at").val();
+	let dset_knd = $("#dset_knd").val();
+	let refrn_column_idntfc_id_eng_nm = $("#refrn_column_idntfc_id_eng_nm").val();
+	let pk_info = $("#pk_info").val();
+	let fk_info = $("#fk_info").val();
+	let creat_table_at = $("#creat_table_at").val();
+	let use_at = $("#use_at").val();
+	let column_stre_type = $("#column_stre_type").val();
+	let column_dc = $("#column_dc").val();
+	let crud_dc = $("#crud_dc").val();
+	let ordr = $("#ordr").val();
+	let indvdl_info_at = $("#indvdl_info_at").val();
+	let encpt_at = $("#encpt_at").val();
+	let crud_se = $("#crud_se").val();
+	let table_eng_nm = $("#table_eng_nm").text();
+	
+	if(!column_korean_nm){
+		alert("한글명을 입력하세요!");
+		$('#column_korean_nm').focus();
+		return;
+	}
+	
+	if(!column_eng_nm){
+		alert("영문명을 입력하세요!");
+		$('#column_eng_nm').focus();
+		return;
+	}
+	
+	const data = {
+   		url: '/dp/ingest/meta/tables/save/column',
+		user_id: 'user00',
+		rl_table_idntfc_id: table_idntfc_id,
+		dset_knd: dset_knd,
+		ordr: Number(ordr),
+		refrn_table_idntfc_id: refrn_table_idntfc_id,
+		refrn_column_idntfc_id: refrn_column_idntfc_id,
+		table_eng_nm: table_eng_nm,
+		column_eng_nm: column_eng_nm,
+		column_korean_nm: column_korean_nm,
+		column_dc: column_dc,
+		data_type: data_type,
+		data_lt: data_lt,
+		data_frmat: null,
+		not_null_at: not_null_at,
+		pk_info: pk_info,
+		fk_info: fk_info,
+		ak_info: null,
+		rstrct_cnd: null,
+		indvdl_info_at: indvdl_info_at,
+		encpt_at: encpt_at,
+		othbc_at: null,
+		column_stre_type: column_stre_type,
+		column_nm: null,
+		crud_se: crud_se,
+		crud_dc: crud_dc,
+		use_at: use_at,
+		creat_table_at: creat_table_at,
+    };
+	
+	if(confirm("등록 하시겠습니까?")){
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestMetaTblSaveCol',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data),
+	    }).done(function (data) {
+	  		alert("저장 되었습니다.");
+	  		initDetail();
+	  		dpIngestMetaTblCol();
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	}
+	
+}
+
+//테이블생성수정
+const dpIngestMetaTblRemake = function (){
+
+	let table_eng_nm = $("#table_eng_nm").text();
+	
+	const data = {
+		url: '/dp/ingest/meta/tables/remake',
+		user_id: 'user00',
+		table_eng_nm: table_eng_nm,
+    };
+	
+	if(confirm("수정 하시겠습니까?")){
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestMetaTblRemake',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data),
+	    }).done(function (data) {
+	    	if(data.contents[0].successYN == 'Y'){
+		   		alert("테이블이 수정되었습니다.");
+	 	   	}else{
+		   		alert("정상적으로 처리되지 않았습니다.");
+	 	   	}
+	  		
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	}
+	
+}
+
+//테이블 수정 처리
+const dpIngestMetaTblProcess = function (){
+	
+	let instance_id = '{{instance_id}}';
+	
+	const data = {
+		url: '/dp/ingest/meta/tables/process',
+		user_id: 'user00',
+		instance_id: instance_id,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpIngestMetaTblProcess',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data),
+    }).done(function (data) {
+		console.log("dpIngestMetaTblProcess : " + data.contents[0].successYn);
+  		
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//메타 테이블명 검색
+const dpIngestPopupMetaTbl = function () {
+	
+	let table_korean_nm = $("#query").val();
+	
+	const data = {
+   		url: '/dp/ingest/popup/meta_table',
+   		user_id: 'user00',	
+   		table_korean_nm: table_korean_nm,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpIngestPopupMetaTbl',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+	  	  if (data != null) {
+  	    	if(data.contents != ""){
+  	    		let insertTr = '';
+  	    		$.each(data.contents, function (idx, el) {
+  	    			insertTr += '<tr>';
+  	    			insertTr += '	<td>'+el.dset_korean_nm+'</td>';
+  	    			insertTr += '	<td>'+el.table_eng_nm+'</td>';
+  	    			insertTr += '	<td><span class="blue bold" style="cursor:pointer" id="dset_nm" data-idntfc_id="'+el.table_idntfc_id+'" data-korean_nm="'+el.table_korean_nm+'" ondblclick="setTableNm(this);">'+el.table_korean_nm+'</span></td>';
+  	    			insertTr += '</tr>';
+  	    			
+  	    		});
+  	    		$("#popupMetaTbl").html(insertTr);
+  	    	}
+	  	  }
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//더블클릭 테이블명 전달
+const setTableNm = function(obj){
+	let table_idntfc_id = $(obj).data("idntfc_id");
+	let table_korean_nm = $(obj).data("korean_nm");
+	
+	$("#refrn_table_idntfc_id").val(table_idntfc_id);
+	$("#refrn_table_idntfc_id_nm").val(table_korean_nm);
+	
+	closeModal();
+}
+
+//테이블수정 버튼
+const metaTblRemakeBtn = function () {
+	
+	dpIngestMetaTblRemake();
+	dpIngestMetaTblProcess();
+	
+}
+
+//테이블 컬럼 변경 모달 추가
+const table_addModal = function(){
+	let table_idntfc_id = $("#table_idntfc_id").val();
+	if(!table_idntfc_id){
+		alert("테이블 식별자ID가 존재하지 않습니다!");
+		return;
+	}
+	initDetail();
+	dpIngestAdapterItTbl();
+	dpIngestMetaTblCol();
+	$('#table_add_modal').modal('show');
+}
+
+//Instance 매칭정보 변경모달 추가
+const instance_addModal = function(){
+	$('#instance_add_modal').modal('show');
+}
+
+//참조 테이블 식별자 모달 추가
+const addModal = function(){
+	$('#query').val('');
+	$('#popupMetaTbl').empty();
+	$('#add_modal').modal('show');
+}
+
+//참조 테이블 식별자 모달 닫기
+const closeModal = function(){
+	$('#add_modal').modal('hide');
+}
+
+//상세 초기화
+const initDetail = function(){
+	$("#column_korean_nm").val("");
+	$("#refrn_table_idntfc_id").val("");
+	$("#column_eng_nm").val("");
+	$("#refrn_table_idntfc_id_nm").val("");
+	$("#data_type").val("VARCHAR").prop("selected", true);
+	$("#data_lt").val("");
+	$("#refrn_column_idntfc_id").val("");
+	$("#not_null_at").val("Y").prop("selected", true);
+	$("#dset_knd").val("D").prop("selected", true);
+	$("#refrn_column_idntfc_id_eng_nm").val("");
+	$("#pk_info").val("Y").prop("selected", true);
+	$("#fk_info").val("Y").prop("selected", true);
+	$("#creat_table_at").val("");
+	$("#use_at").val("Y").prop("selected", true);
+	$("#column_stre_type").val("");
+	$("#column_dc").val("");
+	$("#crud_dc").val("");
+	$("#ordr").val("");
+	$("#indvdl_info_at").val("Y").prop("selected", true);
+	$("#encpt_at").val("Y").prop("selected", true);
+	$("#crud_se").val("");
+  	
+}
+
+//목록 화면
+const jsList = function () {
+	location.href = url+'/list';
+}
+
+dpIngestErrorsDt();
+
+</script>
+

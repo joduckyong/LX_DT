@@ -1,0 +1,612 @@
+{{>layout/header}}
+
+<div class="right_col" role="main">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="x_panel"> 
+                <div class="x_title"> 
+                  <h2>HOME > 데이터 분석 > 샌드박스 관리 > 샌드박스 등록</h2>
+                  <div class="clearfix"> </div>
+                </div>
+                <div class="x_content"> <br>
+                  <div class="scenario_depth"> 
+                    <ul>
+                      <li id="ps1" style="cursor:pointer" onclick="step1();">샌드박스 설정</li>
+                      <li id="ps2" style="cursor:pointer" onclick="step2();">시나리오 선택</li>
+                      <li id="ps3" style="cursor:pointer" onclick="step3();">분석 방식 선택</li>
+                    </ul>
+                  </div>
+                  
+					<div class="tab_item">  
+                      <h3>샌드박스 분석 주기 정의 <span class="red">*</span></h3>
+                      <div class="row" id="commonCodeAnalysisCycleSetting">
+                      </div>
+                      
+	                  <div class="row">
+	                    <div class="form-group row col-md-7">
+	                    </div>
+	                    <div class="col-md-2">
+	                      <div class="form-control_box">
+	                        <select class="form-control" id="commonCodeBatchCycle" onchange="selCodeBatchCycle(this.value);">
+	                        </select>
+	                      </div>
+	                    </div>
+	                    <div class="col-md-2">
+	                      <div class="form-control_box">
+	                        <select class="form-control" id="anals_period_dtl_value">
+		                        <option value="">선택</option>
+	                        </select>
+	                      </div>
+	                    </div>
+	                  </div>    
+	                  <br>
+	                  <div class="row">
+                        <div class="col-6 col-md-6 mx-0">
+                        </div>	
+                        <div class="col-6 col-md-6 mx-0">
+                          <div class="table_responsive">
+                            <table class="table table-striped table-bordered">
+                              <colgroup> 
+                                <col width="140px">
+                              </colgroup>                              
+                              <tbody id="div_B09002"> 
+                                <tr> 
+                                  <td>배치 수행 시작일</td>
+                                  <td> 
+                                    <div class="form-control_box">
+                                      <div class="input-prepend input-group"><span class="add-on input-group-addon"><i class="fa fa-calendar"></i></span>
+                                        <input class="form-control" id="single_cal" name="batch_exec_begin_date" type="text" name="reservation" value="">
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>	                  
+	                  </div>        
+	                            
+                      <h3>분석 종류 선택 <span class="red">*</span></h3>
+                      <div class="d-flex mb-4" id="commonCodeAnalysisKind"> 
+                      </div>
+                      <h3>분석 데이터 선택 <span class="red">*</span></h3>
+                      <div class="row">
+                        <div class="col-12 col-md-6 mx-0">
+                          <h4 class="center_title">분석 데이터 선택</h4>
+                          <div class="table_responsive">
+                            <table id="div_B05001">
+                              <tbody> 
+                                <tr> 
+                                  <td style="text-align: center;color: red;">※분석 데이터는 샌드박스 생성 완료 이후 업로드할 수 있습니다</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <div class="col-12 col-md-6 mx-0">
+                          <h4 class="center_title">재학습 분석 데이터 선택</h4>
+                          <div class="table_responsive">
+                            <table class="table table-striped table-bordered" id="div_B05002">
+                              <colgroup> 
+                              </colgroup>
+                              <thead>
+                                <tr>
+                                  <th>이미지 데이터셋 이름</th>
+                                  <th>종류</th>
+                                  <th>총수</th>
+                                  <th>선택[개]</th>
+                                </tr>
+                              </thead>
+                              <tbody id="sandboxAnalysisImageDatasetGet"> 
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="right_btns mt-6">
+                        <button class="btn btn-primary" id="btn_B06002_1" style="display:none;" onclick="sandboxCreate();">승인</button>
+                        <button class="btn btn-danger" id="btn_B06002_2" style="display:none;" >반려</button>                      
+                        <button class="btn btn-warning" id="btn_B06001" style="display:none;" onclick="sandboxAnalysisMethodUpdate('B06001');">임시저장</button>
+                        <button class="btn btn-primary" id="btn_B06002" style="display:none;" onclick="sandboxAnalysisMethodUpdate('B06002');">등록</button>
+                        <button class="btn btn-danger" onclick="sandboxDelete();">삭제</button>
+                        <button class="btn btn-primary" id="" onclick="list();">목록</button>
+                      </div>
+                    </div>
+                                      
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>      
+		<input type="hidden" name="sandbox_setup_status_cd" id="sandbox_setup_status_cd"/>
+	    <input type="hidden" name="scenario_setup_status_cd" id="scenario_setup_status_cd"/>
+	    <input type="hidden" name="anals_method_status_cd" id="anals_method_status_cd"/>
+	    <input type="hidden" name="last_status_cd" id="last_status_cd"/>
+	    <input type="hidden" name="sandbox_status_cd" id="sandbox_status_cd"/>
+	    
+{{>layout/footer}}        
+
+
+<script>
+const commonUrl = '/sandbox/common';
+const url = '/sandbox/sand/analysisSandbox';
+let contents;
+
+const progressCd1 = 'B06001';	//등록 중
+const progressCd2 = 'B06002';	//등록 완료
+
+//분석 방식 선택 - 분석 주기 코드 조회
+const commonCodeAnalysisCycleSetting = function (){
+	const data = {
+       		url: '/services/sandbox/common-code/analysis-cycle-setting',
+        };		
+        $.ajax({
+            type: 'POST',
+            url: commonUrl+'/commonCodeAnalysisCycleSetting',
+            dataType: 'json',
+            contentType: 'application/json; charset-utf-8',
+            data: JSON.stringify(data)
+        }).done(function (data) {
+ 		  	if (data != null) {
+ 		  	   	if(data.contents != ""){    	    	
+					 $("#commonCodeAnalysisCycleSetting").empty();
+					 
+    				 let htmlData = '';  
+	    	   		 $.each(data.contents, function (idx, el) {
+	    	   			htmlData += '<div class="col-12 col-md-6 mx-0">';
+	    	   			
+	    	   			if(idx ==  0){
+		    	   			htmlData += '  <h4 class="center_title"><label for="'+el.dtl_code+'"><input class="flat" id="'+el.dtl_code+'" type="radio" name="commonCodeAnalysisCycleSetting" onclick=div_show(this.value); value="'+el.dtl_code+'"> '+el.dtl_code_nm+'</label></h4>';
+	    	   			}else{
+			    	   		htmlData += '  <h4 class="center_title"><label for="'+el.dtl_code+'"><input class="flat" id="'+el.dtl_code+'" type="radio" name="commonCodeAnalysisCycleSetting" onclick=div_show(this.value); value="'+el.dtl_code+'"> '+el.dtl_code_nm+'</label></h4>';
+	    	   			}
+	    	   			
+	    	   			htmlData += '</div>';
+	 	     	     });
+	    	   		 
+	   	      	     $("#commonCodeAnalysisCycleSetting").append(htmlData);        	
+ 		  	   	}
+ 		  	   	
+ 		  	}
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });		
+}
+
+//분석 방식 선택 - 분석 종류 선택 코드 조회
+const commonCodeAnalysisKind = function (){
+	const data = {
+       		url: '/services/sandbox/common-code/analysis-kind',
+        };		
+        $.ajax({
+            type: 'POST',
+            url: commonUrl+'/commonCodeAnalysisKind',
+            dataType: 'json',
+            contentType: 'application/json; charset-utf-8',
+            data: JSON.stringify(data)
+        }).done(function (data) {
+ 		  	if (data != null) {
+ 		  	   	if(data.contents != ""){    	    	
+					 $("#commonCodeAnalysisKind").empty();
+					 
+    				 let htmlData = '';  
+	    	   		 $.each(data.contents, function (idx, el) {
+	    	   			if(idx == 0){
+		    	   			htmlData += '<div class="radio mr-4"><label for="'+el.dtl_code+'"><input class="flat" id="'+el.dtl_code+'" type="radio" name="commonCodeAnalysisKind" onclick=div_sub_show(this.value); value="'+el.dtl_code+'">'+el.dtl_code_nm+'</label></div>';
+	    	   			}else{
+	    	   		//		if('{{anals_use_prpos_cd}}' == 'B13001' && '{{cd}}' == 'B01001'){
+	    	   		//			htmlData += '<div class="radio mr-4"><label for="'+el.dtl_code+'"><input class="flat" id="'+el.dtl_code+'" type="radio" name="commonCodeAnalysisKind" onclick=div_sub_show(this.value); value="'+el.dtl_code+'" disabled>'+el.dtl_code_nm+'</label></div>';
+	    	   		//		}else{
+	    	   					htmlData += '<div class="radio mr-4"><label for="'+el.dtl_code+'"><input class="flat" id="'+el.dtl_code+'" type="radio" name="commonCodeAnalysisKind" onclick=div_sub_show(this.value); value="'+el.dtl_code+'">'+el.dtl_code_nm+'</label></div>';
+	    	   		//		}
+	    	   			}
+	 	     	     });
+	    	   		 
+	   	      	     $("#commonCodeAnalysisKind").append(htmlData);        	
+ 		  	   	}
+ 		  	   	
+ 		  	}
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });		
+}
+
+//주기성 
+const selCodeBatchCycle = function(dtl_code){
+	
+	$("#anals_period_dtl_value").empty();
+	let selOp = '';  
+	let selOp2 = '';  
+	if(dtl_code == 'B10001'){
+	    for (var i = 1; i < 29; i++) {
+	    	if(i < 10){
+				selOp += '<option value=0'+i+'>' + i + '일</option>';
+	    	}else{
+				selOp += '<option value='+i+'>' + i + '일</option>';
+	    	}
+	    }		
+	    selOp2 += '<option value="일자">일자</option>';
+	}else if(dtl_code == 'B10002'){
+	    for (var i = 0; i < 7; i++) {
+			selOp += '<option value=0'+i+'>' + dayOfWeek(i) + '요일</option>';
+	    }			
+	    selOp2 += '<option value="요일">요일</option>';
+	}else if(dtl_code == 'B10003'){
+	    for (var i = 0; i < 24; i++) {
+	    	if(i < 10){
+				selOp += '<option value=0'+i+'>' + i + '시</option>';
+	    	}else{
+				selOp += '<option value='+i+'>' + i + '시</option>';
+	    	}
+	    }	
+	    selOp2 += '<option value="시">시</option>';
+	}else{
+		selOp += '<option value="">선택</option>';
+		selOp2 += '<option value="선택">선택</option>';
+	}
+  	$("#anals_period_dtl_value").append(selOp);   	
+}
+
+//분석 방식 선택 - 배치 주기 코드 조회(주기1)
+const commonCodeBatchCycle = function(){
+	const data = {
+       		url: '/services/sandbox/common-code/batch-cycle',
+        };		
+        $.ajax({
+            type: 'POST',
+            url: commonUrl+'/commonCodeBatchCycle',
+            dataType: 'json',
+            contentType: 'application/json; charset-utf-8',
+            data: JSON.stringify(data)
+        }).done(function (data) {
+ 		  	if (data != null) {
+ 		  	   	if(data.contents != ""){    	    	
+					 $("#commonCodeBatchCycle").empty();
+    				 let selOp = '<option value="">선택</option>';  
+	    	   		 $.each(data.contents, function (idx, el) {
+  	    					selOp += '<option value='+el.dtl_code+'>' + el.dtl_code_nm + '</option>';
+	 	     	     });
+		 	     	 $("#commonCodeBatchCycle").append(selOp);       	
+ 		  	   	}
+ 		  	   	
+ 		  	}
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });		
+	
+}
+
+//샌드박스 분석방식 상세조회 - 학습 데이터 개수 조회
+const sandboxAnalysisImageDatasetGet = function(){
+	const data = {
+       		url: '/services/sandbox/sandboxes/{{sandbox_id}}/analysis-method/analysis-images/get',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	            		
+        };		
+        $.ajax({
+            type: 'POST',
+            url: url+'/sandboxAnalysisImageDatasetGet',
+            dataType: 'json',
+            contentType: 'application/json; charset-utf-8',
+            data: JSON.stringify(data)
+        }).done(function (data) {
+ 		  	if (data != null) {
+ 		  	   	if(data.contents != ""){    	    
+ 		  	   		contents = data.contents;
+					$("#sandboxAnalysisImageDatasetGet").empty();
+	     	        let insertTr = '';
+			  	    $.each(data.contents, function (idx, el) {
+		                  insertTr += '<tr>';
+		                  insertTr += ' <td style="text-align: center;">'+el.image_dataset_nm+'</td>';
+		                  insertTr += ' <td style="text-align: center;">'+el.anals_data_sect_nm+'</td>';
+		                  insertTr += ' <td style="text-align: center;">'+el.total_cnt+'</td>';
+		                  insertTr += ' <td style="text-align: center;"><input type="text" id="file_cnt_'+el.anals_data_sect_cd+'" name="file_cnt" id="" value="'+el.file_cnt+'" onKeyup=this.value=this.value.replace(/[^0-9]/g,"");></td>';
+		                  insertTr += '</tr>';
+				    });     	
+          	   	    $("#sandboxAnalysisImageDatasetGet").append(insertTr);
+ 		  	   	}
+ 		  	   	
+ 		  	}
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });	
+}
+
+//분석 방식 선택 임시저장 & 저장 & 수정
+const sandboxAnalysisMethodUpdate = function(val){
+
+	let confirmMsg = '';
+	if(val == progressCd1){	//임시 저장
+		confirmMsg = '임시저장 하시겠습니까?';
+	}else{
+		confirmMsg = '등록 하시겠습니까?';
+	}
+	
+	let commonCodeAnalysisCycleSetting = $("input[name='commonCodeAnalysisCycleSetting']:checked").val();
+	let commonCodeAnalysisKind = $("input[name='commonCodeAnalysisKind']:checked").val();
+	let batch_exec_begin_date = $('input[name=batch_exec_begin_date]').val();
+	let commonCodeBatchCycle = $("#commonCodeBatchCycle").val();
+	let anals_period_dtl_value = $("#anals_period_dtl_value").val();
+	
+	if(commonCodeAnalysisCycleSetting == ''){
+		alert("샌드박스 분석 주기 정의를 선택해주세요!");
+		return;
+	} 	
+	if(commonCodeAnalysisKind == ''){
+		alert("분석 종류를 선택해주세요!");
+		return;
+	} 	
+	
+	let program_list = new Array();
+    $.each(contents, function (idx, el) {
+		let data = new Object();
+		data.anals_target_image_dataset_id = el.image_dataset_id;
+		data.anals_data_sect_cd = el.anals_data_sect_cd;
+		data.file_cnt = $("#file_cnt_"+el.anals_data_sect_cd).val();
+		program_list.push(data);
+    });
+    
+    
+	const data = {
+       		url: '/services/sandbox/sandboxes/{{sandbox_id}}/analysis-method/update',
+       		anals_use_prpos_cd:	'{{anals_use_prpos_cd}}',
+       		anals_period_dfn_cd: commonCodeAnalysisCycleSetting,	
+       		anals_period_cd: commonCodeBatchCycle,	
+       		anals_period_dtl_value: anals_period_dtl_value,	
+       		anals_kind_cd: commonCodeAnalysisKind,	
+       		batch_exec_begin_date: batch_exec_begin_date,	
+       		anals_method_status_cd: val,	
+       		modifier_id: 'modifier_id',		
+       		user_id: 'user00',		
+       		menu_id: 'menu_id',	 	
+       		image_data_batch_info : program_list,
+        };		
+	
+	console.log(JSON.stringify(data));
+	
+	if(confirm(confirmMsg)){
+        $.ajax({
+            type: 'POST',
+            url: url+'/sandboxAnalysisMethodUpdate',
+            dataType: 'json',
+            contentType: 'application/json; charset-utf-8',
+            data: JSON.stringify(data)
+        }).done(function (data) {
+      		let message = JSON.stringify(data.return_msg);
+      		alert(message.replace(/\"/gi, ''));    	  
+
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });		
+	}
+}
+
+//샌드박스 생성
+const sandboxCreate = function(){
+	
+	let regstCd = '';
+	let confirmMsg = '생성 요청 하시겠습니까?';
+	
+	const data = {
+       		url: '/services/sandbox/sandboxes/{{sandbox_id}}/create-request',
+       		modifier_id: 'modifier_id',		
+       		approver_id: 'approver_id',		
+       		user_id: 'user00',		
+       		menu_id: 'menu_id',	 	
+        };		
+	
+	console.log(JSON.stringify(data));
+	
+	if(confirm(confirmMsg)){
+        $.ajax({
+            type: 'POST',
+            url: url+'/sandboxCreate',
+            dataType: 'json',
+            contentType: 'application/json; charset-utf-8',
+            data: JSON.stringify(data)
+        }).done(function (data) {
+      		let message = JSON.stringify(data.return_msg);
+      		alert(message.replace(/\"/gi, ''));    	  
+
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });		
+	}
+}
+
+//샌드박스 삭제
+const sandboxDelete = function () {
+		
+	const data = {
+   		url: '/services/sandbox/sandboxes/{{sandbox_id}}/delete',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+    };		
+    $.ajax({
+        type: 'POST',
+        url: url+'/sandboxDelete',
+        dataType: 'json',
+        contentType: 'application/json; charset-utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+  		let message = JSON.stringify(data.return_msg);
+  		alert(message.replace(/\"/gi, ''));
+  		list();
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//div 초기화
+const div_main = function(){
+	
+	$("#div_B05001").hide();
+	$("#div_B05002").hide();	
+}
+//div 상태
+const div_show = function(val){
+	
+	div_main();	
+	$("input:radio[name='commonCodeAnalysisKind']").prop('checked', false);
+	
+	if(val == 'B09001'){
+		$("#div_B09002").hide();
+	}else if(val == 'B09002'){
+		$("#div_B09002").show();
+		
+		today('single_cal');
+	}
+}
+
+//div 하위 상태
+const div_sub_show = function(val){
+	
+	div_main();
+	let commonCodeAnalysisCycleSetting = $("input[name='commonCodeAnalysisCycleSetting']:checked").val();
+	
+	//1회성
+	if(commonCodeAnalysisCycleSetting == 'B09001'){
+		
+		//분석
+		if(val == 'B05001'){
+			$("#div_B05001").show();
+			$("#div_B05002").hide();
+		//재학습
+		}else if(val == 'B05002'){
+			genRowspan('first');
+			$("#div_B05001").hide();
+			$("#div_B05002").show();
+		//분석 + 재학습				
+		}else{
+			genRowspan('first');
+			$("#div_B05001").show();
+			$("#div_B05002").show();
+		}
+		
+	//주기성(배치성)				
+	}else if(commonCodeAnalysisCycleSetting == 'B09002'){
+		//분석
+		if(val == 'B05001'){
+			$("#div_B05001").show();
+			$("#div_B05002").hide();
+		//재학습				
+		}else if(val == 'B05002'){
+			genRowspan('first');
+			$("#div_B05001").hide();
+			$("#div_B05002").show();
+		//분석 + 재학습						
+		}else{
+			genRowspan('first');
+			$("#div_B05001").show();
+			$("#div_B05002").show();
+		}
+		
+	}
+		
+}
+
+//진행상태 표시 바
+const progressBar = function(){
+	let sandbox_setup_status_cd = $("#sandbox_setup_status_cd").val();
+	let scenario_setup_status_cd = $("#scenario_setup_status_cd").val();
+	let anals_method_status_cd = $("#anals_method_status_cd").val();
+	let last_status_cd = $("#last_status_cd").val();
+	let sandbox_status_cd = $("#sandbox_status_cd").val();
+	
+	if(sandbox_setup_status_cd == progressCd1){
+		$("#ps1").addClass("temporary_storage");
+	}else if(sandbox_setup_status_cd == progressCd2){
+		$("#ps1").addClass("save");
+	}
+	
+	if(scenario_setup_status_cd == progressCd1){
+		$("#ps2").addClass("temporary_storage");
+	}else if(scenario_setup_status_cd == progressCd2){
+		$("#ps2").addClass("save");
+	}
+	
+	if(anals_method_status_cd == progressCd1){
+		$("#ps3").addClass("temporary_storage");
+	}else{
+		$("#ps3").addClass("now_depth");
+	}
+	
+	//반려
+	if(last_status_cd == progressCd2 && sandbox_status_cd == 'B07002'){
+		$("#btn_B06002_2").show();
+	}
+	//승인
+	if((last_status_cd == progressCd2 && sandbox_status_cd == 'B07002') || (last_status_cd == progressCd2 && sandbox_status_cd == 'B07006')){
+		$("#btn_B06002_1").show();
+	}
+	//임시저장, 등록
+	if(sandbox_status_cd != 'B07005'){
+		$("#btn_B06001").show();
+		$("#btn_B06002").show();
+	}
+	
+}
+
+//샌드박스 단계별 등록 상태
+const sandboxEnrollStatus = function(){
+	const data = {
+       		url: '/services/sandbox/sandboxes/{{sandbox_id}}/enroll-status',
+       		user_id: 'user00',	
+       		menu_id: 'menu_id',
+       	};		
+        $.ajax({
+            type: 'POST',
+            url: url+'/sandboxEnrollStatus',
+            dataType: 'json',
+            contentType: 'application/json; charset-utf-8',
+            data: JSON.stringify(data)
+        }).done(function (data) {
+        	
+   	    	if(data.contents != ""){
+   	    		$("#sandbox_setup_status_cd").val(data.contents.sandbox_setup_status_cd);
+   	    		$("#scenario_setup_status_cd").val(data.contents.scenario_setup_status_cd);
+   	    		$("#anals_method_status_cd").val(data.contents.anals_method_status_cd);
+   	    		$("#last_status_cd").val(data.contents.last_status_cd);
+   	    		$("#sandbox_status_cd").val(data.contents.sandbox_status_cd);
+   	    		
+   	    		progressBar();
+   	    	}
+   	    	
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });	
+}
+
+//분석 시나리오 관리
+const list = function(){
+	location.href = url+'/list';
+}
+
+//샌드박스 설정
+const step1 = function(){
+	location.href = url+'/update_step1/{{sandbox_id}}';
+}
+//시나리오 선택
+const step2 = function(){
+	location.href = url+'/update_step2/{{sandbox_id}}/{{anals_use_prpos_cd}}';
+}
+//분석 방식 선택
+const step3 = function(){
+	location.href = url+'/update_step3/{{sandbox_id}}/{{anals_use_prpos_cd}}/{{cd}}';
+}	
+
+
+//초기 호출
+const initMain = function(){
+	commonCodeAnalysisCycleSetting();
+	commonCodeAnalysisKind();
+	commonCodeBatchCycle();
+	div_main();
+	$("#div_B09002").hide();	
+	
+	sandboxAnalysisImageDatasetGet();
+}
+
+initMain();
+sandboxEnrollStatus();
+</script>

@@ -1,0 +1,451 @@
+{{>layout/header}}
+<link rel="stylesheet" href="/vendors/jstree/dist/themes/default/style.min.css">
+	<div class="right_col" role="main">
+	    <div class="row">
+	        <div class="col-md-12">
+	            <div class="x_panel">
+	                <div class="x_title"> 
+	                  <h2>HOME > 시스템 관리 > 분류 관리</h2>
+	                  <div class="clearfix"> </div>
+	                </div>
+	                <div class="row">
+		                <div class="x_content">
+		            	</div>
+		            	<div class="metatable_box col-6">
+		            		<h3 class="center_title">분류 관리</h3>
+							<div class="form-group row">
+								<div class="table_responsive" style="width: 100%; height: 500px; overflow: auto">
+									<div id="tree"></div>
+	     						</div>
+							</div>
+						</div>
+						<div class="metatable_box col-6 col-lg-6">
+							<h3 class="center_title">분류 항목</h3>
+							<div class="form-group row">
+								<div class="table_responsive" style="height: 300px; overflow: auto">
+									<div class="table_btns mt-1">
+				                      <button class="btn btn-primary" type="button" onclick="btnSave();">저장</button>
+				                    </div>
+									<table class="table table-bordered bulk_action table_center">
+										<colgroup>
+											<col width="30%;">
+										</colgroup>
+										<thead>
+		  									<tr>
+												<th>항목</th>
+												<th>값</th>
+		  									</tr>
+										</thead>
+	  									<tbody class="left_tbl">
+	  										<tr> 
+	  											<td>상위분류ID</td>
+	  											<td><input class="form-control" type="text" name="up_clsf_id" id="up_clsf_id" readonly="readonly"></td>
+	  										</tr>
+	  										<tr> 
+	  											<td>분류ID</td>
+	  											<td>
+	  												<div class="form-control_box duplicate_box">
+							                          <input class="form-control" type="text" name="clsf_id" id="clsf_id" oninput="handleOnInput(this);" maxlength="6">
+							                          <button class="btn btn-danger btn-sm" onclick="dpCmCategoryDt();">중복조회</button>
+							                        </div>
+	  											</td>
+	  										</tr>
+	  										<tr> 
+	  											<td>분류명칭</td>
+	  											<td><input class="form-control" type="text" name="clsf_nm" id="clsf_nm"></td>
+	  										</tr>
+	  									</tbody>
+	       							</table>
+	     						</div>
+							</div>
+						</div>
+					</div>
+	        	</div>
+	    	</div>
+		</div>
+	</div>
+	<input type="hidden" name="btnType" id="btnType"/>
+	<input type="hidden" name="old_clsf_id" id="old_clsf_id"/>
+        
+{{>layout/footer}}        
+
+<script src="/vendors/jstree/dist/jstree.min.js"></script>
+<script>
+
+const commonUrl = '/common';
+const url = '/systemMgmt';
+
+let duplicateYn = '';		//중복 체크 여부
+
+//분류ID 변경시 중복 체크 값 초기화
+$('#clsf_id').on('keyup', function(){
+	duplicateYn = '';
+});
+
+//분류 관리 조회
+const dpCmCategoryList = function () {
+	
+	const data = {
+   		url: '/dp/cm/category/list',
+   		user_id: 'user00',
+   		menu_id: 'menu_id',
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpCmCategoryList',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		  
+	  		let arr = [];
+    		let root = {
+    			'id': 'Root',
+    			'parent': '#',
+    			'text': 'Root',
+    		}
+    		arr.push(root);
+	  		  
+  	    	if(data.contents != ""){
+  	    		
+		  	    $.each(data.contents, function (idx, el) {
+		  	    	let obj = {};
+		  	    	
+		  	    	obj['id'] = el.clsf_id;
+		  	    	
+		  	    	if(el.level == 1){
+		  	    		obj['parent'] = 'Root';
+		  	    	}else{
+		  	    		obj['parent'] = el.up_clsf_id;
+		  	    	}
+		  	    	
+		  	    	obj['text'] = el.clsf_nm;
+		  	    	obj['level'] = el.level;
+		  	    	
+		  	    	arr.push(obj);
+		  	    });
+  	    	}
+  	    	
+  	    	$("#tree").jstree({ 
+    			"core" : {
+    				"data" : arr,
+    				"check_callback" : true
+    			},
+    			"plugins" : [ "contextmenu" ],
+    			"contextmenu" : {
+    				"items" : {
+    					"create" : {
+    						"separator_before" : false,
+    						"separator_after" : true,
+    						"label" : "추가",
+    						"action" : function(data){
+    							init();
+    							$("#btnType").val("I");
+    							let ref = $.jstree.reference(data.reference),
+    		                    node = ref.get_node(data.reference);
+    							if(node.original.level == 3){
+    								alert("Depth 범위를 초과하였습니다!");
+    							}else{
+    								$("#up_clsf_id").val(node.id);
+    							}
+    						}
+    					},
+    					"update" : {
+    						"separator_before" : false,
+    						"separator_after" : true,
+    						"label" : "수정",
+    						"action" : function(data){
+    							init();
+    							$("#btnType").val("U");
+    							let ref = $.jstree.reference(data.reference),
+    		                    node = ref.get_node(data.reference);
+    							if(node.parent == '#'){
+    								alert("수정이 허용되지 않는 항목입니다!");
+    							}else{
+    								$("#up_clsf_id").val(node.parent);
+        							$("#clsf_id").val(node.id);
+        							$("#clsf_nm").val(node.text);
+        							$("#old_clsf_id").val(node.id);
+    							}
+    							
+    						}
+    					},
+    					"delete" : {
+    						"separator_before" : false,
+    						"separator_after" : true,
+    						"label" : "삭제",
+    						"action" : function(data){
+    							init();
+    							$("#btnType").val("");
+    							let ref = $.jstree.reference(data.reference),
+    		                    node = ref.get_node(data.reference);
+    							if(node.parent == '#'){
+    								alert("삭제가 허용되지 않는 항목입니다!");
+    							}else{
+        							if(dpCmCategoryDelChk(node.id)){
+        								dpCmCategoryDel(node.id);
+        							}else{
+        								alert("정상적으로 삭제되지 않았습니다!");
+        							}
+    							}
+    							
+    						}
+    					}
+    				}
+    			}
+    	   	});
+  	    	
+  	    	init();
+  	    	$('#tree').jstree(true).settings.core.data = arr;
+  	  		$('#tree').jstree(true).refresh();	
+  	    	
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//분류 항목 조회
+const dpCmCategoryDt = function () {
+	
+	let clsf_id = $("#clsf_id").val();
+	
+	const data = {
+   		url: '/dp/cm/category/detail',
+   		user_id: 'user00',
+   		menu_id: 'menu_id',
+   		clsf_id: clsf_id,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpCmCategoryDt',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		  
+  	    	if(data.contents.length > 0){
+  	    		duplicateYn = 'Y';
+  	    		alert("동일한 분류ID가 있습니다.");
+  	    	}else{
+  	    		duplicateYn = 'N';
+  		   		alert("사용 가능합니다.");
+  	    	}
+  	    	
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//분류 항목 저장
+const dpCmCategorySave = function () {
+	
+	let clsf_id = $("#clsf_id").val();
+	let clsf_nm = $("#clsf_nm").val();
+	let up_clsf_id = $("#up_clsf_id").val();
+	
+	if(!up_clsf_id){
+		alert("상위분류ID를 선택하세요.");
+        $("#up_clsf_id").focus();
+        return true;
+	}
+	
+	if(!clsf_id){
+		alert("분류ID를 입력하세요.");
+        $("#clsf_id").focus();
+        return true;
+	}
+	
+	if(!clsf_nm){
+		alert("분류명칭을 입력하세요.");
+        $("#clsf_nm").focus();
+        return true;
+	}
+	
+	if(up_clsf_id == 'Root'){
+		up_clsf_id = null;
+	}
+	
+	const data = {
+   		url: '/dp/cm/category/save',
+   		user_id: 'user00',
+   		clsf_id: clsf_id,
+   		clsf_nm: clsf_nm,
+   		up_clsf_id: up_clsf_id,
+    };
+	
+	if(duplicateYn != 'N'){
+		if(duplicateYn == 'Y'){
+			alert("동일한 분류ID가 있습니다.");
+		}else{
+			alert("중복 체크를 해주세요.");
+		}
+		$("#clsf_id").focus();
+		return;
+	}
+	
+	if(confirm("등록 하시겠습니까?")){
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpCmCategorySave',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	alert("저장 되었습니다.");
+	    	dpCmCategoryList();
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	}
+}
+
+//분류 항목 수정
+const dpCmCategoryUpdate = function () {
+	
+	let clsf_id = $("#clsf_id").val();
+	let clsf_nm = $("#clsf_nm").val();
+	let up_clsf_id = $("#up_clsf_id").val();
+	let old_clsf_id = $("#old_clsf_id").val();
+	
+	if(!up_clsf_id){
+		alert("상위분류ID를 입력하세요.");
+        $("#up_clsf_id").focus();
+        return true;
+	}
+	
+	if(!clsf_id){
+		alert("분류ID를 입력하세요.");
+        $("#clsf_id").focus();
+        return true;
+	}
+	
+	if(!clsf_nm){
+		alert("분류명칭을 입력하세요.");
+        $("#clsf_nm").focus();
+        return true;
+	}
+	
+	const data = {
+   		url: '/dp/cm/category/update',
+   		user_id: 'user00',
+   		clsf_id: clsf_id,
+   		clsf_nm: clsf_nm,
+   		up_clsf_id: up_clsf_id,
+   		old_clsf_id: old_clsf_id,
+    };
+	
+	if(clsf_id != old_clsf_id){
+		if(duplicateYn != 'N'){
+			if(duplicateYn == 'Y'){
+				alert("동일한 분류ID가 있습니다.");
+			}else{
+				alert("중복 체크를 해주세요.");
+			}
+			$("#clsf_id").focus();
+			return;
+		}
+	}
+	
+	if(confirm("수정 하시겠습니까?")){
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpCmCategoryUpdate',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	alert("수정 되었습니다.");
+	    	dpCmCategoryList();
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	}
+}
+
+//분류 항목 삭제
+const dpCmCategoryDel = function (clsf_id) {
+	
+	const data = {
+   		url: '/dp/cm/category/delete',
+   		user_id: 'user00',
+   		clsf_id: clsf_id,
+    };
+	
+	if(confirm("삭제 하시겠습니까?")){
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpCmCategoryDel',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	alert("삭제 되었습니다.");
+	    	dpCmCategoryList();
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	}
+}
+
+//분류 항목 삭제 전 하위분류 체크
+const dpCmCategoryDelChk = function (clsf_id) {
+	
+	let isSuccess = false;
+	
+	const data = {
+   		url: '/dp/cm/category/delete/check',
+   		user_id: 'user00',
+   		clsf_id: clsf_id,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpCmCategoryDelChk',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data),
+        async: false
+    }).done(function (data) {
+    	isSuccess = true;
+    	
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+	
+	return isSuccess;
+}
+
+//저장 버튼
+const btnSave = function(){
+	let btnType = $("#btnType").val();
+	if(btnType == 'U'){
+		dpCmCategoryUpdate();
+	}else{
+		dpCmCategorySave();
+	}
+}
+
+//초기화
+const init = function(){
+	$("#up_clsf_id").val("");
+	$("#clsf_id").val("");
+	$("#clsf_nm").val("");
+}
+
+dpCmCategoryList();
+
+</script>
+

@@ -1,0 +1,324 @@
+{{>layout/header}}
+
+	<div class="right_col" role="main">
+	    <div class="row">
+	        <div class="col-md-12">
+	            <div class="x_panel">
+	                <div class="x_title"> 
+	                  <h2>HOME > 메타테이블 관리 > 메타정보 항목관리</h2>
+	                  <div class="clearfix"> </div>
+	                </div>
+	                <div class="x_content">
+	                    <div class="col-12 col-md-10">
+	                      <div class="form-group row">
+	                        <label class="control-label">검색</label>
+	                        <div class="form-control_box">
+	                          <div class="col-md-2 pl-0">
+	                            <select class="form-control" name="l_clsf" id="l_clsf" onchange="dpCmCategory('1', this.value);">
+	                                <option value="">대분류</option>
+	                            </select>
+	                          </div>
+	                          <div class="col-md-2 pl-0">
+	                            <select class="form-control" name="m_clsf" id="m_clsf" onchange="dpCmCategory('2', this.value);">
+	                                <option value="">중분류</option>
+	                            </select>
+	                          </div>
+	                          <div class="col-md-2 pl-0">
+	                            <select class="form-control" name="s_clsf" id="s_clsf" onchange="dpCmCategory('3', this.value);">
+	                                <option value="">소분류</option>
+	                            </select>
+	                          </div>
+	                          <div class="col-md-6 pr-0">
+	                            <input class="form-control" type="text" name="query" id="query" onkeypress="enterkey(event);">
+	                          </div>
+	                        </div>
+	                      </div>
+	                    </div>
+	                    <div class="right_btns">
+		                    <div class="col-12 col-md-2 btn_search_box">
+		                      <button class="btn btn-primary" onclick="btnSearch();"> <i class="glyphicon glyphicon-search"></i></button>
+		                    </div>
+	                    </div>
+		                <div class="table_btns mt-4">
+	                   		<button class="btn btn-primary" type="button" onclick="dpIngestMetaItemSave();">저장</button>
+                    	</div>
+		                <div class="table_responsive">
+		                	<div class="talbel_total">총 <span class="red bold" id="total_count">0</span>건</div>
+		                    <table class="table table-striped" style="text-align: center;">
+		                        <colgroup>
+		                        </colgroup>
+		                        <thead>
+		                            <tr>
+		                                <th>대분류</th>
+		                                <th>중분류</th>
+		                                <th>소분류</th>
+		                                <th>데이터셋명</th>
+		                                <th>메타기본정보</th>
+		                                <th>공간정보<br>(데이터 품질)</th>
+		                                <th>공간정보<br>(좌표계)</th>
+		                                <th>공간정보<br>(배포)</th>
+		                                <th>문화재<br>(속성)</th>
+		                            </tr>
+		                        </thead>
+		                        <tbody id="metaList">
+		                        </tbody>
+		                    </table>
+		                    <div class="nav justify-content-center"> 
+		                      <ul id="pagingul" class="pagination">
+							  	</ul> 
+		                    </div>
+		                </div>
+	            	</div>
+	        	</div>
+	    	</div>
+		</div>
+	</div>
+        
+{{>layout/footer}}        
+
+<script>
+
+const commonUrl = '/common';
+const url = '/metaTable';
+
+let init_page = 1;				//초기 페이지
+let page = 1;					//페이지
+let init_size_per_page = 10;	//초기 개수
+let size_per_page = 10;	 		//가져올 개수
+let pageCount = 10;		 		//페이징에 나타낼 페이지 수
+
+//분류 조회
+const dpCmCategory = function (clsf_type, clsf_id) {
+	
+	let paramStr = '';
+	if(clsf_id){
+		paramStr = 'clsf_id='+clsf_id;
+	}
+	
+	const data = {
+   		url: '/dp/cm/category?'+paramStr,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: commonUrl+'/dpCmCategory',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		 if(clsf_type == '1'){	//대분류 선택시
+		  		$("#m_clsf option:gt(0)").remove();
+		  		$("#s_clsf option:gt(0)").remove();
+		  	  }else if(clsf_type == '2'){	//중분류 선택시
+		  		$("#s_clsf option:gt(0)").remove();
+		  	  }else if(clsf_type == '3'){	//소분류 선택시
+		  	  }else{	//초기 호출
+		  		$("#l_clsf option:gt(0)").remove();
+		  		$("#m_clsf option:gt(0)").remove();
+		  		$("#s_clsf option:gt(0)").remove();
+		  	  }
+  	    	if(data.contents != ""){
+  	    		let insertTr = '';
+		  	    $.each(data.contents, function (idx, el) {
+		  	    	let clsf_nm = el.clsf_nm;
+		  	    	if(clsf_nm.lastIndexOf('-') > -1){
+		  	    		clsf_nm = clsf_nm.substring(clsf_nm.lastIndexOf('-')+1);
+		  	    	}
+		  	    	insertTr += '<option value="'+el.clsf_id+'">'+clsf_nm+'</option>';
+		  	    });
+		  	  if(clsf_type == '1'){	//대분류 선택시
+		  	  	$("#m_clsf").append(insertTr);
+		  	  }else if(clsf_type == '2'){	//중분류 선택시
+		  		$("#s_clsf").append(insertTr);
+		  	  }else if(clsf_type == '3'){	//소분류 선택시
+		  	  }else{
+		  		$("#l_clsf").append(insertTr);
+		  	  }
+  	    	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//메타정보 항목 관리 목록
+const dpIngestMetaItem = function (page, size_per_page) {
+	
+	if(!page){
+		page = init_page;
+	}
+	if(!size_per_page){
+		size_per_page = init_size_per_page;
+	}	
+	
+	let query = $("#query").data("search");
+	let l_clsf = $("#l_clsf").val();
+	let m_clsf = $("#m_clsf").val();
+	let s_clsf = $("#s_clsf").val();
+	
+	$("#query").val(query);	//검색어 갱신(검색버튼 클릭시)
+	
+	if(!query){
+		alert("데이터셋명을 입력하세요!");
+		$('#query').focus();
+		return;
+	}
+	
+	const data = {
+   		url: '/dp/ingest/meta/item',
+   		user_id: 'user00',	
+   		search: query,
+   		dset_lclas: l_clsf,
+   		dset_mclas: m_clsf,
+   		dset_sclas: s_clsf,
+   		page_current: String(page),
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpIngestMetaItem',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		$("#total_count").text(data.totalcount);
+  	    	if(data.contents != ""){
+  	    		let insertTr = '';
+		  	    $.each(data.contents, function (idx, el) {
+		  	    	let dset_lclas = isEmpty(el.dset_lclas);
+		  	    	let dset_mclas = isEmpty(el.dset_mclas);
+		  	    	let dset_sclas = isEmpty(el.dset_sclas);
+		  	    	
+		  	    	if(dset_lclas.lastIndexOf('-') > -1){
+		  	    		dset_lclas = dset_lclas.substring(dset_lclas.lastIndexOf('-')+1);
+		  	    	}
+		  	    	
+		  	    	if(dset_mclas.lastIndexOf('-') > -1){
+		  	    		dset_mclas = dset_mclas.substring(dset_mclas.lastIndexOf('-')+1);
+		  	    	}
+		  	    	
+		  	    	if(dset_sclas.lastIndexOf('-') > -1){
+		  	    		dset_sclas = dset_sclas.substring(dset_sclas.lastIndexOf('-')+1);
+		  	    	}
+		  	    	
+		  	    	
+		  	    	let cl_bass_check = el.cl_bass == 'Y' ? 'checked' : ''; 
+		  	    	let cl_qlity_check = el.cl_qlity == 'Y' ? 'checked' : ''; 
+		  	    	let cl_cntm_check = el.cl_cntm == 'Y' ? 'checked' : ''; 
+		  	    	let cl_wdtb_check = el.cl_wdtb == 'Y' ? 'checked' : ''; 
+		  	    	let cl_crlts_check = el.cl_crlts == 'Y' ? 'checked' : ''; 
+		  	    	
+		  	    	insertTr += '<tr name="dset_idntfc_id" data-idntfc_id='+el.dset_idntfc_id+'>';
+		  	    	insertTr += '	<td>'+dset_lclas+'</td>';
+		  	    	insertTr += '	<td>'+dset_mclas+'</td>';
+		  	    	insertTr += '	<td>'+dset_sclas+'</td>';
+		  	    	insertTr += '	<td>'+isEmpty(el.dset_korean_nm)+'</td>';
+		  	    	insertTr += '	<td><input type="checkbox" name="cl_bass" value="'+isEmpty(el.cl_bass)+'" '+cl_bass_check+' onchange="setCheckValue(this);"></td>';
+		  	    	insertTr += '	<td><input type="checkbox" name="cl_qlity" value="'+isEmpty(el.cl_qlity)+'" '+cl_qlity_check+' onchange="setCheckValue(this);"></td>';
+		  	    	insertTr += '	<td><input type="checkbox" name="cl_cntm" value="'+isEmpty(el.cl_cntm)+'" '+cl_cntm_check+' onchange="setCheckValue(this);"></td>';
+		  	    	insertTr += '	<td><input type="checkbox" name="cl_wdtb" value="'+isEmpty(el.cl_wdtb)+'" '+cl_wdtb_check+' onchange="setCheckValue(this);"></td>';
+		  	    	insertTr += '	<td><input type="checkbox" name="cl_crlts" value="'+isEmpty(el.cl_crlts)+'" '+cl_crlts_check+' onchange="setCheckValue(this);"></td>';
+		  	    	insertTr += '</tr>';
+		  	    	
+		  	    });
+		  	  $("#metaList").html(insertTr);
+  	    	}
+  	    	//페이징 보여줌
+  	    	paging(data.totalcount, size_per_page, pageCount, page);
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//메타정보 항목관리 저장
+const dpIngestMetaItemSave = function () {
+	let arr = new Array();
+	$("tr[name='dset_idntfc_id']").each(function(idx, el){
+		let dset_idntfc_id = $(el).data("idntfc_id");
+		let cl_bass = $(el).find("input[name='cl_bass']").val();
+		let cl_qlity = $(el).find("input[name='cl_qlity']").val();
+		let cl_cntm = $(el).find("input[name='cl_cntm']").val();
+		let cl_wdtb = $(el).find("input[name='cl_wdtb']").val();
+		let cl_crlts = $(el).find("input[name='cl_crlts']").val();
+		
+		let obj = {
+			user_id: 'user00',
+			dset_idntfc_id: dset_idntfc_id,
+            cl_bass: cl_bass,
+            cl_qlity: cl_qlity,
+            cl_cntm: cl_cntm,
+            cl_wdtb: cl_wdtb,
+            cl_crlts: cl_crlts,
+		}
+		
+		arr.push(obj);
+	});
+	
+	const data = {
+   		url: '/dp/ingest/meta/item/save',
+   		user_id: 'user00',	
+   		list: arr,
+    };
+	
+	if(confirm("현재 페이지를 저장 하시겠습니까?")){
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestMetaItemSave',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data),
+	    }).done(function (data) {
+	  		alert("저장 되었습니다.");
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	}
+	
+}
+
+//검색 버튼
+const btnSearch = function(){
+	let query = $("#query").val();
+	$("#query").data("search", query);
+	dpIngestMetaItem();
+}
+
+//체크박스 클릭 값 갱신
+const setCheckValue = function(obj){
+	if($(obj).is(":checked")){
+		$(obj).val("Y");
+	}else{
+		$(obj).val("N");
+	}
+}
+
+//모달 추가
+const addModal = function(){
+	$('#add_modal').modal('show');
+}
+
+//페이징 함수 호출
+const pagingFun = function(page, size_per_page){
+	dpIngestMetaItem(page, size_per_page);
+}
+
+//엔터키가 눌렸을 때
+const enterkey = function(e) {
+	if (e.keyCode == 13) {
+		btnSearch();
+    }
+}
+
+
+//분류 조회
+dpCmCategory();
+
+</script>
+

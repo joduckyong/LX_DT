@@ -1,0 +1,138 @@
+{{>layout/header}}
+
+        <div class="right_col" role="main">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="x_panel"> 
+                <div class="x_title"> 
+                  <h2>HOME > 데이터 분석 > 데이터 분석 결과 조회 > 데이터 분석 결과 상세 조회</h2>
+                  <div class="clearfix"> </div>
+                </div>
+                <div class="x_content"> <br>
+                  <div class="scenario_depth"> 
+                    <ul>
+                      <li class="save" onclick="step1();" style="cursor:pointer">데이터 로딩</li>
+                      <li class="now_depth" onclick="step5();" style="cursor:pointer">데이터 분석 결과</li>
+                    </ul>
+                  </div>
+                  <div class="progress_tab">
+                    <div class="tab_item" id="tab-0">
+                      <h3 class="mb-4"><b>데이터 Loading</b></h3>
+                      <div class="row">
+                        <div class="col-12 col-md-12 mx-0">
+                          <h4 class="center_title">이미지 데이터셋 정보</h4>
+                          <div class="table_responsive " style="width:100%; overflow:auto">
+                            <table class="table table-bordered bulk_action table_center">
+                              <colgroup>
+                              </colgroup>
+                              <thead>
+                                <tr>
+                                  <th rowspan="2" style="text-align: center;">#</th>
+                                  <th rowspan="2" style="text-align: center;">이미지<br>데이터셋 이름</th>
+                                  <th colspan="4" style="text-align: center;">파일 수</th>
+                                </tr>
+                                <tr>
+                                  <th style="text-align: center;">학습</th>
+                                  <th style="text-align: center;">검증</th>
+                                  <th style="text-align: center;">테스트</th>
+                                  <th style="text-align: center;">분석</th>
+                                </tr>
+                              </thead>
+                              <tbody id="sandboxResultsDataLoading">
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+                        
+{{>layout/footer}}        
+
+<script>
+const commonUrl = '/sandbox/common';
+const url = '/sandbox/result/objectDetection';
+
+//샌드박스 결과 조회 - 데이터 로딩
+const sandboxResultsDataLoading = function(){
+	
+	const data = {
+	   		url: '/services/sandbox/sandboxes/{{sandbox_id}}/results/{{result_id}}/data-loading/get',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	   		
+	    };		
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/sandboxResultsDataLoading',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	  $("#sandboxResultsDataLoading").empty();
+		  	  if (data != null) {
+		  	    	if(data.contents != ""){
+                        let i = 0;	
+		     	        let train_data_cnt = 0;
+		     	        let valid_data_cnt = 0;
+		     	        let test_data_cnt = 0;
+		     	        let analysis_data_cnt = 0;
+			    	    let insertTr = '';
+		     	        
+				  	    $.each(data.contents.contents, function (idx, el) {
+			     	          insertTr += '<tr>';
+			                  insertTr += ' <td style="text-align: center;">'+(++i)+'</td>';
+			                  insertTr += ' <td style="text-align: center;">'+el.image_dataset_nm+'</td>';
+			                  insertTr += ' <td style="text-align: center;">'+el.train_data_cnt+'</td>';
+			                  insertTr += ' <td style="text-align: center;">'+el.valid_data_cnt+'</td>';
+			                  insertTr += ' <td style="text-align: center;">'+el.test_data_cnt+'</td>';
+			                  insertTr += ' <td style="text-align: center;">'+el.analysis_data_cnt+'</td>';
+			                  insertTr += '</tr>';
+			                  
+			                  train_data_cnt += Number(el.train_data_cnt);
+			                  valid_data_cnt += Number(el.valid_data_cnt);
+			                  test_data_cnt += Number(el.test_data_cnt);			                  
+			                  analysis_data_cnt += Number(el.analysis_data_cnt);			                  
+				  	    });
+				  	    
+	     	            insertTr += '<tr>';
+	                    insertTr += ' <td colspan="2" style="text-align: center;">층</td>';
+	                    insertTr += ' <td style="text-align: center;">'+train_data_cnt+'</td>';
+	                    insertTr += ' <td style="text-align: center;">'+valid_data_cnt+'</td>';
+	                    insertTr += ' <td style="text-align: center;">'+test_data_cnt+'</td>';
+	                    insertTr += ' <td style="text-align: center;">'+analysis_data_cnt+'</td>';
+	                    insertTr += '</tr>';				  	    
+	         	   	    $("#sandboxResultsDataLoading").append(insertTr);
+		  	    	}
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });		
+}
+
+//조회
+sandboxResultsDataLoading();
+
+const step1 = function(){
+	location.href = location.href;
+}
+const step2 = function(){
+	location.href = url+'/step2/{{sandbox_id}}/{{result_id}}';
+}
+const step3 = function(){
+	location.href = url+'/step3/{{sandbox_id}}/{{result_id}}';
+}
+const step4 = function(){
+	location.href = url+'/step4/{{sandbox_id}}/{{result_id}}';
+}
+const step5 = function(){
+	location.href = url+'/step5/{{sandbox_id}}/{{result_id}}';
+}
+</script>
+
+

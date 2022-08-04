@@ -1,0 +1,689 @@
+{{>layout/header}}
+<div class="right_col" role="main">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="x_panel">
+				<div class="x_content">
+					<div class="row">
+						<div class="metatable_box col-6">
+							<div class="form-group row">
+								<label class="control-label">지자체명</label>
+								<div class="form-control_box duplicate_box">
+									<input class="form-control" type="text" name="code_nm" id="code_nm">
+									<button class="btn btn-primary" onclick="agentRecvLocalCsvList();">
+										<i class="glyphicon glyphicon-search"></i>
+									</button>
+								</div>
+								<label class="control-label">수신파일 목록</label>
+								<div class="col-md-12 btn_search_box">
+			                    <div class="port_search">
+			                      <div class="row">
+			                        <div class="control-label">수집방식</div>
+			                        <div class="form-control_box">
+			                          <select class="form-control" id="method_cd" onchange="selCollectionType(this.value);">
+			                            <option value="A01001">Database</option>
+			                            <option value="A01002">File</option>
+			                            <option value="A01003">File(bypass)</option>
+			                          </select>
+			                        </div>
+			                      </div>
+			                    </div>
+			                    </div>
+	                            			
+								<div class="x_content">
+									<div class="table_responsive" style="height: 185px; overflow: auto">
+										<table class="table table-striped" style="width: 100%">
+											<colgroup>
+												<col width="15px">
+												<col width="30px">
+												<col width="40px">
+												<col width="15px">
+											</colgroup>
+											<thead>
+												<tr>
+													<th style="text-align: center;">지자체명</th>
+													<th style="text-align: center;">수신일시</th>
+													<th style="text-align: center;">파일명</th>
+													<th style="text-align: center;">크기(MB)</th>
+												</tr>
+											</thead>
+											<tbody id="agentRecvLocalCsvList">
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="metatable_box col-6 col-lg-6" id="tableV1" style="">
+							<div class="form-group row" >
+								<label class="control-label">수집 테이블 목록</label>
+								<div class="form-control_box duplicate_box">
+									<input class="form-control" type="text" name="input_table_nm" id="input_table_nm">
+									<button class="btn btn-primary" onclick="agentRecvLocalTable();">
+										<i class="glyphicon glyphicon-search"></i>
+									</button>
+								</div>
+								<div class="x_content">
+									<div class="table_responsive" style="height: 260px; overflow: auto">
+										<table class="table table-striped" style="width: 100%">
+											<colgroup>
+											</colgroup>
+											<thead>
+												<tr>
+													<th style="text-align: center;">테이블명</th>
+													<th style="text-align: center;">테이블 설명</th>
+												</tr>
+											</thead>
+											<tbody id="agentRecvLocalTable" >
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="metatable_box col-6 col-lg-6" id="tableV3" style="display:none;">
+							<div class="form-group row" >
+								<label class="control-label">디렉토리 지정</label>
+								<div class="x_content">
+									<div class="table_responsive" style="height: 280px; overflow: auto">
+										<div id="tree">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<br>
+					<div class="row">
+						<div class="metatable_box col-6" id="divReception">
+
+							<div class="row">
+								<div class="x_content">
+									<div class="cont_title_box">
+										<h2>수신파일 컬럼</h2>
+									</div>
+									<div class="table_responsive"
+										style="height: 185px; overflow: auto">
+										<table class="table table-striped" style="width: 100%">
+											<colgroup>
+											</colgroup>
+											<thead>
+												<tr>
+													<th style="text-align: center;">컬럼명</th>
+												</tr>
+											</thead>
+											<tbody id="receiveCol" ondrop="drop(event)" ondragover="allowDrop(event)">
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="metatable_box col-6" id="divFileList" style="display:none;">
+
+							<div class="row">
+								<div class="x_content">
+									<div class="cont_title_box">
+										<h2>파일목록</h2>
+									</div>
+									<div class="table_responsive"
+										style="height: 185px; overflow: auto">
+										<table class="table table-striped" style="width: 100%">
+											<colgroup>
+											</colgroup>
+											<thead>
+												<tr>
+													<th style="text-align: center;">파일명</th>
+													<th style="text-align: center;">확장자</th>
+													<th style="text-align: center;">파일사이즈(MB)</th>
+												</tr>
+											</thead>
+											<tbody id="fileList" >
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="metatable_box col-6 col-lg-6" id="tableV2" >
+							<div class="row">
+
+								<h2>수집 테이블 컬럼 정보</h2>
+								<div class="x_content">
+									<div class="table_responsive"
+										style="height: 193px; overflow: auto">
+										<table class="table table-striped" style="width: 100%">
+											<colgroup>
+												<col width="23px">
+												<col width="23px">
+												<col width="17px">
+												<col width="10px">
+												<col width="17px">
+											</colgroup>
+											<thead>
+												<tr>
+													<th style="text-align: center;">컬럼매핑</th>
+													<th style="text-align: center;">컬럼명</th>
+													<th style="text-align: center;">타입</th>
+													<th style="text-align: center;">길이</th>
+													<th style="text-align: center;">NULL여부</th>
+												</tr>
+											</thead>
+											<tbody id="agentRecvLocalCol">
+											</tbody>
+										</table>
+									</div>
+								</div>
+
+							</div>
+						</div>
+						<div class="metatable_box col-12 col-lg-12" >
+							<div class="right_btns mt-4">
+								<button class="btn btn-primary" id="btnSave" style="display:none;" onclick="agentRecvData('S');">저장</button>
+								<button class="btn btn-primary" id="btnAdd" style="display:none;" onclick="agentRecvData('A');">추가</button>
+								<button class="btn btn-primary" id="btnUp"  style="display:none;" onclick="agentRecvData('U');">갱신</button>
+								<button class="btn btn-primary" id="btnMove" style="display:none;" onclick="agentRecvDataMov();">이동</button>
+							</div>
+						</div>
+					</div>
+					
+					<input type="hidden" name="table_nm" id="table_nm">
+					<input type="hidden" name="table_desc" id="table_desc">
+					<input type="hidden" name="clct_csv_file" id=clct_csv_file>
+					<input type="hidden" name="trf_zip_file" id="trf_zip_file">
+					<input type="hidden" name="file_nm" id="file_nm">
+					<input type="hidden" name="recv_zip_file" id="recv_zip_file">
+					<input type="hidden" name="target_folder_nm" id="target_folder_nm">
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+{{>layout/footer}}
+
+<script>
+
+const url = '/server/mapping';
+
+let dataList;
+let colInfoData;
+
+//데이터 수집 관리 
+const jsList = function(){
+	location.href = url+'/list';
+}	
+
+//데이터 저장
+const agentRecvData = function(type){
+	
+	let file_col_nm_len = [];
+	let null_yn_len = [];
+	let mapped_col_info = new Array();
+
+	if (dataList != null) {
+		if(type === 'S'){
+	  	    $.each(dataList, function (idx, el) {
+				console.log('column_name:'+el.column_name);
+	  	    	if($("#drop_"+el.column_name).text() != ''){
+	  	    		
+	  	    		dataObject = new Object();
+	  	    		dataObject.file_col_nm = $("#drop_"+el.column_name).text();
+	  	    		dataObject.file_col_idx = idx;
+	  	    		dataObject.table_col_nm = el.column_name;
+	  	    		dataObject.table_col_type = el.data_type;
+	  	    		dataObject.table_col_len = el.character_maximum_length;
+	  	    		dataObject.table_col_null_yn = el.is_nullable;
+	  	    		mapped_col_info.push(dataObject);
+	  	    		
+		  	    	file_col_nm_len.push(idx);
+	  	    	}
+	  	    	if(el.is_nullable == "NO"){
+	  	    		null_yn_len.push(idx);
+	  	    	}  	    	
+	  	    });
+		}else{
+	  	    $.each(dataList, function (idx, el) {
+				console.log('file_col_nm:'+el.file_col_nm);
+	  	    	if($("#drop_"+el.file_col_nm).text() != ''){
+	  	    		
+	  	    		dataObject = new Object();
+	  	    		dataObject.file_col_nm = $("#drop_"+el.file_col_nm).text();
+	  	    		dataObject.file_col_idx = idx;
+	  	    		dataObject.table_col_nm = el.table_col_nm;
+	  	    		dataObject.table_col_type = el.table_col_type;
+	  	    		dataObject.table_col_len = el.table_col_len;
+	  	    		dataObject.table_col_null_yn = el.table_col_null_yn;
+	  	    		mapped_col_info.push(dataObject);
+	  	    		
+		  	    	file_col_nm_len.push(idx);
+	  	    	}
+	  	    	if(el.table_col_null_yn == "NO"){
+	  	    		null_yn_len.push(idx);
+	  	    	}  	    	
+	  	    });
+		}
+	}
+	if (dataList != null) {
+		let values = null_yn_len.filter(x => !file_col_nm_len.includes(x));
+		if(values != ''){
+			alert("NULL여부 확인해 주세요!");
+			return;
+		}
+	}
+	
+	let typeUrl = '';
+	if(type === 'S'){
+		typeUrl = '/recv/data';
+	}else if(type === 'A'){
+		typeUrl = '/recv/data/add';
+	}else if(type === 'U'){
+		typeUrl = '/recv/data/upd';
+	}
+	
+	const data = {
+	   		url: typeUrl,
+	   		user_id: 'user00',
+	   		table_nm: $("#table_nm").val(),
+	   		table_desc: $("#table_desc").val(),
+	   		file_nm:  $("#file_nm").val(), 
+	   		recv_zip_file:  $("#recv_zip_file").val(), 
+	   		mapped_col_info: mapped_col_info,
+	    };	
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/agentRecvData',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	
+      		let message = JSON.stringify(data.message);
+      		alert(message.replace(/\"/gi, ''));            	 
+     // 		dataList = null;
+      		
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+}
+
+//로컬DB 컬럼 조회
+const agentRecvLocalCol = function(table_nm, table_desc){
+	
+	$("#table_nm").val(table_nm);
+	$("#table_desc").val(table_desc);
+	$("#agentRecvLocalCol").empty();
+	const data = {
+   		url: '/recv/local/col',
+   		user_id: 'user00',
+   		table_nm: table_nm
+    };	
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/agentRecvLocalCol',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+  	    	dataList = data;
+ 	    	
+ 	    	let insertTr = '';
+	  	    $.each(data, function (idx, el) {
+				insertTr += '<tr>';
+				insertTr += '	<td style="text-align: center;cursor:pointer;" ondrop="drop(event)" ondragover="allowDrop(event)" id="drop_'+el.column_name+'"></td>';
+				insertTr += '	<td style="text-align: center;">'+isEmpty(el.column_name)+'</td>';
+				insertTr += '	<td style="text-align: center;">'+isEmpty(el.data_type)+'</td>';
+				insertTr += '	<td style="text-align: center;">'+isEmpty(el.character_maximum_length)+'</td>';
+				insertTr += '	<td style="text-align: center;">'+isEmpty(el.is_nullable)+'</td>';
+				insertTr += '</tr>';
+	  	    });
+			  	    
+ 	    	$("#agentRecvLocalCol").html(insertTr);
+	
+	  	  }
+	  
+	  	
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//로컬DB 테이블 조회
+const agentRecvLocalTable = function(){
+	
+	$("#agentRecvLocalTable").empty();
+	const data = {
+   		url: '/recv/local/table',
+   		user_id: 'user00',
+   		table_nm: $("#input_table_nm").val()
+    };	
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/agentRecvLocalTable',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+ 	    	
+ 	    	let insertTr = '';
+	  	    $.each(data.tbl_list, function (idx, el) {
+				insertTr += '<tr>';
+				insertTr += '	<td style="text-align: left;cursor:pointer;" onclick=agentRecvLocalCol("'+el.tbl_nm+'","'+el.tbl_desc+'");>'+isEmpty(el.tbl_nm)+'</td>';
+				insertTr += '	<td style="text-align: left;cursor:pointer;" >'+isEmpty(el.tbl_desc)+'</td>';
+				insertTr += '</tr>';
+	  	    });
+			  	    
+ 	    	$("#agentRecvLocalTable").html(insertTr);
+ 	    	
+	  	  }
+	  	
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });		
+}
+
+const receiveCol = function(len, clct_csv_file, trf_zip_file, file_nm, recv_zip_file){
+	
+	$("#clct_csv_file").val(clct_csv_file);
+	$("#trf_zip_file").val(trf_zip_file);
+	$("#file_nm").val(file_nm);
+	$("#recv_zip_file").val(recv_zip_file);
+   	
+	let insertTr = '';
+	let length = '';
+	
+	let method_cd = $("#method_cd").val();
+	
+    $.each(colInfoData, function (idx, el) {
+    	//수신파일 컬럼
+    	if(len-1 == idx ){
+    		$("#receiveCol").empty();  
+    		
+	    	$.each(el.col_info, function (idx2, el2) {
+	    		if(isEmpty(el2.file_col_nm) !== ''){
+					insertTr += '<tr id="tr'+isEmpty(el2.file_col_nm)+'">';
+					insertTr += '	<td style="text-align: left;cursor:pointer;" ><span draggable="true" ondragstart="drag(event)" id="'+isEmpty(el2.file_col_nm)+'">'+isEmpty(el2.file_col_nm)+'</span></td>';
+					insertTr += '</tr>';
+	    		}
+	    	});
+	    	
+	    	$("#receiveCol").html(insertTr);
+    	
+		  	//수신파일 컬럼
+		   	$("#fileList").empty();  
+			insertTr = '';
+	    	$.each(el.col_info, function (idx2, el2) {
+	    		if(isEmpty(el2.bypass_file) !== ''){
+					insertTr += '<tr>';
+					insertTr += '	<td style="text-align: left;cursor:pointer;" onclick=fileSet("'+el2.bypass_file+'")>'+isEmpty(el2.bypass_file)+'</td>';
+					insertTr += '	<td style="text-align: center;" >'+isEmpty(el2.bypass_file_ext)+'</td>';
+					insertTr += '	<td style="text-align: right;" >'+el2.bypass_file_size+'</td>';
+					insertTr += '</tr>';
+	    		}
+	    	}); 	    	
+			$("#fileList").html(insertTr);        	
+    	
+			//수집 테이블 목록
+			$("#agentRecvLocalTable").empty();  
+			if(el.table_nm !== ""){
+			    insertTr = '';
+				insertTr += '<tr>';
+				insertTr += '	<td style="text-align: left;cursor:pointer;" onclick=agentRecvLocalCol("'+el.table_nm+'","'+el.table_desc+'");>'+isEmpty(el.table_nm)+'</td>';
+				insertTr += '	<td style="text-align: left;cursor:pointer;" >'+isEmpty(el.table_desc)+'</td>';
+				insertTr += '</tr>';
+			   	$("#agentRecvLocalTable").html(insertTr);    
+			}
+			$("#table_nm").val(el.table_nm);
+			$("#table_desc").val(el.table_desc);
+			
+	    	if(isEmpty(el.mapped_col_info) !== ''){
+	    		
+	    		dataList = el.mapped_col_info;
+	    		console.log('mapped_col_info: '+el.mapped_col_info);
+	    		console.log('method_cd: '+method_cd);
+	    		console.log('dataList: '+dataList);
+	    		//버튼 기능
+	    		if(method_cd === 'A01003'){
+		    		$("#btnSave").hide();
+		    		$("#btnAdd").hide();
+		    		$("#btnUp").hide();
+		    		$("#btnMove").show();   
+	    		}else{
+		    		$("#btnSave").hide();
+		    		$("#btnAdd").show();
+		    		$("#btnUp").show();
+		    		$("#btnMove").hide();    		
+	    		}
+	    		
+	 	    	//수신파일 컬럼
+	 	    	$("#receiveCol").empty();  
+	    		insertTr = '';
+		    	$.each(el.mapped_col_info, function (idx2, el2) {
+		    		if(isEmpty(el2.file_col_nm) !== ''){
+						insertTr += '<tr id="tr'+isEmpty(el2.file_col_nm)+'">';
+						insertTr += '	<td style="text-align: left;cursor:pointer;" ><span draggable="true" ondragstart="drag(event)" id="'+isEmpty(el2.file_col_nm)+'"></span></td>';
+						insertTr += '</tr>';
+		    		}
+		    		
+		    	}); 	    	
+	    		$("#receiveCol").html(insertTr);    	
+		    	
+	    		//수집 테이블 컬럼 정보
+	   	    	$("#agentRecvLocalCol").empty();
+	   	    	insertTr = '';
+		    	$.each(el.mapped_col_info, function (idx2, el2) {
+	    				insertTr += '<tr>';
+	    				insertTr += '	<td style="text-align: center;cursor:pointer;" ondrop="drop(event)" ondragover="allowDrop(event)" id="drop_'+el2.file_col_nm+'">'+isEmpty(el2.file_col_nm)+'</td>';
+	    				insertTr += '	<td style="text-align: center;">'+isEmpty(el2.table_col_nm)+'</td>';
+	    				insertTr += '	<td style="text-align: center;">'+isEmpty(el2.table_col_type)+'</td>';
+	    				insertTr += '	<td style="text-align: center;">'+isEmpty(el2.table_col_len)+'</td>';
+	    				insertTr += '	<td style="text-align: center;">'+isEmpty(el2.table_col_null_yn)+'</td>';
+	    				insertTr += '</tr>';
+		    	}); 	    	
+	   	    	$("#agentRecvLocalCol").html(insertTr);
+	   	    	
+	    	}else{
+	    		
+	    		if(method_cd === 'A01003'){
+		    		$("#btnSave").hide();
+		    		$("#btnAdd").hide();
+		    		$("#btnUp").hide();
+		    		$("#btnMove").show();   
+	    		}else{
+		    		$("#btnSave").show();
+		    		$("#btnAdd").hide();
+		    		$("#btnUp").hide();
+		    		$("#btnMove").hide();   
+	    		}
+	    	}
+    	
+    	}
+    });
+    
+    
+    
+}
+
+
+//지자체별 csv파일 조회
+const agentRecvLocalCsvList = function(){
+	
+	$("#agentRecvLocalCsvList").empty();
+	const data = {
+   		url: '/recv/local/csv/list',
+   		user_id: 'user00',
+   		code_nm: $("#code_nm").val(),
+   		method_cd: $("#method_cd").val(),
+    };	
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/agentRecvLocalCsvList',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+ 	    	
+ 	    	let insertTr = '';
+ 	    	let i = 0;
+ 	    	
+ 	    	colInfoData = data;
+	  	    $.each(data, function (idx, el) {
+	  	    	
+				insertTr += '<tr>';
+				insertTr += '	<td style="text-align: center;">'+isEmpty(el.code_nm)+'</td>';
+				insertTr += '	<td style="text-align: center;">'+isEmpty(el.recv_datetime)+'</td>';
+				insertTr += '	<td style="text-align: center;cursor:pointer;" onclick=receiveCol("'+(++i)+'","'+el.clct_csv_file+'","'+el.recv_zip_file+'","'+el.file_nm+'","'+el.recv_zip_file+'");>'+isEmpty(el.file_nm)+'</td>';
+				insertTr += '	<td style="text-align: center;">'+isEmpty(el.recv_file_size)+'</td>';
+				insertTr += '</tr>';
+	  	    });
+			  	    
+ 	    	$("#agentRecvLocalCsvList").html(insertTr);
+ 	    	
+	  	  }
+	  	
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+const selCollectionType = function(val){
+	
+	$("#agentRecvLocalTable").empty();
+	$("#receiveCol").empty();
+	$("#fileList").empty();
+	$("#agentRecvLocalCol").empty();
+	
+	$("#btnSave").hide();
+	$("#btnAdd").hide();
+	$("#btnUp").hide();
+	$("#btnMove").hide();
+	
+	if(val === 'A01003'){
+		$("#tableV1").hide();
+		$("#tableV2").hide();
+		$("#tableV3").show();
+		$("#divReception").hide();
+		$("#divFileList").show();
+		
+	}else{
+		
+		$("#tableV1").show();
+		$("#tableV2").show();
+		$("#tableV3").hide();
+		$("#divReception").show();
+		$("#divFileList").hide();
+		
+	}
+	
+	agentRecvLocalCsvList();
+}
+const allowDrop = function(allowdropevent) {
+    allowdropevent.preventDefault();
+}
+
+const drag = function(dragevent) {
+    dragevent.dataTransfer.setData("text", dragevent.target.id);
+}
+
+const drop= function(dropevent) {
+    dropevent.preventDefault();
+    var data = dropevent.dataTransfer.getData("text");
+    dropevent.target.appendChild(document.getElementById(data));
+}
+
+//데이터 이동
+const agentRecvDataMov = function(){
+	
+	const data = {
+	   		url: '/recv/data/mov',
+	   		user_id: 'user00',
+	   		file_nm: $("#file_nm").val(),
+	   		target_folder_nm: $("#target_folder_nm").val(),
+	   		recv_zip_file: $("#recv_zip_file").val(),
+	    };	
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/agentRecvDataMov',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	
+      		let message = JSON.stringify(data.message);
+      		alert(message.replace(/\"/gi, ''));            	 
+		  	
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+}
+
+//파일목록 선택
+const fileSet = function(bypass_file){
+	$("#file_nm").val(bypass_file);
+	console.log(bypass_file);
+}
+
+//파일목록 선택
+const folderSet = function(target_folder_nm){
+	$("#target_folder_nm").val(target_folder_nm);
+	console.log(target_folder_nm);
+}
+
+//디렉토리 조회
+const agentRecvDir = function(){
+	
+	$("#tree").empty();
+	const data = {
+	   		url: '/recv/dir',
+	   		user_id: 'user00',
+	    };	
+		
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/agentRecvDir',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+
+	      let rootDir;
+    	  let insertLi = '<ul><li class="folder expanded">';
+	  	  if (data != null) {
+	  		rootDir = data.root.replace('/root/','');
+	  	    insertLi += rootDir;
+	  	    insertLi += '<ul>';
+	  	    $.each(data.directory, function (idx, el) {
+	  	    	let dataDir = el.replace(data.root+'/','');
+				console.log('dataDir : '+dataDir);	 	    
+		  	    insertLi += '<li class="folder"><a href=javascript:folderSet("'+el+'")>'+dataDir+'</a></li>';
+	  	    });
+	  	    insertLi += '</ul></li></ul>';
+	  	  }
+	  	  
+	  	  $("#tree").html(insertLi);
+		  	
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+ 	
+}
+
+agentRecvDir();
+setTimeout(function() {
+   $("#tree").fancytree({});
+}, 500);
+</script>

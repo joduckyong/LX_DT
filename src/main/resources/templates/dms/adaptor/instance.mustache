@@ -1,0 +1,339 @@
+{{>layout/header}}
+
+<div class="right_col" role="main">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="x_panel">
+				<div class="x_title">
+					<h2>HOME > Adapter 관리 > Instance 조회</h2>
+					<div class="clearfix"></div>
+				</div>
+				<div class="x_content">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="x_panel">
+								<div class="x_content">
+									<div class="col-12 col-md-11">
+										<div class="form-group row">
+											<label class="control-label">검색</label>
+											<div class="form-control_box">
+												<div class="col-md-2 pl-0">
+						                            <select class="form-control" name="l_clsf" id="l_clsf" onchange="dpCmCategory('1', this.value);">
+						                                <option value="">대분류</option>
+						                            </select>
+												</div>
+												<div class="col-md-2 pl-0">
+						                            <select class="form-control" name="m_clsf" id="m_clsf" onchange="dpCmCategory('2', this.value);">
+						                                <option value="">중분류</option>
+						                            </select>
+												</div>
+												<div class="col-md-2 pl-0">
+						                            <select class="form-control" name="s_clsf" id="s_clsf" onchange="dpCmCategory('3', this.value);">
+						                                <option value="">소분류</option>
+						                            </select>
+												</div>
+												<div class="col-md-2 pl-0">
+						                            <select class="form-control" name="search_type" id="search_type">
+						                                <option value="adapter_nm">Adapter 명</option>
+						                                <option value="instance_nm">Instance 명</option>
+						                                <option value="clct_mthd">수집 방식</option>
+						                                <option value="clct_ty">수집유형</option>
+						                                <option value="dset_korean_nm">데이터셋명</option>
+						                            </select>
+												</div>
+												<div class="col-md-4 pr-0">
+													<input class="form-control" type="text" placeholder="" id="query" onkeypress="enterkey(event);">
+												</div>
+												<div class="col-md-1 pr-0"></div>
+											</div>
+										</div>
+									</div>
+									<div class="col-12 col-md-1 btn_search_box">
+										<button class="btn btn-primary" onclick="dpIngestItSeach();">
+											<i class="glyphicon glyphicon-search"></i>
+										</button>
+									</div>
+								</div>
+								<div class="x_title col-md-11 mb-4">
+									<h2>Instance 정보</h2>
+								</div>
+								<div class="x_content">
+									<div class="table_responsive">
+										<div class="talbel_total mb-2">총<span id="total_count"></span>개</div>
+										<table class="table table-striped" >
+											<colgroup>
+												<col width="55px">
+											</colgroup>
+											<thead>
+												<tr>
+													<th style="text-align: center;">순번</th>
+													<th style="text-align: center;">대분류</th>
+													<th style="text-align: center;">중분류</th>
+													<th style="text-align: center;">소분류</th>
+													<th style="text-align: center;">Adapter 명</th>
+													<th style="text-align: center;">Instance 명</th>
+													<th style="text-align: center;">수집방식</th>
+													<th style="text-align: center;">수집유형</th>
+													<th style="text-align: center;">데이터셋 명</th>
+													<th style="text-align: center;">수집오류</th>
+													<th style="text-align: center;">상태</th>
+												</tr>
+											</thead>
+											<tbody id="dpIngestItSeach">
+											</tbody>
+										</table>
+					                    <div class="nav justify-content-center"> 
+										  <ul id="pagingul" class="pagination">
+										  </ul>                    
+					                    </div>   
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="divForm"></div>
+
+{{>layout/footer}}
+
+<script>
+const commonUrl = '/common';
+const url = '/adaptor';
+
+let init_page = 1;				//초기 페이지
+let page = 1;					//페이지
+let init_size_per_page = 10;	//초기 개수
+let size_per_page = 10;	 		//가져올 개수
+let pageCount = 10;		 		//페이징에 나타낼 페이지 수
+
+//분류 조회(검색 영역)
+const dpCmCategory = function (clsf_type, clsf_id) {
+	
+	let paramStr = '';
+	if(clsf_id){
+		paramStr = 'clsf_id='+clsf_id;
+	}
+	
+	const data = {
+   		url: '/dp/cm/category?'+paramStr,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: commonUrl+'/dpCmCategory',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		 if(clsf_type == '1'){	//대분류 선택시
+		  		$("#m_clsf option:gt(0)").remove();
+		  		$("#s_clsf option:gt(0)").remove();
+		  	  }else if(clsf_type == '2'){	//중분류 선택시
+		  		$("#s_clsf option:gt(0)").remove();
+		  	  }else if(clsf_type == '3'){	//소분류 선택시
+		  	  }else{	//초기 호출
+		  		$("#l_clsf option:gt(0)").remove();
+		  		$("#m_clsf option:gt(0)").remove();
+		  		$("#s_clsf option:gt(0)").remove();
+		  	  }
+  	    	if(data.contents != ""){
+  	    		let insertTr = '';
+		  	    $.each(data.contents, function (idx, el) {
+		  	    	let clsf_nm = el.clsf_nm;
+		  	    	if(clsf_nm.lastIndexOf('-') > -1){
+		  	    		clsf_nm = clsf_nm.substring(clsf_nm.lastIndexOf('-')+1);
+		  	    	}
+		  	    	insertTr += '<option value="'+el.clsf_id+'">'+clsf_nm+'</option>';
+		  	    });
+		  	  if(clsf_type == '1'){	//대분류 선택시
+		  	  	$("#m_clsf").append(insertTr);
+		  	  }else if(clsf_type == '2'){	//중분류 선택시
+		  		$("#s_clsf").append(insertTr);
+		  	  }else if(clsf_type == '3'){	//소분류 선택시
+		  	  }else{
+		  		$("#l_clsf").append(insertTr);
+		  	  }
+  	    	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//수집방식
+const dpCmCodesClctMthdInput = function (group_code) {
+	
+    const data = {
+   		url: '/dp/cm/codes/clct_mthd?group_code='+group_code,
+    };		
+    
+    $.ajax({
+        type: 'POST',
+        url: commonUrl+'/dpCmCodesClctMthdInput',
+        dataType: 'json',
+        contentType: 'application/json; charset-utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+	  	  if (data != null) {
+		  	   	if(data.contents != ""){    	   
+	    	   		 $.each(data.contents, function (idx, el) {
+		    	   		 $("#divForm").append($("<input type='hidden' value='"+el.dtl_code_nm+"' id='"+el.dtl_code+"'>"));
+		    	   		 
+		    	   		 dpCmCodesClctTyInput(el.etc_code);
+	 	     	     });
+		  	   	}
+	  	  }
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });
+    
+}
+
+//수집유형
+const dpCmCodesClctTyInput = function (group_code) {
+	
+    const data = {
+   		url: '/dp/cm/codes/clct_ty?group_code='+group_code,
+    };		
+    
+    $.ajax({
+        type: 'POST',
+        url: commonUrl+'/dpCmCodesClctTyInput',
+        dataType: 'json',
+        contentType: 'application/json; charset-utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+		  	   	if(data.contents != ""){    	    	
+	    	   		 $.each(data.contents, function (idx, el) {
+	    	   			$("#divForm").append($("<input type='hidden' value='"+el.dtl_code_nm+"' id='"+el.dtl_code+"'>"));
+	 	     	     });
+		  	   	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });
+    
+}
+
+const dpIngestItSeach = function(page, size_per_page){
+	
+	if(!page){
+		page = init_page;
+	}
+	if(!size_per_page){
+		size_per_page = init_size_per_page;
+	}
+	
+	console.log('page : '+page+' , size_per_page : '+size_per_page );
+	
+	let search_type = $("#search_type").val();
+	let query = $("#query").val();
+	let l_clsf = $("#l_clsf").val();
+	let m_clsf = $("#m_clsf").val();
+	let s_clsf = $("#s_clsf").val();
+	
+	const data = {
+   		url: '/dp/ingest/instance/search',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+   		search_type: search_type,
+   		search: query,
+   		dset_lclas: l_clsf,
+   		dset_mclas: m_clsf,
+   		dset_sclas: s_clsf,
+   		page_current: page,
+    };		
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpIngestItSeach',
+        dataType: 'json',
+        contentType: 'application/json; charset-utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+		  $("#dpIngestItSeach").empty();
+	  	  if (data != null) {
+  	    	$("#total_count").text(data.total_count);
+  	    	
+  	    	if(data.contents != ""){
+  	    		
+	     	    let insertTr = '';
+	     	    let i = 0;	
+		  	    $.each(data.contents, function (idx, el) {
+
+	     	          insertTr += '<tr>';
+	     		      insertTr += '	<td style="text-align: center;">'+(++i)+'</td>';
+	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.l_code_nm)+'</td>';
+	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.m_code_nm)+'</td>';
+	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.s_code_nm)+'</td>';
+	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.adapter_nm)+'</td>';
+	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.instance_nm)+'</td>';
+	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.clct_mthd)+'</td>';
+	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.clct_ty)+'</td>';
+	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.dset_korean_nm)+'</td>';
+	     		      if( el.use_yn === 'N'){
+	     		  	    insertTr += ' <td style="text-align: center;">';
+	     		  	    insertTr += '	<button class="btn btn-sm btn-primary" onclick=errorPage("'+ el.instance_id +'")>바로가기</button>';
+	     		    	insertTr += ' </td>';	
+	     		      }else{
+	     		  	    insertTr += ' <td style="text-align: center;"></td>';	
+	     		      }
+	     		      if( el.active_yn === 'Y'){
+		                  insertTr += ' <td style="text-align: center;">실행</td>';
+	     		      }else{
+		                  insertTr += ' <td style="text-align: center;">중지</td>';
+	     		      }
+	                  insertTr += '</tr>';
+		  	    });
+          	    $("#dpIngestItSeach").append(insertTr);
+  	    	}
+  	    	
+  	    	//페이징 보여줌
+  	    	paging(data.total_count, size_per_page, pageCount, page);
+  	    	
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//수집오류 바로가기
+const errorPage = function(instance_id){
+	location.href="/collectionError/detail/"+instance_id;
+}
+
+//페이징 함수 호출
+const pagingFun = function(page, size_per_page){
+	dpIngestItSeach(page, size_per_page);
+}
+
+//엔터키가 눌렸을 때
+const enterkey = function(e) {
+	if (e.keyCode == 13) {
+		dpIngestItSeach();
+    }
+}
+
+//분류 조회
+dpCmCategory();
+
+//수집방식
+dpCmCodesClctMthdInput('D34');
+
+setTimeout(dpIngestItSeach, 300);
+</script>
+
+
+

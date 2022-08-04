@@ -1,0 +1,714 @@
+{{>layout/header}}
+
+        <div class="right_col" role="main">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="x_panel"> 
+                <div class="x_title"> 
+                  <h2>HOME > 데이터 분석 > 분석 환경 관리 > 도커 이미지 관리</h2>
+                  <div class="clearfix"> </div>
+                </div>
+                <div class="x_content"> 
+                  <div class="right_btns"> 
+                    <div class="row port_search">
+                      <div class="form-group row">
+                        <div class="control-label">도커 이미지명</div>
+                        <div class="form-control_box">
+                          <input class="form-control" type="text" name="query" id="query" onkeypress="enterkey(event);">
+                        </div>
+                      </div>
+                      <button class="btn btn-primary btn-sm" onclick="dockerImagesGet();">조회</button>
+                    </div>
+                  </div>
+                  <div class="table_btns mt-4">
+                    <button class="btn btn-primary row" type="button" onclick="addModal()">이미지 추가</button>
+                  </div>
+                  <div class="table_responsive">
+                    <div class="talbel_total"><span class="red bold" id="total_count"></span>건이 조회되었습니다.</div>
+                    <table class="table table-striped">
+                      <colgroup> 
+<!--                         <col width="55px"> -->
+                      </colgroup>
+                      <thead>
+                        <tr> 
+<!--                           <th>선택</th> -->
+                          <th>도커 이미지명</th>
+                          <th>생성자</th>
+                          <th>등록일자</th>
+                          <th>최종 변경 일자</th>
+                        </tr>
+                      </thead>
+                      <tbody id="dockerImage">
+                      </tbody>
+                    </table>
+                    <div class="nav justify-content-center"> 
+                      <ul id="pagingul" class="pagination">
+					  	</ul> 
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- modal -->
+        <div class="modal fade add_modal" id="add_modal" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" id="modelLabel">도커 이미지 추가 팝업</h4>
+                <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
+              </div>
+              <div class="modal-body">
+                <div class="x_content"> 
+                  <div class="table_responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr> 
+                          <th colspan="2">▣ 이미지명</th>
+                        </tr>
+                      </thead>
+                    </table>
+                  </div>
+                  <div class="border_rows">
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-12">
+                        <div class="control-label">도커 이미지명 <span class="red bold">*</span></div>
+                        <div class="form-control_box">
+                          <input class="form-control col-md-10" type="text" name="docker_image_nm" id="docker_image_nm">
+                          <input class="form-control col-md-10" type="hidden" name="temp_docker_image_nm" id="temp_docker_image_nm">
+                          <button class="btn btn-danger btn-sm" style="margin-left:10px;" id="duplicate_check" onclick="dockerImageNameDupCheck();">중복체크</button>
+                          <input type="hidden" name="docker_image_id" id="docker_image_id">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="table_responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr> 
+                          <th colspan="3">▣ 프로그램 등록</th>
+                          <th>
+                          <div class="table_btns">
+		                    <button class="btn btn-primary" onclick="addProgram();">+ 추가</button>
+		                    <button class="btn btn-danger" onclick="deleteProgram();">- 삭제</button>
+		                  </div>
+                          </th>
+                        </tr>
+                        <tr> 
+                          <th>프로그램명 <span class="red bold">*</span></th>
+                          <th>버전 <span class="red bold">*</span></th>
+                          <th>포트 유무 <span class="red bold">*</span></th>
+                          <th>기본 포트 <span class="red bold">*</span></th>
+                        </tr>
+                      </thead>
+                      <tbody id="programs">
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer" id="modal_footer">
+              </div>
+            </div>
+          </div>
+        </div>
+
+{{>layout/footer}}
+
+<script>
+const commonUrl = '/sandbox/common';
+const url = '/sandbox/env/dockerImage';
+
+let init_page = 1;				//초기 페이지
+let page = 1;					//페이지
+let init_size_per_page = 10;	//초기 개수
+let size_per_page = 10;	 		//가져올 개수
+let pageCount = 10;		 		//페이징에 나타낼 페이지 수
+
+let duplicateYn = '';		//중복 체크 여부
+
+//도커 이미지명 변경시 중복 체크 값 초기화
+$('#docker_image_nm').on('keyup', function(){
+	duplicateYn = '';
+});
+
+//도커 이미지 목록 조회
+const dockerImagesGet = function (page, size_per_page) {
+	
+	if(!page){
+		page = init_page;
+	}
+	if(!size_per_page){
+		size_per_page = init_size_per_page;
+	}	
+	
+	let query = isEmpty($("#query").val());
+	
+	const data = {
+   		url: '/services/sandbox/docker-images/get?search=docker_image_nm:'+query+'&page_current='+page+'&sizePerPage='+size_per_page+'&sort=creatDatetime:desc',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+    };		
+    $.ajax({
+        type: 'POST',
+        url: url+'/dockerImagesGet',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		$("#dockerImage").empty();
+  	    	$("#total_count").text(data.total_count);
+  	    	
+  	    	if(data.contents != ""){
+  	    		let insertTr = '';
+		  	    $.each(data.contents, function (idx, el) {
+		  	    	
+					insertTr += "<tr>";
+					insertTr += ' <td><span class="blue bold" style="cursor:pointer" onclick=dockerImagesDetail('+el.docker_image_id+');>'+el.docker_image_nm+'</span></td>';
+					insertTr += ' <td>'+el.creator_id+'</td>';
+					insertTr += ' <td>'+el.creat_datetime+'</td>';
+					insertTr += ' <td>'+el.modify_datetime+'</td>';
+					insertTr += '</tr>';
+		  	    });
+		  	  	$("#dockerImage").html(insertTr);
+  	    	}
+  	    	//페이징 보여줌
+  	    	paging(data.total_count, size_per_page, pageCount, page);
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//도커 이미지 상세 조회
+const dockerImagesDetail = function (docker_image_id) {
+	
+	const data = {
+   		url: '/services/sandbox/docker-images/'+docker_image_id+'/detail',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+    };		
+    $.ajax({
+        type: 'POST',
+        url: url+'/dockerImagesDetail',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  	    	if(data.contents != ""){
+	  	    		$("#docker_image_nm").val(data.contents.docker_image_nm);
+	  	    		$("#temp_docker_image_nm").val(data.contents.docker_image_nm);
+	  	    		$("#docker_image_id").val(data.contents.docker_image_id);
+	  	    		$("#programs").empty();
+	  	    		$.each(data.contents.programs, function (idx, el) {
+	  	    		  let insertTr = '<tr data-seq="'+idx+'">';
+		     		      insertTr += '	<td><input type="text" id="progrm_nm'+idx+'" value="'+el.progrm_nm+'"></td>';
+		     		      insertTr += ' <td><input type="text" id="version'+idx+'" value="'+el.version+'"></td>';
+		     		      insertTr += ' <td>';
+		     		      insertTr += '		<select id="port_use_yn'+idx+'" onchange="portUseYn(this);">';
+		     		      insertTr += '			<option value="">선택 </option>';
+		     		      insertTr += '			<option value="Y" ';
+		     		      if(el.port_use_yn == 'Y'){
+		     		    	 insertTr += 'selected ';
+		     		      }
+		     		      insertTr += '>Y </option>';
+		     		      
+		     		      insertTr += '			<option value="N" ';
+		     		      if(el.port_use_yn == 'N'){
+		     		    	 insertTr += 'selected ';
+		     		      }
+		     		      insertTr += '>N </option>';
+		     		      
+		     		      insertTr += '		</select>';
+		     		      insertTr += '	</td>';
+		     		      insertTr += ' <td>';
+		     		      if(el.port_use_yn == 'Y'){
+		     		      	insertTr += '		<input type="number" id="bass_port'+idx+'" value="'+el.bass_port+'" min="0" max="65535">';
+		     		      }
+		     		      insertTr += '	</td>';
+		                  insertTr += '</tr>';
+  	    				$("#programs").append(insertTr);
+	  	    		});
+	  	    	}  		
+	  	  }
+    	  
+	  	detailModal();
+	  	
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//도커 이미지명 중복 확인
+const dockerImageNameDupCheck = function (){
+	let docker_image_nm = $("#docker_image_nm").val();
+	if(docker_image_nm == '') {
+        alert('도커 이미지명을 입력하세요!');
+        $("#docker_image_nm").focus();
+        return true;
+    }
+	
+	const data = {
+       		url: '/services/sandbox/docker-images/name/dup-check?docker_image_nm='+docker_image_nm,
+       		user_id: 'user00',	
+       		menu_id: 'menu_id',
+        };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/dockerImageNameDupCheck',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data),
+    }).done(function (data) {
+ 	if (data != null) {
+ 	   	if(data.contents.duplicated){
+ 	   		duplicateYn = 'Y';
+ 	   		alert("동일한 도커 이미지명이 있습니다.");
+ 	   		$("#docker_image_nm").focus();
+ 	   	}else{
+ 	   		duplicateYn = 'N';
+ 	   		alert("사용 가능합니다.");
+ 	   	}
+ 	}
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });
+    
+}
+
+//도커 이미지명 중복 확인 여부(업데이트시 사용)
+const isDockerImageNameDupCheck= function (){
+	let docker_image_nm = $("#docker_image_nm").val();
+	let temp_docker_image_nm = $("#temp_docker_image_nm").val();
+	let isDuplicate = false;
+	
+	const data = {
+       		url: '/services/sandbox/docker-images/name/dup-check?docker_image_nm='+docker_image_nm,
+       		user_id: 'user00',	
+       		menu_id: 'menu_id',
+        };
+	
+	if(docker_image_nm == temp_docker_image_nm){	//기존 이름과 같을 경우
+	   	return false;
+	}
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/isDockerImageNameDupCheck',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data),
+        async: false
+    }).done(function (data) {
+ 	if (data != null) {
+ 	   	if(data.contents.duplicated){
+ 	   		isDuplicate = true;
+ 	   	}
+ 	}
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });
+    
+    return isDuplicate;
+    
+}
+
+//도커 이미지 관리 등록
+const dockerImagesInsert = function(){
+	let docker_image_nm = $("#docker_image_nm").val();
+	
+	if(docker_image_nm == '') {
+        alert('도커 이미지명을 입력하세요!');
+        $("#docker_image_nm").focus();
+        return true;
+    }
+	
+	const data = {
+      		url: '/services/sandbox/docker-images/enroll',
+      		user_id: 'user00',	
+      		menu_id: 'menu_id',
+      		creator_id: 'creator',
+      		modifier_id: 'modifier_id',
+      		docker_image_nm: $('#docker_image_nm').val(),
+       };
+	
+	let programsArr = new Array();
+	let duplicatePortArr = new Array();
+	let isValid = true;
+	$('#programs > tr').each(function(index){
+		let progrm_nm = $("#progrm_nm"+index).val();
+    	let version = $("#version"+index).val();
+    	let port_use_yn = $("#port_use_yn"+index).val();
+    	let bass_port = $("#bass_port"+index).val();
+    	
+    	if(progrm_nm == ''){
+    		alert("프로그램명을 입력하세요.");
+    		$("#progrm_nm"+index).focus();
+    		isValid = false;
+    		return isValid;
+    	}
+    	
+    	if(version == ''){
+    		alert("버전을 입력하세요.");
+    		$("#version"+index).focus();
+    		isValid = false;
+    		return isValid;
+    	}
+    	
+    	if(port_use_yn == ''){
+    		alert("포트 유무을 입력하세요.");
+    		$("#port_use_yn"+index).focus();
+    		isValid = false;
+    		return isValid;
+    	}
+    	
+    	if(bass_port == ''){
+    		alert("기본 포트을 입력하세요.");
+    		$("#bass_port"+index).focus();
+    		isValid = false;
+    		return isValid;
+    	}
+		
+		let programsData = {
+			"progrm_nm": progrm_nm,
+	        "version": version,
+	        "port_use_yn": port_use_yn,
+	        "bass_port": bass_port,
+		}
+		
+		if(port_use_yn == 'Y'){
+			if(duplicatePortArr.includes(bass_port)){
+				alert("동일한 기본 포트 존재합니다.");
+				$("#bass_port"+index).focus();
+				isValid = false;
+	    		return isValid;
+			}else{
+				duplicatePortArr.push(bass_port);
+			}
+		}
+		
+		programsArr.push(programsData);
+		
+	});
+	
+	data.programs = programsArr;
+	
+	if(!isValid){
+    	return;
+    }
+	
+	if(duplicateYn != 'N'){
+		if(duplicateYn == 'Y'){
+			alert("동일한 도커 이미지명이 있습니다.");
+		}else{
+			alert("중복 체크를 해주세요.");
+		}
+		$("#docker_image_nm").focus();
+		return;
+	}
+	
+	if(confirm("등록 하시겠습니까?")){
+		$.ajax({
+	        type: 'POST',
+	        url: url+'/dockerImagesInsert',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data),
+	    }).done(function (data) {
+	    	let message = JSON.stringify(data.return_msg);
+	  		alert(message.replace(/\"/gi, ''));    	
+	  		jsList();
+	  		
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });
+	}
+		
+}
+
+//도커 이미지 수정
+const dockerImagesUpdate = function () {
+	let docker_image_id = $("#docker_image_id").val();
+	let docker_image_nm = $("#docker_image_nm").val();
+	
+	if(docker_image_nm == '') {
+        alert('도커 이미지명을 입력하세요!');
+        $("#docker_image_nm").focus();
+        return true;
+    }
+	
+	const data = {
+   		url: '/services/sandbox/docker-images/'+docker_image_id+'/update',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+   		creator_id: 'creator',
+   		modifier_id: 'modifier_id',
+   		docker_image_nm: $('#docker_image_nm').val(),
+    };
+		
+	let programsArr = new Array();
+	let duplicatePortArr = new Array();
+	let isValid = true;
+	$('#programs > tr').each(function(index){
+		let progrm_nm = $("#progrm_nm"+index).val();
+    	let version = $("#version"+index).val();
+    	let port_use_yn = $("#port_use_yn"+index).val();
+    	let bass_port = $("#bass_port"+index).val();
+    	
+    	if(progrm_nm == ''){
+    		alert("프로그램명을 입력하세요.");
+    		$("#progrm_nm"+index).focus();
+    		isValid = false;
+    		return isValid;
+    	}
+    	
+    	if(version == ''){
+    		alert("버전을 입력하세요.");
+    		$("#version"+index).focus();
+    		isValid = false;
+    		return isValid;
+    	}
+    	
+    	if(port_use_yn == ''){
+    		alert("포트 유무을 입력하세요.");
+    		$("#port_use_yn"+index).focus();
+    		isValid = false;
+    		return isValid;
+    	}
+    	
+    	if(bass_port == ''){
+    		alert("기본 포트을 입력하세요.");
+    		$("#bass_port"+index).focus();
+    		isValid = false;
+    		return isValid;
+    	}
+		
+		let programsData = {
+			"progrm_nm": progrm_nm,
+	        "version": version,
+	        "port_use_yn": port_use_yn,
+	        "bass_port": bass_port,
+		}
+		
+		if(port_use_yn == 'Y'){
+			if(duplicatePortArr.includes(bass_port)){
+				alert("동일한 기본 포트 존재합니다.");
+				$("#bass_port"+index).focus();
+				isValid = false;
+	    		return isValid;
+			}else{
+				duplicatePortArr.push(bass_port);
+			}
+		}
+		
+		programsArr.push(programsData);
+	});
+	
+	data.programs = programsArr;
+	
+	if(!isValid){
+    	return;
+    }
+	
+	if(isDockerImageNameDupCheck()){
+		alert("동일한 도커 이미지명이 있습니다.");
+		$("#docker_image_nm").focus();
+		return;
+	}
+	
+	if(confirm("수정 하시겠습니까?")){
+		$.ajax({
+	        type: 'POST',
+	        url: url+'/dockerImagesUpdate',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data),
+	    }).done(function (data) {
+	    	let message = JSON.stringify(data.return_msg);
+	  		alert(message.replace(/\"/gi, ''));    	
+	  		jsList();
+	  		
+	    }).fail(function (jqXHR, status, error) {
+	    	let res = jqXHR.responseJSON.message;
+	    	let message = '';
+	    	if(res.indexOf('message') > -1){
+	    		message = res.substring(res.indexOf('message')+10, res.lastIndexOf('}')-1);
+	    		alert(message);
+	    	}else{
+	    		alert(JSON.stringify(jqXHR));
+	    	}
+	    });
+	}
+}
+
+//도커 이미지 삭제
+const dockerImagesDelete = function () {
+	let docker_image_id = $("#docker_image_id").val();
+	const data = {
+   		url: '/services/sandbox/docker-images/'+docker_image_id+'/delete',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+    };	
+	
+	if(confirm("삭제 하시겠습니까?")){
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dockerImagesDelete',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	  		let message = JSON.stringify(data.return_msg);
+	  		alert(message.replace(/\"/gi, ''));
+	  		jsList();
+	    }).fail(function (jqXHR, status, error) {
+	    	let res = jqXHR.responseJSON.message;
+	    	let message = '';
+	    	if(res.indexOf('message') > -1){
+	    		message = res.substring(res.indexOf('message')+10, res.lastIndexOf('}')-1);
+	    		alert(message);
+	    	}else{
+	    		alert(JSON.stringify(jqXHR));
+	    	}
+	    });	
+	}
+}
+
+//분석 이미지에서 사용하고 있는 도커 이미지 조회
+const analysisImagesDockerImageGet = function () {
+	return new Promise(function(resolve, reject){
+		let docker_image_nm = $("#docker_image_nm").val();
+		const data = {
+	   		url: '/services/sandbox/analysis-images/docker-images/get?search=docker_image_nm:'+docker_image_nm+'&page_current=1',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',
+	    };	
+		
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/analysisImagesDockerImageGet',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	  		let message = JSON.stringify(data.return_msg);
+	  		console.log(message.replace(/\"/gi, ''));
+	  		resolve(data);
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	        reject(error);
+	    });	
+	});
+}
+
+
+//기본 포트 활성화
+const portUseYn = function(obj){
+	let selected = $(obj).val();
+	let idx = $(obj).parent().parent().data('seq');
+	let text = '<input type="number" id="bass_port'+idx+'" min="0" max="65535">'
+	if(selected == 'Y'){
+		$(obj).parent().next().html(text);
+	}else {
+		$(obj).parent().next().empty();
+	}
+}
+
+//도커 이미지 추가/삭제 팝업 - 프로그램 라인 추가
+const addProgram = function (){
+	let idx = $("#programs > tr").length;
+	
+	let insertTr = '<tr data-seq="'+idx+'">';
+	insertTr += '	<td><input type="text" id="progrm_nm'+idx+'"></td>';
+	insertTr += '	<td><input type="text" id="version'+idx+'"></td>';
+	insertTr += '	<td>';
+	insertTr += '		<select id="port_use_yn'+idx+'" onchange="portUseYn(this);">';
+	insertTr += '			<option value="">선택 </option>';
+	insertTr += '			<option value="Y">Y </option>';
+	insertTr += '			<option value="N">N </option>';
+	insertTr += '		</select>';
+	insertTr += '	</td>';
+	insertTr += '<td></td>';
+	$('#programs').append(insertTr);
+}
+
+//도커 이미지 추가/삭제 팝업 - 프로그램 라인 삭제
+const deleteProgram = function (obj){
+	$("#programs > tr:last").remove();
+}
+
+//모달 등록창
+const addModal = function(){
+	
+	initModal();
+	$('#modelLabel').text('도커 이미지 추가 팝업');
+	$('#add_modal').modal('show');
+	$("#duplicate_check").show();
+	
+	let insertBtn = '<button class="btn btn-primary" type="button" onclick="dockerImagesInsert();">등록</button>';
+		insertBtn += '<button class="btn btn-danger" type="button" data-dismiss="modal">취소</button>';
+	$('#modal_footer').html(insertBtn);
+}
+
+//모달 상세정보
+const detailModal = function(){
+	duplicateYn = 'N';
+	$('#modelLabel').text('도커 이미지 상세 팝업');
+	$('#add_modal').modal('show');
+	$("#duplicate_check").hide();
+	
+	let insertBtn = '<button class="btn btn-primary" type="button" onclick="dockerImagesUpdate();">수정</button>';
+		insertBtn += '<button class="btn btn-danger" type="button" onclick="dockerImagesDelete();">삭제</button>';
+		insertBtn += '<button class="btn btn-danger" type="button" data-dismiss="modal">취소</button>';
+	$('#modal_footer').html(insertBtn);
+}
+
+//모달 닫기
+const closeModal = function(){
+	$('#add_modal').modal('hide');
+}
+
+//모달 초기화
+const initModal = function(){
+	$("#docker_image_nm").val('');
+	let insertTr = '<tr data-seq="0">';
+		insertTr += '	<td><input type="text" id="progrm_nm0"></td>';
+		insertTr += '	<td><input type="text" id="version0"></td>';
+		insertTr += '	<td>';
+		insertTr += '		<select id="port_use_yn0" onchange="portUseYn(this);">';
+		insertTr += '			<option value="">선택 </option>';
+		insertTr += '			<option value="Y">Y </option>';
+		insertTr += '			<option value="N">N </option>';
+		insertTr += '		</select>';
+		insertTr += '	</td>';
+		insertTr += '<td></td>';
+	$('#programs').html(insertTr);
+}
+
+//분석 모델 목록 페이지 이동
+const jsList = function(){
+	location.href = '/sandbox/env/dockerImage/list';
+}
+
+//페이징 함수 호출
+const pagingFun = function(page, size_per_page){
+	dockerImagesGet(page, size_per_page);
+}
+
+//엔터키가 눌렸을 때
+const enterkey = function(e) {
+	if (e.keyCode == 13) {
+		dockerImagesGet();
+    }
+}
+
+//조회
+dockerImagesGet();
+</script>

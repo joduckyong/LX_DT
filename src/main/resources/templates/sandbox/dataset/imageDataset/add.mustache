@@ -1,0 +1,483 @@
+{{>layout/header}}
+		
+		<div class="right_col" role="main">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="x_panel">
+						<div class="x_title">
+							<h2>HOME > 데이터 분석 > 이미지 데이터셋 관리 > 이미지 관리</h2>
+							<div class="clearfix"></div>
+						</div>
+						<div class="x_content">
+							<br>
+							<div class="row">
+								<div class="col-12 col-md-12 mx-0">
+									<h4 class="center_title">이미지 데이터셋 관리 이름</h4>
+									<div class="row">
+										<div class="form-group row col-12 col-md-12 mx-0">
+											<label class="control-label">이미지 데이터셋 이름</label>
+											<div class="form-control_box">
+												<input class="form-control" type="text" name="image_dataset_nm" id="image_dataset_nm" readOnly>
+												<input type="hidden" name="dtl_code" id="dtl_code">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-12 col-md-6 mx-0">
+									<h4 class="center_title">
+										이미지 데이터셋<span class="red">*</span>
+									</h4>
+									<div class="table_responsive">
+										<table class="table table-striped table-bordered bulk_action">
+											<colgroup>
+											</colgroup>
+											<thead>
+												<tr>
+													<th style="text-align: center;">구분</th>
+													<th style="text-align: center;">업로드된 파일</th>
+													<th style="text-align: center;">파일 업로드</th>
+												</tr>
+											</thead>
+											<tbody id="commonCodeImagesDatasetsCode">
+											</tbody>
+										</table>
+									</div>
+								</div>
+								<div class="col-12 col-md-6 mx-0">
+									<h4 class="center_title">업로드 파일</h4>
+									<div class="table_responsive">
+										<table class="table table-striped table-bordered bulk_action">
+											<colgroup>
+											</colgroup>
+											<thead>
+												<tr>
+													<th style="text-align: center;">구분</th>
+													<th style="text-align: center;">파일명</th>
+													<th style="text-align: center;">파일 크기</th>
+												</tr>
+											</thead>
+											<tbody id="fileList">
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+							<div class="right_btns mt-4">
+								<button class="btn btn-primary" type="button" onclick="imagesDatasetsFileUpload();">업로드</button>
+								<button class="btn btn-dark" type="button" onclick="jsList();">뒤로</button>
+							</div>
+						</div>
+		
+					</div>
+				</div>
+			</div>
+		</div>
+		
+        <div class="modal fade file_modal" id="add_modal" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-lg" style="max-width: 550px;">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">이미지 데이터셋 업로드 정보 팝업</h4>
+                <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
+              </div>
+              <div class="modal-body">
+                <div class="x_content"> 
+                  <div class="table_responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr> 
+                          <th colspan="2">▣ 이미지 데이터셋 기본 정보</th>
+                        </tr>
+                      </thead>
+                    </table>
+                  </div>
+                  <div class="border_rows">
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-12">
+                        <div class="control-label" style="text-align: center;">이미지 데이터셋 명</div>
+                        <div class="form-control_box">
+                          <input class="form-control" type="text" name="image_dataset_nm2" id="image_dataset_nm2" readOnly>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-12">
+                        <div class="control-label" style="text-align: center;">구분</div>
+                        <div class="form-control_box">
+                          <input class="form-control" type="text" name="dtl_code_nm" id="dtl_code_nm" readOnly>
+                          <input class="form-control" type="hidden" name="file_index" id="file_index">
+                          <input class="form-control" type="hidden" name="file_cnt" id="file_cnt">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="table_responsive">
+                    <table class="table table-striped">
+                      <colgroup> 
+                        <col width="50px">
+                        <col width="130px">
+                        <col width="100px">
+                        <col width="70px">
+                      </colgroup>                    
+                      <thead>
+                        <tr> 
+                          <th colspan="3">▣ 등록된 파일 정보</th>
+                        </tr>
+                        <tr> 
+                          <th style="text-align: center;">선택</th>
+                          <th style="text-align: center;">파일명</th>
+                          <th style="text-align: center;">파일 등록 일시</th>
+                          <th style="text-align: center;">파일 갯수</th>
+                        </tr>
+                      </thead>
+                      <tbody id="imageDatasetsDetailList">
+                      </tbody>
+                    </table>
+                    <div class="nav justify-content-center"> 
+					  <ul id="pagingul" class="pagination">
+					  </ul>                    
+                    </div>                    
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-danger" type="button" onclick="btnDel();">삭제</button>
+                <button class="btn btn-dark" type="button" onclick="closeModal();">닫기</button>
+              </div>
+            </div>
+          </div>
+        </div>		
+{{>layout/footer}}
+		
+<script>
+const commonUrl = '/sandbox/common';
+const url = '/sandbox/dataset/imageDataset';
+
+let fileNo = 0;
+let fileNo2 = 0;
+let fileNo3 = 0;
+let trainDataFiles = new Array();
+let validDataFiles = new Array();
+let testDataFiles = new Array();
+
+let init_page = 1;				//초기 페이지
+let page = 1;					//페이지
+let init_size_per_page = 10;	//초기 개수
+let size_per_page = 10;	 		//가져올 개수
+let pageCount = 10;		 		//페이징에 나타낼 페이지 수
+
+//이미지 데이터셋 상세 조회
+const imageDatasetDetail = function() {
+		
+	const data = {
+   		url: '/services/sandbox/datasets/images/{{image_dataset_id}}/detail',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+    };		
+    $.ajax({
+        type: 'POST',
+        url: url+'/imageDatasetDetail',
+        dataType: 'json',
+        contentType: 'application/json; charset-utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+  	    	if(data.contents != ""){
+  	    		$("#image_dataset_nm").val(data.contents.image_dataset_nm);
+  	    		$("#image_dataset_nm2").val(data.contents.image_dataset_nm);
+  	    	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//항목별 이미지 데이터셋 조회
+const imageDatasetsDetailList = function(page, size_per_page){
+	
+	let dtl_code = $('#dtl_code').val();
+	
+	if(page == '' || typeof page == "undefined"){
+		page = init_page;
+	}
+	if(size_per_page == '' || typeof size_per_page == "undefined"){
+		size_per_page = init_size_per_page;
+	}	
+	
+	const data = {
+	   		url: '/services/sandbox/datasets/images/{{image_dataset_id}}/'+dtl_code+'/get?page_current='+page+'&size_per_page='+size_per_page+'&sort=image_dataset_seq_num:desc',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	   		
+	    };		
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/imageDatasetsDetailList',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	
+		  	  if (data != null) {
+		  	    	if(data.contents != ""){
+		  	    		$("#imageDatasetsDetailList").empty();
+				  	    $.each(data.contents, function (idx, el) {
+			     	      let insertTr = '<tr>';
+			                  insertTr += ' <td style="text-align: center;"><input class="flat" type="radio" name="image_dataset_seq_num"  value="'+el.image_dataset_seq_num+'" onclick=selClick("'+el.file_index+'","'+el.file_cnt+'");></td>';
+			                  insertTr += ' <td style="text-align: center;">'+el.file_nm+'</td>';
+			                  insertTr += ' <td style="text-align: center;">'+el.file_index+'</td>';
+			                  insertTr += ' <td style="text-align: center;">'+el.file_cnt+'</td>';
+			                  insertTr += '</tr>';
+			         	   	  $("#imageDatasetsDetailList").append(insertTr);
+				  	    });
+		  	    	}
+		  	    	//페이징 보여줌
+		  	    	paging(data.total_count, size_per_page, pageCount, page);
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });		
+}
+
+//데이터 재학습 분석 구분 코드 조회
+const commonCodeImagesDatasetsCode = function(){
+	const data = {
+	   		url: '/services/sandbox/common-code/relearn-analysis-code',
+	    };		
+	    $.ajax({
+	        type: 'POST',
+	        url: commonUrl+'/commonCodeImagesDatasetsCode',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	
+		  	  if (data != null) {
+		  	    	if(data.contents != ""){
+		  	    		$("#commonCodeImagesDatasetsCode").empty();
+				  	    $.each(data.contents, function (idx, el) {
+			     	      let insertTr = '<tr>';
+			                  insertTr += ' <td style="text-align: center;">'+el.dtl_code_nm+' 데이터</td>';
+			                  insertTr += ' <td style="text-align: center;"><button class="btn btn-sm btn-primary" onclick=viewModal("'+el.dtl_code_nm+'","'+el.dtl_code+'")>파일 확인</button></td>';
+			                  insertTr += ' <td style="text-align: center;"><button class="btn btn-sm btn-primary" onclick=fileCheck("'+el.dtl_code+'");>파일 추가</button><input type="file" id="file_'+el.dtl_code+'" onchange=addFile(this,"'+el.dtl_code+'"); multiple style="display:none;"></input></td>';
+			                  insertTr += '</tr>';
+			         	   	  $("#commonCodeImagesDatasetsCode").append(insertTr);
+				  	    });
+		  	    	}
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });		
+}
+
+//항목별 이미지 데이터셋 삭제
+const imageDatasetDetailDelete = function (image_dataset_seq_num) {
+		
+	const data = {
+   		url: '/services/sandbox/datasets/images/{{image_dataset_id}}/'+image_dataset_seq_num+'/delete',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+    };		
+    $.ajax({
+        type: 'POST',
+        url: url+'/imagesDatasetsDelete',
+        dataType: 'json',
+        contentType: 'application/json; charset-utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+  		let message = JSON.stringify(data.return_msg);
+  		alert(message.replace(/\"/gi, ''));    	    	
+  		
+  		imageDatasetsDetailList(page, size_per_page);
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//삭제버튼
+const btnDel = function(){
+	
+	let selid; 
+    $("input[name='image_dataset_seq_num']:checked").each(function (i) {
+    	selid = $(this).val();
+    });
+    
+	let msg = $("#image_dataset_nm2").val() +' - '+ $("#dtl_code_nm").val() +'\n'+$('#file_index').val()+'('+$('#file_cnt').val()+'개)의 \n파일을 삭제하시겠습니까?'
+    if(!confirm(msg)) {
+    } else {
+        if($("input[name='image_dataset_seq_num']:checked").length < 1) {
+            alert('선택 항목이 없습니다.');
+            return;
+        }
+
+        $("input[name='image_dataset_seq_num']:checked").each(function (i) {
+        	imageDatasetDetailDelete($(this).val());
+        });
+        
+    }
+}
+
+
+//첨부파일 추가
+const addFile = function(obj, dtl_code){
+
+	//학습데이터
+	if(dtl_code == 'B17001'){
+        for (const file of obj.files) {
+                // 파일 배열에 담기
+                let reader = new FileReader();
+                reader.onload = function () {
+                	trainDataFiles.push(file);
+                };
+                
+                var insertTr = '<tr>';
+                insertTr += '<td style="text-align: center;" class="first">학습 데이터</td>';
+                insertTr += '<td style="text-align: center;">' + file.name + '</td>';
+                insertTr += '<td style="text-align: center;">' + formatBytes(file.size) + '</td>';
+                insertTr += '<tr>';
+                $('#fileList').append(insertTr);
+                
+                reader.readAsDataURL(file);
+                fileNo++;
+        }
+    //검증데이터
+	}else if(dtl_code == 'B17002'){
+        for (const file of obj.files) {
+                // 파일 배열에 담기
+                let reader = new FileReader();
+                reader.onload = function () {
+                	validDataFiles.push(file);
+                };
+                
+                let insertTr = '<tr>';
+                insertTr += '<td style="text-align: center;" class="second">검증 데이터</td>';
+                insertTr += '<td style="text-align: center;">' + file.name + '</td>';
+                insertTr += '<td style="text-align: center;">' + formatBytes(file.size) + '</td>';
+                insertTr += '<tr>';
+                $('#fileList').append(insertTr);
+                
+                reader.readAsDataURL(file);
+                fileNo2++;
+        }		
+    //테스트데이터    
+	}else if(dtl_code == 'B17003'){
+        for (const file of obj.files) {
+                // 파일 배열에 담기
+                let reader = new FileReader();
+                reader.onload = function () {
+                	testDataFiles.push(file);
+                };
+                
+                let insertTr = '<tr>';
+                insertTr += '<td style="text-align: center;" class="three">테스트 데이터</td>';
+                insertTr += '<td style="text-align: center;">' + file.name + '</td>';
+                insertTr += '<td style="text-align: center;">' + formatBytes(file.size) + '</td>';
+                insertTr += '<tr>';
+                $('#fileList').append(insertTr);
+                
+                reader.readAsDataURL(file);
+                fileNo3++;
+        }		
+	}
+	
+}
+
+/* 폼 전송 */
+const imagesDatasetsFileUpload = function() {
+    // 폼데이터 담기
+    
+   	if(!confirm('등록 하시겠습니까?')) {
+	}else{
+	    if(fileNo == 0){
+	    	alert("학습 데이터 하나이상 첨부해주세요!");
+	    	return;
+	    }    
+	    if(fileNo2 == 0){
+	    	alert("검증 데이터 하나이상 첨부해주세요!");
+	    	return;
+	    }    
+	    if(fileNo3 == 0){
+	    	alert("테스트 데이터 하나이상 첨부해주세요!");
+	    	return;
+	    }    
+	    
+	    let formData = new FormData();
+	    formData.append("url", '/services/sandbox/datasets/images/{{image_dataset_id}}/file-upload');
+	    formData.append("creator_id", 'creator');
+	    formData.append("modifier_id", 'modifier');
+	    formData.append("user_id", 'user_id');
+	    formData.append("menu_id", 'menu_id');
+	//    console.log('url : '+formData.get('url'));
+	    for (let i = 0; i < trainDataFiles.length; i++) {
+	        formData.append("trainDataFiles", trainDataFiles[i]);
+	    }
+	    for (let i = 0; i < validDataFiles.length; i++) {
+	        formData.append("validDataFiles", validDataFiles[i]);
+	    }
+	    for (let i = 0; i < testDataFiles.length; i++) {
+	   		formData.append("testDataFiles", testDataFiles[i]);
+	    }
+	
+	    $.ajax({
+	        type: 'POST',
+	        enctype: "multipart/form-data",
+	        url: url+'/file/imagesDatasetsFileUpload',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: formData,
+	        processData: false,
+	   	    contentType: false,        
+	    }).done(function (data) {
+	  		let message = JSON.stringify(data.return_msg);
+	  		alert(message.replace(/\"/gi, ''));    	
+	  		jsList();
+	  		
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	}
+}
+
+const fileCheck = function(id){
+	$('#file_'+id).trigger("click");
+}
+
+//모달 등록창
+const viewModal = function(dtl_code_nm, dtl_code){
+	$('#dtl_code_nm').val(dtl_code_nm+" 데이터");
+	$('#dtl_code').val(dtl_code);
+	
+	imageDatasetsDetailList(init_page, init_size_per_page);
+	$('#add_modal').modal('show');
+}
+
+//모달 닫기
+const closeModal = function(){
+	$('#add_modal').modal('hide');
+}
+
+//이미지 관리 페이지 이동
+const jsList = function(){
+	location.href = '/sandbox/dataset/imageDataset/list';
+}
+
+//값 셋팅
+const selClick = function(file_index, file_cnt){
+	$('#file_index').val(file_index);
+	$('#file_cnt').val(file_cnt);
+}
+
+//페이징 함수 호출
+const pagingFun = function(page, size_per_page){
+	imageDatasetsDetailList(page, size_per_page);
+}
+
+imageDatasetDetail();
+commonCodeImagesDatasetsCode();
+
+</script>		

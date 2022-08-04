@@ -1,0 +1,617 @@
+{{>layout/header}}
+
+<div class="right_col" role="main">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="x_panel">
+				<div class="x_title">
+					<h2>HOME &gt; Adaptor 관리 &gt; 접속유형 항목관리</h2>
+					<div class="clearfix"></div>
+				</div>
+				<div class="x_content">
+					<div class="col-12 col-md-12">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="x_panel">
+									<div class="cont_title_box">
+										<h3>접속 유형상세</h3>
+									</div>
+									<div class="x_content">
+										<div class="table_btns mb-2">
+											<button class="btn btn-success" onclick="instanceSetAdd();">추가</button>
+											<button class="btn btn-danger" onclick="dpIngestItPpInfoDelChk();">삭제</button>
+											<button class="btn btn-primary" onclick="dpIngestItPpInfoSave();">저장</button>
+										</div>
+										<div class="table_responsive">
+											<input type="hidden" id="connect_id" value=""> 
+											<input type="hidden" id="instanceSetAddCnt" value="0"> 
+											<table class="table table-striped table-bordered bulk_action" style="width: 100%" id="instanceSetData">
+												<colgroup>
+													<col width="10px">
+													<col width="10px">
+													<col width="35px">
+													<col width="45px">
+												</colgroup>
+												<thead>
+													<tr>
+														<th style="text-align: center;">선택</th>
+														<th style="text-align: center;">순번</th>
+														<th style="text-align: center;">수집방식</th>
+														<th style="text-align: center;">수집유형</th>
+													</tr>
+												</thead>
+												<tbody id="dpIngestItPpType">
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row" id="instanceSetDataConfigArea" style="display:none;">
+							<div class="col-md-12">
+								<div class="x_panel">
+									<h3>접속정보 설정</h3>
+									<div class="x_content">
+										<div class="table_btns mb-2">
+											<button class="btn btn-primary" onclick="instanceSetConfigAdd();">+ 추가</button>
+											<button class="btn btn-danger" onclick="dpIngestItPpDtDelChk();">- 삭제</button>
+											<button class="btn btn-success" onclick="dpIngestItPpDtSave();">저장</button>
+										</div>
+										<div class="table_responsive">
+											<input type="hidden" id="hiddenConnectId" value=""> 
+											<input type="hidden" id="hiddenClctTy" value=""> 
+											<input type="hidden" id="hiddenClctMthd" value="">
+											<table class="table table-striped table-bordered bulk_action" style="width: 100%" id="instanceSetDataConfig">
+												<colgroup>
+													<col width="12px">
+													<col width="12px">
+													<col width="25px">
+													<col width="26px">
+													<col width="25px">
+												</colgroup>
+												<thead>
+													<tr>
+														<th style="text-align: center;">선택</th>
+														<th style="text-align: center;">순서</th>
+														<th style="text-align: center;">항목ID(Key)</th>
+														<th style="text-align: center;">항목명</th>
+														<th style="text-align: center;">항목설명</th>
+													</tr>
+												</thead>
+												<tbody id="dpIngestItPpInfo">
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+<div id="divForm"></div>
+
+{{>layout/footer}}
+
+<script>
+const commonUrl = '/common';
+const url = '/adaptor';
+
+let dpIngestItPpTypeCnt = 0;
+let dpIngestItPpInfoCnt = 0;
+
+//수집방식
+const dpCmCodesClctMthdInput = function (group_code) {
+	
+    const data = {
+   		url: '/dp/cm/codes/clct_mthd?group_code='+group_code,
+    };		
+    
+    $.ajax({
+        type: 'POST',
+        url: commonUrl+'/dpCmCodesClctMthdInput',
+        dataType: 'json',
+        contentType: 'application/json; charset-utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+	  	  if (data != null) {
+		  	   	if(data.contents != ""){    	   
+	    	   		 $.each(data.contents, function (idx, el) {
+		    	   		 $("#divForm").append($("<input type='hidden' value='"+el.dtl_code_nm+"' id='"+el.dtl_code+"'>"));
+		    	   		 
+		    	   		 dpCmCodesClctTyInput(el.etc_code);
+	 	     	     });
+		  	   	}
+	  	  }
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });
+    
+}
+
+//수집유형
+const dpCmCodesClctTyInput = function (group_code) {
+	
+    const data = {
+   		url: '/dp/cm/codes/clct_ty?group_code='+group_code,
+    };		
+    
+    $.ajax({
+        type: 'POST',
+        url: commonUrl+'/dpCmCodesClctTyInput',
+        dataType: 'json',
+        contentType: 'application/json; charset-utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+		  	   	if(data.contents != ""){    	    	
+	    	   		 $.each(data.contents, function (idx, el) {
+	    	   			$("#divForm").append($("<input type='hidden' value='"+el.dtl_code_nm+"' id='"+el.dtl_code+"'>"));
+	 	     	     });
+		  	   	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });
+    
+}
+
+//수집방식
+const dpCmCodesClctMthd = function (group_code, id) {
+	
+	$("#"+id).empty();
+	
+    const data = {
+   		url: '/dp/cm/codes/clct_mthd?group_code='+group_code,
+    };		
+    
+    $.ajax({
+        type: 'POST',
+        url: commonUrl+'/dpCmCodesClctMthd',
+        dataType: 'json',
+        contentType: 'application/json; charset-utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+		  	   	if(data.contents != ""){    	    	
+   					 let selOp = '<option value="">선택</option>';  
+	    	   		 $.each(data.contents, function (idx, el) {
+ 	    				selOp += '<option value="'+el.dtl_code+'|'+el.etc_code+'" value2="'+el.etc_code+'">' + el.dtl_code_nm + '</option>';
+	 	     	     });
+		 	     	 $("#"+id).append(selOp);        	
+		  	   	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });
+    
+}
+
+//수집방식 선택 
+const clctMthdType = function(val){
+	let group_code = val.substring(val.indexOf('|')+1);
+	dpCmCodesClctTy(group_code, 'clct_ty');
+}
+
+//수집유형
+const dpCmCodesClctTy = function (group_code, id) {
+	
+	$("#"+id).empty();
+	
+    const data = {
+   		url: '/dp/cm/codes/clct_ty?group_code='+group_code,
+    };		
+    
+    $.ajax({
+        type: 'POST',
+        url: commonUrl+'/dpCmCodesClctTy',
+        dataType: 'json',
+        contentType: 'application/json; charset-utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+		  	   	if(data.contents != ""){    	    	
+   					 let selOp = '<option value="">선택</option>';  
+	    	   		 $.each(data.contents, function (idx, el) {
+ 	    				selOp += '<option value="'+el.dtl_code+'">' + el.dtl_code_nm + '</option>';
+	 	     	     });
+		 	     	 $("#"+id).append(selOp);        	
+		  	   	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });
+    
+}
+
+//접속정보 설정 추가
+const instanceSetConfigAdd = function(){
+	
+	  let insertTr = '';
+	  let i = 0;	
+	  insertTr += '<tr>';
+	  insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList" id="checkConfig_'+dpIngestItPpInfoCnt+1+'" value=""></td>';
+	  insertTr += ' <td style="text-align: center;">'+(++dpIngestItPpInfoCnt)+'</td>';
+	  insertTr += ' <td style="text-align: center;"><input type="text" id="configItem" value=""></td>';
+	  insertTr += ' <td style="text-align: center;"><input type="text" id="configIteNm" value=""></td>';
+	  insertTr += ' <td style="text-align: center;"><input type="text" id="configItemDescribed" value=""></td>';
+      insertTr += '</tr>';
+	  
+	  $("#dpIngestItPpInfo").append(insertTr);
+}
+
+//접속정보 설정 조회
+const dpIngestItPpInfo = function(connect_id){
+	
+	$("#connect_id").val(connect_id);
+	
+    const data = {
+	   		url: '/dp/ingest/instance/property/info',
+	   		connect_id: connect_id,	
+	   		clct_mthd: $("#clct_mthd_"+connect_id).val(),	
+	   		clct_ty: $("#clct_ty_"+connect_id).val(),	
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',
+	    };		
+	    
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestItPpInfo',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+ 	    	  $("#dpIngestItPpInfo").empty();
+     	      let insertTr = '';
+ 		      let i = 0;	
+		  	  if (data != null) {
+			  	   	if(data.contents != ""){    	
+			  	   		dpIngestItPpInfoData = data.contents;
+    			  	    $.each(data.contents, function (idx, el) {
+    		     	          insertTr += '<tr>';
+    		     		      insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList" id="checkConfig_'+i+'" value="'+el.connect_id+'"></td>';
+    		     		      insertTr += ' <td style="text-align: center;">'+(++i)+'</td>';
+    		     		      insertTr += ' <td style="text-align: center;"><input type="text" id="configItem" value="'+el.item+'"></td>';
+    		     		      insertTr += ' <td style="text-align: center;"><input type="text" id="configIteNm" value="'+el.item_nm+'"></td>';
+    		     		      insertTr += ' <td style="text-align: center;"><input type="text" id="configItemDescribed" value="'+el.item_described+'"></td>';
+    		                  insertTr += '</tr>';
+    			  	    });
+    	          	    $("#dpIngestItPpInfo").append(insertTr);		    	   			 
+			  	   	}
+		  	  }
+    		  dpIngestItPpInfoCnt = i;
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });		
+}
+
+//접속유형 체크
+const checkOnlyOne = function(element, id) {
+
+    const checkboxes = document.getElementsByName("checkList");
+    checkboxes.forEach((cb) => {
+        cb.checked = false;
+    })
+    element.checked = true;
+	
+    if(id === '0'){
+	    $("#instanceSetDataConfigArea").hide();
+    }else{
+	    $("#instanceSetDataConfigArea").show();
+	    dpIngestItPpInfo(id);
+    }
+}
+
+//접속 유형상세 추가 
+const instanceSetAdd = function(){
+	
+	if($("#instanceSetAddCnt").val() === '0'){
+		let insertTr = '';
+	    insertTr += '<tr>';
+	    insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkList" onclick=checkOnlyOne(this,"0"); id="check_'+dpIngestItPpTypeCnt+'" value=""></td>';
+	    insertTr += ' <td style="text-align: center;">'+(++dpIngestItPpTypeCnt)+'</td>';
+	    insertTr += ' <td style="text-align: center;"><select id="clct_mthd" onchange=clctMthdType(this.value)></select></td>';
+	    insertTr += ' <td style="text-align: center;"><select id="clct_ty"></select></td>';
+	    insertTr += '</tr>';
+	    $("#dpIngestItPpType").append(insertTr);	
+	    $("#instanceSetAddCnt").val(dpIngestItPpTypeCnt);
+	    
+	    dpCmCodesClctMthd('D34', 'clct_mthd');
+	}
+}
+
+//접속유형 항목관리 리스트 조회
+const dpIngestItPpType = function(){
+	
+    const data = {
+	   		url: '/dp/ingest/instance/property/type',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',
+	    };		
+	    
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestItPpType',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+ 	    	  $("#dpIngestItPpType").empty();
+		  	  if (data != null) {
+			  	   	if(data.contents != ""){
+			  	   		
+			  	   		dpIngestItPpTypeData = data.contents;
+
+			  	   		let insertTr = '';
+    		     	    let i = 0;	
+    			  	    $.each(data.contents, function (idx, el) {
+    		     	          insertTr += '<tr>';
+    		     		      insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkList" onclick=checkOnlyOne(this,"'+el.connect_id+'"); id="check_'+el.connect_id+'" value="'+el.connect_id+'"></td>';
+    		     		      insertTr += ' <td style="text-align: center;">'+(++i)+'</td>';
+    		     		      insertTr += ' <td style="text-align: center;"><select id="clct_mthd_'+el.connect_id+'"><option value="'+isEmpty(el.clct_mthd)+'">'+isEmpty($("#"+el.clct_mthd).val())+'</option></select></td>';
+    		     		      insertTr += ' <td style="text-align: center;"><select id="clct_ty_'+el.connect_id+'"><option value="'+isEmpty(el.clct_ty)+'">'+isEmpty($("#"+el.clct_ty).val())+'</option></select></td>';
+    		                  insertTr += '</tr>';
+    			  	    });
+    			  	    
+    			  	  	dpIngestItPpTypeCnt = i;
+    			  	    
+    	          	    $("#dpIngestItPpType").append(insertTr);		    	   			 
+			  	   	}
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+}
+
+//접속정보 설정 선택 삭제
+const dpIngestItPpDtDel = function(connect_id, item){
+
+	let message = '';
+	const data = {
+	   		url: '/dp/ingest/instance/property/detail/delete',
+	   		connect_id: connect_id,	
+	   		clct_mthd: $("#clct_mthd_"+connect_id).val(),	
+	   		clct_ty: $("#clct_ty_"+connect_id).val(),	
+	   		item: item,	
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',
+	    };		
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestItPpDtDel',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	  		
+	  	message = JSON.stringify(data.return_msg);
+	    	
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	    
+	    if(message !==''){
+		  	alert(message.replace(/\"/gi, ''));
+	    }
+}
+
+//접속정보 설정 삭제전 체크
+const dpIngestItPpDtDelChk = function(){
+	
+	if(confirm('삭제 하시겠습니까?')) {
+		let connect_id;
+	    $("input[name='checkList']:checked").each(function(e){
+	        connect_id = $(this).val();
+	    });
+	    
+	    $.each($("#instanceSetDataConfig tbody tr"), function(){
+	    
+	    	let item = $(this).find("#configItem").val();
+			const data = {
+			   		url: '/dp/ingest/instance/property/detail/delete/check',
+			   		clct_mthd: $("#clct_mthd_"+connect_id).val(),	
+			   		clct_ty: $("#clct_ty_"+connect_id).val(),	
+			   		item: item,	
+			   		user_id: 'user00',	
+			   		menu_id: 'menu_id',
+			    };		
+			    $.ajax({
+			        type: 'POST',
+			        url: url+'/dpIngestItPpDtDelChk',
+			        dataType: 'json',
+			        contentType: 'application/json; charset-utf-8',
+			        data: JSON.stringify(data)
+			    }).done(function (data) {
+			  		
+			    	if (data != null) {
+				  	   	if(data.contents != ""){    	
+			    	   		 $.each(data.contents, function (idx, el) {
+			    	   			if(el.chk_yn == 'N'){
+			    	   				dpIngestItPpDtDel(connect_id, item);
+			    	   			}
+			 	     	     });
+				  	   	}
+			  	  } 
+			    	
+			    	
+			    }).fail(function (error) {
+			        alert(JSON.stringify(error));
+			    });		
+	    });   	
+	}
+}
+
+//접속유형 항목관리 선택 삭제
+const dpIngestItPpInfoDel = function(connect_id){
+	
+	const data = {
+	   		url: '/dp/ingest/instance/property/info/delete',
+	   		connect_id: connect_id,	
+	   		clct_mthd: $("#clct_mthd_"+connect_id).val(),	
+	   		clct_ty: $("#clct_ty_"+connect_id).val(),	
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',
+	    };		
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestItPpInfoDel',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	  		
+	  		let message = JSON.stringify(data.return_msg);
+	  		alert(message.replace(/\"/gi, ''));
+	  		dpIngestItPpType();
+	  		
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });		
+}
+
+//접속유형 항목관리 삭제전 체크
+const dpIngestItPpInfoDelChk = function(){
+	
+	if(confirm('삭제 하시겠습니까?')) {
+		var len = $("input[name='checkList']:checked").length;
+		if(len === 0){
+			alert("하나이상 선택해주세요!");
+			return;
+		}
+		
+		let connect_id;
+	    $("input[name='checkList']:checked").each(function(e){
+	        connect_id = $(this).val();
+	    });
+	    
+		const data = {
+		   		url: '/dp/ingest/instance/property/info/delete/check',
+		   		connect_id: connect_id,	
+		   		clct_mthd: $("#clct_mthd_"+connect_id).val(),	
+		   		clct_ty: $("#clct_ty_"+connect_id).val(),	
+		   		user_id: 'user00',	
+		   		menu_id: 'menu_id',
+		    };		
+		    $.ajax({
+		        type: 'POST',
+		        url: url+'/dpIngestItPpDtDelChk',
+		        dataType: 'json',
+		        contentType: 'application/json; charset-utf-8',
+		        data: JSON.stringify(data)
+		    }).done(function (data) {
+		  		
+		    	if (data != null) {
+			  	   	if(data.contents != ""){    	
+		    	   		 $.each(data.contents, function (idx, el) {
+		    	   			if(el.chk_yn == 'N'){
+		    	   				
+		    	   				dpIngestItPpInfoDel(connect_id);
+		    	   			}
+		 	     	     });
+			  	   	}
+		  	  } 
+		    	
+		    	
+		    }).fail(function (error) {
+		        alert(JSON.stringify(error));
+		    });
+	}
+}
+
+//Instance 설정정보 저장
+const dpIngestItPpDtSave = function(){
+
+	if(confirm('저장 하시겠습니까?')) {
+		let connect_id;
+	    $("input[name='checkList']:checked").each(function(e){
+	        connect_id = $(this).val();
+	    });
+	    
+	    const instanceSetConfigSaveData = [];
+	    let i = 1;
+	    $.each($("#instanceSetDataConfig tbody tr"), function(){
+	        const contents = {
+	            item : $(this).find("#configItem").val(),
+	            item_nm : $(this).find("#configIteNm").val(),
+	            item_described : $(this).find("#configItemDescribed").val(),
+	            display_seq : i
+	        };
+	        instanceSetConfigSaveData.push(contents);
+	        i++;
+	    });    
+	    
+		const data = {
+		   		url: '/dp/ingest/instance/property/detail/save',
+		   		connect_id: connect_id,	
+		   		clct_mthd: $("#clct_mthd_"+connect_id).val(),	
+		   		clct_ty: $("#clct_ty_"+connect_id).val(),	
+		   		user_id: 'user00',	
+		   		menu_id: 'menu_id',
+		   		contents: instanceSetConfigSaveData,
+		    };		
+		    $.ajax({
+		        type: 'POST',
+		        url: url+'/dpIngestItPpInfoDel',
+		        dataType: 'json',
+		        contentType: 'application/json; charset-utf-8',
+		        data: JSON.stringify(data)
+		    }).done(function (data) {
+		  		
+		  		let message = JSON.stringify(data.return_msg);
+		  		alert(message.replace(/\"/gi, ''));
+		    	
+		    }).fail(function (error) {
+		        alert(JSON.stringify(error));
+		    });	
+	}
+}
+
+//접속유형 항목관리 저장
+const dpIngestItPpInfoSave = function(){
+	
+	if(confirm('저장 하시겠습니까?')) {
+		const data = {
+		   		url: '/dp/ingest/instance/property/info/save',
+		   		clct_mthd: $('#clct_mthd').val().substring(0,$('#clct_mthd').val().indexOf('|')),	
+		   		clct_ty: $("#clct_ty").val(),	
+		   		user_id: 'user00',	
+		   		menu_id: 'menu_id',
+		    };		
+		    $.ajax({
+		        type: 'POST',
+		        url: url+'/dpIngestItPpInfoSave',
+		        dataType: 'json',
+		        contentType: 'application/json; charset-utf-8',
+		        data: JSON.stringify(data)
+		    }).done(function (data) {
+		  		
+		  		let message = JSON.stringify(data.return_msg);
+		  		alert(message.replace(/\"/gi, ''));
+		    	
+		  		$("#instanceSetAddCnt").val("0");
+		  		dpIngestItPpType();
+		  		
+		    }).fail(function (error) {
+		        alert(JSON.stringify(error));
+		    });	
+	}
+}
+
+dpCmCodesClctMthdInput('D34');
+
+setTimeout(dpIngestItPpType, 300);
+</script>
+

@@ -1,0 +1,164 @@
+{{>layout/header}}
+
+        <div class="right_col" role="main">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="x_panel"> 
+                <div class="x_title"> 
+                  <h2>HOME > 데이터 분석 > 데이터 분석 결과 조회 > 데이터 분석 결과 상세 조회</h2>
+                  <div class="clearfix"> </div>
+                </div>
+                <div class="x_content"> <br>
+                  <div class="scenario_depth"> 
+                    <ul>
+                      <li class="now_depth">데이터 로딩</li>
+                      <li class="temporary_storage">데이터 전처리</li>
+                      <li class="save">결과비교</li>
+                      <li>데이터 재학습 결과</li>
+                      <li>데이터 분석 결과</li>
+                    </ul>
+                  </div>
+                  <div class="progress_tab">
+                    <div class="tab_item" id="tab-0">
+                      <h3 class="mb-4"><b>데이터 전처리</b></h3>
+                      <div class="row mb-4">
+						<div class="col-12 col-md-10">
+	                      <div class="form-group row col-12 col-md-12 mx-0">
+	                        <label class="control-label">전처리 결과</label>
+	                        <div class="form-control_box">
+	                          <input class="form-control" type="text" placeholder="">
+	                        </div>
+	                      </div>
+	                    </div>
+						<div class="col-12 col-md-2 btn_search_box">
+	                      <button class="btn btn-dark btn-sm">데이터정보</button>
+	                    </div>                      
+                      </div>
+                      <div class="row">
+                        <div class="col-12 col-md-6 mx-0">
+                          <h4 class="center_title">* 데이터 전처리 결과 요약</h4>
+                          <div class="table_responsive " style="width:100%; height:270px; overflow:auto">
+                            <table class="table table-striped table-bordered bulk_action">
+                              <colgroup>
+                              </colgroup>
+                              <thead>
+                                <tr>
+                                  <th></th>
+                                  <th>pm10</th>
+                                  <th>co2</th>
+                                  <th>no2</th>
+                                  <th>speed</th>
+                                  <th>humidity</th>
+                                  <th>humidity</th>
+                                  <th>humidity</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>Count</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                </tr>
+                                <tr>
+                                  <td>Count</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                </tr>
+                                <tr>
+                                  <td>Count</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                </tr>
+                                <tr>
+                                  <td>Count</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                </tr>
+                                <tr>
+                                  <td>Count</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                </tr>
+                                <tr>
+                                  <td>Count</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                </tr>
+                                <tr>
+                                  <td>Count</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                  <td>x</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          <div class="right_btns">
+                            <h3>** 결과 Raw 데이터 100개는 상세보기를 통해 확인 가능&nbsp;</h3>
+                            <button class="btn btn-primary">상세보기</button>
+                          </div>
+                        </div>
+                        <div class="col-12 col-md-6 mx-0">
+                          <h4 class="center_title">* 데이터 전처리 결과 그래프 조회</h4>
+                          <canvas id="mybarChart"></canvas>
+                        </div>
+                      </div>
+                      <div class="right_btns mt-4">
+                        <button class="btn btn-warning">임시저장</button>
+                        <button class="btn btn-success tab_next" onclick="step3();">다음</button>
+                        <button class="btn btn-primary" onclick="list();">목록</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+                        
+{{>layout/footer}}        
+
+<script>
+	function list(){
+		location.href = '/sandbox/result/analysisResult/list';
+	}
+	function step3(){
+		location.href = '/sandbox/result/timeseriesAnalysis/step3';
+	}
+</script>
+
+

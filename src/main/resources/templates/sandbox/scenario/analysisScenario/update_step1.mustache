@@ -1,0 +1,500 @@
+{{>layout/header}}
+
+        <div class="right_col" role="main">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="x_panel"> 
+                <div class="x_title"> 
+                  <h2>시나리오</h2>
+                  <div class="clearfix"> </div>
+                </div>
+                <div class="x_content"> <br>
+                  <div class="scenario_depth"> 
+                    <ul>
+                      <li id="ps1">시나리오 작성</li>
+                      <li id="ps2">분석모델 설정</li>
+                      <li id="ps3">전처리 모델 설정</li>
+                      <li id="ps4">분석 대상 설정</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <div class="tab_item">
+                      <h3 class="mb-4">▣ 분석 시나리오 이름 수정</h3>
+                      <div class="row mb-4">
+                        <div class="form-group row col-12 col-md-12 mx-0">
+                          <label class="control-label">시나리오 한글 이름 <span class="red">*</span></label>
+                          <div class="form-control_box duplicate_box">
+                            <input class="form-control" type="text" id="scenario_nm_kor">
+                            <input class="form-control" type="hidden" name="temp_scenario_nm_kor" id="temp_scenario_nm_kor">
+                            <button class="btn btn-danger btn-sm" onclick="analysisModelsNameDupCheck();">중복체크</button>
+                            <div id="duplicate_status">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group row col-12 col-md-12 mx-0">
+                          <label class="control-label">시나리오 영문 이름 <span class="red">*</span></label>
+                          <div class="form-control_box duplicate_box">
+                            <input class="form-control" type="text" id="scenario_nm_eng" oninput="handleOnInput(this);">
+                          </div>
+                        </div>
+                      </div>
+                      <h3 class="mb-4">▣ 분석 시나리오 세부 정보 수정</h3>
+                      <div class="row">
+                      	<div class="col-12 col-md-6 mx-0">
+	                        <h4 class="mb-2 center_title"> 분석 시나리오 선택</h4>
+	                       	<div class="form-group">
+		                      	<table class="table table-bordered bulk_action table_center" id="sandboxTable1">
+		                       		<colgroup> 
+		                         		<col width="50%">
+		                       		</colgroup>
+		                       		<thead>
+				                        <tr id="anals_use_prpos_cd_radio"> 
+				                        </tr>
+				                        <tr id="anals_use_prpos_cd">
+				                        </tr>
+		                       		</thead>
+		                     	</table>
+	                     	</div>
+                     	</div>
+	                    <div class="col-12 col-md-6 mx-0">
+	                      	<h4 class="mb-2 center_title"> 분석 시나리오 세부 설정</h4>
+	                      	<div class="form-group">
+	                      		<table class="table table-bordered bulk_action table_center" id="sandboxTable2">
+	                       			<colgroup> 
+	                         			<col width="50%">
+	                       			</colgroup>
+			                       	<thead>
+			                        	<tr id="anals_detail_setting_cd_radio">
+			                         	</tr>
+			                         	<tr id="anals_detail_setting_cd">
+			                         	</tr>
+			                       	</thead>
+			                	</table>
+	                      	</div>
+	                  	</div>
+                    </div>
+                    <h4 class="center_title">분석 시나리오 설명</h4>
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-12 mx-0">
+                        <label class="control-label">시나리오 설명</label>
+                        <div class="form-control_box">
+                          <input class="form-control" type="text" id="scenario_desc">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="right_btns mt-4">
+                      <button class="btn btn-success" onclick="btnSave();">수정</button>
+                      <button class="btn btn-primary" onclick="jsList();">목록</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+	</div>
+	<input type="hidden" name="regst_status_cd" id="regst_status_cd"/>
+    <input type="hidden" name="model_setup_status_cd" id="model_setup_status_cd"/>
+    <input type="hidden" name="pretreat_status_cd" id="pretreat_status_cd"/>
+    <input type="hidden" name="target_setup_status_cd" id="target_setup_status_cd"/>
+    <input type="hidden" name="last_status_cd" id="last_status_cd"/>
+        
+{{>layout/footer}}        
+
+<script>
+const commonUrl = '/sandbox/common';
+const url = '/sandbox/scenario/analysisScenario';
+
+const progressCd1 = 'B03001';	//등록 중
+const progressCd2 = 'B03002';	//등록 완료
+
+const setupCd1 = 'B01001'	//분석 대상만 설정
+const setupCd2 = 'B01002'	//분석 모델, 전처리 모델, 분석 대상 설정
+
+const lastCd = 'B02008';	//최종 상태 코드
+
+let duplicateYn = '';		//중복 체크 여부
+
+//시나리오 한글 이름 변경시 중복 체크 값 초기화
+$('#scenario_nm_kor').on('keyup', function(){
+	duplicateYn = '';
+});
+
+$(document).ready(function(){
+	progressBar();
+});
+
+//시나리오 등록 단계별 상태
+const scenarioEnrollStepStatus = function (){
+	let scenario_id = '{{scenario_id}}';
+	if(!scenario_id){
+		return;
+	}
+	
+	const data = {
+   		url: '/services/sandbox/scenarios/'+scenario_id+'/enroll-status',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+    };
+	
+	$.ajax({
+        type: 'POST',
+        url: url+'/scenarioEnrollStepStatus',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data),
+        async: false,
+    }).done(function (data) {
+    	
+    	 if (data != null) {
+   	    	
+   	    	if(data.contents != ""){
+   	    		$("#regst_status_cd").val(data.contents.regst_status_cd);
+   	    		$("#model_setup_status_cd").val(data.contents.model_setup_status_cd);
+   	    		$("#pretreat_status_cd").val(data.contents.pretreat_status_cd);
+   	    		$("#target_setup_status_cd").val(data.contents.target_setup_status_cd);
+   	    		$("#last_status_cd").val(data.contents.last_status_cd);
+   	    		
+   	    		if(data.contents.last_status_cd != lastCd){
+   	    			jsAdd(scenario_id);
+   	    		}
+   	    	}
+    	 }
+  		
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//분석_사용_용도_코드
+const commonCodeAnalysisUsePurpose = function (){
+	const data = {
+       		url: '/services/sandbox/common-code/analysis-usage',
+        };		
+        $.ajax({
+            type: 'POST',
+            url: commonUrl+'/commonCodeAnalysisUsePurpose',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data),
+            async: false
+        }).done(function (data) {
+ 		  	if (data != null) {
+ 		  	   	if(data.contents != ""){
+ 		  	   		 $("#anals_use_prpos_cd_radio").empty();
+					 $("#anals_use_prpos_cd").empty();
+    				 let radioOp = '';
+    				 let insertTr = '';
+	    	   		 $.each(data.contents, function (idx, el) {
+	    	   			radioOp += '<th>';
+	    	   			radioOp += '	<input id="radio'+idx +'" type="radio" name="anals_use_prpos_cd" value="'+el.dtl_code+'"';
+	    	   			if(idx==0){
+	    	   				radioOp += ' checked';
+	    	   			}
+	    	   			radioOp += '>';
+	    	   			radioOp += '</th>';
+	    	   			insertTr += '<th>'+el.dtl_code_nm+'</th>'
+	 	     	     });
+		 	     	 $("#anals_use_prpos_cd_radio").append(radioOp);        	
+		 	     	 $("#anals_use_prpos_cd").append(insertTr);        	
+ 		  	   	}
+ 		  	}
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+}
+
+//분석_시나리오_설정_코드
+const commonCodeAnalysisScenarioSetting = function (){
+	const data = {
+       		url: '/services/sandbox/common-code/analysis-scenario-setting',
+        };		
+        $.ajax({
+            type: 'POST',
+            url: commonUrl+'/commonCodeAnalysisScenarioSetting',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data),
+            async: false
+        }).done(function (data) {
+ 		  	if (data != null) {
+ 		  	   	if(data.contents != ""){
+ 		  	   		 $("#anals_detail_setting_cd_radio").empty();
+					 $("#anals_detail_setting_cd").empty();
+    				 let radioOp = '';
+    				 let insertTr = '';
+	    	   		 $.each(data.contents, function (idx, el) {
+	    	   			radioOp += '<th>';
+	    	   			radioOp += '	<input id="setting_radio'+idx +'" type="radio" name="anals_detail_setting_cd" value="'+el.dtl_code+'"';
+	    	   			if(idx==0){
+	    	   				radioOp += ' checked';
+	    	   			}
+	    	   			radioOp += '>';
+	    	   			radioOp += '</th>';
+	    	   			insertTr += '<th>'+el.dtl_code_nm+'</th>'
+	 	     	     });
+		 	     	 $("#anals_detail_setting_cd_radio").append(radioOp);        	
+		 	     	 $("#anals_detail_setting_cd").append(insertTr);        	
+ 		  	   	}
+ 		  	}
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+}
+
+//시나리오명 중복 체크
+const analysisModelsNameDupCheck = function (t){
+	let scenario_nm_kor = $("#scenario_nm_kor").val();
+	let temp_scenario_nm_kor = $("#temp_scenario_nm_kor").val();
+	
+	if(scenario_nm_kor == temp_scenario_nm_kor){
+		if(scenario_nm_kor != '') {
+			$("#duplicate_status").html('<div class="duple_text success_text">* 사용 가능합니다.</div>');
+			duplicateYn = 'N';
+			return;
+		}
+	}
+	
+	if(scenario_nm_kor == '') {
+        alert('시나리오 한글 이름을 입력하세요!');
+        $("#scenario_nm_kor").focus();
+        return true;
+    }
+	
+	const data = {
+       		url: '/services/sandbox/scenarios/name/dup-check?scenario_nm_kor='+scenario_nm_kor,
+       		user_id: 'user00',	
+       		menu_id: 'menu_id',
+        };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/analysisModelsNameDupCheck',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data),
+    }).done(function (data) {
+ 	if (data != null) {
+ 		let text = ''
+ 	   	if(data.contents.duplicated){
+	 	   	duplicateYn = 'Y';
+	 	   	text = '<div class="duple_text danger_text">* 이미 사용중인 ID 입니다.</div>';
+	   		$("#scenario_nm_kor").focus();
+ 	   	}else{
+	 	   	duplicateYn = 'N';
+	 	   	text = '<div class="duple_text success_text">* 사용 가능합니다.</div>';
+ 	   	}
+ 		
+ 		$("#duplicate_status").html(text);
+ 	}
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });
+    
+}
+
+//시나리오 작성 수정
+const scenarioWritingUpdate = function (){
+	let scenario_nm_kor = $('#scenario_nm_kor').val();
+	let temp_scenario_nm_kor = $("#temp_scenario_nm_kor").val();
+	let scenario_nm_eng = $('#scenario_nm_eng').val();
+	let scenario_desc = $('#scenario_desc').val();
+	let anals_use_prpos_cd = $('input:radio[name="anals_use_prpos_cd"]:checked').val();
+	let anals_detail_setting_cd = $('input:radio[name="anals_detail_setting_cd"]:checked').val();
+	let scenario_id = '{{scenario_id}}';
+	
+	let regstCd = progressCd2;
+	let confirmMsg = '분석 시나리오 설정의 변경이 생기면 저장되어 있는 “분석모델”, “전처리 모델”, “분석 대상” 정보가 사라집니다. 진행하시겠습니까?';
+	
+	if(!scenario_nm_eng){
+		alert("시나리오 영문 이름을 입력하세요.");
+		$("#scenario_nm_eng").focus();
+		return;
+	}
+	
+	if(scenario_nm_kor == temp_scenario_nm_kor){
+		duplicateYn = 'N';
+	}
+	
+	if(duplicateYn != 'N'){
+		let text = '';
+		if(duplicateYn == 'Y'){
+			text = '<div class="duple_text danger_text">* 이미 사용중인 ID 입니다.</div>';
+		}else{
+			alert("중복 체크를 해주세요.");
+		}
+		$("#scenario_nm_kor").focus();
+		
+		if(text){
+			$("#duplicate_status").html(text);
+		}
+		return;
+	}
+	
+	const data = {
+   		url: '/services/sandbox/scenarios/'+scenario_id+'/scenario-writing/update',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+   		modifier_id: 'modifier_id',
+   		scenario_nm_kor: scenario_nm_kor,
+   		scenario_nm_eng: scenario_nm_eng,
+   		scenario_desc: scenario_desc,
+   		anals_use_prpos_cd: anals_use_prpos_cd,
+   		anals_scenario_setup_cd: anals_detail_setting_cd,
+   		regst_status_cd: regstCd,
+    };
+	if(confirm(confirmMsg)){
+		$.ajax({
+	        type: 'POST',
+	        url: url+'/scenarioWritingUpdate',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data),
+	    }).done(function (data) {
+	  		let message = JSON.stringify(data.return_msg);
+			alert("수정 되었습니다.");
+			jsNext(1, scenario_id);
+	  		
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });
+	}
+	
+}
+
+//시나리오 작성 상세 조회
+const scenarioWritingDetail = function (){
+	let scenario_id = '{{scenario_id}}';
+	if(!scenario_id){
+		return;
+	}
+	
+	const data = {
+   		url: '/services/sandbox/scenarios/'+scenario_id+'/scenario-writing/detail',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+    };
+	
+	$.ajax({
+        type: 'POST',
+        url: url+'/scenarioWritingDetail',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data),
+    }).done(function (data) {
+    	if (data != null) {
+  	    	
+  	    	if(data.contents != ""){
+  	    		$('#scenario_nm_kor').val(data.contents.scenario_nm_kor);
+  	    		$('#temp_scenario_nm_kor').val(data.contents.scenario_nm_kor);
+  	    		$('#scenario_nm_eng').val(data.contents.scenario_nm_eng);
+  	    		$('#scenario_desc').val(data.contents.scenario_desc);
+  	    		$('input:radio[name="anals_use_prpos_cd"]:input[value="'+data.contents.anals_use_prpos_cd+'"]').prop('checked',true);
+  	    		$('input:radio[name="anals_detail_setting_cd"]:input[value="'+data.contents.anals_scenario_setup_cd+'"]').prop('checked',true);
+  	    	}
+    	}
+  		
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+	
+}
+
+//다음 버튼
+const btnSave = function(type){
+	scenarioWritingUpdate(type);
+}
+
+//임시저장 & 다음 단계 이동
+const jsNext = function(step, scenario_id){
+	let anals_use_prpos_cd = $('input:radio[name="anals_use_prpos_cd"]:checked').val();
+	let anals_detail_setting_cd = $('input:radio[name="anals_detail_setting_cd"]:checked').val();
+	if(step == 1){
+		location.href='/sandbox/scenario/analysisScenario/update/step1/'+scenario_id;
+	}else if(step == 2){
+		location.href='/sandbox/scenario/analysisScenario/update/step2/'+anals_detail_setting_cd+'/'+anals_use_prpos_cd+'/'+scenario_id;
+	}else if(step == 3){
+		location.href='/sandbox/scenario/analysisScenario/update/step3/'+anals_detail_setting_cd+'/'+anals_use_prpos_cd+'/'+scenario_id;
+	}else{
+		location.href='/sandbox/scenario/analysisScenario/update/step4/'+anals_detail_setting_cd+'/'+anals_use_prpos_cd+'/'+scenario_id;
+	}
+}
+
+const jsAdd = function(scenario_id){
+	location.href='/sandbox/scenario/analysisScenario/step1/'+scenario_id;
+}
+
+//진행상태 표시 바
+const progressBar = function(){
+	let regst_status_cd = $("#regst_status_cd").val();
+	let model_setup_status_cd = $("#model_setup_status_cd").val();
+	let pretreat_status_cd = $("#pretreat_status_cd").val();
+	let target_setup_status_cd = $("#target_setup_status_cd").val();
+	let scenario_id = '{{scenario_id}}';
+	
+	if(regst_status_cd){
+		$("#ps1").attr("onclick","jsNext('1',"+scenario_id+")");
+		$("#ps1").attr("style","cursor:pointer");
+	}
+	
+	if(model_setup_status_cd){
+		$("#ps2").attr("onclick","jsNext('2',"+scenario_id+")");
+		$("#ps2").attr("style","cursor:pointer");
+	}
+	
+	if(pretreat_status_cd){
+		$("#ps3").attr("onclick","jsNext('3',"+scenario_id+")");
+		$("#ps3").attr("style","cursor:pointer");
+	}
+	
+	if(target_setup_status_cd){
+		$("#ps4").attr("onclick","jsNext('4',"+scenario_id+")");
+		$("#ps4").attr("style","cursor:pointer");
+	}
+	
+	if(regst_status_cd == progressCd1){
+		$("#ps1").addClass("temporary_storage");
+	}else{
+		$("#ps1").addClass("now_depth");
+	}
+	
+	if(model_setup_status_cd == progressCd1){
+		$("#ps2").addClass("temporary_storage");
+	}else if(model_setup_status_cd == progressCd2){
+		$("#ps2").addClass("save");
+	}
+	
+	if(pretreat_status_cd == progressCd1){
+		$("#ps3").addClass("temporary_storage");
+	}else if(pretreat_status_cd == progressCd2){
+		$("#ps3").addClass("save");
+	}
+	
+	if(target_setup_status_cd == progressCd1){
+		$("#ps4").addClass("temporary_storage");
+	}else if(target_setup_status_cd == progressCd2){
+		$("#ps4").addClass("save");
+	}
+}
+
+//분석 시나리오 목록 페이지 이동
+const jsList = function(){
+	location.href = '/sandbox/scenario/analysisScenario/list';
+}
+
+
+//시나리오 등록 단계별 상태
+scenarioEnrollStepStatus();
+
+//분석_사용_용도_코드
+commonCodeAnalysisUsePurpose();
+
+//분석_시나리오_설정_코드
+commonCodeAnalysisScenarioSetting();
+
+//시나리오 작성 상세 조회
+scenarioWritingDetail();
+
+
+</script>
+
