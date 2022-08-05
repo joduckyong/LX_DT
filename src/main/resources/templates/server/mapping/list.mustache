@@ -204,8 +204,7 @@
 	</div>
 
 </div>
-
-<span id="statusLine"></span>
+<div id="divForm"></div>
 
 {{>layout/footer}}
 
@@ -668,6 +667,7 @@ const agentRecvDir = function(){
 	  	    	let dataDir = el.replace(data.root+'/','');
 				console.log('dataDir : '+dataDir);	 	    
 		  	    insertLi += '<li class="folder">'+dataDir+'</li>';
+		  	  	$("#divForm").append($("<input type='hidden' value='"+el+"' id='dir_"+dataDir+"'>"));
 	  	    });
 	  	    insertLi += '</ul></li></ul>';
 	  	  }
@@ -684,7 +684,7 @@ agentRecvDir();
 setTimeout(function() {
    $("#tree").fancytree({
    	  activate: function(event, data) {
-	    $("#target_folder_nm").val(data.node.title);
+	    $("#target_folder_nm").val($("#dir_"+data.node.title).val());
 	  },   
    });
 }, 500);
