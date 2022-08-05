@@ -205,6 +205,8 @@
 
 </div>
 
+<span id="statusLine"></span>
+
 {{>layout/footer}}
 
 <script>
@@ -308,7 +310,8 @@ const agentRecvData = function(type){
      // 		dataList = null;
       		
 	    }).fail(function (error) {
-	        alert(JSON.stringify(error));
+	    	//alert(JSON.stringify(error));	    	
+	        alert("저장[실패]하였습니다.");
 	    });	
 }
 
@@ -624,10 +627,11 @@ const agentRecvDataMov = function(){
 	    }).done(function (data) {
 	    	
       		let message = JSON.stringify(data.message);
-      		alert(message.replace(/\"/gi, ''));            	 
+      		alert(message);            	 
 		  	
 	    }).fail(function (error) {
-	        alert(JSON.stringify(error));
+	        //alert(JSON.stringify(error));
+	    	alert("저장[실패]하였습니다.");
 	    });	
 }
 
@@ -635,12 +639,6 @@ const agentRecvDataMov = function(){
 const fileSet = function(bypass_file){
 	$("#file_nm").val(bypass_file);
 	console.log(bypass_file);
-}
-
-//파일목록 선택
-const folderSet = function(target_folder_nm){
-	$("#target_folder_nm").val(target_folder_nm);
-	console.log(target_folder_nm);
 }
 
 //디렉토리 조회
@@ -669,7 +667,7 @@ const agentRecvDir = function(){
 	  	    $.each(data.directory, function (idx, el) {
 	  	    	let dataDir = el.replace(data.root+'/','');
 				console.log('dataDir : '+dataDir);	 	    
-		  	    insertLi += '<li class="folder"><a href=javascript:folderSet("'+el+'")>'+dataDir+'</a></li>';
+		  	    insertLi += '<li class="folder">'+dataDir+'</li>';
 	  	    });
 	  	    insertLi += '</ul></li></ul>';
 	  	  }
@@ -684,6 +682,10 @@ const agentRecvDir = function(){
 
 agentRecvDir();
 setTimeout(function() {
-   $("#tree").fancytree({});
+   $("#tree").fancytree({
+   	  activate: function(event, data) {
+	    $("#target_folder_nm").val(data.node.title);
+	  },   
+   });
 }, 500);
 </script>

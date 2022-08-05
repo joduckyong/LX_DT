@@ -180,7 +180,7 @@
 	             </div>
 	           </div>
 	           <div class="modal-footer" id="modal_footer">
-	           	<button class="btn btn-primary" type="button">선택</button>
+	           	<button class="btn btn-primary" type="button" onclick="dpIngestPopupPpPathSave();">선택</button>
 	           </div>
 	         </div>
 	       </div>
@@ -355,11 +355,12 @@ const dpIngestAdapterItMatchSave = function(){
 }
 
 //데이터 모델 속성 정보 조회
-/*
+
 const dpIngestDataModelsPp = function(){
 	
     const data = {
 	   		url: '/dp/ingest/data/models/property',
+	   		table_idntfc_id: $("#table_idntfc_id").val(),  
 	    };		
 	    
 	    $.ajax({
@@ -382,7 +383,7 @@ const dpIngestDataModelsPp = function(){
 	        alert(JSON.stringify(error));
 	    });			
 }
-*/
+
 //전처리 조회
 /*
 const dpIngestAdapterItPre = function(){
