@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,9 +35,10 @@ public class DataSetController {
 		return "dms/dataSet/list";
 	}	
 	
-	@GetMapping("/detail")
-	public String detail(ModelMap model) throws Exception{
+	@GetMapping("/detail/{tableIdntfcId}")
+	public String detail(@PathVariable String tableIdntfcId, ModelMap model) throws Exception{
 		
+		model.addAttribute("table_idntfc_id", tableIdntfcId);
 		
 		return "dms/dataSet/detail";
 	}	
