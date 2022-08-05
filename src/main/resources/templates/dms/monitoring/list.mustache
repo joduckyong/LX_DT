@@ -5,6 +5,144 @@
 {{>layout/footer}}        
 
 <script>
+const commonUrl = '/common';
+const url = '/adaptor';
 
+//데이터로그 상세팝업
+const dpCmMoniteringLogsPopup = function(id, log_type){
+	
+    const data = {
+	   		url: '/dp/cm/monitering/logs/popup',
+	   		id: id,	
+	   		log_type: log_type,	
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	 
+	    };		
+	    
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpCmMoniteringLogsPopup',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+		  	  if (data != null) {
+			  	   	if(data.contents != ""){    	
+			  	   		data.contents[0].log_dt;
+			  	  		data.contents[0].adapter_nm;
+			  	  		data.contents[0].log_desc;
+			  	  		data.contents[0].clct_mthd;
+			  	  		data.contents[0].clct_ty;
+			  	  		data.contents[0].log_desc;
+			  	  		data.contents[0].st_datamodel;
+			  	  		data.contents[0].data_before;
+			  	  		data.contents[0].payload;
+			  	   	}
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });			
+}
+
+//데이터로그
+const dpCmMoniteringLogs = function(){
+	
+    const data = {
+	   		url: '/dp/cm/monitering/logs',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	 
+	    };		
+	    
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpCmMoniteringLogs',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+		  	  if (data != null) {
+			  	   	if(data.contents != ""){    	
+    			  	    $.each(data.contents, function (idx, el) {
+    			  	    	el.log_dt;
+    			  	    	el.adapter_nm;
+    			  	    	el.log_desc;
+    			  	    	el.payload;
+    			  	    	el.id;
+    			  	    	el.log_type;
+    			  	    });
+			  	   	}
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });			
+}
+
+//수집동작현황
+const dpCmMoniteringStatus = function(){
+	
+    const data = {
+	   		url: '/dp/cm/monitering/status',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	   	
+	    };		
+	    
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpCmMoniteringStatus',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+		  	  if (data != null) {
+			  	   	if(data.contents != ""){    	
+   			  	    	data.contents[0].adapter_start;
+   			  	    	data.contents[0].adapter_stop;
+   			  	    	data.contents[0].instance_start;
+   			  	    	data.contents[0].instance_stop;
+   			  	    	data.contents[0].instance_error;
+			  	   	}
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });			
+}
+
+//수집현황
+const dpCmMoniteringIngest = function(){
+	
+    const data = {
+	   		url: '/dp/cm/monitering/ingest',
+	   		daytype: $("#daytype").val(), 	
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	   		
+	    };		
+	    
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpCmMoniteringIngest',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+		  	  if (data != null) {
+			  	   	if(data.contents != ""){    	
+    			  	    $.each(data.contents, function (idx, el) {
+    			  	    	el.log_dt;
+    			  	    	el.adapter_nm;
+    			  	    	el.log_desc;
+    			  	    	el.payload;
+    			  	    	el.id;
+    			  	    	el.log_type;
+    			  	    });
+			  	   	}
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });			
+}
 </script>
 

@@ -451,45 +451,47 @@ const dpIngestAdapterItPpSave = function(url_mix){
 //저장전 접속정보 설정 접속테스트
 const dpIngestAdapterItPpTest = function(){
 	
-	let lengthCnt = 0;
-	let contentsData = new Array();
-	let itemObject = new Object();
-	$.each($("#tbDpIngestAdapterItPp tbody tr"), function(){
-		 console.log('item : '+$(this).find("#item_"+lengthCnt).val()+', item_value : '+$(this).find("#item_value_"+lengthCnt).val());
- 		 itemObject[($(this).find("#item_"+lengthCnt).val())]=$(this).find("#item_value_"+lengthCnt).val();
-		 lengthCnt++;
-	});
-	
-	contentsData.push(itemObject);
-	console.log('contentsData:'+JSON.stringify(contentsData));
-	
-    const data = {
-	   		url: '/dp/ingest/adapter/instance/property/test',
-	   		user_id: 'user00',	
-	   		menu_id: 'menu_id',
-	   		contents: contentsData,
-	    };			
-        
-	    $.ajax({
-	        type: 'POST',
-	        url: url+'/dpIngestAdapterItPpTest',
-	        dataType: 'json',
-	        contentType: 'application/json; charset-utf-8',
-	        data: JSON.stringify(data)
-        }).done(function (data) {
-  	  	  if (data != null) {
-		  	   	if(data.contents != ""){    	   
-	  	   	//		if(data.contents[0].successYn === 'Y'){
-	  	   				dpIngestAdapterItPpSave(data.contents[0].url_mix);
-	  	   	//		}else{
-		  	 // 	  		let message = JSON.stringify(data.return_msg);
-		  	//	  		alert(message.replace(/\"/gi, ''));
-	  	   	//		}
-		  	   	}
-	  	  }
-        }).fail(function (error) {
-            alert(JSON.stringify(error));
-        });	
+	if(confirm('등록 하시겠습니까?')) {
+		let lengthCnt = 0;
+		let contentsData = new Array();
+		let itemObject = new Object();
+		$.each($("#tbDpIngestAdapterItPp tbody tr"), function(){
+			 console.log('item : '+$(this).find("#item_"+lengthCnt).val()+', item_value : '+$(this).find("#item_value_"+lengthCnt).val());
+	 		 itemObject[($(this).find("#item_"+lengthCnt).val())]=$(this).find("#item_value_"+lengthCnt).val();
+			 lengthCnt++;
+		});
+		
+		contentsData.push(itemObject);
+		console.log('contentsData:'+JSON.stringify(contentsData));
+		
+	    const data = {
+		   		url: '/dp/ingest/adapter/instance/property/test',
+		   		user_id: 'user00',	
+		   		menu_id: 'menu_id',
+		   		contents: contentsData,
+		    };			
+	        
+		    $.ajax({
+		        type: 'POST',
+		        url: url+'/dpIngestAdapterItPpTest',
+		        dataType: 'json',
+		        contentType: 'application/json; charset-utf-8',
+		        data: JSON.stringify(data)
+	        }).done(function (data) {
+	  	  	  if (data != null) {
+			  	   	if(data.contents != ""){    	   
+		  	   	//		if(data.contents[0].successYn === 'Y'){
+		  	   				dpIngestAdapterItPpSave(data.contents[0].url_mix);
+		  	   	//		}else{
+			  	 // 	  		let message = JSON.stringify(data.return_msg);
+			  	//	  		alert(message.replace(/\"/gi, ''));
+		  	   	//		}
+			  	   	}
+		  	  }
+	        }).fail(function (error) {
+	            alert(JSON.stringify(error));
+	        });	
+	}
 	    
 }
 
