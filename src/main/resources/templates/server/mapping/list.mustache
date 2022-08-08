@@ -307,7 +307,7 @@ const agentRecvData = function(type){
       		let message = JSON.stringify(data.message);
       		alert(message.replace(/\"/gi, ''));            	 
      // 		dataList = null;
-      		
+      		receivePage();
 	    }).fail(function (error) {
 	    	//alert(JSON.stringify(error));	    	
 	        alert("저장[실패]하였습니다.");
@@ -636,7 +636,7 @@ const agentRecvDataMov = function(){
 	    	
       		let message = JSON.stringify(data.message);
       		alert(message.replace(/\"/gi, ''));     
-      		
+      		receivePage();
 	    }).fail(function (error) {
 	        //alert(JSON.stringify(error));
 	    	alert("저장[실패]하였습니다.");
@@ -697,4 +697,9 @@ setTimeout(function() {
 	  },   
    });
 }, 500);
+
+const receivePage = function(){
+	location.href = '/server/receive/list';
+}
+
 </script>
