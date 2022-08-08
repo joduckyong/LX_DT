@@ -84,7 +84,7 @@
 						
 						<div class="metatable_box col-6 col-lg-6" id="tableV3" style="display:none;">
 							<div class="form-group row" >
-								<label class="control-label">디렉토리 지정</label>
+								<label class="control-label">디렉토리 지정<span id="dirName"></span></label>
 								<div class="x_content">
 									<div class="table_responsive" style="height: 280px; overflow: auto">
 										<div id="tree">
@@ -449,12 +449,21 @@ const receiveCol = function(len, clct_csv_file, trf_zip_file, file_nm, recv_zip_
 			$("#table_nm").val(el.table_nm);
 			$("#table_desc").val(el.table_desc);
 			
+			
+    		$("#target_folder_nm").val("");
+    		$("#dirName").text("");
+    		
 	    	if(isEmpty(el.mapped_col_info) !== ''){
 	    		
 	    		dataList = el.mapped_col_info;
 	    		console.log('mapped_col_info: '+el.mapped_col_info);
 	    		console.log('method_cd: '+method_cd);
 	    		console.log('dataList: '+dataList);
+	    		console.log('target_folder_nm: '+el.mapped_col_info.target_folder_nm);
+	    		
+	    		$("#target_folder_nm").val(el.mapped_col_info.target_folder_nm);
+	    		$("#dirName").text("("+el.mapped_col_info.target_folder_nm+")");
+	    		
 	    		//버튼 기능
 	    		if(method_cd === 'A01003'){
 		    		$("#btnSave").hide();
@@ -626,8 +635,8 @@ const agentRecvDataMov = function(){
 	    }).done(function (data) {
 	    	
       		let message = JSON.stringify(data.message);
-      		alert(message);            	 
-		  	
+      		alert(message.replace(/\"/gi, ''));     
+      		
 	    }).fail(function (error) {
 	        //alert(JSON.stringify(error));
 	    	alert("저장[실패]하였습니다.");
@@ -666,7 +675,7 @@ const agentRecvDir = function(){
 	  	    $.each(data.directory, function (idx, el) {
 	  	    	let dataDir = el.replace(data.root+'/','');
 				console.log('dataDir : '+dataDir);	 	    
-		  	    insertLi += '<li class="folder">'+dataDir+'</li>';
+		  	    insertLi += '<li class="folder" >'+dataDir+'</li>';
 		  	  	$("#divForm").append($("<input type='hidden' value='"+el+"' id='dir_"+dataDir+"'>"));
 	  	    });
 	  	    insertLi += '</ul></li></ul>';
