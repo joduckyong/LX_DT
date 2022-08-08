@@ -12,9 +12,9 @@
                   <div class="progress_tab">
                     <div class="tab_item" id="tab-0">
                       <div class="row">
-                        <div class="col-12 col-md-6 mx-0">
+                        <div class="col-12 col-md-4 mx-0">
                           <h4 class="center_title">수집현황</h4>
-                          <canvas id="mybarChart"></canvas>
+                          <canvas id="barChart"></canvas>
 						  <div class="table_responsive scroll_y">
                             <table class="table table-striped table-bordered bulk_action">
                               <colgroup>
@@ -32,32 +32,32 @@
                               <tbody>
                                 <tr>
                                   <td>요청건수</td>
-                                  <td>시계열_분석_이미지</td>
-                                  <td>img_01</td>
-                                  <td>시계열 분석용</td>
-                                  <td>시계열 분석용</td>
+                                  <td>200</td>
+                                  <td>300</td>
+                                  <td>250</td>
+                                  <td>100</td>
                                 </tr>
                                 <tr>
                                   <td>적재건수</td>
-                                  <td>시계열_분석_이미지</td>
-                                  <td>img_01</td>
-                                  <td>시계열 분석용</td>
-                                  <td>시계열 분석용</td>
+                                  <td>195</td>
+                                  <td>300</td>
+                                  <td>220</td>
+                                  <td>90</td>
                                 </tr>
                                 <tr>
                                   <td>오류건수</td>
-                                  <td>시계열_분석_이미지</td>
-                                  <td>img_01</td>
-                                  <td>시계열 분석용</td>
-                                  <td>시계열 분석용</td>
+                                  <td>5</td>
+                                  <td>0</td>
+                                  <td>30</td>
+                                  <td>10</td>
                                 </tr>
                               </tbody>
                             </table>
                           </div>                          
                         </div>
-                        <div class="col-12 col-md-6 mx-0">
-                          <h4 class="center_title">수집동작현황</h4>
-                          <canvas id="defaltbarChart"></canvas>
+                        <div class="col-12 col-md-4 mx-0">
+                          <h4 class="center_title">수집동작현황(Adapter)</h4>
+                          <canvas id="pieChart1"></canvas>
 						  <div class="table_responsive scroll_y">
                             <table class="table table-striped table-bordered bulk_action">
                               <colgroup>
@@ -69,23 +69,39 @@
                               <tbody>
                                 <tr>
                                   <td style="text-align: center;">Adapter 동작건수</td>
-                                  <td style="text-align: center;"><span id="adapter_start_txt"></span></td>
+                                  <td style="text-align: center;"><span id="adapter_start_txt">8</span></td>
                                 </tr>
                                 <tr>
                                   <td style="text-align: center;">Adapter 중지건수</td>
-                                  <td style="text-align: center;"><span id="adapter_stop_txt"></span></td>
+                                  <td style="text-align: center;"><span id="adapter_stop_txt">2</span></td>
                                 </tr>
+                              </tbody>
+                            </table>
+                          </div>                              
+                        </div>
+                        <div class="col-12 col-md-4 mx-0">
+                          <h4 class="center_title">수집동작현황(Instance)</h4>
+                          <canvas id="pieChart2"></canvas>
+						  <div class="table_responsive scroll_y">
+                            <table class="table table-striped table-bordered bulk_action">
+                              <colgroup>
+                                <col width="50%">
+                                <col width="50%">
+                              </colgroup>
+                              <thead>
+                              </thead>
+                              <tbody>
                                 <tr>
                                   <td style="text-align: center;">Instance 동작</td>
-                                  <td style="text-align: center;"><span id="instance_start_txt"></span></td>
+                                  <td style="text-align: center;"><span id="instance_start_txt">28</span></td>
                                 </tr>
                                 <tr>
                                   <td style="text-align: center;">Instance 중지</td>
-                                  <td style="text-align: center;"><span id="instance_stop_txt"></span></td>
+                                  <td style="text-align: center;"><span id="instance_stop_txt">10</span></td>
                                 </tr>
                                 <tr>
                                   <td style="text-align: center;">Instance 오류 중지</td>
-                                  <td style="text-align: center;"><span id="instance_error_txt"></span></td>
+                                  <td style="text-align: center;"><span id="instance_error_txt">2</span></td>
                                 </tr>
                               </tbody>
                             </table>
@@ -192,6 +208,193 @@
 <script>
 const commonUrl = '/common';
 const url = '/adaptor';
+
+
+//bar 차트 
+const barChart = function(){
+	var context = document.getElementById('barChart').getContext('2d');
+	var myChart = new Chart(context, {
+		type: 'bar', // 차트의 형태
+		data: { // 차트에 들어갈 데이터
+		    labels: [
+		        //x 축
+		        'Adapter1','Adapter2','Adapter3','Adapter4'
+		    ],
+		    datasets: [
+		        { //데이터
+		            label: '요청건수', //차트 제목
+		            fill: false, // line 형태일 때, 선 안쪽을 채우는지 안채우는지
+		            data: [
+		                200,300,250,100 //x축 label에 대응되는 데이터 값
+		            ],
+		            backgroundColor: [
+		                //색상
+		                'rgba(54, 162, 235, 0.2)',
+		                'rgba(54, 162, 235, 0.2)',
+		                'rgba(54, 162, 235, 0.2)',
+		                'rgba(54, 162, 235, 0.2)',
+		            ],
+		            borderColor: [
+		                //경계선 색상
+		                'rgba(54, 162, 235, 1)',
+		                'rgba(54, 162, 235, 1)',
+		                'rgba(54, 162, 235, 1)',
+		                'rgba(54, 162, 235, 1)',
+		            ],
+		            borderWidth: 1 //경계선 굵기
+		        }
+		       ,{ //데이터
+		            label: '적재건수', //차트 제목
+		            fill: false, // line 형태일 때, 선 안쪽을 채우는지 안채우는지
+		            data: [
+		                195,300,220,90 //x축 label에 대응되는 데이터 값
+		            ],
+		            backgroundColor: [
+		                //색상
+		                'rgba(255, 206, 86, 0.2)',
+		                'rgba(255, 206, 86, 0.2)',
+		                'rgba(255, 206, 86, 0.2)',
+		                'rgba(255, 206, 86, 0.2)',
+		            ],
+		            borderColor: [
+		                //경계선 색상
+		                'rgba(255, 206, 86, 1)',
+		                'rgba(255, 206, 86, 1)',
+		                'rgba(255, 206, 86, 1)',
+		                'rgba(255, 206, 86, 1)',
+		            ],
+		            borderWidth: 1 //경계선 굵기
+		        }		        
+		       ,{ //데이터
+		            label: '오루건수', //차트 제목
+		            fill: false, // line 형태일 때, 선 안쪽을 채우는지 안채우는지
+		            data: [
+		                5,0,30,10 //x축 label에 대응되는 데이터 값
+		            ],
+		            backgroundColor: [
+		                //색상
+		                'rgba(255, 99, 132, 0.2)',
+		                'rgba(255, 99, 132, 0.2)',
+		                'rgba(255, 99, 132, 0.2)',
+		                'rgba(255, 99, 132, 0.2)',
+		            ],
+		            borderColor: [
+		                //경계선 색상
+		                'rgba(255, 99, 132, 1)',
+		                'rgba(255, 99, 132, 1)',
+		                'rgba(255, 99, 132, 1)',
+		                'rgba(255, 99, 132, 1)',
+		            ],
+		            borderWidth: 1 //경계선 굵기
+		        }		        
+		             
+		    ]
+		},
+		options: {
+		    scales: {
+		        yAxes: [
+		            {
+		                ticks: {
+		                    beginAtZero: true
+		                }
+		            }
+		        ]
+		    }
+		}
+	});
+}
+
+//pie 차트
+const pieChart1 = function(){
+	var context = document.getElementById('pieChart1').getContext('2d');
+	var myChart = new Chart(context, {
+		type: 'pie', // 차트의 형태
+		data: { // 차트에 들어갈 데이터
+		    labels: [
+		        //x 축
+		        'Adapter 동작건수','Adapter 중지건수'
+		    ],
+		    datasets: [
+		        { //데이터
+		            label: '수집동작현황(Adapter)', //차트 제목
+		            fill: false, // line 형태일 때, 선 안쪽을 채우는지 안채우는지
+		            data: [
+		                8,2 //x축 label에 대응되는 데이터 값
+		            ],
+		            backgroundColor: [
+		                //색상
+		                'rgba(54, 162, 235, 0.2)',
+		                'rgba(255, 153, 102, 0.2)'
+		            ],
+		            borderColor: [
+		                //경계선 색상
+		                'rgba(54, 162, 235, 1)',
+		                'rgba(255, 153, 102, 1)'
+		            ],
+		            borderWidth: 1 //경계선 굵기
+		        }
+		    ]
+		},
+		options: {
+		    scales: {
+		        yAxes: [
+		            {
+		                ticks: {
+		                    beginAtZero: true
+		                }
+		            }
+		        ]
+		    }
+		}
+	});
+}
+
+//Pie 차트 
+const pieChart2 = function(){
+	var context = document.getElementById('pieChart2').getContext('2d');
+	var myChart = new Chart(context, {
+		type: 'pie', // 차트의 형태
+		data: { // 차트에 들어갈 데이터
+		    labels: [
+		        //x 축
+		        'Instance 동작','Instance 중지','Instance 오류 중지'
+		    ],
+		    datasets: [
+		        { //데이터
+		            label: '수집동작현황(Instance)', //차트 제목
+		            fill: false, // line 형태일 때, 선 안쪽을 채우는지 안채우는지
+		            data: [
+		                28,10,2 //x축 label에 대응되는 데이터 값
+		            ],
+		            backgroundColor: [
+		                //색상
+		                'rgba(54, 162, 235, 0.2)',
+		                'rgba(255, 153, 102, 0.2)',
+		                'rgba(255, 000, 051, 0.2)'
+		            ],
+		            borderColor: [
+		                //경계선 색상
+		                'rgba(54, 162, 235, 1)',
+		                'rgba(255, 153, 102, 1)',
+		                'rgba(255, 000, 051, 1)'
+		            ],
+		            borderWidth: 1 //경계선 굵기
+		        }
+		    ]
+		},
+		options: {
+		    scales: {
+		        yAxes: [
+		            {
+		                ticks: {
+		                    beginAtZero: true
+		                }
+		            }
+		        ]
+		    }
+		}
+	});
+}
 
 //데이터로그 상세팝업
 const dpCmMoniteringLogsPopup = function(id, log_type){
@@ -334,5 +537,11 @@ const dpCmMoniteringIngest = function(){
 	        alert(JSON.stringify(error));
 	    });			
 }
+
+barChart();
+pieChart1();
+pieChart2();
+
+
 </script>
 
