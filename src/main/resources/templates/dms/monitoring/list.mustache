@@ -13,7 +13,13 @@
                     <div class="tab_item" id="tab-0">
                       <div class="row">
                         <div class="col-12 col-md-4 mx-0">
-                          <h4 class="center_title">수집현황</h4>
+                          <h4 class="center_title">수집현황
+							<select class="" id="daytype" name="daytype" onchange="dpCmMoniteringIngest(this.value);">
+								<option value="M">월</option>
+								<option value="W">주</option>
+								<option value="D">일</option>
+                            </select>                        
+                          </h4>
                           <canvas id="barChart"></canvas>
 						  <div class="table_responsive scroll_y">
                             <table class="table table-striped table-bordered bulk_action">
@@ -504,11 +510,11 @@ const dpCmMoniteringStatus = function(){
 }
 
 //수집현황
-const dpCmMoniteringIngest = function(){
+const dpCmMoniteringIngest = function(daytype){
 	
     const data = {
 	   		url: '/dp/cm/monitering/ingest',
-	   		daytype: $("#daytype").val(), 	
+	   		daytype: daytype, 	
 	   		user_id: 'user00',	
 	   		menu_id: 'menu_id',	   		
 	    };		
