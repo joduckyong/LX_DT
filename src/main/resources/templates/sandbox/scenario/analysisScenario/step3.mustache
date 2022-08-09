@@ -174,12 +174,6 @@ const scenarioPretreatModelsGet = function (analsModelId) {
 	let anals_use_prpos_cd = '{{anals_use_prpos_cd}}';
 	let query = isEmpty($("#query").val());
 	
-	if(query == '' && anals_model_id == '') {
-        alert('전처리 모델명을 입력하세요!');
-        $("#query").focus();
-        return;
-    }
-	
 	const data = {
    		url: '/services/sandbox/'+anals_use_prpos_cd+'/scenarios/analysis-models/B04001/get?search=anals_model_id:'+anals_model_id+',anals_model_nm:'+query+'&sort=creatDatetime:desc',
    		user_id: 'user00',	

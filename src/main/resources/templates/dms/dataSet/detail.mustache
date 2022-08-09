@@ -12,7 +12,7 @@
 	                	<div class="cont_title_box">
 		                    <h3>데이터 셋 목록 상세</h3>
 		                    <div class="right_btns">
-		                      <button class="btn btn-dark">목록</button>
+		                      <button class="btn btn-dark" onclick="jsList();">목록</button>
 		                      <button class="btn btn-success" onclick="addModal();">이력보기</button>
 		                    </div>
 		                  </div>
@@ -20,29 +20,21 @@
 		                    <div class="row">
 		                      <div class="form-group row col-12 col-md-6">
 		                        <div class="control-label">데이터셋명</div>
-		                        <div class="form-control_box">
-		                        	연계1
-		                        </div>
+		                        <div class="form-control_box" id="dset_korean_nm"></div>
 		                      </div>
 		                      <div class="form-group row col-12 col-md-6">
 		                        <div class="control-label">메타테이블명</div>
-		                        <div class="form-control_box">
-		                        	문화재 정보
-		                        </div>
+		                        <div class="form-control_box" id="table_eng_nm"></div>
 		                      </div>
 		                    </div>
 		                    <div class="row">
 		                      <div class="form-group row col-12 col-md-6">
 		                        <div class="control-label">수집방식</div>
-		                        <div class="form-control_box">
-		                        	DB_TO_DB
-		                        </div>
+		                        <div class="form-control_box" id="clct_mthd"></div>
 		                      </div>
 		                      <div class="form-group row col-12 col-md-6">
 		                        <div class="control-label">수집유형</div>
-		                        <div class="form-control_box">
-		                        	Postgresql
-		                        </div>
+		                        <div class="form-control_box" id="clct_ty"></div>
 		                      </div>
 		                    </div>
 						</div>
@@ -203,6 +195,73 @@
 
 <script>
 
+const commonUrl = '/common';
+const url = '/dataSet';
+
+//데이터 셋 상세 조회
+const dpLoadDsetDt = function () {
+	
+	let table_idntfc_id = '{{table_idntfc_id}}';
+	
+	const data = {
+   		url: '/dp/load/dataset/detail',
+   		user_id: 'user00',	
+   		table_idntfc_id: table_idntfc_id,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpLoadDsetDt',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		  
+  	    	if(data.contents != ""){
+		  	  	$("#dset_korean_nm").text(data.contents[0].dset_korean_nm);
+		  	  	$("#table_eng_nm").text(data.contents[0].table_eng_nm);
+		  	  	$("#clct_mthd").text(data.contents[0].clct_mthd);
+		  	  	$("#clct_ty").text(data.contents[0].clct_ty);
+  	    	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//데이터 셋 상세 리스트 조회
+const dpLoadDsetDtList = function () {
+	
+	let table_idntfc_id = '{{table_idntfc_id}}';
+	
+	const data = {
+   		url: '/dp/load/dataset/detail/list',
+   		user_id: 'user00',	
+   		table_idntfc_id: table_idntfc_id,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpLoadDsetDtList',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		  
+  	    	if(data.contents != ""){
+  	    	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
 //이력보기 모달 추가
 const addModal = function(){
 	$('#add_modal').modal('show');
@@ -212,5 +271,12 @@ const addModal = function(){
 const fail_addModal = function(){
 	$('#fail_add_modal').modal('show');
 }
+
+//목록
+const jsList = function () {
+	location.href = url+'/list/';
+}
+
+dpLoadDsetDt();
 </script>
 
