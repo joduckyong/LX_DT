@@ -265,6 +265,11 @@ const dpIngestMetaItemSave = function () {
 		arr.push(obj);
 	});
 	
+	if(arr.length == 0){
+		alert("선택된 항목이 없습니다!");
+		return;
+	}
+	
 	const data = {
    		url: '/dp/ingest/meta/item/save',
    		user_id: 'user00',	
