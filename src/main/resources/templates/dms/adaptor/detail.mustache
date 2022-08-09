@@ -165,6 +165,23 @@
                            </div>
                       </div>
                     </div>
+                    <div class="row subfolder" style="display:none;">
+                      <div class="form-group row col-12 col-md-12">
+                        <div class="control-label" style="text-align: center;">하위폴더 포함여부</div>
+	 					   <div class="form-control_box">
+                             <div class="radio radio_inline">
+                               <label class="">
+                                   <input class="" type="radio" name="subfolder_yn" id="subfolder_Y" value="Y" checked>포함
+                               </label>
+                             </div>
+                             <div class="radio radio_inline">
+                               <label>
+                                   <input class="" type="radio" name="subfolder_yn" id="subfolder_N" value="N">미포함
+                               </label>
+                             </div>
+                           </div>
+                      </div>
+                    </div>                    
                     <div class="row">
                       <div class="form-group row col-12 col-md-6">
                         <div class="control-label" style="text-align: center;">수집 스케줄 유형</div>
@@ -336,6 +353,15 @@ const dpCmCodesClctMthd = function (group_code, id) {
 //수집방식 선택 
 const clctMthdType = function(val, sel){
 //	console.log('val'+val);
+	let clct_mthd = val.substring(0, val.indexOf('|'));
+	console.log('clct_mthd:'+clct_mthd);
+	
+	if(clct_mthd === 'D34003'){
+		$(".subfolder").show();
+	}else{
+		$(".subfolder").hide();
+	}
+	
 	let group_code = val.substring(val.indexOf('|')+1);
 	dpCmCodesClctTy(group_code, 'clct_ty', sel);
 }
@@ -993,7 +1019,7 @@ const dpIngestAdapterItSave = function(type){
 		   		schedule_week: $("#schedule_week").val(),	
 		   		etc_note: $("#etc_note").val(),	
 		   		time_data_yn: $("input:radio[name='time_data_yn']:checked").val(),	
-		   		subfolder_yn: null,	
+		   		subfolder_yn: $("input:radio[name='subfolder_yn']:checked").val(),
 		   		url_mix: null,	
 		   		clct_mthd: clct_mthd,	
 		   		clct_ty: $("#clct_ty").val(),	
@@ -1132,6 +1158,8 @@ const dpIngestAdapterItDt = function(){
 			  	   		$("#storage_type").val(data.contents[0].storage_type);
 			  	   		$("input:radio[id='useYn_"+data.contents[0].use_yn+"']").prop("checked", true); 
 			  	   		$("input:radio[id='schedule_type_"+data.contents[0].schedule_type+"']").prop("checked", true); 
+			  	   		$("input:radio[id='subfolder_"+data.contents[0].subfolder_yn+"']").prop("checked", true); 
+			  	   		
 			  	   																				
 				  	   	jsScheduleType();
 			  	   		$("input:radio[id='schedule_time_type_"+data.contents[0].schedule_time_type+"']").prop("checked", true); 
