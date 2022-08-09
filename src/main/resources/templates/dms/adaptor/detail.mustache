@@ -564,6 +564,8 @@ const openModal = function(modalId){
 		$("#btnAdd").show();
 		$("#btnUpdate").hide();
 		$("#btnDel").hide();
+  	   	$("#clct_mthd").prop('disabled',false);
+  	   	$("#clct_ty").prop('disabled',false);		
 		dpIngestAdapterItIdChk();
 	}else if(modalId == 'dataSet'){
 		$('footer').hide();
@@ -1123,6 +1125,10 @@ const dpIngestAdapterItDt = function(){
 			  	   		$("select[name='clct_mthd'] option:contains('"+clct_mthd_nm+"')").prop("selected", true);
 			  	   		clctMthdType($("#clct_mthd").val(), data.contents[0].clct_ty);
 			  	   		$("#storage_cycle").val(data.contents[0].storage_cycle);
+			  	   		
+				  	   	$("#clct_mthd").prop('disabled',true);
+				  	   	$("#clct_ty").prop('disabled',true);
+				  	   	
 			  	   		$("#storage_type").val(data.contents[0].storage_type);
 			  	   		$("input:radio[id='useYn_"+data.contents[0].use_yn+"']").prop("checked", true); 
 			  	   		$("input:radio[id='schedule_type_"+data.contents[0].schedule_type+"']").prop("checked", true); 
