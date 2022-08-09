@@ -365,9 +365,13 @@ const dpCmCategory = function (clsf_type, clsf_id) {
 		  	    	insertTr += '<option value="'+el.clsf_id+'">'+clsf_nm+'</option>';
 		  	    });
 		  	  if(clsf_type == '1'){	//대분류 선택시
-		  	  	$("#m_clsf").append(insertTr);
+		  		if(clsf_id){
+		  	  		$("#m_clsf").append(insertTr);
+		  		}
 		  	  }else if(clsf_type == '2'){	//중분류 선택시
-		  		$("#s_clsf").append(insertTr);
+		  		if(clsf_id){
+		  			$("#s_clsf").append(insertTr);
+		  		}
 		  	  }else if(clsf_type == '3'){	//소분류 선택시
 		  	  }else{
 		  		$("#l_clsf").append(insertTr);
@@ -423,9 +427,13 @@ const dpCmCategoryDataset = function (clsf_type, clsf_id) {
 		  	    	insertTr += '<option value="'+el.clsf_id+'">'+clsf_nm+'</option>';
 		  	    });
 		  	  if(clsf_type == '1'){	//대분류 선택시
-		  	  	$("#dset_mclas").append(insertTr);
+		  		if(clsf_id){
+		  	  		$("#dset_mclas").append(insertTr);
+		  		}
 		  	  }else if(clsf_type == '2'){	//중분류 선택시
-		  		$("#dset_sclas").append(insertTr);
+		  		if(clsf_id){
+		  			$("#dset_sclas").append(insertTr);
+		  		}
 		  	  }else if(clsf_type == '3'){	//소분류 선택시
 		  	  }else{
 		  		$("#dset_lclas").append(insertTr);
