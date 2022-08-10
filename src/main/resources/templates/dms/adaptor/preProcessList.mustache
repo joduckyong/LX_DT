@@ -28,7 +28,7 @@
 										</div>
 									</div>
 									<div class="col-12 col-md-1 btn_search_box">
-										<button class="btn btn-primary" onclick="dpIngestAdapter();">
+										<button class="btn btn-primary" onclick="btnSearch();">
 											<i class="glyphicon glyphicon-search"></i>
 										</button>
 									</div>
@@ -107,7 +107,8 @@ const dpIngestPre = function(page, size_per_page){
 		size_per_page = init_size_per_page;
 	}
 	
-	let query = $("#query").val() != null ? $("#query").val() : '';
+	let query = $("#query").data("search");
+	$("#query").val(query);	//검색어 갱신(검색버튼 클릭시)
 	
 	const data = {
    		url: '/dp/ingest/pre',
@@ -161,10 +162,17 @@ const dpIngestPre = function(page, size_per_page){
     });	
 }
 
+//검색 버튼
+const btnSearch = function(){
+	let query = $("#query").val();
+	$("#query").data("search", query);
+	dpIngestPre();
+}
+
 //엔터키가 눌렸을 때
 const enterkey = function(e) {
 	if (e.keyCode == 13) {
-		dpIngestPre();
+		btnSearch();
     }
 }
 
@@ -173,7 +181,7 @@ const addModal = function(){
 	location.href = url+'/preProcessAdd';
 }
 
-dpIngestPre(page, size_per_page);
+dpIngestPre();
 </script>
 
 
