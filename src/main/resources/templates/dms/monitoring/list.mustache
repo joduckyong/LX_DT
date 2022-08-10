@@ -20,7 +20,7 @@
 								<option value="D">일</option>
                             </select>                        
                           </h4>
-                          <canvas id="barChart"></canvas>
+                          <div id="divBarChart"><canvas id="barChart"></canvas></div>
 						  <div class="table_responsive scroll_y">
                             <table class="table table-striped table-bordered bulk_action">
                               <colgroup>
@@ -152,7 +152,7 @@
                       </div>
                       <div class="form-group row col-12 col-md-6">
                         <div class="control-label" style="text-align: center;">인스턴스명</div>
-                        <div class="form-control_box"><span id="log_desc_txt"></span></div>
+                        <div class="form-control_box"><span id=""></span></div>
                       </div>
                     </div>
                     <div class="row">
@@ -199,6 +199,9 @@ const url = '/monitoring';
 //bar 차트 
 const barChart = function(chartTitle, data1, data2, data3){
 	
+    $('#barChart').remove(); // this is my <canvas> element
+	$('#divBarChart').append('<canvas id="barChart"><canvas>');	
+    
 	let bgcolor1 = [];
 	let bgcolor2 = [];
 	let bgcolor3 = [];
@@ -375,7 +378,6 @@ const dpCmMoniteringLogsPopup = function(id, log_type){
 			  	   	if(data.contents != ""){    	
 				  	   	$("#log_dt_txt").text(data.contents[0].log_dt);
 				  	   	$("#adapter_nm_txt").text(data.contents[0].adapter_nm);
-				  	   	$("#log_desc_txt").text(data.contents[0].log_desc);
 				  	   	$("#clct_mthd_txt").text(data.contents[0].clct_mthd);
 				  	   	$("#clct_ty_txt").text(data.contents[0].clct_ty);
 				  	   	$("#log_desc_txt").text(data.contents[0].log_desc);
