@@ -32,7 +32,7 @@
 										</div>
 									</div>
 									<div class="col-12 col-md-1 btn_search_box">
-										<button class="btn btn-primary" onclick="dpIngestAdapter();">
+										<button class="btn btn-primary" onclick="btnSearch();">
 											<i class="glyphicon glyphicon-search"></i>
 										</button>
 									</div>
@@ -153,7 +153,8 @@ const dpIngestAdapter = function (page, size_per_page) {
 	
 	console.log('page : '+page+' , size_per_page : '+size_per_page );    
 	let search_type = $("#search_type").val() != null ? $("#search_type").val() : '';
-	let query = $("#query").val() != null ? $("#query").val() : '';
+	let query = $("#query").data("search");
+	$("#query").val(query);	//검색어 갱신(검색버튼 클릭시)
 	
 	const data = {
    		url: '/dp/ingest/adapter',
@@ -544,10 +545,17 @@ const pagingFun = function(page, size_per_page){
 	dpIngestAdapter(page, size_per_page);
 }
 
+//검색 버튼
+const btnSearch = function(){
+	let query = $("#query").val();
+	$("#query").data("search", query);
+	dpIngestAdapter();
+}
+
 //엔터키가 눌렸을 때
 const enterkey = function(e) {
 	if (e.keyCode == 13) {
-		dpIngestAdapter();
+		btnSearch();
     }
 }
 
@@ -562,7 +570,7 @@ const adapterDPage = function(adapter_id){
 }
 
 //조회
-dpIngestAdapter(page, size_per_page);
+dpIngestAdapter();
 dpIngestAdapterType();
 
 </script>
