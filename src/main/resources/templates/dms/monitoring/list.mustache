@@ -511,16 +511,17 @@ const dpCmMoniteringIngest = function(daytype){
 				  	   	let insertTd3 = '<td>오류건수</td>';
     			  	    $.each(data.contents, function (idx, el) {
     			  	    	
-    			  	    	insertTh += '<th>'+el.adapter_nm+'</th>';
-    			  	    	insertTd1 += '<td>'+el.ingest_count+'</td>';
-    			  	    	insertTd2 += '<td>'+el.load_count+'</td>';
-    			  	    	insertTd3 += '<td>'+el.error_count+'</td>';
-    			  	    	
-    			  	    	chartTitle.push(el.adapter_nm);
-    			  	    	
     			  	    	let ingest_count = isEmpty(el.ingest_count) === '' ? 0:isEmpty(el.ingest_count);
     			  	    	let load_count = isEmpty(el.load_count) === '' ? 0:isEmpty(el.load_count);
     			  	    	let error_count = isEmpty(el.error_count) === '' ? 0:isEmpty(el.error_count);
+    			  	    	
+    			  	    	insertTh += '<th>'+el.adapter_nm+'</th>';
+    			  	    	insertTd1 += '<td>'+ingest_count+'</td>';
+    			  	    	insertTd2 += '<td>'+load_count+'</td>';
+    			  	    	insertTd3 += '<td>'+error_count+'</td>';
+    			  	    	
+    			  	    	chartTitle.push(el.adapter_nm);
+    			  	    	
     			  	    	data1.push(ingest_count);
     			  	    	data2.push(load_count);
     			  	    	data3.push(error_count);
