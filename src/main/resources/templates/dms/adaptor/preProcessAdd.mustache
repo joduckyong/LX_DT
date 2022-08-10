@@ -172,7 +172,7 @@ const dpIngestPreIdChk = function(){
 	    }).done(function (data) {
 		    if (data != null) {
 		  	   	if(data.contents != ""){    
-		  	   		 $("#pre_id").val(data.contents[0].instance_id);
+		  	   		 $("#pre_id").val(data.contents[0].pre_id);
 		  	   	}
 		    }
 	    	  
@@ -230,7 +230,7 @@ const dpIngestPreSave = function(){
 		  		
 		  		let message = JSON.stringify(data.return_msg);
 		  		alert(message.replace(/\"/gi, ''));
-		  		
+		  		listPage();
 		    }).fail(function (error) {
 		        alert(JSON.stringify(error));
 		    });	
@@ -244,6 +244,6 @@ const listPage = function(){
 
 dpCmCodesClctTy('D07', 'property_type');
 dpCmCodesClctTy('D38', 'chang_type');
-//dpIngestPreIdChk();
+dpIngestPreIdChk();
 </script>
 
