@@ -27,35 +27,15 @@
                                 <col width="55px">
                               </colgroup>
                               <thead>
-                                <tr>
-                                  <th></th>
-                                  <th>Adapter1</th>
-                                  <th>Adapter2</th>
-                                  <th>Adapter3</th>
-                                  <th>Adapter4</th>
+                                <tr id="gridTitle">
                                 </tr>
                               </thead>
-                              <tbody>
-                                <tr>
-                                  <td>요청건수</td>
-                                  <td>200</td>
-                                  <td>300</td>
-                                  <td>250</td>
-                                  <td>100</td>
+                              <tbody id="gridData">
+                                <tr id="gridData1">
                                 </tr>
-                                <tr>
-                                  <td>적재건수</td>
-                                  <td>195</td>
-                                  <td>300</td>
-                                  <td>220</td>
-                                  <td>90</td>
+                                <tr id="gridData2">
                                 </tr>
-                                <tr>
-                                  <td>오류건수</td>
-                                  <td>5</td>
-                                  <td>0</td>
-                                  <td>30</td>
-                                  <td>10</td>
+                                <tr id="gridData3">
                                 </tr>
                               </tbody>
                             </table>
@@ -75,11 +55,11 @@
                               <tbody>
                                 <tr>
                                   <td style="text-align: center;">Adapter 동작건수</td>
-                                  <td style="text-align: center;"><span id="adapter_start_txt">8</span></td>
+                                  <td style="text-align: center;"><span id="adapter_start_txt"></span></td>
                                 </tr>
                                 <tr>
                                   <td style="text-align: center;">Adapter 중지건수</td>
-                                  <td style="text-align: center;"><span id="adapter_stop_txt">2</span></td>
+                                  <td style="text-align: center;"><span id="adapter_stop_txt"></span></td>
                                 </tr>
                               </tbody>
                             </table>
@@ -99,15 +79,15 @@
                               <tbody>
                                 <tr>
                                   <td style="text-align: center;">Instance 동작</td>
-                                  <td style="text-align: center;"><span id="instance_start_txt">28</span></td>
+                                  <td style="text-align: center;"><span id="instance_start_txt"></span></td>
                                 </tr>
                                 <tr>
                                   <td style="text-align: center;">Instance 중지</td>
-                                  <td style="text-align: center;"><span id="instance_stop_txt">10</span></td>
+                                  <td style="text-align: center;"><span id="instance_stop_txt"></span></td>
                                 </tr>
                                 <tr>
                                   <td style="text-align: center;">Instance 오류 중지</td>
-                                  <td style="text-align: center;"><span id="instance_error_txt">2</span></td>
+                                  <td style="text-align: center;"><span id="instance_error_txt"></span></td>
                                 </tr>
                               </tbody>
                             </table>
@@ -213,84 +193,55 @@
 
 <script>
 const commonUrl = '/common';
-const url = '/adaptor';
+const url = '/monitoring';
 
 
 //bar 차트 
-const barChart = function(){
+const barChart = function(chartTitle, data1, data2, data3){
+	
+	let bgcolor1 = [];
+	let bgcolor2 = [];
+	let bgcolor3 = [];
+	let bordercolor1 = [];	
+	let bordercolor2 = [];	
+	let bordercolor3 = [];	
+	chartTitle.forEach(function(titile, index){
+		bgcolor1.push('rgba(54, 162, 235, 0.2)');
+		bgcolor2.push('rgba(255, 206, 86, 0.2)');
+		bgcolor3.push('rgba(255, 99, 132, 0.2)');
+		bordercolor1.push('rgba(54, 162, 235, 1)');
+		bordercolor2.push('rgba(255, 206, 86, 1)');
+		bordercolor3.push('rgba(255, 99, 132, 1)');
+	});
+	
 	var context = document.getElementById('barChart').getContext('2d');
 	var myChart = new Chart(context, {
 		type: 'bar', // 차트의 형태
 		data: { // 차트에 들어갈 데이터
-		    labels: [
-		        //x 축
-		        'Adapter1','Adapter2','Adapter3','Adapter4'
-		    ],
+		    labels: chartTitle,
 		    datasets: [
 		        { //데이터
 		            label: '요청건수', //차트 제목
 		            fill: false, // line 형태일 때, 선 안쪽을 채우는지 안채우는지
-		            data: [
-		                200,300,250,100 //x축 label에 대응되는 데이터 값
-		            ],
-		            backgroundColor: [
-		                //색상
-		                'rgba(54, 162, 235, 0.2)',
-		                'rgba(54, 162, 235, 0.2)',
-		                'rgba(54, 162, 235, 0.2)',
-		                'rgba(54, 162, 235, 0.2)',
-		            ],
-		            borderColor: [
-		                //경계선 색상
-		                'rgba(54, 162, 235, 1)',
-		                'rgba(54, 162, 235, 1)',
-		                'rgba(54, 162, 235, 1)',
-		                'rgba(54, 162, 235, 1)',
-		            ],
+		            data: data1,
+		            backgroundColor: bgcolor1,
+		            borderColor: bordercolor1,
 		            borderWidth: 1 //경계선 굵기
 		        }
 		       ,{ //데이터
 		            label: '적재건수', //차트 제목
 		            fill: false, // line 형태일 때, 선 안쪽을 채우는지 안채우는지
-		            data: [
-		                195,300,220,90 //x축 label에 대응되는 데이터 값
-		            ],
-		            backgroundColor: [
-		                //색상
-		                'rgba(255, 206, 86, 0.2)',
-		                'rgba(255, 206, 86, 0.2)',
-		                'rgba(255, 206, 86, 0.2)',
-		                'rgba(255, 206, 86, 0.2)',
-		            ],
-		            borderColor: [
-		                //경계선 색상
-		                'rgba(255, 206, 86, 1)',
-		                'rgba(255, 206, 86, 1)',
-		                'rgba(255, 206, 86, 1)',
-		                'rgba(255, 206, 86, 1)',
-		            ],
+		            data: data2,
+		            backgroundColor: bgcolor2,
+		            borderColor: bordercolor2,
 		            borderWidth: 1 //경계선 굵기
 		        }		        
 		       ,{ //데이터
 		            label: '오루건수', //차트 제목
 		            fill: false, // line 형태일 때, 선 안쪽을 채우는지 안채우는지
-		            data: [
-		                5,0,30,10 //x축 label에 대응되는 데이터 값
-		            ],
-		            backgroundColor: [
-		                //색상
-		                'rgba(255, 99, 132, 0.2)',
-		                'rgba(255, 99, 132, 0.2)',
-		                'rgba(255, 99, 132, 0.2)',
-		                'rgba(255, 99, 132, 0.2)',
-		            ],
-		            borderColor: [
-		                //경계선 색상
-		                'rgba(255, 99, 132, 1)',
-		                'rgba(255, 99, 132, 1)',
-		                'rgba(255, 99, 132, 1)',
-		                'rgba(255, 99, 132, 1)',
-		            ],
+		            data: data3,
+		            backgroundColor: bgcolor3,
+		            borderColor: bordercolor3,
 		            borderWidth: 1 //경계선 굵기
 		        }		        
 		             
@@ -311,7 +262,8 @@ const barChart = function(){
 }
 
 //pie 차트
-const pieChart1 = function(){
+const pieChart1 = function(datas){
+	
 	var context = document.getElementById('pieChart1').getContext('2d');
 	var myChart = new Chart(context, {
 		type: 'pie', // 차트의 형태
@@ -324,9 +276,7 @@ const pieChart1 = function(){
 		        { //데이터
 		            label: '수집동작현황(Adapter)', //차트 제목
 		            fill: false, // line 형태일 때, 선 안쪽을 채우는지 안채우는지
-		            data: [
-		                8,2 //x축 label에 대응되는 데이터 값
-		            ],
+		            data: datas,
 		            backgroundColor: [
 		                //색상
 		                'rgba(54, 162, 235, 0.2)',
@@ -356,7 +306,8 @@ const pieChart1 = function(){
 }
 
 //Pie 차트 
-const pieChart2 = function(){
+const pieChart2 = function(datas){
+	
 	var context = document.getElementById('pieChart2').getContext('2d');
 	var myChart = new Chart(context, {
 		type: 'pie', // 차트의 형태
@@ -369,9 +320,7 @@ const pieChart2 = function(){
 		        { //데이터
 		            label: '수집동작현황(Instance)', //차트 제목
 		            fill: false, // line 형태일 때, 선 안쪽을 채우는지 안채우는지
-		            data: [
-		                28,10,2 //x축 label에 대응되는 데이터 값
-		            ],
+		            data: datas,
 		            backgroundColor: [
 		                //색상
 		                'rgba(54, 162, 235, 0.2)',
@@ -408,7 +357,7 @@ const dpCmMoniteringLogsPopup = function(id, log_type){
 	$('#log_modal').modal('show');
 	
     const data = {
-	   		url: '/dp/cm/monitering/logs/popup',
+	   		url: '/dp/cm/monitoring/logs/popup',
 	   		id: id,	
 	   		log_type: log_type,	
 	   		user_id: 'user00',	
@@ -445,7 +394,7 @@ const dpCmMoniteringLogs = function(){
 	
 	$("#dpCmMoniteringLogs").empty();	
     const data = {
-	   		url: '/dp/cm/monitering/logs',
+	   		url: '/dp/cm/monitoring/logs',
 	   		user_id: 'user00',	
 	   		menu_id: 'menu_id',	 
 	    };		
@@ -461,13 +410,12 @@ const dpCmMoniteringLogs = function(){
 			  	   	if(data.contents != ""){    	
     		     	    let insertTr = '';
     			  	    $.each(data.contents, function (idx, el) {
-  		     	          insertTr += '<tr onclick=dpCmMoniteringLogsPopup("'+el.id+'","'+el.log_type+'")>';
-		     		      insertTr += ' <td>'+el.log_dt+'</td>';
-		     		      insertTr += ' <td>'+el.adapter_nm+'</td>';
-		     		      insertTr += ' <td>'+el.log_desc+'</td>';
-		     		      insertTr += ' <td>'+el.payload+'</td>';
+  		     	          insertTr += '<tr style="cursor:pointer" onclick=dpCmMoniteringLogsPopup('+el.id+',"'+el.log_type+'")>';
+		     		      insertTr += ' <td>'+isEmpty(el.log_dt)+'</td>';
+		     		      insertTr += ' <td>'+isEmpty(el.adapter_nm)+'</td>';
+		     		      insertTr += ' <td>'+isEmpty(el.log_desc)+'</td>';
+		     		      insertTr += ' <td>'+isEmpty(el.payload)+'</td>';
 		                  insertTr += '</tr>';
-		                  i++;
     			  	    });	  			  	    
 	  	          	    $("#dpCmMoniteringLogs").append(insertTr);		    			  	    
 			  	   	}
@@ -482,7 +430,7 @@ const dpCmMoniteringLogs = function(){
 const dpCmMoniteringStatus = function(){
 	
     const data = {
-	   		url: '/dp/cm/monitering/status',
+	   		url: '/dp/cm/monitoring/status',
 	   		user_id: 'user00',	
 	   		menu_id: 'menu_id',	   	
 	    };		
@@ -496,11 +444,29 @@ const dpCmMoniteringStatus = function(){
 	    }).done(function (data) {
 		  	  if (data != null) {
 			  	   	if(data.contents != ""){    	
-			  	   		$("#adapter_start_txt").text(data.contents[0].adapter_start);
-			  	   		$("#adapter_stop_txt").text(data.contents[0].adapter_stop);
-			  	   		$("#instance_start_txt").text(data.contents[0].instance_start);
-			  	   		$("#instance_stop_txt").text(data.contents[0].instance_stop);
-			  	   		$("#instance_error_txt").text(data.contents[0].instance_error);
+			  	   		
+			  	   		let adapter_start = isEmpty(data.contents[0].adapter_start) === '' ? 0:isEmpty(data.contents[0].adapter_start);
+			  	   		let adapter_stop = isEmpty(data.contents[0].adapter_stop) === '' ? 0:isEmpty(data.contents[0].adapter_stop);
+			  	   		let instance_start = isEmpty(data.contents[0].instance_start) === '' ? 0:isEmpty(data.contents[0].instance_start);
+			  	   		let instance_stop = isEmpty(data.contents[0].instance_stop) === '' ? 0:isEmpty(data.contents[0].instance_stop);
+			  	   		let instance_error = isEmpty(data.contents[0].instance_error) === '' ? 0:isEmpty(data.contents[0].instance_error);
+			  	   		$("#adapter_start_txt").text(adapter_start);
+			  	   		$("#adapter_stop_txt").text(adapter_stop);
+			  	   		$("#instance_start_txt").text(instance_start);
+			  	   		$("#instance_stop_txt").text(instance_stop);
+			  	   		$("#instance_error_txt").text(instance_error);
+			  	   		
+			  	   		let pieChartData1 = [];
+			  	   		pieChartData1.push(adapter_start);
+			  	  		pieChartData1.push(adapter_stop);
+			  	   	    
+			  	   		let pieChartData2 = [];
+			  	   		pieChartData2.push(instance_start);
+			  	  		pieChartData2.push(instance_stop);
+			  	  		pieChartData2.push(instance_error);
+			  	   	    
+			  	   		pieChart1(pieChartData1);
+			  	   		pieChart2(pieChartData2);
 			  	   	}
 		  	  }
 	    	  
@@ -512,8 +478,13 @@ const dpCmMoniteringStatus = function(){
 //수집현황
 const dpCmMoniteringIngest = function(daytype){
 	
+  	$("#gridTitle").empty();
+ 	$("#gridData1").empty();	
+ 	$("#gridData2").empty();	
+ 	$("#gridData3").empty();	
+ 	
     const data = {
-	   		url: '/dp/cm/monitering/ingest',
+	   		url: '/dp/cm/monitoring/ingest',
 	   		daytype: daytype, 	
 	   		user_id: 'user00',	
 	   		menu_id: 'menu_id',	   		
@@ -528,14 +499,40 @@ const dpCmMoniteringIngest = function(daytype){
 	    }).done(function (data) {
 		  	  if (data != null) {
 			  	   	if(data.contents != ""){    	
+			  	   		
+			  	   		let chartTitle = [];
+			  	   		let data1 = [];
+			  	   		let data2 = [];
+			  	   		let data3 = [];
+			  	   		
+				  	   	let insertTh = '<th></th>';
+				  	   	let insertTd1 = '<td>요청건수</td>';
+				  	   	let insertTd2 = '<td>적재건수</td>';
+				  	   	let insertTd3 = '<td>오류건수</td>';
     			  	    $.each(data.contents, function (idx, el) {
-    			  	    	el.log_dt;
-    			  	    	el.adapter_nm;
-    			  	    	el.log_desc;
-    			  	    	el.payload;
-    			  	    	el.id;
-    			  	    	el.log_type;
+    			  	    	
+    			  	    	insertTh += '<th>'+el.adapter_nm+'</th>';
+    			  	    	insertTd1 += '<td>'+el.ingest_count+'</td>';
+    			  	    	insertTd2 += '<td>'+el.load_count+'</td>';
+    			  	    	insertTd3 += '<td>'+el.error_count+'</td>';
+    			  	    	
+    			  	    	chartTitle.push(el.adapter_nm);
+    			  	    	
+    			  	    	let ingest_count = isEmpty(el.ingest_count) === '' ? 0:isEmpty(el.ingest_count);
+    			  	    	let load_count = isEmpty(el.load_count) === '' ? 0:isEmpty(el.load_count);
+    			  	    	let error_count = isEmpty(el.error_count) === '' ? 0:isEmpty(el.error_count);
+    			  	    	data1.push(ingest_count);
+    			  	    	data2.push(load_count);
+    			  	    	data3.push(error_count);
     			  	    });
+    			  	    
+    			  	  	$("#gridTitle").append(insertTh);
+    			  	  	$("#gridData1").append(insertTd1);
+    			  	  	$("#gridData2").append(insertTd2);
+    			  	  	$("#gridData3").append(insertTd3);
+    			  	  	
+    			  	  	barChart(chartTitle, data1, data2, data3);
+    			  	    
 			  	   	}
 		  	  }
 	    	  
@@ -544,10 +541,13 @@ const dpCmMoniteringIngest = function(daytype){
 	    });			
 }
 
-barChart();
-pieChart1();
-pieChart2();
-
+//수집현황
+let daytype = $("#daytype").val();
+dpCmMoniteringIngest(daytype);
+//수집동작현황
+dpCmMoniteringStatus();
+//데이터로그
+dpCmMoniteringLogs();
 
 </script>
 
