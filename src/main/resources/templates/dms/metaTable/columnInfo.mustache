@@ -115,11 +115,11 @@
 				                        <tr>
 				                            <th>데이터타입</th>
 				                            <th>
-				                                <select class="form-control" name="data_type" id="data_type">
-				                                    <option value="VARCHAR">VARCHAR</option>
-				                                    <option value="INTEGER">INTEGER</option>
-				                                    <option value="NUMERIC">NUMERIC</option>
-				                                    <option value="TIMESTAMPTZ">TIMESTAMPTZ</option>
+				                                <select class="form-control" name="data_type" id="data_type" onchange="changeDataType(this);">
+				                                    <option value="varchar">varchar</option>
+				                                    <option value="integer">integer</option>
+				                                    <option value="Numeric">Numeric</option>
+				                                    <option value="timestamptz">timestamptz</option>
 				                                </select>
 				                            </th>
 				                            <th>데이터 길이</th>
@@ -128,7 +128,8 @@
 				                            </th>
 				                            <th>참조 컬럼 식별자</th>
 				                            <th colspan="3">
-				                                <input class="form-control" type="text"  name="refrn_column_idntfc_id" id="refrn_column_idntfc_id" readonly="readonly">
+				                                <select class="form-control" name="refrn_column_idntfc_id" id="refrn_column_idntfc_id">
+				                                </select>
 				                            </th>
 				                        </tr>
 				                        <tr>
@@ -215,7 +216,11 @@
 				                            </th>
 				                            <th>CRUD 구분</th>
 				                            <th>
-				                                <input class="form-control" type="text" name="crud_se" id="crud_se">
+				                                <select class="form-control" name="crud_se" id="crud_se">
+				                                    <option value="C">C</option>
+				                                    <option value="U">U</option>
+				                                    <option value="D">D</option>
+				                                </select>
 				                            </th>
 				                        </tr>
 			                        </thead>
@@ -384,6 +389,11 @@ const dpIngestMetaTblColDt = function (column_idntfc_id) {
   	    			$("#column_eng_nm").val(el.column_eng_nm);
   	    			$("#refrn_table_idntfc_id_nm").val(el.refrn_table_idntfc_id_nm);
   	    			$("#data_type").val(el.data_type).prop("selected", true);
+  	    			if(el.data_type == 'varchar' || el.data_type == 'Numeric'){
+  	    				$('#data_lt').prop('disabled', false);
+  	    			}else{
+  	    				$('#data_lt').prop('disabled', true);
+  	    			}
   	    			$("#data_lt").val(el.data_lt);
   	    			$("#refrn_column_idntfc_id").val(el.refrn_column_idntfc_id);
   	    			$("#not_null_at").val(el.not_null_at).prop("selected", true);
@@ -649,6 +659,24 @@ const colSaveBtn = function () {
 	
 }
 
+//데이터타입 선택시 데이터길이/컬럼저장타입 변경
+const changeDataType = function(obj){
+	let val = $(obj).val();
+	if(val == 'varchar'){
+		$('#column_stre_type').val('String');
+		$('#data_lt').prop('disabled', false);
+	}else if(val == 'integer'){
+		$('#column_stre_type').val('Integer');
+		$('#data_lt').prop('disabled', true);
+	}else if(val == 'Numeric'){
+		$('#column_stre_type').val('Double');
+		$('#data_lt').prop('disabled', false);
+	}else if(val == 'timestamptz'){
+		$('#column_stre_type').val('Date');
+		$('#data_lt').prop('disabled', true);
+	}
+}
+
 //추가 버튼
 const btnAdd = function(){
 	$("#btn_type").val('I');
@@ -684,7 +712,7 @@ const initDetail = function(){
 	$("#refrn_table_idntfc_id").val("");
 	$("#column_eng_nm").val("");
 	$("#refrn_table_idntfc_id_nm").val("");
-	$("#data_type").val("VARCHAR").prop("selected", true);
+	$("#data_type").val("varchar").prop("selected", true);
 	$("#data_lt").val("");
 	$("#refrn_column_idntfc_id").val("");
 	$("#not_null_at").val("Y").prop("selected", true);
@@ -700,7 +728,7 @@ const initDetail = function(){
 	$("#ordr").val("");
 	$("#indvdl_info_at").val("Y").prop("selected", true);
 	$("#encpt_at").val("Y").prop("selected", true);
-	$("#crud_se").val("");
+	$("#crud_se").val("C").prop("selected", true);
   	
 }
 
