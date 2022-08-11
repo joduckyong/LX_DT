@@ -152,7 +152,7 @@
                       </div>
                       <div class="form-group row col-12 col-md-6">
                         <div class="control-label" style="text-align: center;">인스턴스명</div>
-                        <div class="form-control_box"><span id=""></span></div>
+                        <div class="form-control_box"><span id="instance_nm_txt"></span></div>
                       </div>
                     </div>
                     <div class="row">
@@ -376,13 +376,14 @@ const dpCmMoniteringLogsPopup = function(id, log_type){
 	    }).done(function (data) {
 		  	  if (data != null) {
 			  	   	if(data.contents != ""){    	
-				  	   	$("#log_dt_txt").text(data.contents[0].log_dt);
-				  	   	$("#adapter_nm_txt").text(data.contents[0].adapter_nm);
-				  	   	$("#clct_mthd_txt").text(data.contents[0].clct_mthd);
-				  	   	$("#clct_ty_txt").text(data.contents[0].clct_ty);
-				  	   	$("#log_desc_txt").text(data.contents[0].log_desc);
-				  	   	$("#st_datamodel_txt").text(data.contents[0].st_datamodel);
-				  	   	$("#data_before_txt").text(data.contents[0].data_before);
+				  	   	$("#log_dt_txt").text(isEmpty(data.contents[0].log_dt));
+				  	   	$("#adapter_nm_txt").text(isEmpty(data.contents[0].adapter_nm));
+				  	   	$("#instance_nm_txt").text(isEmpty(data.contents[0].instance_nm));
+				  	   	$("#clct_mthd_txt").text(isEmpty(data.contents[0].clct_mthd));
+				  	   	$("#clct_ty_txt").text(isEmpty(data.contents[0].clct_ty));
+				  	   	$("#log_desc_txt").text(isEmpty(data.contents[0].log_desc));
+				  	   	$("#st_datamodel_txt").text(isEmpty(data.contents[0].st_datamodel));
+				  	   	$("#data_before_txt").text(isEmpty(data.contents[0].data_before));
 			  	   	}
 		  	  }
 	    	  
