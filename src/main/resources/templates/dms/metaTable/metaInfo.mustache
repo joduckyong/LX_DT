@@ -122,11 +122,7 @@ const dpCmCategory = function (clsf_type, clsf_id) {
   	    	if(data.contents != ""){
   	    		let insertTr = '';
 		  	    $.each(data.contents, function (idx, el) {
-		  	    	let clsf_nm = el.clsf_nm;
-		  	    	if(clsf_nm.lastIndexOf('-') > -1){
-		  	    		clsf_nm = clsf_nm.substring(clsf_nm.lastIndexOf('-')+1);
-		  	    	}
-		  	    	insertTr += '<option value="'+el.clsf_id+'">'+clsf_nm+'</option>';
+		  	    	insertTr += '<option value="'+el.clsf_id+'">'+el.clsf_nm+'</option>';
 		  	    });
 		  	  if(clsf_type == '1'){	//대분류 선택시
 		  		if(clsf_id){
@@ -194,22 +190,6 @@ const dpIngestMetaItem = function (page, size_per_page) {
   	    	if(data.contents != ""){
   	    		let insertTr = '';
 		  	    $.each(data.contents, function (idx, el) {
-		  	    	let dset_lclas = isEmpty(el.dset_lclas);
-		  	    	let dset_mclas = isEmpty(el.dset_mclas);
-		  	    	let dset_sclas = isEmpty(el.dset_sclas);
-		  	    	
-		  	    	if(dset_lclas.lastIndexOf('-') > -1){
-		  	    		dset_lclas = dset_lclas.substring(dset_lclas.lastIndexOf('-')+1);
-		  	    	}
-		  	    	
-		  	    	if(dset_mclas.lastIndexOf('-') > -1){
-		  	    		dset_mclas = dset_mclas.substring(dset_mclas.lastIndexOf('-')+1);
-		  	    	}
-		  	    	
-		  	    	if(dset_sclas.lastIndexOf('-') > -1){
-		  	    		dset_sclas = dset_sclas.substring(dset_sclas.lastIndexOf('-')+1);
-		  	    	}
-		  	    	
 		  	    	
 		  	    	let cl_bass_check = el.cl_bass == 'Y' ? 'checked' : ''; 
 		  	    	let cl_qlity_check = el.cl_qlity == 'Y' ? 'checked' : ''; 
@@ -218,9 +198,9 @@ const dpIngestMetaItem = function (page, size_per_page) {
 		  	    	let cl_crlts_check = el.cl_crlts == 'Y' ? 'checked' : ''; 
 		  	    	
 		  	    	insertTr += '<tr name="dset_idntfc_id" data-idntfc_id='+el.dset_idntfc_id+'>';
-		  	    	insertTr += '	<td>'+dset_lclas+'</td>';
-		  	    	insertTr += '	<td>'+dset_mclas+'</td>';
-		  	    	insertTr += '	<td>'+dset_sclas+'</td>';
+		  	    	insertTr += '	<td>'+el.dset_lclas+'</td>';
+		  	    	insertTr += '	<td>'+el.dset_mclas+'</td>';
+		  	    	insertTr += '	<td>'+el.dset_sclas+'</td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.dset_korean_nm)+'</td>';
 		  	    	insertTr += '	<td><input type="checkbox" name="cl_bass" value="'+isEmpty(el.cl_bass)+'" '+cl_bass_check+' onchange="setCheckValue(this);"></td>';
 		  	    	insertTr += '	<td><input type="checkbox" name="cl_qlity" value="'+isEmpty(el.cl_qlity)+'" '+cl_qlity_check+' onchange="setCheckValue(this);"></td>';
@@ -264,6 +244,11 @@ const dpIngestMetaItemSave = function () {
 		
 		arr.push(obj);
 	});
+	
+	if(arr.length == 0){
+		alert("선택된 항목이 없습니다!");
+		return;
+	}
 	
 	const data = {
    		url: '/dp/ingest/meta/item/save',

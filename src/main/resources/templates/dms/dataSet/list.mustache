@@ -129,11 +129,7 @@ const dpCmCategory = function (clsf_type, clsf_id) {
   	    	if(data.contents != ""){
   	    		let insertTr = '';
 		  	    $.each(data.contents, function (idx, el) {
-		  	    	let clsf_nm = el.clsf_nm;
-		  	    	if(clsf_nm.lastIndexOf('-') > -1){
-		  	    		clsf_nm = clsf_nm.substring(clsf_nm.lastIndexOf('-')+1);
-		  	    	}
-		  	    	insertTr += '<option value="'+el.clsf_id+'">'+clsf_nm+'</option>';
+		  	    	insertTr += '<option value="'+el.clsf_id+'">'+el.clsf_nm+'</option>';
 		  	    });
 		  	  if(clsf_type == '1'){	//대분류 선택시
 		  		if(clsf_id){

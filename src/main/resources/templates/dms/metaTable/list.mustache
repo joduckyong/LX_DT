@@ -358,11 +358,7 @@ const dpCmCategory = function (clsf_type, clsf_id) {
   	    	if(data.contents != ""){
   	    		let insertTr = '';
 		  	    $.each(data.contents, function (idx, el) {
-		  	    	let clsf_nm = el.clsf_nm;
-		  	    	if(clsf_nm.lastIndexOf('-') > -1){
-		  	    		clsf_nm = clsf_nm.substring(clsf_nm.lastIndexOf('-')+1);
-		  	    	}
-		  	    	insertTr += '<option value="'+el.clsf_id+'">'+clsf_nm+'</option>';
+		  	    	insertTr += '<option value="'+el.clsf_id+'">'+el.clsf_nm+'</option>';
 		  	    });
 		  	  if(clsf_type == '1'){	//대분류 선택시
 		  		if(clsf_id){
@@ -420,11 +416,7 @@ const dpCmCategoryDataset = function (clsf_type, clsf_id) {
   	    	if(data.contents != ""){
   	    		let insertTr = '';
 		  	    $.each(data.contents, function (idx, el) {
-		  	    	let clsf_nm = el.clsf_nm;
-		  	    	if(clsf_nm.lastIndexOf('-') > -1){
-		  	    		clsf_nm = clsf_nm.substring(clsf_nm.lastIndexOf('-')+1);
-		  	    	}
-		  	    	insertTr += '<option value="'+el.clsf_id+'">'+clsf_nm+'</option>';
+		  	    	insertTr += '<option value="'+el.clsf_id+'">'+el.clsf_nm+'</option>';
 		  	    });
 		  	  if(clsf_type == '1'){	//대분류 선택시
 		  		if(clsf_id){
@@ -489,26 +481,11 @@ const dpIngestMetaTbl = function (page, size_per_page) {
   	    	if(data.contents != ""){
   	    		let insertTr = '';
 		  	    $.each(data.contents, function (idx, el) {
-		  	    	let dset_mclas = el.dset_mclas;
-		  	    	let dset_sclas = el.dset_sclas;
-		  	    	
-		  	    	if(dset_mclas){
-		  	    		if(dset_mclas.lastIndexOf('-') > -1){
-			  	    		dset_mclas = dset_mclas.substring(dset_mclas.lastIndexOf('-')+1);
-			  	    	}
-		  	    	}
-		  	    	
-		  	    	if(dset_sclas){
-		  	    		if(dset_sclas.lastIndexOf('-') > -1){
-			  	    		dset_sclas = dset_sclas.substring(dset_sclas.lastIndexOf('-')+1);
-			  	    	}
-		  	    	}
-		  	    	
 		  	    	insertTr += '<tr>';
 		  	    	insertTr += '	<td><input type="checkbox" name="tbl_chk" data-createyn="'+isEmpty(el.creat_table_at)+'" data-eng="'+isEmpty(el.table_eng_nm)+'"></td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.dset_lclas)+'</td>';
-		  	    	insertTr += '	<td>'+isEmpty(dset_mclas)+'</td>';
-		  	    	insertTr += '	<td>'+isEmpty(dset_sclas)+'</td>';
+		  	    	insertTr += '	<td>'+isEmpty(el.dset_mclas)+'</td>';
+		  	    	insertTr += '	<td>'+isEmpty(el.dset_sclas)+'</td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.clct_mthd)+'</td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.clct_ty)+'</td>';
 		  	    	insertTr += '	<td><span class="blue bold" style="cursor:pointer" onclick="dpIngestMetaDetail(\''+el.rl_dset_idntfc_id+'\', \''+el.table_idntfc_id+'\');">'+isEmpty(el.dset_korean_nm)+'</span></td>';
