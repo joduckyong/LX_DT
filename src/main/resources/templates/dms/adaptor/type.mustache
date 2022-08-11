@@ -25,6 +25,7 @@
 										<div class="table_responsive">
 											<input type="hidden" id="adapter_type_id" value=""> 
 											<input type="hidden" id="adaptorSetAddCnt" value="0"> 
+											<input type="hidden" id="adaptorConfigSetAddCnt" value="0"> 
 											<table class="table table-striped table-bordered bulk_action" style="width: 100%" id="adaptorSetData">
 												<colgroup>
 													<col width="12px">
@@ -247,10 +248,14 @@ const dpCmCodesClctTy = function (group_code, id) {
 //접속정보 설정 추가
 const adaptorSetConfigAdd = function(){
 
+	let adaptorSetDataConfigLen = $("#adaptorSetDataConfig tbody tr").length;
+	console.log('adaptorSetDataConfigLen: '+adaptorSetDataConfigLen);
+	
+	if($("#adaptorConfigSetAddCnt").val() === '0'){
 	    let insertTr = '';
         insertTr += '<tr>';
-        insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList" onclick=checkOnlyOne(this,"'+dpIngestPpInfoCnt+'"); id="checkConfig_'+dpIngestPpInfoCnt+'" value=""></td>';
-        insertTr += ' <td style="text-align: center;">'+(++dpIngestPpInfoCnt)+'</td>';
+        insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList" onclick=checkConfigOnlyOne(this); id="checkConfig_'+adaptorSetDataConfigLen+'" value=""></td>';
+        insertTr += ' <td style="text-align: center;"><span id="displauSeq">'+(++adaptorSetDataConfigLen)+'</span></td>';
         insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configItem" id="configItem"></td>';
         insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configIteNm" id="configIteNm"></td>';
         insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configValue" id="configValue"></td>';
@@ -263,6 +268,8 @@ const adaptorSetConfigAdd = function(){
         insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configItemDescribed" id="configItemDescribed"></td>';
         insertTr += '</tr>';
   	    $("#dpIngestPpInfo").append(insertTr);		
+  	  	$("#adaptorConfigSetAddCnt").val(adaptorSetDataConfigLen);
+	}
 }
 
 //접속정보 설정 조회
@@ -291,26 +298,26 @@ const dpIngestPpInfo = function(adapter_type_id){
     		     	    let i = 0;	
     			  	    $.each(data.contents, function (idx, el) {
     		     	          insertTr += '<tr>';
-    		     		      insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList" onclick=checkOnlyOne(this,"'+el.adapter_type_id+'"); id="checkConfig_'+el.adapter_type_id+'" value="'+el.adapter_type_id+'"></td>';
+    		     		      insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList" onclick=checkConfigOnlyOne(this); id="checkConfig_'+(i+1)+'" value="'+el.item+'"></td>';
     		     		      insertTr += ' <td style="text-align: center;">'+(++i)+'</td>';
-    		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+el.item+'" name="configItem" id="configItem"></td>';
-    		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+el.item_nm+'" name="configIteNm" id="configIteNm"></td>';
-    		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+el.value+'" name="configValue" id="configValue"></td>';
-    		     		      insertTr += ' <td style="text-align: center;"><select id="change_able_yn">';
+    		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+el.item+'" name="configItem" id="configItem_'+i+'"></td>';
+    		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+el.item_nm+'" name="configIteNm" id="configIteNm_'+i+'"></td>';
+    		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+el.value+'" name="configValue" id="configValue_'+i+'"></td>';
+    		     		      insertTr += ' <td style="text-align: center;"><select id="change_able_yn_'+i+'">';
     		     		      if(el.change_able_yn === 'Y'){
 	    		     		      insertTr += ' <option value="Y" selected>필수</option><option value="N">필수아님</option>';
     		     		      }else{
 	    		     		      insertTr += ' <option value="Y" selected>필수</option><option value="N">필수아님</option>';
     		     		      }
     		     		      insertTr += ' </select></td>';
-    		     		      insertTr += ' <td style="text-align: center;"><select id="essential_yn">';
+    		     		      insertTr += ' <td style="text-align: center;"><select id="essential_yn_'+i+'">';
     		     		      if(el.essential_yn === 'Y'){
 	    		     		      insertTr += ' <option value="Y" selected>필수</option><option value="N">필수아님</option>';
     		     		      }else{
 	    		     		      insertTr += ' <option value="Y">필수</option><option value="N" selected>필수아님</option>';
     		     		      }
     		     		      insertTr += ' </select></td>';
-    		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+el.item_described+'" name="configItemDescribed" id="configItemDescribed"></td>';
+    		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+el.item_described+'" name="configItemDescribed" id="configItemDescribed_'+i+'"></td>';
     		                  insertTr += '</tr>';
     			  	    });
     			  	    
@@ -340,6 +347,19 @@ const checkOnlyOne = function(element, id) {
 	    $("#adaptorSetDataConfigArea").show();
 	    dpIngestPpInfo(id);
     }    
+    
+    $("#adaptorConfigSetAddCnt").val("0");
+}
+
+//접속정보 설정 체크
+const checkConfigOnlyOne = function(element) {
+
+    const checkboxes = document.getElementsByName("checkConfigList");
+    checkboxes.forEach((cb) => {
+        cb.checked = false;
+    })
+    element.checked = true;
+    
 }
 
 //Adapter 유형관리 추가
@@ -442,9 +462,11 @@ const dpIngestPpDtDelChk = function(){
 	    	adapter_type_id = $(this).val();
 	    });
 	    
-	    $.each($("#adaptorSetDataConfig tbody tr"), function(){
+	    $("input[name='checkConfigList']:checked").each(function(e){
 	    	
-	    	let item = $(this).find("#configItem").val();
+	    	let item = $(this).val();
+	    	
+	    	console.log('item:'+item);
 	    	
 			const data = {
 			   		url: '/dp/ingest/property/detail/delete/check',
@@ -477,6 +499,8 @@ const dpIngestPpDtDelChk = function(){
 			    }).fail(function (error) {
 			        alert(JSON.stringify(error));
 			    });
+			    
+			   
 	    });   	
 	}
 }
@@ -562,23 +586,6 @@ const dpIngestPpDtSave = function(){
 	    	adapter_type_id = $(this).val();
 	    });
 	    
-	    const adaptorSetConfigSaveData = [];
-	    let i = 1;
-	    $.each($("#adaptorSetDataConfig tbody tr"), function(){
-	        const contents = {
-	            item : $(this).find("#configItem").val(),
-	            item_nm : $(this).find("#configIteNm").val(),
-	            item_described : $(this).find("#configItemDescribed").val(),
-	            change_able_yn : $(this).find("#change_able_yn").val(),
-	            essential_yn : $(this).find("#essential_yn").val(),
-	            value : $(this).find("#configValue").val(),
-	            display_seq : i,
-	            adapter_type_id : adapter_type_id
-	        };
-	        adaptorSetConfigSaveData.push(contents);
-	        i++;
-	    });
-	    
 		const data = {
 		   		url: '/dp/ingest/property/detail/save',
 		   		adapter_type_id: adapter_type_id,	
@@ -586,8 +593,18 @@ const dpIngestPpDtSave = function(){
 		   		clct_ty: $("#clct_ty_"+adapter_type_id).val(),	
 		   		user_id: 'user00',	
 		   		menu_id: 'menu_id',
-		   		contents: adaptorSetConfigSaveData,
+		   		displau_seq: $("#displauSeq").text(),
+		   		item: $("#configItem").val(),
+		   		item_nm: $("#configIteNm").val(),
+		   		value: $("#configValue").val(),
+		   		change_able_yn: $("#change_able_yn").val(),
+		   		essential_yn: $("#essential_yn").val(),
+		   		item_described: $("#configItemDescribed").val(),
 		    };		
+		
+		
+		console.log('data : '+JSON.stringify(data));
+
 		    $.ajax({
 		        type: 'POST',
 		        url: url+'/dpIngestPpDtSave',
@@ -598,7 +615,9 @@ const dpIngestPpDtSave = function(){
 		  		
 		  		let message = JSON.stringify(data.return_msg);
 		  		alert(message.replace(/\"/gi, ''));
-		    	
+		  		$("#adaptorConfigSetAddCnt").val("0");
+		  		
+		  		dpIngestPpInfo(adapter_type_id);
 		    }).fail(function (error) {
 		        alert(JSON.stringify(error));
 		    });		
@@ -628,7 +647,7 @@ const dpIngestPpInfoSave = function(){
 		  		let message = JSON.stringify(data.return_msg);
 		  		alert(message.replace(/\"/gi, ''));
 		    	
-		  		$("#instanceSetAddCnt").val("0");
+		  		$("#adaptorSetAddCnt").val("0");
 		  		dpIngestPpType();
 		  		
 		    }).fail(function (error) {

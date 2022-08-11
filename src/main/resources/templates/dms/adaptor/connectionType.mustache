@@ -25,6 +25,7 @@
 										<div class="table_responsive">
 											<input type="hidden" id="connect_id" value=""> 
 											<input type="hidden" id="instanceSetAddCnt" value="0"> 
+											<input type="hidden" id="instanceConfigSetAddCnt" value="0"> 
 											<table class="table table-striped table-bordered bulk_action" style="width: 100%" id="instanceSetData">
 												<colgroup>
 													<col width="10px">
@@ -238,17 +239,23 @@ const dpCmCodesClctTy = function (group_code, id) {
 //접속정보 설정 추가
 const instanceSetConfigAdd = function(){
 	
+	let instanceSetDataConfigLen = $("#instanceSetDataConfig tbody tr").length;
+	console.log('instanceSetDataConfigLen: '+instanceSetDataConfigLen);
+	
+//	if($("#instanceConfigSetAddCnt").val() === '0'){
 	  let insertTr = '';
 	  let i = 0;	
 	  insertTr += '<tr>';
-	  insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList" id="checkConfig_'+dpIngestItPpInfoCnt+1+'" value=""></td>';
-	  insertTr += ' <td style="text-align: center;">'+(++dpIngestItPpInfoCnt)+'</td>';
+	  insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList"  id="checkConfig_'+instanceSetDataConfigLen+'" value=""></td>';
+	  insertTr += ' <td style="text-align: center;">'+(++instanceSetDataConfigLen)+'</td>';
 	  insertTr += ' <td style="text-align: center;"><input type="text" id="configItem" value=""></td>';
 	  insertTr += ' <td style="text-align: center;"><input type="text" id="configIteNm" value=""></td>';
 	  insertTr += ' <td style="text-align: center;"><input type="text" id="configItemDescribed" value=""></td>';
       insertTr += '</tr>';
 	  
 	  $("#dpIngestItPpInfo").append(insertTr);
+//	  $("#instanceConfigSetAddCnt").val(instanceSetDataConfigLen);
+//	}
 }
 
 //접속정보 설정 조회
@@ -280,11 +287,11 @@ const dpIngestItPpInfo = function(connect_id){
 			  	   		dpIngestItPpInfoData = data.contents;
     			  	    $.each(data.contents, function (idx, el) {
     		     	          insertTr += '<tr>';
-    		     		      insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList" id="checkConfig_'+i+'" value="'+el.connect_id+'"></td>';
+    		     		      insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList" id="checkConfig_'+(i+1)+'" value="'+el.connect_id+'"></td>';
     		     		      insertTr += ' <td style="text-align: center;">'+(++i)+'</td>';
-    		     		      insertTr += ' <td style="text-align: center;"><input type="text" id="configItem" value="'+el.item+'"></td>';
-    		     		      insertTr += ' <td style="text-align: center;"><input type="text" id="configIteNm" value="'+el.item_nm+'"></td>';
-    		     		      insertTr += ' <td style="text-align: center;"><input type="text" id="configItemDescribed" value="'+el.item_described+'"></td>';
+    		     		      insertTr += ' <td style="text-align: center;"><input type="text" id="configItem_'+i+'" value="'+el.item+'"></td>';
+    		     		      insertTr += ' <td style="text-align: center;"><input type="text" id="configIteNm_'+i+'" value="'+el.item_nm+'"></td>';
+    		     		      insertTr += ' <td style="text-align: center;"><input type="text" id="configItemDescribed_'+i+'" value="'+el.item_described+'"></td>';
     		                  insertTr += '</tr>';
     			  	    });
     	          	    $("#dpIngestItPpInfo").append(insertTr);		    	   			 
@@ -312,6 +319,17 @@ const checkOnlyOne = function(element, id) {
 	    $("#instanceSetDataConfigArea").show();
 	    dpIngestItPpInfo(id);
     }
+}
+
+//접속정보 설정 체크
+const checkConfigOnlyOne = function(element) {
+
+    const checkboxes = document.getElementsByName("checkConfigList");
+    checkboxes.forEach((cb) => {
+        cb.checked = false;
+    })
+    element.checked = true;
+    
 }
 
 //접속 유형상세 추가 
