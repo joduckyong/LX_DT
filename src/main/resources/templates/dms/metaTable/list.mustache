@@ -482,7 +482,7 @@ const dpIngestMetaTbl = function (page, size_per_page) {
   	    		let insertTr = '';
 		  	    $.each(data.contents, function (idx, el) {
 		  	    	insertTr += '<tr>';
-		  	    	insertTr += '	<td><input type="checkbox" name="tbl_chk" data-createyn="'+isEmpty(el.creat_table_at)+'" data-eng="'+isEmpty(el.table_eng_nm)+'"></td>';
+		  	    	insertTr += '	<td><input type="radio" name="tbl_chk" data-createyn="'+isEmpty(el.creat_table_at)+'" data-eng="'+isEmpty(el.table_eng_nm)+'"></td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.dset_lclas)+'</td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.dset_mclas)+'</td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.dset_sclas)+'</td>';
@@ -492,7 +492,11 @@ const dpIngestMetaTbl = function (page, size_per_page) {
 		  	    	insertTr += '	<td>'+isEmpty(el.table_korean_nm)+'</td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.table_eng_nm)+'</td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.creat_table_at)+'</td>';
-		  	    	insertTr += '	<td><button class="btn btn-success btn-sm mx-0" type="button" onclick="columnInfoList(\''+el.table_idntfc_id+'\');">바로가기</button></td>';
+		  	    	insertTr += '	<td>';
+		  	    	if(el.table_idntfc_id){
+		  	    		insertTr += '	<button class="btn btn-success btn-sm mx-0" type="button" onclick="columnInfoList(\''+el.table_idntfc_id+'\');">바로가기</button>';
+		  	    	}
+		  	    	insertTr += '	</td>';
 		  	    	insertTr += '</tr>';
 		  	    });
 		  	  $("#metaList").html(insertTr);
@@ -1093,15 +1097,16 @@ const metaTblSaveBtn = function () {
 
 //테이블생성 버튼
 const metaTblMakeBtn = function () {
-	let tbl_chk = $("input:checkbox[name='tbl_chk']:checked");
+	let tbl_chk = $("input:radio[name='tbl_chk']:checked");
+// 	let tbl_chk = $("input:checkbox[name='tbl_chk']:checked");
 	
-	if(tbl_chk.length == 0){
-		alert("항목을 선택하세요!");
-		return;
-	}else if(tbl_chk.length > 1){
-		alert("1개의 항목을 선택하세요!");
-		return;
-	}
+// 	if(tbl_chk.length == 0){
+// 		alert("항목을 선택하세요!");
+// 		return;
+// 	}else if(tbl_chk.length > 1){
+// 		alert("1개의 항목을 선택하세요!");
+// 		return;
+// 	}
 	
 	let creat_table_at = tbl_chk[0].dataset.createyn;
 	let table_eng_nm = tbl_chk[0].dataset.eng;

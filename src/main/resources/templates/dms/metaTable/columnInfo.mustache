@@ -105,7 +105,7 @@
 				                        <tr>
 				                            <th>영문명</th>
 				                            <th colspan="3">
-				                                <input class="form-control" type="text" name="column_eng_nm" id="column_eng_nm">
+				                                <input class="form-control" type="text" name="column_eng_nm" id="column_eng_nm" oninput="handleOnInput(this);">
 				                            </th>
 				                            <th>참조 테이블명</th>
 				                            <th colspan="3">
@@ -124,7 +124,7 @@
 				                            </th>
 				                            <th>데이터 길이</th>
 				                            <th>
-				                                <input class="form-control" type="text" name="data_lt" id="data_lt">
+				                                <input class="form-control" type="text" name="data_lt" id="data_lt" oninput="handleOnInputNumber(this);">
 				                            </th>
 				                            <th>참조 컬럼 식별자</th>
 				                            <th colspan="3">
@@ -458,6 +458,20 @@ const dpIngestMetaTblSaveCol = function (){
 		return;
 	}
 	
+	if(data_type == 'varchar'){
+		data_lt = data_lt.replace(/,/gi,'');
+		if(Number(data_lt) > 99999999){
+			alert("최대 길이를 초과하였습니다. 99999999 이하의 숫자를 입력해주세요!");
+			return;
+		}
+	}else if(data_type == 'Numeric'){
+		let regex = /^[0-6]{1},[0-3]{1}$/;
+		if(!regex.test(data_lt)){
+			alert("최대 길이는 6,3입니다. 형식에 맞게 입력해주세요!");
+			return;
+		}
+	}
+	
 	const data = {
    		url: '/dp/ingest/meta/tables/save/column',
 		user_id: 'user00',
@@ -543,6 +557,20 @@ const dpIngestMetaTblUpdateCol = function (){
 		alert("영문명을 입력하세요!");
 		$('#column_eng_nm').focus();
 		return;
+	}
+	
+	if(data_type == 'varchar'){
+		data_lt = data_lt.replace(/,/gi,'');
+		if(Number(data_lt) > 99999999){
+			alert("최대 길이를 초과하였습니다. 99999999 이하의 숫자를 입력해주세요!");
+			return;
+		}
+	}else if(data_type == 'Numeric'){
+		let regex = /^[0-6]{1},[0-3]{1}$/;
+		if(!regex.test(data_lt)){
+			alert("최대 길이는 6,3입니다. 형식에 맞게 입력해주세요!");
+			return;
+		}
 	}
 	
 	const data = {
@@ -662,6 +690,7 @@ const colSaveBtn = function () {
 //데이터타입 선택시 데이터길이/컬럼저장타입 변경
 const changeDataType = function(obj){
 	let val = $(obj).val();
+	$('#data_lt').val('');
 	if(val == 'varchar'){
 		$('#column_stre_type').val('String');
 		$('#data_lt').prop('disabled', false);
@@ -714,6 +743,7 @@ const initDetail = function(){
 	$("#refrn_table_idntfc_id_nm").val("");
 	$("#data_type").val("varchar").prop("selected", true);
 	$("#data_lt").val("");
+	$("#data_lt").prop("disabled",false);
 	$("#refrn_column_idntfc_id").val("");
 	$("#not_null_at").val("Y").prop("selected", true);
 	$("#dset_knd").val("D").prop("selected", true);
