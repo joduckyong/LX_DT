@@ -16,6 +16,11 @@ function handleOnInput(e)  {
 	  e.value = e.value.replace(/[^A-Za-z0-9\_\-]/g, '')
 }
 
+//숫자, 콤마
+function handleOnInputNumber(e){
+	e.value = e.value.replace(/[^0-9\,]/g, '')
+}
+
 //널 체크
 function isEmpty(str){ if(typeof str == "undefined" || str == null || str == "") return ''; else return str; }
 
