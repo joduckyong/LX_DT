@@ -39,49 +39,18 @@
 		                    </div>
 						</div>
 						<div class="table_responsive">
-		                	<div class="talbel_total">총 건</div>
-		                    <table class="table table-striped" style="text-align: center;">
-		                        <colgroup>
-		                        	<col width="15%">
-		                        	<col width="10%">
-		                        	<col width="10%">
-		                        	<col width="35%">
-		                        	<col width="30%">
-		                        </colgroup>
-		                        <thead>
-		                            <tr>
-		                                <th>문화재명</th>
-		                                <th>문화재 순번</th>
-		                                <th>고유번호</th>
-		                                <th>주소</th>
-		                                <th>적재일시</th>
-		                            </tr>
+		                	<div class="talbel_total">총 <span class="red bold" id="total_count"></span>건</div>
+		                    <table class="table table-striped" style="text-align: center; width:auto; table-layout: fixed; white-space: nowrap;">
+		                        <thead id="dsetDtCt">
 		                        </thead>
-		                        <tbody>
-									<tr>
-										<td>문화재명1</td>
-										<td>11</td>
-										<td>1111</td>
-										<td>전주시 OO동</td>
-										<td>2019. 06. 18 오후 01:07:39</td>
-									</tr>
-									<tr>
-										<td>문화재명1</td>
-										<td>11</td>
-										<td>1111</td>
-										<td>전주시 OO동</td>
-										<td>2019. 06. 18 오후 01:07:39</td>
-									</tr>
-									<tr>
-										<td>문화재명1</td>
-										<td>11</td>
-										<td>1111</td>
-										<td>전주시 OO동</td>
-										<td>2019. 06. 18 오후 01:07:39</td>
-									</tr>
+		                        <tbody id="dsetDtList">
 		                        </tbody>
 		                    </table>
 		                </div>
+		                <div class="nav justify-content-center mt-3"> 
+	                      <ul id="pagingul" class="pagination">
+						  	</ul> 
+	                    </div>
 	            	</div>
 	        	</div>
 	    	</div>
@@ -198,6 +167,12 @@
 const commonUrl = '/common';
 const url = '/dataSet';
 
+let init_page = 1;				//초기 페이지
+let page = 1;					//페이지
+let init_size_per_page = 10;	//초기 개수
+let size_per_page = 10;	 		//가져올 개수
+let pageCount = 10;		 		//페이징에 나타낼 페이지 수
+
 //데이터 셋 상세 조회
 const dpLoadDsetDt = function () {
 	
@@ -232,8 +207,53 @@ const dpLoadDsetDt = function () {
     });	
 }
 
+//데이터 셋 적재 항목조회
+const dpLoadDsetDtCt = function () {
+	return new Promise(function(resolve, reject){
+		let table_idntfc_id = '{{table_idntfc_id}}';
+		
+		const data = {
+	   		url: '/dp/load/dataset/detail/collection',
+	   		user_id: 'user00',	
+	   		table_idntfc_id: table_idntfc_id,
+	    };
+		
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpLoadDsetDtCt',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	
+		  	  if (data != null) {
+		  		  
+	  	    	if(data.contents != ""){
+	  	    		let insertTr = '<tr>';
+	  	    		$.each(data.contents, function (idx, el) {
+			  	    	insertTr += '	<th>'+el.column_korean_nm+'</th>';
+			  	    });
+	  	    		insertTr += '</tr>';
+	  	    		$("#dsetDtCt").html(insertTr);
+	  	    	}
+	  	    	resolve(data);
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	});
+}
+
 //데이터 셋 상세 리스트 조회
-const dpLoadDsetDtList = function () {
+const dpLoadDsetDtList = function (fieldData, page, size_per_page) {
+	
+	if(!page){
+		page = init_page;
+	}
+	if(!size_per_page){
+		size_per_page = init_size_per_page;
+	}	
 	
 	let table_idntfc_id = '{{table_idntfc_id}}';
 	
@@ -241,6 +261,7 @@ const dpLoadDsetDtList = function () {
    		url: '/dp/load/dataset/detail/list',
    		user_id: 'user00',	
    		table_idntfc_id: table_idntfc_id,
+   		page_current: String(page),
     };
 	
     $.ajax({
@@ -252,9 +273,23 @@ const dpLoadDsetDtList = function () {
     }).done(function (data) {
     	
 	  	  if (data != null) {
-	  		  
+	  		$("#dsetDtList").empty();
+  	    	$("#total_count").text(data.totalcount);
+  	    	
   	    	if(data.contents != ""){
+  	    		let insertTr = '';
+  	    		$.each(data.contents, function (idx, el) {
+  	    			insertTr += '<tr>';
+  	    			$.each(fieldData.contents, function (f_idx, f_el) {
+  	    				insertTr += '	<td>'+isEmpty(el[f_el.column_eng_nm])+'</td>';
+  	    			});
+  	    			insertTr += '</tr>';
+  	    		});
+  	    		$("#dsetDtList").html(insertTr);
   	    	}
+  	    	//페이징 보여줌
+  	    	paging(data.totalcount, size_per_page, pageCount, page);
+  	    	
 	  	  }
     	  
     }).fail(function (error) {
@@ -277,6 +312,25 @@ const jsList = function () {
 	location.href = url+'/list/';
 }
 
+//페이징 함수 호출
+const pagingFun = function(page, size_per_page){
+	dpLoadDsetDtCall(page, size_per_page);
+}
+
+const dpLoadDsetDtCall = function(page, size_per_page){
+	dpLoadDsetDtCt()
+	.then(function(data){
+		dpLoadDsetDtList(data, page, size_per_page);
+	})
+	.catch(function(error){
+		console.log(error)
+	});
+}
+
 dpLoadDsetDt();
+
+dpLoadDsetDtCall();
+
+
 </script>
 
