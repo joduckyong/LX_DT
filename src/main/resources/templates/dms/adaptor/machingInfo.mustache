@@ -498,45 +498,51 @@ const dpIngestPopupPpPathSave = function(){
 
 	let lengthCnt = 0;
 	let contentsData = new Array();
-	$.each($("#adaptorSetDataConfig tbody tr"), function(){
-		 let itemObject = new Object();
-		 itemObject.instance_id = '{{instance_id}}';
-		 itemObject.source_id = $(this).find("#source_id_"+lengthCnt).val();
-		 itemObject.source_path = $(this).find("#source_path_"+lengthCnt).val();
-		 itemObject.choice_yn = $(this).find("#choice_yn_"+lengthCnt).val();
-		 itemObject.user_id = 'user00';
-		 contentsData.push(itemObject);
-		 lengthCnt++;
-	});
 	
-    const data = {
-	   		url: '/dp/ingest/popup/property/path',
-	   		instance_id: '{{instance_id}}',	
-	   		user_id: 'user00',	
-	   		menu_id: 'menu_id',
-	   		contents: contentsData,
-	    };		
-	    
-	    $.ajax({
-	        type: 'POST',
-	        url: url+'/dpIngestPopupPpPathSave',
-	        dataType: 'json',
-	        contentType: 'application/json; charset-utf-8',
-	        data: JSON.stringify(data)
-	    }).done(function (data) {
-		  	  if (data != null) {
-			  	   	if(data.contents != ""){    	
-	  		     	    let insertTr = '';
-	  			  	    $.each(data.contents, function (idx, el) {
-	  		     	         el.source_id;
-	  		     	         el.source_path;
-	  			  	    });
-			  	   	}
-		  	  }
-	    	  
-	    }).fail(function (error) {
-	        alert(JSON.stringify(error));
-	    });	
+	let adaptorSetDataConfigLen = $("#adaptorSetDataConfig tbody tr").length;
+	
+	if(adaptorSetDataConfigLen > 0){
+		
+		$.each($("#adaptorSetDataConfig tbody tr"), function(){
+			 let itemObject = new Object();
+			 itemObject.instance_id = '{{instance_id}}';
+			 itemObject.source_id = $(this).find("#source_id_"+lengthCnt).val();
+			 itemObject.source_path = $(this).find("#source_path_"+lengthCnt).val();
+			 itemObject.choice_yn = $(this).find("#choice_yn_"+lengthCnt).val();
+			 itemObject.user_id = 'user00';
+			 contentsData.push(itemObject);
+			 lengthCnt++;
+		});
+		
+	    const data = {
+		   		url: '/dp/ingest/popup/property/path',
+		   		instance_id: '{{instance_id}}',	
+		   		user_id: 'user00',	
+		   		menu_id: 'menu_id',
+		   		contents: contentsData,
+		    };		
+		    
+		    $.ajax({
+		        type: 'POST',
+		        url: url+'/dpIngestPopupPpPathSave',
+		        dataType: 'json',
+		        contentType: 'application/json; charset-utf-8',
+		        data: JSON.stringify(data)
+		    }).done(function (data) {
+			  	  if (data != null) {
+				  	   	if(data.contents != ""){    	
+		  		     	    let insertTr = '';
+		  			  	    $.each(data.contents, function (idx, el) {
+		  		     	         el.source_id;
+		  		     	         el.source_path;
+		  			  	    });
+				  	   	}
+			  	  }
+		    	  
+		    }).fail(function (error) {
+		        alert(JSON.stringify(error));
+		    });	
+	}
 	    
 }
 
@@ -586,9 +592,9 @@ const dpIngestPopupPpPath = function(){
 const openModal = function(modalId){
 	
 	if(modalId === 'idSet'){
-		
-	}else if(modalId === 'apiDataSet'){
 		dpIngestAdapterItSource();
+	}else if(modalId === 'apiDataSet'){
+		dpIngestPopupPpPath();
 	}
 	$('#'+modalId).modal('show');
 }
