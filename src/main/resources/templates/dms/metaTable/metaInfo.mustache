@@ -154,7 +154,7 @@ const dpIngestMetaItem = function (page, size_per_page) {
 		size_per_page = init_size_per_page;
 	}	
 	
-	let query = $("#query").data("search");
+	let query = isEmpty($("#query").data("search"));
 	let l_clsf = $("#l_clsf").val();
 	let m_clsf = $("#m_clsf").val();
 	let s_clsf = $("#s_clsf").val();
