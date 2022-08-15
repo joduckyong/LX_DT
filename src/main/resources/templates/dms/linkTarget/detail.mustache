@@ -21,13 +21,11 @@
 					                        <div class="form-control_box">
 					                          <select class="form-control" name="schema" id="schema">
 					                            <option value="">스키마</option>
-					                            <option value="A01002">File</option>
-					                            <option value="A01003">File(bypass)</option>
 					                          </select>
 					                        </div>
 					                        <div class="form-control_box duplicate_box">
-											<input class="form-control" type="text" name="tbl" id="tbl" placeholder="테이블">
-											<button class="btn btn-primary">
+											<input class="form-control" type="text" name="query" id="query" placeholder="테이블">
+											<button class="btn btn-primary" onclick="distributeSetupSchemaTblList();">
 												<i class="glyphicon glyphicon-search"></i>
 											</button>
 										</div>
@@ -47,7 +45,7 @@
 														<th>테이블_한글</th>
 													</tr>
 												</thead>
-												<tbody id="">
+												<tbody id="tblList">
 												</tbody>
 											</table>
 										</div>
@@ -58,32 +56,32 @@
 								<div class="form-group row">
 									<div class="x_content">
 										<div class="table_responsive">
-						                    <table class="table table-bordered bulk_action table_center">
+						                    <table class="table table-bordered bulk_action">
 						                        <colgroup>
 						                        </colgroup>
 						                        <thead>
 							                        <tr>
 							                            <th>스키마</th>
 							                            <th colspan="3">
-							                                <input class="form-control" type="text" readonly="readonly">
+							                                <input class="form-control" type="text" readonly="readonly" name="info_schemaNm" id="info_schemaNm">
 							                            </th>
 							                        </tr>
 							                        <tr>
 							                            <th>테이블</th>
 							                            <th colspan="3">
-							                                <input class="form-control" type="text" readonly="readonly">
+							                                <input class="form-control" type="text" readonly="readonly" name="info_tbl" id="info_tbl">
 							                            </th>
 							                        </tr>
 							                        <tr>
 							                            <th>서비스명칭</th>
 							                            <th colspan="3">
-							                                <input class="form-control" type="text">
+							                                <input class="form-control" type="text" name="info_srvNm" id="info_srvNm">
 							                            </th>
 							                        </tr>
 							                        <tr>
 							                            <th>서비스여부</th>
 							                            <th colspan="3">
-							                                <select class="form-control">
+							                                <select class="form-control" name="info_srvYn" id="info_srvYn">
 									                            <option value="Y">Y</option>
 									                            <option value="N">N</option>
 									                          </select>
@@ -92,19 +90,19 @@
 							                        <tr>
 							                            <th>서비스대상</th>
 							                            <th colspan="3">
-							                                <input class="form-control" type="text">
+							                                <button class="btn-sm btn-success" type="button">설정</button>
 							                            </th>
 							                        </tr>
 							                        <tr>
 							                            <th>서비스URL</th>
 							                            <th colspan="3">
-							                                <input class="form-control" type="text" readonly="readonly">
+							                                <input class="form-control" type="text" readonly="readonly" name="info_srvUrl" id="info_srvUrl">
 							                            </th>
 							                        </tr>
 							                        <tr>
 							                            <th>서비스설명</th>
 							                            <th colspan="3">
-							                                <textarea class="form-control" type="text"></textarea>
+							                                <textarea class="form-control"  name="info_srvDesc" id="info_srvDesc"></textarea>
 							                            </th>
 							                        </tr>
 						                        </thead>
@@ -147,64 +145,72 @@
 						                        </thead>
 						                        <tbody>
 						                        	<tr>
-						                        		<td></td>
+						                        		<td><input type="checkbox"></td>
 						                        		<td>11</td>
 						                        		<td>11</td>
 						                        		<td>11</td>
 						                        		<td>11</td>
 						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
+						                        		<td><input type="checkbox"></td>
+						                        		<td>
+						                        			<select class="form-control" name="totFncCd" id="totFncCd">
+								                                <option value="max">max</option>
+								                                <option value="min">min</option>
+								                                <option value="avg">avg</option>
+								                                <option value="sum">sum</option>
+								                                <option value="count">count</option>
+								                            </select>
+						                        		</td>
+						                        		<td><input type="text"></td>
+						                        		<td><input type="text"></td>
 						                        	</tr>
 						                        	<tr>
+						                        		<td><input type="checkbox"></td>
+						                        		<td>11</td>
+						                        		<td>11</td>
+						                        		<td>11</td>
+						                        		<td>11</td>
+						                        		<td>11</td>
+						                        		<td><input type="checkbox"></td>
 						                        		<td></td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
+						                        		<td><input type="text"></td>
+						                        		<td><input type="text"></td>
 						                        	</tr>
 						                        	<tr>
+						                        		<td><input type="checkbox"></td>
+						                        		<td>11</td>
+						                        		<td>11</td>
+						                        		<td>11</td>
+						                        		<td>11</td>
+						                        		<td>11</td>
+						                        		<td><input type="checkbox"></td>
 						                        		<td></td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
+						                        		<td><input type="text"></td>
+						                        		<td><input type="text"></td>
 						                        	</tr>
 						                        	<tr>
+						                        		<td><input type="checkbox"></td>
+						                        		<td>11</td>
+						                        		<td>11</td>
+						                        		<td>11</td>
+						                        		<td>11</td>
+						                        		<td>11</td>
+						                        		<td><input type="checkbox"></td>
 						                        		<td></td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
+						                        		<td><input type="text"></td>
+						                        		<td><input type="text"></td>
 						                        	</tr>
 						                        	<tr>
+						                        		<td><input type="checkbox"></td>
+						                        		<td>11</td>
+						                        		<td>11</td>
+						                        		<td>11</td>
+						                        		<td>11</td>
+						                        		<td>11</td>
+						                        		<td><input type="checkbox"></td>
 						                        		<td></td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
+						                        		<td><input type="text"></td>
+						                        		<td><input type="text"></td>
 						                        	</tr>
 						                        </tbody>
 						                    </table>
@@ -248,54 +254,70 @@
 						                        </thead>
 						                        <tbody>
 						                        	<tr>
-						                        		<td></td>
+						                        		<td><input type="checkbox"></td>
 						                        		<td>11</td>
+						                        		<td>
+						                        			<select class="form-control" name="targetCol" id="targetCol">
+								                                <option value="C_name1">C_name1</option>
+								                                <option value="C_name3">C_name3</option>
+								                                <option value="C_name4">C_name4</option>
+								                                <option value="C_name4">C_name4</option>
+								                            </select>
+						                        		</td>
 						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
+						                        		<td>
+						                        			<select class="form-control" name="cnd" id="cnd">
+								                                <option value="=">=</option>
+								                                <option value="<=">&#60;&#61;</option>
+								                                <option value=">=">&#62;&#61;</option>
+								                                <option value="From_To(From)">From_To(From)</option>
+								                                <option value="From_To(To)">From_To(To)</option>
+								                                <option value="like">like</option>
+								                            </select>
+						                        		</td>
+						                        		<td><input type="text"></td>
+						                        		<td><input type="text"></td>
+						                        		<td><input type="text"></td>
 						                        	</tr>
 						                        	<tr>
-						                        		<td></td>
+						                        		<td><input type="checkbox"></td>
 						                        		<td>11</td>
 						                        		<td>11</td>
 						                        		<td>11</td>
 						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
+						                        		<td><input type="text"></td>
+						                        		<td><input type="text"></td>
+						                        		<td><input type="text"></td>
 						                        	</tr>
 						                        	<tr>
-						                        		<td></td>
+						                        		<td><input type="checkbox"></td>
 						                        		<td>11</td>
 						                        		<td>11</td>
 						                        		<td>11</td>
 						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
+						                        		<td><input type="text"></td>
+						                        		<td><input type="text"></td>
+						                        		<td><input type="text"></td>
 						                        	</tr>
 						                        	<tr>
-						                        		<td></td>
+						                        		<td><input type="checkbox"></td>
 						                        		<td>11</td>
 						                        		<td>11</td>
 						                        		<td>11</td>
 						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
+						                        		<td><input type="text"></td>
+						                        		<td><input type="text"></td>
+						                        		<td><input type="text"></td>
 						                        	</tr>
 						                        	<tr>
-						                        		<td></td>
+						                        		<td><input type="checkbox"></td>
 						                        		<td>11</td>
 						                        		<td>11</td>
 						                        		<td>11</td>
 						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
+						                        		<td><input type="text"></td>
+						                        		<td><input type="text"></td>
+						                        		<td><input type="text"></td>
 						                        	</tr>
 						                        </tbody>
 						                    </table>
@@ -328,31 +350,43 @@
 						                        </thead>
 						                        <tbody>
 						                        	<tr>
-						                        		<td></td>
+						                        		<td><input type="checkbox"></td>
+						                        		<td>11</td>
+						                        		<td>
+						                        			<select class="form-control" name="sortColEng" id="sortColEng">
+								                                <option value="C_name1">C_name1</option>
+								                                <option value="C_name3">C_name3</option>
+								                                <option value="C_name4">C_name4</option>
+								                                <option value="C_name4">C_name4</option>
+								                            </select>
+						                        		</td>
+						                        		<td>
+						                        			<select class="form-control" name="sortMethod" id="sortMethod">
+								                                <option value="Asc">Asc</option>
+								                                <option value="Desc">Desc</option>
+								                            </select>
+						                        		</td>
+						                        	</tr>
+						                        	<tr>
+						                        		<td><input type="checkbox"></td>
 						                        		<td>11</td>
 						                        		<td>11</td>
 						                        		<td>11</td>
 						                        	</tr>
 						                        	<tr>
-						                        		<td></td>
+						                        		<td><input type="checkbox"></td>
 						                        		<td>11</td>
 						                        		<td>11</td>
 						                        		<td>11</td>
 						                        	</tr>
 						                        	<tr>
-						                        		<td></td>
+						                        		<td><input type="checkbox"></td>
 						                        		<td>11</td>
 						                        		<td>11</td>
 						                        		<td>11</td>
 						                        	</tr>
 						                        	<tr>
-						                        		<td></td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        		<td>11</td>
-						                        	</tr>
-						                        	<tr>
-						                        		<td></td>
+						                        		<td><input type="checkbox"></td>
 						                        		<td>11</td>
 						                        		<td>11</td>
 						                        		<td>11</td>
@@ -519,6 +553,133 @@
 {{>layout/footer}}        
 
 <script>
+
+const commonUrl = '/common/linkTarget';
+const url = '/linkTarget';
+
+//스키마 조회
+const distributeSetupSchemaList = function () {
+	
+	const data = {
+   		url: '/services/distribute/setup/schema/list',
+   		userId: 'user00',	
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/distributeSetupSchemaList',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		  
+  	    	if(data.contents != ""){
+  	    		let insertTr = '';
+  	    		insertTr += '<option value="">스키마</option>';
+		  	    $.each(data.contents, function (idx, el) {
+		  	    	
+		  	    	insertTr += '<option value="'+el.schemaname+'">'+el.schemaname+'</option>';
+		  	    	
+		  	    });
+		  	  $("#schema").html(insertTr);
+  	    	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//테이블 조회
+const distributeSetupSchemaTblList = function () {
+	
+	let schema = $("#schema").val();
+	let query = $("#query").val();
+	
+	if(!schema){
+		alert("스키마를 선택하세요!");
+		$('#schema').focus();
+		return;
+	}
+	
+	const data = {
+   		url: '/services/distribute/setup/schema/tbl/list',
+   		userId: 'user00',
+   		schema: schema,
+   		tbl: query,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/distributeSetupSchemaTblList',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		$("#tblList").empty();
+  	    	if(data.contents != ""){
+  	    		let insertTr = '';
+		  	    $.each(data.contents, function (idx, el) {
+		  	    	
+		  	    	insertTr += '<tr>';
+		  	    	insertTr += '	<td><input type="radio" name="tbl_radio"></td>';
+		  	    	insertTr += '	<td>'+el.tblEng+'</td>';
+		  	    	insertTr += '	<td>'+el.tblKor+'</td>';
+		  	    	insertTr += '</tr>';
+		  	    	
+		  	    });
+		  	  $("#tblList").html(insertTr);
+  	    	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//데이터 분배설정 마스터 조회
+const distributeSetupInfo = function () {
+	
+	let dstbId = '{{dstbId}}';
+	
+	const data = {
+   		url: '/services/distribute/setup/info',
+   		userId: 'user00',
+   		dstbId: dstbId,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/distributeSetupInfo',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		  
+  	    	if(data.contents != ""){
+  	    		$("#info_schemaNm").val(data.contents.schemaNm);
+  	    		$("#info_tbl").val(data.contents.tbl);
+  	    		$("#info_srvNm").val(data.contents.srvNm);
+  	    		$("#info_srvYn").val(data.contents.srvYn).prop("selected", true);
+  	    		$("#info_srvUrl").val(data.contents.srvUrl);
+  	    		$("#info_srvDesc").val(data.contents.srvDesc);
+  	    	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+distributeSetupInfo();
+
+distributeSetupSchemaList();
 
 
 </script>

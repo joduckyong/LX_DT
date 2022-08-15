@@ -31,16 +31,21 @@ public class LinkTargetController {
 	@GetMapping("/list")
 	public String list(ModelMap model) throws Exception{
 		
-		
 		return "dms/linkTarget/list";
-	}	
+	}
 	
-	@GetMapping("/detail/{dstbId}")
-	public String detail(@PathVariable String dstbId, ModelMap model) throws Exception{
+	@GetMapping("/add")
+	public String add(ModelMap model) throws Exception{
+		
+		return "dms/linkTarget/add";
+	}
+	
+	@GetMapping("/update/{dstbId}")
+	public String update(@PathVariable String dstbId, ModelMap model) throws Exception{
 		
 		model.addAttribute("dstbId", dstbId);
 		
-		return "dms/linkTarget/detail";
+		return "dms/linkTarget/update";
 	}	
 	
 	@ResponseBody

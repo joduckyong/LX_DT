@@ -32,7 +32,7 @@
 		                    </div>
 		                  </div>
 		                  <div class="table_btns mt-4">
-	                    	<button class="btn btn-primary" type="button">등록</button>
+	                    	<button class="btn btn-primary" type="button" onclick="btnAdd();">등록</button>
                     	</div>
 		                <div class="table_responsive">
 		                	<div class="talbel_total">총 <span class="red bold" id="total_count"></span>건</div>
@@ -77,7 +77,7 @@
 
 <script>
 
-const commonUrl = '/common';
+const commonUrl = '/common/linkTarget';
 const url = '/linkTarget';
 
 let init_page = 1;				//초기 페이지
@@ -126,13 +126,13 @@ const distributeSetupList = function (page, size_per_page) {
 		  	    $.each(data.contents, function (idx, el) {
 		  	    	
 		  	    	insertTr += '<tr>';
-		  	    	insertTr += '	<td>'+isEmpty(el.srvNm)+'</td>';
+		  	    	insertTr += '	<td><span class="blue bold" style="cursor:pointer" onclick="btnUpdate(\''+el.dstbId+'\');">'+isEmpty(el.srvNm)+'</td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.srvUrl)+'</td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.srvYn)+'</td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.delYn)+'</td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.schemaNm)+'</td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.tbl)+'</td>';
-		  	    	insertTr += '	<td><button class="btn btn-success btn-sm mx-0" type="button" onclick="btnDetail(\''+el.dstbId+'\')">바로가기</button></td>';
+		  	    	insertTr += '	<td><button class="btn btn-success btn-sm mx-0" type="button">바로가기</button></td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.creatorId)+'</td>';
 		  	    	insertTr += '</tr>';
 		  	    });
@@ -154,14 +154,26 @@ const btnSearch = function(){
 	distributeSetupList();
 }
 
-//데이터셋 상세 조회
-const btnDetail = function (dstbId) {
-	location.href = url+'/detail/'+dstbId;
+//데이터분배 등록 버튼
+const btnAdd = function () {
+	location.href = url+'/add/';
+}
+
+//데이터분배 상세 조회
+const btnUpdate = function (dstbId) {
+	location.href = url+'/update/'+dstbId;
 }
 
 //페이징 함수 호출
 const pagingFun = function(page, size_per_page){
 	distributeSetupList(page, size_per_page);
+}
+
+//엔터키가 눌렸을 때
+const enterkey = function(e) {
+	if (e.keyCode == 13) {
+		btnSearch();
+    }
 }
 
 distributeSetupList();
