@@ -22,7 +22,10 @@ import lombok.extern.slf4j.Slf4j;
 public class CommonController {
 	
     @Value("${dms.api.url}")
-    private String dmsApiUrl;	
+    private String dmsApiUrl;
+    
+    @Value("${linkTarget.api.url}")
+    private String linkTargetApiUrl;
 
 	@Autowired
 	private ApiService<?> apiService;
@@ -39,6 +42,20 @@ public class CommonController {
 		Object object = responseEntity.getBody();
 		
 		return object;
-	}		
+	}
+	
+	//연계대상 관리 공통코드
+	@ResponseBody
+	@PostMapping("/linkTarget/{apiId}")
+	public Object linkTargetCommonCode(@RequestBody Map<String, Object> param, ModelMap model) throws Exception{
+		log.info("linkTargetCommonCode");
+		
+		String url = linkTargetApiUrl+param.get("url");
+		
+		ResponseEntity<?> responseEntity = apiService.get(url);
+		Object object = responseEntity.getBody();
+		
+		return object;
+	}
 	
 }
