@@ -281,7 +281,8 @@
 							<div class="metatable_box col-12">
 								<div class="form-group row">
 									<div class="x_content">
-										<div class="table_responsive" style="max-height: 30px; overflow: auto;">
+										<div class="table_responsive" style="max-height: 300px; overflow: auto;">
+											<pre id="execResult"></pre>
 										</div>
 									</div>
 								</div>
@@ -601,16 +602,17 @@ const distributeSetupReg = function(){
 //설정테스트 팝업 실행
 const distributeSetupPopupTest = function () {
 	
-	let dstbId = '';
 	let pgngYn = $("#pgngYn").is(":checked") ? 'Y' : 'N';
 	let rowsOfPage = $("#rowsOfPageTest").val().replace(/,/gi,'');
 	let nowPageNum = $("#nowPageNumTest").val().replace(/,/gi,'');
 	let sqlText = $("#sqlText").text();
 	
-	if(!dstbId){
-		alert("분배 아이디가 없습니다.");
-		return;
-	}
+	let obj = {
+		pgngYn: pgngYn,
+	};
+	
+	let regex = /\{[0-9a-zA-Z_]+\}/ig;
+	let arr = sqlText.match(regex);
 	
 	if(!sqlText){
 		alert("쿼리를 생성하세요.");
@@ -629,36 +631,42 @@ const distributeSetupPopupTest = function () {
 			$("#nowPageNumTest").focus();
 			return;
 		}
+		
+		obj['rowsOfPage'] = rowsOfPage;
+		obj['nowPageNum'] = nowPageNum;
 	}
 	
-	const data = {
-   		url: '/services/distribute/setup/popup/test',
+	if(arr){
+		for(let i=0; i<arr.length; i++){
+			let str = arr[i].replace('{','').replace('}','');
+			$(".cnd_cndNm > input").each(function(){
+				if(str == $(this).val()){
+					obj[str] = $(this).parents('.cnd_list').find('td.cnd_testValue > input').val();
+				}
+			});
+		}
+	}
+	
+	const t_data = {
+   		url: '/services/distribute/setup/test',
    		userId: 'user00',
-   		dstbId: dstbId,
-   		pgngYn: pgngYn,
-   		rowsOfPage: rowsOfPage,
-   		nowPageNum: nowPageNum,
    		sqlText: sqlText,
     };
 	
-// 	console.log(data);
+	data = Object.assign(t_data, obj);
 	
-//     $.ajax({
-//         type: 'POST',
-//         url: url+'/distributeSetupPopupTest',
-//         dataType: 'json',
-//         contentType: 'application/json; charset=utf-8',
-//         data: JSON.stringify(data)
-//     }).done(function (data) {
-    	
-// 	  	  if (data != null) {
-//   	    	if(data.contents != ""){
-//   	    	}
-// 	  	  }
+    $.ajax({
+        type: 'POST',
+        url: url+'/distributeSetupPopupTest',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	$("#execResult").text(JSON.stringify(data,null,2));
     	  
-//     }).fail(function (error) {
-//         alert(JSON.stringify(error));
-//     });	
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
 }
 
 //시도 리스트 검색
@@ -854,13 +862,13 @@ const createQuery = function(){
 			for(let i=0; i<cndData.length; i++){
 				if(cndData[i]['cnd'].indexOf('From_To') > -1){
 					if(cndData[i]['cnd'] == 'From_To(From)'){
-						fromToSql += ' AND ' + cndData[i]['targetCol'] + ' BETWEEN ' + cndData[i]['cnd'] + ' ' + '{' +cndData[i]['cndNm'] + '}';
+						fromToSql += ' AND ' + cndData[i]['targetCol'] + ' BETWEEN ' + '#{' +cndData[i]['cndNm'] + '}';
 					}else if(cndData[i]['cnd'] == 'From_To(TO)'){
-						fromToSql += ' AND ' + cndData[i]['targetCol'] + ' ' + cndData[i]['cnd'] + ' ' + '{' +cndData[i]['cndNm'] + '}';
+						fromToSql += ' AND ' + '#{' +cndData[i]['cndNm'] + '}';
 						fromToSql += '<br>';
 					}
 				}else{
-					sqlText += ' AND ' + cndData[i]['targetCol'] + ' ' + cndData[i]['cnd'] + ' ' + '{' +cndData[i]['cndNm'] + '}';
+					sqlText += ' AND ' + cndData[i]['targetCol'] + ' ' + cndData[i]['cnd'] + ' ' + '#{' +cndData[i]['cndNm'] + '}';
 					sqlText += '<br>';
 				}
 				
@@ -872,14 +880,15 @@ const createQuery = function(){
 		if(sortData.length > 0){
 			let noTotFncSql = '';
 			let groupByStr = '';
-			sqlText += ' ORDER BY';
+			let orderBySql = '';
+			orderBySql += ' ORDER BY';
 			
 			for(let i=0; i<sortData.length; i++){
-				sqlText += ' ' + sortData[i]['colEng'] + ' ' + sortData[i]['sortMethod'];
+				orderBySql += ' ' + sortData[i]['colEng'] + ' ' + sortData[i]['sortMethod'];
 				if(i != sortData.length-1){
-					sqlText += ',';
+					orderBySql += ',';
 				}
-				sqlText += '<br>';
+				orderBySql += '<br>';
 				
 				if(noTotFncArr.includes(sortData[i]['colEng'])){
 					groupByStr = ' GROUP BY';
@@ -895,7 +904,7 @@ const createQuery = function(){
 			}
 			noTotFncSql += '<br>';
 			
-			sqlText += groupByStr + noTotFncSql;
+			sqlText += groupByStr + noTotFncSql + orderBySql;
 		}
 		
 	// 	console.log(sqlText);
@@ -1045,8 +1054,8 @@ const sortNumbering = function(){
 
 //조건항목 대상컬럼 선택
 const selectTargetCol = function(obj){
-	let cnd_no = $(obj).parents("tr").data("code");
-	$("#cnd_dataType"+cnd_no).text(columnObj[$(obj).val()]);
+	let col = $(obj).val();
+	$(obj).parents("tr").find("td.cnd_dataType").text(columnObj[$(obj).val()]);
 }
 
 const paingDefault = function(obj){
