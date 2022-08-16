@@ -273,7 +273,7 @@ const dpCmCodes = function (page, size_per_page) {
 		size_per_page = init_size_per_page;
 	}	
 	
-	let query = $("#query1").data("search");
+	let query = isEmpty($("#query1").data("search"));
 	$("#query1").val(query);	//검색어 갱신(검색버튼 클릭시)
 	
 	const data = {
@@ -336,7 +336,7 @@ const dpCmCodesDt = function (page, size_per_page) {
 		size_per_page = init_size_per_page;
 	}	
 	
-	let query = $("#query2").data("search");
+	let query = isEmpty($("#query2").data("search"));
 	$("#query2").val(query);	//검색어 갱신(검색버튼 클릭시)
 	
 	const data = {

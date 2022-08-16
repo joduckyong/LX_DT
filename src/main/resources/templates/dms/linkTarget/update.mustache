@@ -1,0 +1,1613 @@
+{{>layout/header}}
+
+	<div class="right_col" role="main">
+	    <div class="row">
+	        <div class="col-md-12">
+	            <div class="x_panel">
+	                <div class="x_title"> 
+	                  <h2>HOME > 연계대상 관리 > 데이터분배 설정</h2>
+	                  <div class="clearfix"> </div>
+	                </div>
+	                <div class="x_content">
+		                <div class="cont_title_box">
+		                    <h3>▣ 구분</h3>
+		                </div>
+	                    <div class="row">
+	                    	<div class="metatable_box col-6">
+								<div class="form-group row">
+									<div class="col-md-12 btn_search_box">
+					                    <div class="port_search">
+					                      <div class="row">
+					                        <div class="form-control_box">
+					                          <select class="form-control" name="schema" id="schema">
+					                            <option value="">스키마</option>
+					                          </select>
+					                        </div>
+					                        <div class="form-control_box duplicate_box">
+											<input class="form-control" type="text" name="query" id="query" placeholder="테이블" onkeypress="enterkey(event);">
+											<button class="btn btn-primary" onclick="btnSearch();">
+												<i class="glyphicon glyphicon-search"></i>
+											</button>
+										</div>
+					                      </div>
+					                    </div>
+				                    </div>
+									<div class="x_content">
+										<div class="table_responsive_info" style="height: 400px; overflow: auto">
+											<table class="table table-striped" style="width: 100%; word-wrap: break-word;">
+												<colgroup>
+													<col width="55px">
+												</colgroup>
+												<thead>
+													<tr>
+														<th>선택</th>
+														<th>테이블_영문</th>
+														<th>테이블_한글</th>
+													</tr>
+												</thead>
+												<tbody id="tblList">
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="metatable_box col-6">
+								<div class="form-group row">
+									<div class="x_content">
+										<div class="table_responsive">
+						                    <table class="table table-bordered bulk_action">
+						                        <colgroup>
+						                        </colgroup>
+						                        <thead>
+							                        <tr>
+							                            <th>스키마</th>
+							                            <th colspan="3">
+							                                <input class="form-control" type="text" readonly="readonly" name="info_schemaNm" id="info_schemaNm">
+							                            </th>
+							                        </tr>
+							                        <tr>
+							                            <th>테이블</th>
+							                            <th colspan="3">
+							                                <input class="form-control" type="text" readonly="readonly" name="info_tbl" id="info_tbl">
+							                            </th>
+							                        </tr>
+							                        <tr>
+							                            <th>서비스명칭</th>
+							                            <th colspan="3">
+							                                <input class="form-control" type="text" name="info_srvNm" id="info_srvNm">
+							                            </th>
+							                        </tr>
+							                        <tr>
+							                            <th>서비스여부</th>
+							                            <th colspan="3">
+							                                <select class="form-control" name="info_srvYn" id="info_srvYn">
+									                            <option value="Y">Y</option>
+									                            <option value="N">N</option>
+									                          </select>
+							                            </th>
+							                        </tr>
+							                        <tr>
+							                            <th>서비스대상</th>
+							                            <th colspan="3">
+							                                <button class="btn-sm btn-success" type="button" onclick="addModal();">설정</button>
+							                            </th>
+							                        </tr>
+							                        <tr>
+							                            <th>서비스URL</th>
+							                            <th colspan="3">
+							                                <input class="form-control" type="text" name="info_srvUrl" id="info_srvUrl" disabled="disabled">
+							                            </th>
+							                        </tr>
+							                        <tr>
+							                            <th>서비스설명</th>
+							                            <th colspan="3">
+							                                <textarea class="form-control"  name="info_srvDesc" id="info_srvDesc"></textarea>
+							                            </th>
+							                        </tr>
+						                        </thead>
+						                    </table>
+						                </div>
+									</div>
+								</div>
+							</div>
+						</div>
+	            	</div>
+	            	<div class="x_content">
+	                    <div class="row">
+							<div class="metatable_box col-12">
+								<div class="form-group row">
+									<div class="x_content">
+										<div class="cont_title_box">
+						                    <h3>▣ 서비스 선택</h3>
+						                </div>
+										<div class="table_responsive" style="height: 400px; overflow: auto;">
+						                    <table class="table table-striped" style="text-align: center; word-wrap: break-word;">
+						                        <colgroup>
+						                        	<col width="55px;">
+						                        </colgroup>
+						                        <thead>
+						                            <tr>
+						                                <th rowspan="2">선택</th>
+						                                <th rowspan="2">테이블</th>
+						                                <th rowspan="2">컬럼 영문</th>
+						                                <th rowspan="2">컬럼 한글</th>
+						                                <th rowspan="2">데이터타입</th>
+						                                <th rowspan="2">길이수</th>
+						                                <th rowspan="2">집합함수 사용여부</th>
+						                                <th rowspan="2">집합함수</th>
+						                                <th colspan="2">서비스명칭</th>
+						                            </tr>
+						                            <tr>
+						                            	<th>컬럼 명칭</th>
+						                            	<th>명칭 설명</th>
+						                            </tr>
+						                        </thead>
+						                        <tbody id="svrList">
+						                        </tbody>
+						                    </table>
+						                </div>
+									</div>
+								</div>
+							</div>
+						</div>
+	            	</div>
+	            	<div class="x_content">
+	                    <div class="row">
+	                    	<div class="metatable_box col-8">
+								<div class="form-group row">
+									<div class="x_content">
+										<div class="cont_title_box">
+						                    <h3>▣ 조건항목</h3>
+						                    <div class="table_btns">
+												<div style="padding:5px 5px 0 0; font-size: 15px;">
+											  		<input type="checkbox" id="pgngYn" onclick="paingDefault(this);">페이징 처리
+											  	</div>
+						                      <button class="btn-sm btn-primary" onclick="addCndList();">+ 추가</button>
+						                      <button class="btn-sm btn-danger" onclick="deleteCndList();">- 삭제</button>
+						                    </div>
+						                </div>
+										<div class="table_responsive" style="height: 400px; overflow: auto;">
+						                    <table class="table table-striped" style="text-align: center; word-wrap: break-word;">
+						                        <colgroup>
+						                        	<col width="55px;">
+						                        </colgroup>
+						                        <thead>
+						                            <tr>
+						                                <th>선택</th>
+						                                <th>테이블</th>
+						                                <th>대상컬럼</th>
+						                                <th>데이터타입</th>
+						                                <th>조건</th>
+						                                <th>조건명칭</th>
+						                                <th>항목설명</th>
+						                                <th>테스트값</th>
+						                            </tr>
+						                        </thead>
+						                        <tbody id="cndList">
+						                        	<tr class="cnd_default" id="paging_default1" style="display: none;">
+						                        		<td><input type="checkbox" disabled="disabled"></td>
+						                        		<td></td>
+						                        		<td><input type="text" value="rowsOfPage" disabled="disabled"></td>
+						                        		<td><input type="text" value="varchar" disabled="disabled"></td>
+						                        		<td><input type="text" value="" disabled="disabled"></td>
+						                        		<td><input type="text" value="rowsOfPage" disabled="disabled"></td>
+						                        		<td><input type="text" value="페이지 표시줄" disabled="disabled"></td>
+						                        		<td><input type="text" value="" id="rowsOfPageTest" oninput="handleOnInputNumber(this);"></td>
+						                        	</tr>
+						                        	<tr class="cnd_default" id="paging_default2" style="display: none;">
+						                        		<td><input type="checkbox" disabled="disabled"></td>
+						                        		<td></td>
+						                        		<td><input type="text" value="nowPageNum" disabled="disabled"></td>
+						                        		<td><input type="text" value="varchar" disabled="disabled"></td>
+						                        		<td><input type="text" value="" disabled="disabled"></td>
+						                        		<td><input type="text" value="nowPageNum" disabled="disabled"></td>
+						                        		<td><input type="text" value="현재 페이지" disabled="disabled"></td>
+						                        		<td><input type="text" value="" id="nowPageNumTest" oninput="handleOnInputNumber(this);"></td>
+						                        	</tr>
+						                        	<tr class="cnd_default">
+						                        		<td><input type="checkbox" disabled="disabled"></td>
+						                        		<td></td>
+						                        		<td><input type="text" value="userId" disabled="disabled"></td>
+						                        		<td><input type="text" value="varchar" disabled="disabled"></td>
+						                        		<td><input type="text" value="" disabled="disabled"></td>
+						                        		<td><input type="text" value="userId" disabled="disabled"></td>
+						                        		<td><input type="text" value="사용자 아이디" disabled="disabled"></td>
+						                        		<td><input type="text" value="tester" disabled="disabled"></td>
+						                        	</tr>
+						                        </tbody>
+						                    </table>
+						                </div>
+									</div>
+								</div>
+							</div>
+							<div class="metatable_box col-4">
+								<div class="form-group row">
+									<div class="x_content">
+										<div class="cont_title_box">
+						                    <h3>▣ 정렬순서</h3>
+						                    <div class="table_btns">
+						                      <button class="btn-sm btn-primary" onclick="addSortList();">+ 추가</button>
+						                      <button class="btn-sm btn-danger" onclick="deleteSortList();">- 삭제</button>
+						                    </div>
+						                </div>
+										<div class="table_responsive" style="height: 400px; overflow: auto;">
+						                    <table class="table table-striped" style="text-align: center; word-wrap: break-word;">
+						                        <colgroup>
+						                        	<col width="55px;">
+						                        </colgroup>
+						                        <thead>
+						                            <tr>
+						                                <th>선택</th>
+						                                <th>순서</th>
+						                                <th>컬럼 영문</th>
+						                                <th>정렬방식</th>
+						                            </tr>
+						                        </thead>
+						                        <tbody id="sortList">
+						                        </tbody>
+						                    </table>
+						                </div>
+									</div>
+								</div>
+							</div>
+						</div>
+	            	</div>
+	            	<div class="x_content">
+	            		<div class="cont_title_box">
+		                    <h3>▣ 쿼리생성</h3>
+		                    <div class="right_btns">
+		                      <button class="btn-sm btn-dark" onclick="createQuery();">쿼리생성</button>
+		                      <button class="btn-sm btn-dark" onclick="distributeSetupPopupTest();">실행</button>
+		                    </div>
+		                </div>
+	                    <div class="row">
+							<div class="metatable_box col-12">
+								<div class="form-group row">
+									<div class="x_content">
+										<div class="table_responsive" style="max-height: 300px; overflow: auto;">
+											<div id="sqlText"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+	            	</div>
+	            	<div class="x_content">
+	            		<div class="cont_title_box">
+		                    <h3>▣ 실행결과</h3>
+		                </div>
+	                    <div class="row">
+							<div class="metatable_box col-12">
+								<div class="form-group row">
+									<div class="x_content">
+										<div class="table_responsive" style="max-height: 30px; overflow: auto;">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+	            	</div>
+	            	<div class="x_content">
+	            		<div class="table_btns mt-4 mb-4">
+		                    <div class="right_btns">
+		                      <button class="btn btn-success" onclick="distributeSetupUpdate();">수정</button>
+		                      <button class="btn btn-danger" onclick="distributeSetupDel();">삭제</button>
+		                    </div>
+	                	</div>
+	            	</div>
+	        	</div>
+	    	</div>
+		</div>
+	</div>
+	<!-- 데이터 분배 대상 설정 modal -->
+    <div class="modal fade add_modal" id="add_modal" tabindex="-1" role="dialog" aria-hidden="true">
+	      <div class="modal-dialog modal-lg">
+	        <div class="modal-content">
+	          <div class="modal-header">
+	            <h4 class="modal-title" id="myModalLabel">데이터분배 대상 설정</h4>
+	            <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
+	          </div>
+	          <div class="modal-body">
+	          	<div class="table_btns">
+                  <button class="btn-sm btn-primary" onclick="addPopupList();">+ 추가</button>
+                  <button class="btn-sm btn-danger" onclick="deletePopupList();">- 삭제</button>
+                </div>
+	       		<div class="table_responsive">
+	                <table class="table table-striped">
+	                  <colgroup>
+	                  	<col width="55px;">
+	                  </colgroup>
+	                  <thead>
+	                    <tr>
+	                      <th>선택</th>
+	                      <th>시/도</th>
+	                      <th>시/군/구</th>
+	                      <th>서비스키</th>
+	                    </tr>
+	                  </thead>
+	                  <tbody id="popupList">
+	                  </tbody>
+	                </table>
+	          	</div>
+	          </div>
+	          <div class="modal-footer" id="modal_footer">
+	          	<button class="btn btn-primary" type="button" onclick="distributeSetupPopupSrvTargetReg();">저장</button>
+	        </div>
+	      </div>
+	    </div>
+	</div>    
+        
+{{>layout/footer}}        
+
+<script>
+
+const commonUrl = '/common/linkTarget';
+const url = '/linkTarget';
+
+let columnObj = {};
+let ctprvnCdArr = new Array();	//시도 리스트 배열
+let targetList = new Array();
+
+//스키마 조회
+const distributeSetupSchemaList = function (info_schemaNm) {
+	
+	const data = {
+   		url: '/services/distribute/setup/schema/list',
+   		userId: 'user00',	
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/distributeSetupSchemaList',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data),
+        async: false,
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		  
+  	    	if(data.contents != ""){
+  	    		let insertTr = '';
+  	    		insertTr += '<option value="">스키마</option>';
+		  	    $.each(data.contents, function (idx, el) {
+		  	    	
+		  	    	if(el.schemaname == info_schemaNm){
+		  	    		insertTr += '<option value="'+el.schemaname+'" selected>'+el.schemaname+'</option>';
+		  	    	}else{
+		  	    		insertTr += '<option value="'+el.schemaname+'">'+el.schemaname+'</option>';
+		  	    	}
+		  	    	
+		  	    });
+		  	  $("#schema").html(insertTr);
+  	    	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//테이블 조회
+const distributeSetupSchemaTblList = function (info_tbl) {
+	
+	let schema = $("#schema").val();
+	let query = $("#query").val();
+	
+	if(!schema){
+		alert("스키마를 선택하세요!");
+		$('#schema').focus();
+		return;
+	}
+	
+	const data = {
+   		url: '/services/distribute/setup/schema/tbl/list',
+   		userId: 'user00',
+   		schema: schema,
+   		tbl: query,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/distributeSetupSchemaTblList',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		$("#tblList").empty();
+  	    	if(data.contents != ""){
+  	    		let insertTr = '';
+		  	    $.each(data.contents, function (idx, el) {
+		  	    	
+		  	    	insertTr += '<tr>';
+		  	    	if(info_tbl == el.tblEng){
+		  	    		insertTr += '	<td><input type="radio" name="tbl_radio" value="'+el.tblEng+'" onclick="checkTbl(\''+schema+'\',\''+el.tblEng+'\');" checked></td>';
+		  	    	}else{
+		  	    		insertTr += '	<td><input type="radio" name="tbl_radio" value="'+el.tblEng+'" onclick="checkTbl(\''+schema+'\',\''+el.tblEng+'\');"></td>';	
+		  	    	}
+		  	    	insertTr += '	<td>'+el.tblEng+'</td>';
+		  	    	insertTr += '	<td>'+el.tblKor+'</td>';
+		  	    	insertTr += '</tr>';
+		  	    	
+		  	    });
+		  	  $("#tblList").html(insertTr);
+  	    	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//데이터 분배설정 마스터 조회
+const distributeSetupInfo = function () {
+	return new Promise(function(resolve, reject){
+	
+		let dstbId = '{{dstbId}}';
+		
+		const data = {
+	   		url: '/services/distribute/setup/info',
+	   		userId: 'user00',
+	   		dstbId: dstbId,
+	    };
+		
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/distributeSetupInfo',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	
+		  	  if (data != null) {
+	  	    	if(data.contents != ""){
+				  	$("#info_schemaNm").val(data.contents.schemaNm);
+					$("#info_tbl").val(data.contents.tbl);
+					$("#info_srvNm").val(data.contents.srvNm);
+					$("#info_srvYn").val(data.contents.srvYn).prop("selected", true);
+					$("#info_srvUrl").val(data.contents.srvUrl);
+					$("#info_srvDesc").val(data.contents.srvDesc);
+					
+					resolve(data);
+	  	    	}
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	});
+}
+
+//서비스선택(테이블속성 컬럼조회)
+const distributeSetupColList = function (info_tbl) {
+	
+	let schema = $("#schema").val();
+	let tbl = $("input:radio[name=tbl_radio]:checked").val();
+	
+	if(info_tbl){
+		tbl = info_tbl;
+	}
+	
+	const data = {
+   		url: '/services/distribute/setup/col/list',
+   		userId: 'user00',
+   		schemaNm: schema,
+   		tbl: tbl,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/distributeSetupColList',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data),
+        async: false,
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		$("#svrList").empty();
+  	    	if(data.contents != ""){
+  	    		let insertTr = '';
+		  	    $.each(data.contents, function (idx, el) {
+		  	    	
+		  	    	columnObj[el.colEng] = el.dataType;
+		  	    	
+		  	    	insertTr += '<tr class="svr_tr">';
+		  	    	insertTr += '	<td><input type="checkbox" name="svr_chk" value="'+el.colEng+'"></td>';
+		  	    	insertTr += '	<td class="svr_tbl">'+el.tbl+'</td>';
+		  	    	insertTr += '	<td class="svr_colEng">'+el.colEng+'</td>';
+		  	    	insertTr += '	<td class="svr_colKor">'+el.colKor+'</td>';
+		  	    	insertTr += '	<td class="svr_dataType">'+el.dataType+'</td>';
+		  	    	insertTr += '	<td class="svr_lenCnt">'+el.lenCnt+'</td>';
+		  	    	insertTr += '	<td class="svr_totFncYn"><input type="checkbox" name="svr_totFncYn" id="svr_totFncYn'+el.colEng+'"></td>';
+		  	    	insertTr += '	<td class="svr_totFncCd" id="svr_totFncCd'+el.colEng+'"></td>';
+		  	    	insertTr += '	<td class="svr_srvColNm"><input type="text" id="svr_srvColNm'+el.colEng+'"></td>';
+		  	    	insertTr += '	<td class="svr_srvNmDesc"><input type="text" id="svr_srvNmDesc'+el.colEng+'"></td>';
+		  	    	insertTr += '</tr>';
+		  	    	
+		  	    });
+		  	  $("#svrList").html(insertTr);
+  	    	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//서비스선택(저장된것 조회)
+const distributeSetupSrvList = function () {
+	
+	let dstbId = '{{dstbId}}';
+	
+	const data = {
+   		url: '/services/distribute/setup/srv/list',
+   		userId: 'user00',
+   		dstbId: dstbId,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/distributeSetupSrvList',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data),
+        async: false,
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+  	    	if(data.contents != ""){
+		  	    $.each(data.contents, function (idx, el) {
+		  	    	
+		  	    	$("input:checkbox[name=svr_chk][value="+el.colEng+"]").prop("checked", true);
+		  	    	if(el.totFncYn == 'Y'){
+		  	    		$("#svr_totFncYn"+el.colEng).prop("checked", true);
+		  	    		let insertTr = '';
+		  	    		insertTr += '<select class="form-control">';
+		  	    		if(el.totFncCd == 'max'){
+		  	    			insertTr +=	'	<option value="max" selected>max</option>';
+		  	    		}else{
+		  	    			insertTr +=	'	<option value="max">max</option>';
+		  	    		}
+		  	    		
+		  	    		if(el.totFncCd == 'min'){
+		  	    			insertTr +=	'	<option value="min" selected>min</option>';
+		  	    		}else{
+		  	    			insertTr +=	'	<option value="min">min</option>';
+		  	    		}
+		  	    		
+		  	    		if(el.totFncCd == 'avg'){
+		  	    			insertTr +=	'	<option value="avg" selected>avg</option>';
+		  	    		}else{
+		  	    			insertTr +=	'	<option value="avg">avg</option>';
+		  	    		}
+		  	    		
+		  	    		if(el.totFncCd == 'sum'){
+		  	    			insertTr +=	'	<option value="sum" selected>sum</option>';
+		  	    		}else{
+		  	    			insertTr +=	'	<option value="sum">sum</option>';
+		  	    		}
+		  	    		
+		  	    		if(el.totFncCd == 'count'){
+		  	    			insertTr +=	'	<option value="count" selected>count</option>';
+		  	    		}else{
+		  	    			insertTr +=	'	<option value="count">count</option>';
+		  	    		}
+			  	  	  	insertTr += '</select>';
+			  	  		$("#svr_totFncCd"+el.colEng).html(insertTr);
+		  	    	}
+		  	    	$("#svr_srvColNm"+el.colEng).val(el.srvColNm);
+		  	    	$("#svr_srvNmDesc"+el.colEng).val(el.srvNmDesc);
+		  	    	
+		  	    	
+		  	    });
+  	    	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//조건항목 조회
+const distributeSetupCndList = function () {
+	
+	let dstbId = '{{dstbId}}';
+	
+	const data = {
+   		url: '/services/distribute/setup/cnd/list',
+   		userId: 'user00',
+   		dstbId: dstbId,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/distributeSetupCndList',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+  	    	if(data.contents != ""){
+  	    		let insertTr = '';
+		  	    $.each(data.contents, function (idx, el) {
+		  	    	
+		  	    	insertTr += '<tr class="cnd_list">';
+		  			insertTr += '	<td><input type="checkbox" name="cnd_chk" value="'+el.dstbId+'" checked></td>';
+		  			insertTr += '	<td class="cnd_tbl">'+el.tbl+'</td>';
+		  			insertTr += '	<td class="cnd_targetCol">';
+		  			insertTr += '		<select class="form-control" name="cnd_targetCol" onchange="selectTargetCol(this);">';
+		  			for(let column in columnObj){
+		  				if(column == el.targetCol){
+		  					insertTr += '			<option value="'+column+'" selected>'+column+'</option>';
+		  				}else{
+		  					insertTr += '			<option value="'+column+'">'+column+'</option>';
+		  				}
+		  				
+		  			}
+		  			insertTr += '		</select>';
+		  			insertTr += '	</td>';
+		  			insertTr += '	<td class="cnd_dataType">'+el.dataType+'</td>';
+		  			insertTr += '	<td class="cnd_cnd">';
+		  			insertTr += '		<select class="form-control" name="cnd_cnd">';
+		  			if(el.cnd == '='){
+		  				insertTr += '			<option value="=" selected>=</option>';
+		  			}else{
+		  				insertTr += '			<option value="=">=</option>';
+		  			}
+		  			
+		  			if(el.cnd == '<='){
+		  				insertTr += '			<option value="<=" selected>&#60;&#61;</option>';
+		  			}else{
+		  				insertTr += '			<option value="<=">&#60;&#61;</option>';
+		  			}
+		  			
+		  			if(el.cnd == '>='){
+		  				insertTr += '			<option value=">=" selected>&#62;&#61;</option>';
+		  			}else{
+		  				insertTr += '			<option value=">=">&#62;&#61;</option>';
+		  			}
+		  			
+		  			if(el.cnd == 'From_To(From)'){
+		  				insertTr += '			<option value="From_To(From)" selected>From_To(From)</option>';
+		  			}else{
+		  				insertTr += '			<option value="From_To(From)">From_To(From)</option>';
+		  			}
+		  			
+		  			if(el.cnd == 'From_To(TO)'){
+		  				insertTr += '			<option value="From_To(TO)" selected>From_To(TO)</option>';
+		  			}else{
+		  				insertTr += '			<option value="From_To(TO)">From_To(TO)</option>';
+		  			}
+		  			
+		  			if(el.cnd == 'like'){
+		  				insertTr += '			<option value="like" selected>like</option>';
+		  			}else{
+		  				insertTr += '			<option value="like">like</option>';
+		  			}
+		  			insertTr += '		</select>';
+		  			insertTr += '	</td>';
+		  			insertTr += '	<td class="cnd_cndNm"><input type="text" value="'+el.cndNm+'"></td>';
+		  			insertTr += '	<td class="cnd_iemDesc"><input type="text" value="'+el.iemDesc+'"></td>';
+		  			insertTr += '	<td class="cnd_testValue"><input type="text" value="'+el.testValue+'"></td>';
+		  			insertTr += '</tr>';
+		  			
+		  	    });
+		  	  $("#cndList").append(insertTr);
+  	    	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//정렬항목 조회
+const distributeSetupSortList = function () {
+	
+	let dstbId = '{{dstbId}}';
+	
+	const data = {
+   		url: '/services/distribute/setup/sort/list',
+   		userId: 'user00',
+   		dstbId: dstbId,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/distributeSetupSortList',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+  	    	if(data.contents != ""){
+  	    		let insertTr = '';
+		  	    $.each(data.contents, function (idx, el) {
+		  	    	
+		  	    	insertTr += '<tr class="sort_list">';
+		  			insertTr += '	<td><input type="checkbox" name="sort_chk" checked></td>';
+		  			insertTr += '	<td class="sort_seq">'+(idx+1)+'</td>';
+		  			insertTr += '	<td class="sort_colEng">';
+		  			insertTr += '		<select class="form-control" name="sort_colEng">';
+		  			for(let column in columnObj){
+		  				if(column == el.colEng){
+		  					insertTr += '			<option value="'+column+'" selected>'+column+'</option>';
+		  				}else{
+		  					insertTr += '			<option value="'+column+'">'+column+'</option>';
+		  				}
+		  				
+		  			}
+		  			insertTr += '		</select>';
+		  			insertTr += '	</td>';
+		  			insertTr += '	<td class="sort_sortMethod">';
+		  			insertTr += '		<select class="form-control" name="sort_sortMethod">';
+		  			if(el.sortMethod == 'Asc'){
+		  				insertTr += '			<option value="Asc" selected>Asc</option>';
+		  			}else{
+		  				insertTr += '			<option value="Asc">Asc</option>';
+		  			}
+		  			
+		  			if(el.sortMethod == 'Desc'){
+		  				insertTr += '			<option value="Desc" selected>Desc</option>';
+		  			}else{
+		  				insertTr += '			<option value="Desc">Desc</option>';
+		  			}
+		  			
+		  			insertTr += '		</select>';
+		  			insertTr += '	</td>';
+		  			insertTr += '</tr>';
+		  			
+		  	    });
+		  	  $("#sortList").append(insertTr);
+  	    	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//데이버분배 대상 설정팝업 저장
+const distributeSetupPopupSrvTargetReg = function(){
+	
+	let dataset = new Array();
+	$("#popupList > tr").each(function(idx, el){
+		let pop_ctprvnCd = $(this).find('td.pop_ctprvnCd > select').val();
+		let pop_signguCd = $(this).find('td.pop_signguCd > select').val();
+		let pop_srvkey = $(this).find('td.pop_srvkey > input').val();
+		let obj ={
+			ctprvnCd : pop_ctprvnCd,
+			signguCd : pop_signguCd,
+			srvkey : pop_srvkey,
+			
+		}
+		dataset.push(obj);
+	});
+	
+	const data = {
+   		url: '/services/distribute/setup/popup/srv/target/reg',
+   		userId: 'user00',
+   		data: dataset,
+    };
+	
+	if(confirm("등록 하시겠습니까?")){
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/distributeSetupPopupSrvTargetReg',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	
+		  	  if (data != null) {
+	  	    	if(data.contents != ""){
+	  	    		targetList = data.contents;
+	  	    		closeModal();
+	  	    	}
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });
+	}
+}
+
+//설정수정
+const distributeSetupUpdate = function(){
+	
+	let dstbId = '{{dstbId}}';
+	
+	if(validationCheck()){
+		
+		let schemaNm = $("#info_schemaNm").val();
+		let tbl = $("#info_tbl").val();
+		let srvNm = $("#info_srvNm").val();
+		let srvYn = $("#info_srvYn").val();
+		let pgngYn = $("#pgngYn").is(":checked") ? 'Y' : 'N';
+		let srvDesc = $("#info_srvDesc").val();
+		let sqlText = $("#sqlText").text().replace(/<br>/gi,'');
+		
+		let svrData = getSvrData();
+		let cndData = getCndData();
+		let sortData = getSortData();
+		
+		if(!srvNm){
+			alert("서비스명칭을 입력하세요.");
+			$("#info_srvNm").focus();
+			return;
+		}
+		
+		if(!srvDesc){
+			alert("서비스설명을 입력하세요.");
+			$("#info_srvDesc").focus();
+			return;
+		}
+		
+		if(!sqlText){
+			alert("쿼리를 생성하세요.");
+			return;
+		}
+		
+		const data = {
+	   		url: '/services/distribute/setup/update',
+	   		userId: 'user00',
+	   		dstbId: dstbId,
+	   		schemaNm: schemaNm,
+	   		tbl: tbl,
+	   		srvNm: srvNm,
+	   		srvYn: srvYn,
+	   		pgngYn: pgngYn,
+	   		srvDesc: srvDesc,
+	   		sqlText: sqlText,
+	   		svrlist: svrData,
+	   		cndlist: cndData,
+	   		sortlist: sortData,
+	   		targetlist: targetList,
+	    };
+		
+		if(confirm("수정 하시겠습니까?")){
+		    $.ajax({
+		        type: 'POST',
+		        url: url+'/distributeSetupUpdate',
+		        dataType: 'json',
+		        contentType: 'application/json; charset=utf-8',
+		        data: JSON.stringify(data)
+		    }).done(function (data) {
+		    	let message = JSON.stringify(data.returnMsg);
+		  		alert(message.replace(/\"/gi, ''));    	
+		    	location.reload();
+		    }).fail(function (error) {
+		        alert(JSON.stringify(error));
+		    });
+		}
+	}
+}
+
+//설정삭제
+const distributeSetupDel = function(){
+	
+	let dstbId = '{{dstbId}}';
+	
+	const data = {
+   		url: '/services/distribute/setup/del',
+   		userId: 'user00',
+   		dstbId: dstbId,
+    };
+	
+	if(confirm("삭제 하시겠습니까?")){
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/distributeSetupDel',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	let message = JSON.stringify(data.returnMsg);
+	  		alert(message.replace(/\"/gi, ''));    	
+	    	jsList();
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });
+	}
+}
+
+//설정테스트 팝업 실행
+const distributeSetupPopupTest = function () {
+	
+	let dstbId = '';
+	let pgngYn = $("#pgngYn").is(":checked") ? 'Y' : 'N';
+	let rowsOfPage = $("#rowsOfPageTest").val().replace(/,/gi,'');
+	let nowPageNum = $("#nowPageNumTest").val().replace(/,/gi,'');
+	let sqlText = $("#sqlText").text();
+	
+	if(!dstbId){
+		alert("분배 아이디가 없습니다.");
+		return;
+	}
+	
+	if(!sqlText){
+		alert("쿼리를 생성하세요.");
+		return;
+	}
+	
+	if(pgngYn == 'Y'){
+		if(!rowsOfPage){
+			alert("페이지별 개수값을 입력하세요.");
+			$("#rowsOfPageTest").focus();
+			return;
+		}
+		
+		if(!nowPageNum){
+			alert("현재 페이지 값을 입력하세요.");
+			$("#nowPageNumTest").focus();
+			return;
+		}
+	}
+	
+	const data = {
+   		url: '/services/distribute/setup/popup/test',
+   		userId: 'user00',
+   		dstbId: dstbId,
+   		pgngYn: pgngYn,
+   		rowsOfPage: rowsOfPage,
+   		nowPageNum: nowPageNum,
+   		sqlText: sqlText,
+    };
+	
+// 	console.log(data);
+	
+//     $.ajax({
+//         type: 'POST',
+//         url: url+'/distributeSetupPopupTest',
+//         dataType: 'json',
+//         contentType: 'application/json; charset=utf-8',
+//         data: JSON.stringify(data)
+//     }).done(function (data) {
+    	
+// 	  	  if (data != null) {
+//   	    	if(data.contents != ""){
+//   	    	}
+// 	  	  }
+    	  
+//     }).fail(function (error) {
+//         alert(JSON.stringify(error));
+//     });	
+}
+
+//데이터분배 대상 설정팝업 리스트
+const distributeSetupPopupSrvTargetList = function(){
+	
+	let dstbId = '{{dstbId}}';
+	
+	const data = {
+   		url: '/services/distribute/setup/popup/srv/target/list',
+   		userId: 'user00',
+   		dstbId: dstbId,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/distributeSetupPopupSrvTargetList',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		let insertTr = '';
+  	    	if(data.contents != ""){
+  	    		
+				$.each(data.contents, function (idx, el) {
+		  	    	
+					insertTr += '<tr class="popup_list">';
+		  	  		insertTr += '	<td class="pop_dstbSeq"><input type="radio" name="pop_dstbSeq" value="'+el.seq+'"></td>';
+		  	  		insertTr += '	<td class="pop_ctprvnCd">';
+		  	  		insertTr += '		<select class="form-control" onchange="lxpfAdministSggList(this, \''+popIdx+'\');">';
+		  	  		insertTr +=	'			<option value="">시/도 선택</option>';
+		  	  		for(let i=0; i<ctprvnCdArr.length; i++){
+		  	  			if(ctprvnCdArr[i]['korNm']){
+		  	  				if(ctprvnCdArr[i]['cd'] == el.ctprvnCd){
+		  	  					insertTr +=	'			<option value="'+ctprvnCdArr[i]['cd']+'" selected>'+ctprvnCdArr[i]['korNm']+'</option>';
+		  	  				}else{
+		  	  					insertTr +=	'			<option value="'+ctprvnCdArr[i]['cd']+'">'+ctprvnCdArr[i]['korNm']+'</option>';
+		  	  				}
+		  	  			}
+		  	  		}
+		  	  		insertTr +=	'		</select>';
+		  	  		insertTr += '	</td>';
+		  	  		insertTr += '	<td class="pop_signguCd">';
+		  	  		insertTr += '		<select class="form-control" id="pop_signguCd'+popIdx+'">';
+		  	  		insertTr +=	'			<option value="">시/군/구 선택</option>';
+		  	  		insertTr +=	'		</select>';
+		  	  		insertTr += '	</td>';
+		  	  		insertTr += '	<td class="pop_srvkey"><input type="text" value="'+el.srvkey+'"></td>';
+		  	  		popIdx++;
+		  	    });
+  	    	}
+  	    	$("#popupList").html(insertTr);
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });
+}
+
+//시도 리스트 검색
+const lxpfAdministCtpvList = function(){
+	ctprvnCdArr.length = 0;
+	
+	const data = {
+   		url: '/services/lxpf/administ/ctpv/list?serviceKey=test',
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: commonUrl+'/lxpfAdministCtpvList',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data),
+        async: false,
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		$("#ctprvnCd option:gt(0)").remove();
+  	    	if(data.contents != ""){
+  	    		
+  	    		ctprvnCdArr = data.contents;
+  	    	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });
+}
+
+//시군구 리스트 검색
+const lxpfAdministSggList = function(obj, i){
+	
+	let ctprvnCd = $(obj).val();
+	$("#pop_signguCd"+i+" option:gt(0)").remove();
+	let insertTr = '';
+	
+	if(ctprvnCd){
+		const data = {
+	   		url: '/services/lxpf/administ/sgg/list?serviceKey=test&ctprvnCd='+ctprvnCd,
+	    };
+			
+	    $.ajax({
+	        type: 'POST',
+	        url: commonUrl+'/lxpfAdministSggList',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	
+		  	  if (data != null) {
+	  	    	if(data.contents != ""){
+	  	    		$.each(data.contents, function (idx, el) {
+	  	    			if(typeof el.korNm != "undefined"){
+	  		    			insertTr += '<option value="'+el.cd+'">'+el.korNm+'</option>';
+	  	    			}
+	  	    		});
+	  	    	}
+	  	    	$("#pop_signguCd"+i).append(insertTr);
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });
+	}
+	
+}
+
+//서비스선택 체크값
+const getSvrData = function(){
+	let dataSets = new Array();
+	
+	$("input:checkbox[name=svr_chk]:checked").parents('tr.svr_tr').each(function(idx, el){
+		let trObj = {};
+		
+		let svr_tbl = $(this).find('td.svr_tbl').text();
+		let svr_colEng = $(this).find('td.svr_colEng').text();
+		let svr_colKor = $(this).find('td.svr_colKor').text();
+		let svr_dataType = $(this).find('td.svr_dataType').text();
+		let svr_lenCnt = $(this).find('td.svr_lenCnt').text();
+		let svr_totFncYn = $(this).find('td > input:checkbox[name=svr_totFncYn]').is(":checked") ? 'Y' : 'N';
+		let svr_totFncCd = isEmpty($(this).find('td.svr_totFncCd > select').val());
+		let svr_srvColNm = $(this).find('td.svr_srvColNm > input').val();
+		let svr_srvNmDesc = $(this).find('td.svr_srvNmDesc > input').val();
+		
+		trObj['choiceYn'] = 'Y';
+		trObj['tbl'] = svr_tbl;
+		trObj['colEng'] = svr_colEng;
+		trObj['colKor'] = svr_colKor;
+		trObj['dataType'] = svr_dataType;
+		trObj['lenCnt'] = svr_lenCnt;
+		trObj['totFncYn'] = svr_totFncYn;
+		trObj['totFncCd'] = svr_totFncCd;
+		trObj['srvColNm'] = svr_srvColNm;
+		trObj['srvNmDesc'] = svr_srvNmDesc;
+		
+		dataSets.push(trObj);
+		
+	});
+	
+	//역순으로 each되어서 reverse
+	return dataSets.reverse();
+}
+
+//조건항목 체크값
+const getCndData = function(){
+	let dataSets = new Array();
+
+	$($("input:checkbox[name=cnd_chk]:checked").parents('tr.cnd_list').get().reverse()).each(function(idx, el){
+		let trObj = {};
+		
+		let seq = idx+1;
+		let cnd_tbl = $(this).find('td.cnd_tbl').text();
+		let cnd_targetCol = $(this).find('td.cnd_targetCol > select').val();
+		let cnd_dataType = $(this).find('td.cnd_dataType').text();
+		let cnd_cnd = $(this).find('td.cnd_cnd > select').val();
+		let cnd_cndNm = $(this).find('td.cnd_cndNm > input').val();
+		let cnd_iemDesc = $(this).find('td.cnd_iemDesc > input').val();
+		let cnd_testValue = $(this).find('td.cnd_testValue > input').val();
+
+		trObj['seq'] = seq;
+		trObj['tbl'] = cnd_tbl;
+		trObj['targetCol'] = cnd_targetCol;
+		trObj['dataType'] = cnd_dataType;
+		trObj['cnd'] = cnd_cnd;
+		trObj['cndNm'] = cnd_cndNm;
+		trObj['iemDesc'] = cnd_iemDesc;
+		trObj['testValue'] = cnd_testValue;
+		
+		dataSets.push(trObj);
+		
+	});
+	
+	return dataSets;
+}
+
+//정렬순서 체크값
+const getSortData = function(){
+	let dataSets = new Array();
+	
+	$($("input:checkbox[name=sort_chk]:checked").parents('tr.sort_list').get().reverse()).each(function(idx, el){
+		let trObj = {};
+		
+		let seq = idx+1;
+		let sort_colEng = $(this).find('td.sort_colEng > select').val();
+		let sort_sortMethod = $(this).find('td.sort_sortMethod > select').val();
+
+		trObj['seq'] = seq;
+		trObj['colEng'] = sort_colEng;
+		trObj['sortMethod'] = sort_sortMethod;
+		
+		dataSets.push(trObj);
+		
+	});
+	
+	return dataSets;
+}
+
+//쿼리 생성
+const createQuery = function(){
+	
+	if(validationCheck()){
+		let svrData = getSvrData();
+		let cndData = getCndData();
+		let sortData = getSortData();
+		
+		let noTotFncArr = [];	//집합함수 미체크 항목 리스트
+		
+		let sqlText = '';
+		if(svrData.length > 0){
+			sqlText += 'SELECT' + '<br>';
+			for(let i=0; i<svrData.length; i++){
+				if(svrData[i]['totFncYn'] == 'Y'){		//집합함수 사용
+					sqlText += ' ' + svrData[i]['totFncCd'] + '(' + svrData[i]['colEng'] + ')' + ' as ' + svrData[i]['srvColNm'];
+				}else{
+					sqlText += ' ' + svrData[i]['colEng'] + ' as ' + svrData[i]['srvColNm'];
+					noTotFncArr.push(svrData[i]['colEng']);
+				}
+				
+				if(i != svrData.length-1){
+					sqlText += ',';
+				}
+				sqlText += '<br>';
+			}
+			
+			sqlText += ' FROM ' + svrData[0]['tbl'] + '<br>';
+			sqlText += ' WHERE 1=1' + '<br>';
+		}
+		
+		if(cndData.length > 0){
+			let fromToSql = '';
+			for(let i=0; i<cndData.length; i++){
+				if(cndData[i]['cnd'].indexOf('From_To') > -1){
+					if(cndData[i]['cnd'] == 'From_To(From)'){
+						fromToSql += ' AND ' + cndData[i]['targetCol'] + ' BETWEEN ' + cndData[i]['cnd'] + ' ' + '{' +cndData[i]['cndNm'] + '}';
+					}else if(cndData[i]['cnd'] == 'From_To(TO)'){
+						fromToSql += ' AND ' + cndData[i]['targetCol'] + ' ' + cndData[i]['cnd'] + ' ' + '{' +cndData[i]['cndNm'] + '}';
+						fromToSql += '<br>';
+					}
+				}else{
+					sqlText += ' AND ' + cndData[i]['targetCol'] + ' ' + cndData[i]['cnd'] + ' ' + '{' +cndData[i]['cndNm'] + '}';
+					sqlText += '<br>';
+				}
+				
+			}
+			
+			sqlText += fromToSql;
+		}
+		
+		if(sortData.length > 0){
+			let noTotFncSql = '';
+			let groupByStr = '';
+			sqlText += ' ORDER BY';
+			
+			for(let i=0; i<sortData.length; i++){
+				sqlText += ' ' + sortData[i]['colEng'] + ' ' + sortData[i]['sortMethod'];
+				if(i != sortData.length-1){
+					sqlText += ',';
+				}
+				sqlText += '<br>';
+				
+				if(noTotFncArr.includes(sortData[i]['colEng'])){
+					groupByStr = ' GROUP BY';
+					noTotFncSql += ' ' + sortData[i]['colEng'] + ' ' + sortData[i]['sortMethod'];
+					noTotFncArr = noTotFncArr.filter((el) => el !== sortData[i]['colEng']);
+					noTotFncSql += ',';
+// 					noTotFncSql += '<br>';
+				}
+			}
+			
+			if(noTotFncSql.indexOf(',') > -1){	//마지막 콤마 제거
+				noTotFncSql = noTotFncSql.substring(0, noTotFncSql.length-1);
+			}
+			noTotFncSql += '<br>';
+			
+			sqlText += groupByStr + noTotFncSql;
+		}
+		
+	// 	console.log(sqlText);
+		$("#sqlText").html(sqlText);
+	}
+	
+}
+
+//테이블 선택
+const checkTbl = function(schema, tbl){
+	init();
+	$("#info_schemaNm").val(schema);
+	$("#info_tbl").val(tbl);
+	
+	distributeSetupColList();
+	$(".table_responsive").scrollTop(0); //스크롤 초기화
+}
+
+//조건항목 추가
+const addCndList = function(){
+	
+	let tbl = $("input:radio[name=tbl_radio]:checked").val();
+	
+	if(!tbl){
+		alert("선택된 테이블이 없습니다!");
+		return;
+	}
+	
+	let insertTr = '<tr class="cnd_list">';
+		insertTr += '	<td><input type="checkbox" name="cnd_chk"></td>';
+		insertTr += '	<td class="cnd_tbl">'+tbl+'</td>';
+		insertTr += '	<td class="cnd_targetCol">';
+		insertTr += '		<select class="form-control" name="cnd_targetCol" onchange="selectTargetCol(this);">';
+		for(let column in columnObj){
+			insertTr += '			<option value="'+column+'">'+column+'</option>';
+		}
+		insertTr += '		</select>';
+		insertTr += '	</td>';
+		insertTr += '	<td class="cnd_dataType">'+columnObj[Object.keys(columnObj)[0]]+'</td>';
+		insertTr += '	<td class="cnd_cnd">';
+		insertTr += '		<select class="form-control" name="cnd_cnd">';
+		insertTr += '			<option value="=">=</option>';
+		insertTr += '			<option value="<=">&#60;&#61;</option>';
+		insertTr += '			<option value=">=">&#62;&#61;</option>';
+		insertTr += '			<option value="From_To(From)">From_To(From)</option>';
+		insertTr += '			<option value="From_To(TO)">From_To(TO)</option>';
+		insertTr += '			<option value="like">like</option>';
+		insertTr += '		</select>';
+		insertTr += '	</td>';
+		insertTr += '	<td class="cnd_cndNm"><input type="text"></td>';
+		insertTr += '	<td class="cnd_iemDesc"><input type="text"></td>';
+		insertTr += '	<td class="cnd_testValue"><input type="text"></td>';
+		insertTr += '</tr>';
+		
+	$("#cndList").append(insertTr);
+}
+
+//정렬순서 추가
+const addSortList = function(){
+	
+	let tbl = $("input:radio[name=tbl_radio]:checked").val();
+	
+	if(!tbl){
+		alert("선택된 테이블이 없습니다!");
+		return;
+	}
+	
+	let insertTr = '<tr class="sort_list">';
+		insertTr += '	<td><input type="checkbox" name="sort_chk"></td>';
+		insertTr += '	<td class="sort_seq"></td>';
+		insertTr += '	<td class="sort_colEng">';
+		insertTr += '		<select class="form-control" name="sort_colEng">';
+		for(let column in columnObj){
+			insertTr += '			<option value="'+column+'">'+column+'</option>';
+		}
+		insertTr += '		</select>';
+		insertTr += '	</td>';
+		insertTr += '	<td class="sort_sortMethod">';
+		insertTr += '		<select class="form-control" name="sort_sortMethod">';
+		insertTr += '			<option value="Asc">Asc</option>';
+		insertTr += '			<option value="Desc">Desc</option>';
+		insertTr += '		</select>';
+		insertTr += '	</td>';
+		insertTr += '</tr>';
+		
+	$("#sortList").append(insertTr);
+	
+	sortNumbering();
+}
+
+//데이터분배 대상 설정팝업 추가
+let popIdx = 0;
+const addPopupList = function(){
+	
+	let insertTr = '<tr class="popup_list">';
+		insertTr += '	<td class="pop_dstbSeq"><input type="radio" name="pop_dstbSeq"></td>';
+		insertTr += '	<td class="pop_ctprvnCd">';
+		insertTr += '		<select class="form-control" onchange="lxpfAdministSggList(this, \''+popIdx+'\');">';
+		insertTr +=	'			<option value="">시/도 선택</option>';
+		for(let i=0; i<ctprvnCdArr.length; i++){
+			if(ctprvnCdArr[i]['korNm']){
+				insertTr +=	'			<option value="'+ctprvnCdArr[i]['cd']+'">'+ctprvnCdArr[i]['korNm']+'</option>';
+			}
+		}
+		insertTr +=	'		</select>';
+		insertTr += '	</td>';
+		insertTr += '	<td class="pop_signguCd">';
+		insertTr += '		<select class="form-control" id="pop_signguCd'+popIdx+'">';
+		insertTr +=	'			<option value="">시/군/구 선택</option>';
+		insertTr +=	'		</select>';
+		insertTr += '	</td>';
+		insertTr += '	<td class="pop_srvkey"><input type="text"></td>';
+		
+	$("#popupList").append(insertTr);
+	popIdx++;
+	
+}
+
+//조건항목 삭제
+const deleteCndList = function (){
+	$('input:checkbox[name="cnd_chk"]:checked').each(function() {
+		$(this).parents('tr.cnd_list').remove();
+   });
+}
+
+//정렬순서 삭제
+const deleteSortList = function (){
+	$('input:checkbox[name="sort_chk"]:checked').each(function() {
+		$(this).parents('tr.sort_list').remove();
+   	});
+	
+	sortNumbering();
+}
+
+//데이터분배 대상 설정팝업 삭제
+const deletePopupList = function (){
+	
+	$('input:radio[name="pop_dstbSeq"]:checked').parents('tr.popup_list').remove();
+}
+
+//정렬순서 번호매기기
+const sortNumbering = function(){
+	$("#sortList > tr").each(function(idx, el){
+	   $(el).find('td.sort_seq').text(idx+1);
+	});
+}
+
+//조건항목 대상컬럼 선택
+const selectTargetCol = function(obj){
+	let cnd_no = $(obj).parents("tr").data("code");
+	$("#cnd_dataType"+cnd_no).text(columnObj[$(obj).val()]);
+}
+
+const paingDefault = function(obj){
+	if($(obj).is(":checked")){
+		$("#paging_default1").show();
+		$("#paging_default2").show();
+	}else{
+		$("#paging_default1").hide();
+		$("#paging_default2").hide();
+	}
+}
+
+//유효성 검사
+const validationCheck = function(){
+	
+	let isValid = true;
+	
+	let svrArr = new Array(); 
+	$($("input:checkbox[name=svr_chk]:checked").parents('tr.svr_tr').get().reverse()).each(function(idx, el){
+		
+		let svr_srvColNm = $(this).find('td.svr_srvColNm > input').val();
+		let svr_srvNmDesc = $(this).find('td.svr_srvNmDesc > input').val();
+		
+		svrArr.push($(this).find('td.svr_colEng').text());
+		
+    	if(!svr_srvColNm){
+			alert("컬럼 명칭을 입력하세요.");
+			$(this).find('td.svr_srvColNm > input').focus();
+			isValid = false;
+			return isValid;
+		}
+    	
+    	if(!svr_srvNmDesc){
+			alert("명칭 설명을 입력하세요.");
+			$(this).find('td.svr_srvNmDesc > input').focus();
+			isValid = false;
+			return isValid;
+		}
+    });
+	
+	if(!isValid){
+    	return;
+    }
+	
+	$($("input:checkbox[name=cnd_chk]:checked").parents('tr.cnd_list').get().reverse()).each(function(idx, el){
+		
+		let cnd_cndNm = $(this).find('td.cnd_cndNm > input').val();
+		let cnd_targetCol = $(this).find('td.cnd_targetCol > select').val();
+		
+    	if(!cnd_cndNm){
+			alert("조건 명칭을 입력하세요.");
+			$(this).find('td.cnd_cndNm > input').focus();
+			isValid = false;
+			return isValid;
+		}
+    	
+    	if(!svrArr.includes(cnd_targetCol)){	//서비스 선택에서 체크되지 않은 항목 체크
+			alert("서비스 선택 항목에서 체크되지 않은 컬럼입니다.");
+			isValid = false;
+			return isValid;
+		}
+    	
+    });
+	
+	if(!isValid){
+    	return;
+    }
+	
+	let sortArr = new Array();
+	$($("input:checkbox[name=sort_chk]:checked").parents('tr.sort_list').get().reverse()).each(function(idx, el){
+		
+		let sort_colEng = $(this).find('td.sort_colEng > select').val();
+		
+		if(sortArr.includes(sort_colEng)){
+			alert("동일한 정렬순서 컬럼이 선택되었습니다.");
+			isValid = false;
+			return isValid;
+		}
+		
+		if(!svrArr.includes(sort_colEng)){	//서비스 선택에서 체크되지 않은 항목 체크
+			alert("서비스 선택 항목에서 체크되지 않은 컬럼입니다.");
+			isValid = false;
+			return isValid;
+		}
+		
+		sortArr.push(sort_colEng);
+    });
+	
+	return isValid;
+	
+}
+
+//검색 버튼
+const btnSearch = function(){
+	init();
+	distributeSetupSchemaTblList();
+}
+
+//초기화
+const init = function(){
+	columnObj = {}; //컬럼 객체 초기화
+	targetList.length = 0; //데이터분배 대상 설정 저장 초기화
+	
+	/*기본정보 초기화*/
+	$("#info_schemaNm").val("");
+	$("#info_tbl").val("");
+	$("#info_srvNm").val("");
+	$("#info_srvYn").val("Y").prop("selected", true);
+	$("#info_srvUrl").val("");
+	$("#info_srvDesc").val("");
+	$("#sqlText").empty();
+	
+	/*서비스선택 초기화*/
+	$("#svrList").empty();
+	
+	/*조건항목 초기화*/
+	$("#cndList tr:not(.cnd_default)").empty();
+	$("#cndList tr#paging_default1").hide();
+	$("#cndList tr#paging_default2").hide();
+	$("#pgngYn").prop("checked", false);
+	$("#rowsOfPageTest").val('');
+	$("#nowPageNumTest").val('');
+	
+	/*정렬순서 초기화*/
+	$("#sortList").empty();
+	
+	popIdx = 0;	// 시/도 index
+	
+}
+
+//엔터키가 눌렸을 때
+const enterkey = function(e) {
+	if (e.keyCode == 13) {
+		btnSearch();
+    }
+}
+
+//모달 추가
+const addModal = function(){
+	alert("작업중");
+	return;
+	lxpfAdministCtpvList();
+	distributeSetupPopupSrvTargetList();
+	$('#add_modal').modal('show');
+}
+
+//모달 닫기
+const closeModal = function(){
+	$('#add_modal').modal('hide');
+}
+
+//목록 페이지 이동
+const jsList = function(){
+	location.href = url + '/list';
+}
+
+//집합함수 사용여부 체크시
+$(document).on("click", "input:checkbox[name=svr_totFncYn]", function(){
+	let insertTr = '';
+	if($(this).is(":checked")){
+		insertTr += '<select class="form-control">';
+	  	insertTr +=	'	<option value="max">max</option>';
+	  	insertTr +=	'	<option value="min">min</option>';
+	  	insertTr +=	'	<option value="avg">avg</option>';
+	  	insertTr +=	'	<option value="sum">sum</option>';
+	  	insertTr +=	'	<option value="count">count</option>';
+	  	insertTr += '</select>';
+	}
+	$(this).parent().next().html(insertTr)
+});
+
+distributeSetupInfo()
+.then(function(data){
+	distributeSetupSchemaList(data.contents.schemaNm);
+	distributeSetupSchemaTblList(data.contents.tbl);
+	distributeSetupColList(data.contents.tbl);
+	distributeSetupSrvList();
+	distributeSetupCndList();
+	distributeSetupSortList();
+})
+.catch(function(error){
+	console.log(error)
+});
+
+</script>
+

@@ -449,7 +449,7 @@ const dpIngestMetaTbl = function (page, size_per_page) {
 	}	
 	
 	let search_type = $("#search_type").val();
-	let query = $("#query").data("search");
+	let query = isEmpty($("#query").data("search"));
 	let l_clsf = $("#l_clsf").val();
 	let m_clsf = $("#m_clsf").val();
 	let s_clsf = $("#s_clsf").val();
