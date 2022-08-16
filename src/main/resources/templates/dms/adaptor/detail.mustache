@@ -304,9 +304,6 @@
           </div>
         </div>
        </div>
-       <div class="modal fade add_modal" id="modal_hidden" tabindex="-1" role="dialog" aria-hidden="true">
-       	<div class="modal-dialog modal-lg" style="max-width: 1000px;"></div>
-       </div>
        <input type="hidden" name="instance_id" id="instance_id">
        <div id="divForm"></div>
         
@@ -316,6 +313,12 @@
 const commonUrl = '/common';
 const url = '/adaptor';
 
+//다중 모달 닫을때 스크롤 비활성화 되는 문제 해결
+$('body').on('hidden.bs.modal', function () {
+	if ($('.modal:visible').length > 0) { 
+        $('body').addClass('modal-open'); 
+    }
+});
 
 //수집방식
 const dpCmCodesClctMthd = function (group_code, id) {
@@ -1200,11 +1203,6 @@ const dataSetId = function(dset_idntfc_id, dset_korean_nm){
 	
 	closeModal('dataSet');
 	$('footer').show();
-	
-	setTimeout(function() {
-		openModal('modal_hidden');
-		$('.modal-backdrop').remove();
-	}, 1000);	
 	
 }
 
