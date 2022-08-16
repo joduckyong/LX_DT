@@ -304,9 +304,6 @@
           </div>
         </div>
        </div>
-       <div class="modal fade add_modal" id="modal_hidden" tabindex="-1" role="dialog" aria-hidden="true">
-       	<div class="modal-dialog modal-lg" style="max-width: 1000px;"></div>
-       </div>
        <input type="hidden" name="instance_id" id="instance_id">
        <div id="divForm"></div>
         
@@ -316,6 +313,12 @@
 const commonUrl = '/common';
 const url = '/adaptor';
 
+//다중 모달 닫을때 스크롤 비활성화 되는 문제 해결
+$('body').on('hidden.bs.modal', function () {
+	if ($('.modal:visible').length > 0) { 
+        $('body').addClass('modal-open'); 
+    }
+});
 
 //수집방식
 const dpCmCodesClctMthd = function (group_code, id) {
@@ -818,186 +821,169 @@ const dpIngestAdapterItIdChk = function(){
 // 레이어 Instance 저장
 const dpIngestAdapterItSave = function(type){
 	
+    if($("#instance_nm").val() == '') {
+        alert('인스턴스 명을 입력하세요!');
+        $("#instance_nm").focus();
+        return;
+    }
+    if($("#dset_korean_nm").val() == '') {
+        alert('데이터 셋 명을 선택하세요!');
+        $("#dset_korean_nm").focus();
+        return;
+    }
+    if($("#clct_mthd").val() == '') {
+        alert('수집방식을 선택하세요!');
+        $("#clct_mthd").focus();
+        return;
+    }
+    if($("#clct_ty").val() == '') {
+        alert('수집유형을 선택하세요!');
+        $("#clct_ty").focus();
+        return;
+    }
+    if($("#storage_cycle").val() == '') {
+        alert('보관주기를 입력하세요!');
+        $("#storage_cycle").focus();
+        return;
+    }
+    
+    console.log('storage_type : '+$("#storage_type").val());
+    if($("#storage_type").val() == '') {
+        alert('보관주기를 선택하세요!');
+        $("#storage_type").focus();
+        return;
+    }
+    
+    let schedule_time_type = $("input:radio[name='schedule_time_type']:checked").val();
+    let schedule_type = $("input:radio[name='schedule_type']:checked").val();
+    let clct_mthd = $('#clct_mthd').val().substring(0,$('#clct_mthd').val().indexOf('|'));
+	    
+    console.log('schedule_type : '+schedule_type);
+    if(schedule_type === "D39001"){
+      if(schedule_time_type === "D40001"){
+        if($("#schedule_month").val() == '') {
+            alert('월을 선택하세요!');
+            $("#schedule_month").focus();
+            return;
+        }
+        if($("#schedule_day").val() == '') {
+            alert('일을 선택하세요!');
+            $("#schedule_day").focus();
+            return;
+        }
+        if($("#schedule_hour").val() == '') {
+            alert('시를 선택하세요!');
+            $("#schedule_hour").focus();
+            return;
+        }    	
+        if($("#schedule_minute").val() == '') {
+            alert('분을 선택하세요!');
+            $("#schedule_minute").focus();
+            return;
+        }  
+        
+      }else if(schedule_time_type === "D40002"){
+    	  
+          if($("#schedule_day").val() == '') {
+              alert('일을 선택하세요!');
+              $("#schedule_day").focus();
+              return;
+          }
+          if($("#schedule_hour").val() == '') {
+              alert('시를 선택하세요!');
+              $("#schedule_hour").focus();
+              return;
+          }    	
+          if($("#schedule_minute").val() == '') {
+              alert('분을 선택하세요!');
+              $("#schedule_minute").focus();
+              return;
+          }      	  
+
+      }else if(schedule_time_type === "D40003"){
+
+        if($("#schedule_week").val() == '') {
+            alert('요일을 선택하세요!');
+            $("#schedule_week").focus();
+            return;
+        }
+        if($("#schedule_hour").val() == '') {
+            alert('시를 선택하세요!');
+            $("#schedule_hour").focus();
+            return;
+        }    	
+        if($("#schedule_minute").val() == '') {
+            alert('분을 선택하세요!');
+            $("#schedule_minute").focus();
+            return;
+        }  
+
+      }else if(schedule_time_type === "D40004"){
+        if($("#schedule_hour").val() == '') {
+            alert('시를 선택하세요!');
+            $("#schedule_hour").focus();
+            return;
+        }    	
+        if($("#schedule_minute").val() == '') {
+            alert('분을 선택하세요!');
+            $("#schedule_minute").focus();
+            return;
+        } 
+
+      }else if(schedule_time_type === "D40005"){
+
+        if($("#schedule_minute").val() == '') {
+            alert('분을 선택하세요!');
+            $("#schedule_minute").focus();
+            return;
+        } 
+        
+      }
+    }else{
+
+        if($("#schedule_year").val() == '') {
+            alert('년을 선택하세요!');
+            $("#schedule_year").focus();
+            return;
+        }
+        if($("#schedule_month").val() == '') {
+            alert('월을 선택하세요!');
+            $("#schedule_month").focus();
+            return;
+        }
+        if($("#schedule_day").val() == '') {
+            alert('일을 선택하세요!');
+            $("#schedule_day").focus();
+            return;
+        }
+        if($("#schedule_hour").val() == '') {
+            alert('시를 선택하세요!');
+            $("#schedule_hour").focus();
+            return;
+        }    	
+        if($("#schedule_minute").val() == '') {
+            alert('분을 선택하세요!');
+            $("#schedule_minute").focus();
+            return;
+        }    	
+    }
+	    
+    let schedule_now_exe = $("input:checkbox[name='schedule_now_exe']:checked").val();
+    if(schedule_now_exe !== 'Y'){
+    	schedule_now_exe = null;
+    }
+    
+    let pageUrl = '/dp/ingest/adapter/instance/save';
+    if(type === 'U'){
+    	pageUrl = '/dp/ingest/adapter/instance/update';
+    }
+    
 	let message = "등록 하시겠습니까?";
 	if(type === 'U'){
 		message = "수정 하시겠습니까?";
 	}
 	
-	if(confirm(message)) {
-	    if($("#instance_nm").val() == '') {
-	        alert('인스턴스 명을 입력하세요!');
-	        $("#instance_nm").focus();
-	        return;
-	    }
-	    if($("#dset_korean_nm").val() == '') {
-	        alert('데이터 셋 명을 선택하세요!');
-	        $("#dset_korean_nm").focus();
-	        return;
-	    }
-	    if($("#clct_mthd").val() == '') {
-	        alert('수집방식을 선택하세요!');
-	        $("#clct_mthd").focus();
-	        return;
-	    }
-	    if($("#clct_ty").val() == '') {
-	        alert('수집유형을 선택하세요!');
-	        $("#clct_ty").focus();
-	        return;
-	    }
-	    if($("#storage_cycle").val() == '') {
-	        alert('보관주기를 입력하세요!');
-	        $("#storage_cycle").focus();
-	        return;
-	    }
-	    
-	    console.log('storage_type : '+$("#storage_type").val());
-	    if($("#storage_type").val() == '') {
-	        alert('보관주기를 선택하세요!');
-	        $("#storage_type").focus();
-	        return;
-	    }
-	    
-	//    let scheduleType = null;
-	//    let scheduleTimeTpe = null;
-	//    let scheduleYear = null;
-	//    let scheduleMonth = null;
-	//    let scheduleDay = null;
-	//    let scheduleWeek = null;
-	//    let scheduleHour = null;
-	//    let scheduleMinute = null;
-	
-	    let schedule_time_type = $("input:radio[name='schedule_time_type']:checked").val();
-	    let schedule_type = $("input:radio[name='schedule_type']:checked").val();
-	    let clct_mthd = $('#clct_mthd').val().substring(0,$('#clct_mthd').val().indexOf('|'));
-	    
-	    console.log('schedule_type : '+schedule_type);
-	    if(schedule_type === "D39001"){
-	//      scheduleType = "반복";
-	      if(schedule_time_type === "D40001"){
-	//        scheduleTimeTpe = "year";
-	
-	        if($("#schedule_month").val() == '') {
-	            alert('월을 선택하세요!');
-	            $("#schedule_month").focus();
-	            return;
-	        }
-	        if($("#schedule_day").val() == '') {
-	            alert('일을 선택하세요!');
-	            $("#schedule_day").focus();
-	            return;
-	        }
-	        if($("#schedule_hour").val() == '') {
-	            alert('시를 선택하세요!');
-	            $("#schedule_hour").focus();
-	            return;
-	        }    	
-	        if($("#schedule_minute").val() == '') {
-	            alert('분을 선택하세요!');
-	            $("#schedule_minute").focus();
-	            return;
-	        }  
-	        
-	      }else if(schedule_time_type === "D40002"){
-	    	  
-	          if($("#schedule_day").val() == '') {
-	              alert('일을 선택하세요!');
-	              $("#schedule_day").focus();
-	              return;
-	          }
-	          if($("#schedule_hour").val() == '') {
-	              alert('시를 선택하세요!');
-	              $("#schedule_hour").focus();
-	              return;
-	          }    	
-	          if($("#schedule_minute").val() == '') {
-	              alert('분을 선택하세요!');
-	              $("#schedule_minute").focus();
-	              return;
-	          }      	  
-	//        scheduleTimeTpe = "month";
-	
-	      }else if(schedule_time_type === "D40003"){
-	//        scheduleTimeTpe = "week";
-	
-	        if($("#schedule_week").val() == '') {
-	            alert('요일을 선택하세요!');
-	            $("#schedule_week").focus();
-	            return;
-	        }
-	        if($("#schedule_hour").val() == '') {
-	            alert('시를 선택하세요!');
-	            $("#schedule_hour").focus();
-	            return;
-	        }    	
-	        if($("#schedule_minute").val() == '') {
-	            alert('분을 선택하세요!');
-	            $("#schedule_minute").focus();
-	            return;
-	        }  
-	
-	      }else if(schedule_time_type === "D40004"){
-	//        scheduleTimeTpe = "day";
-	        if($("#schedule_hour").val() == '') {
-	            alert('시를 선택하세요!');
-	            $("#schedule_hour").focus();
-	            return;
-	        }    	
-	        if($("#schedule_minute").val() == '') {
-	            alert('분을 선택하세요!');
-	            $("#schedule_minute").focus();
-	            return;
-	        } 
-	
-	      }else if(schedule_time_type === "D40005"){
-	//        scheduleTimeTpe = "hour";
-	
-	        if($("#schedule_minute").val() == '') {
-	            alert('분을 선택하세요!');
-	            $("#schedule_minute").focus();
-	            return;
-	        } 
-	        
-	      }
-	    }else{
-	
-	        if($("#schedule_year").val() == '') {
-	            alert('년을 선택하세요!');
-	            $("#schedule_year").focus();
-	            return;
-	        }
-	        if($("#schedule_month").val() == '') {
-	            alert('월을 선택하세요!');
-	            $("#schedule_month").focus();
-	            return;
-	        }
-	        if($("#schedule_day").val() == '') {
-	            alert('일을 선택하세요!');
-	            $("#schedule_day").focus();
-	            return;
-	        }
-	        if($("#schedule_hour").val() == '') {
-	            alert('시를 선택하세요!');
-	            $("#schedule_hour").focus();
-	            return;
-	        }    	
-	        if($("#schedule_minute").val() == '') {
-	            alert('분을 선택하세요!');
-	            $("#schedule_minute").focus();
-	            return;
-	        }    	
-	//      scheduleType = "미반복";
-	    }
-	    
-	    let schedule_now_exe = $("input:checkbox[name='schedule_now_exe']:checked").val();
-	    if(schedule_now_exe !== 'Y'){
-	    	schedule_now_exe = null;
-	    }
-	    
-	    let pageUrl = '/dp/ingest/adapter/instance/save';
-	    if(type === 'U'){
-	    	pageUrl = '/dp/ingest/adapter/instance/update';
-	    }
-	    
+    if(confirm(message)) {
 		const data = {
 		   		url: pageUrl,
 		   		adapter_id: "{{adapter_id}}",	
@@ -1200,11 +1186,6 @@ const dataSetId = function(dset_idntfc_id, dset_korean_nm){
 	
 	closeModal('dataSet');
 	$('footer').show();
-	
-	setTimeout(function() {
-		openModal('modal_hidden');
-		$('.modal-backdrop').remove();
-	}, 1000);	
 	
 }
 

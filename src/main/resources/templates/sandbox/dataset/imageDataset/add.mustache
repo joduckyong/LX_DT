@@ -308,12 +308,13 @@ const btnDel = function(){
     });
     
 	let msg = $("#image_dataset_nm2").val() +' - '+ $("#dtl_code_nm").val() +'\n'+$('#file_index').val()+'('+$('#file_cnt').val()+'개)의 \n파일을 삭제하시겠습니까?'
-    if(!confirm(msg)) {
-    } else {
-        if($("input[name='image_dataset_seq_num']:checked").length < 1) {
-            alert('선택 항목이 없습니다.');
-            return;
-        }
+			
+    if($("input[name='image_dataset_seq_num']:checked").length < 1) {
+        alert('선택 항목이 없습니다.');
+        return;
+    }
+	
+    if(confirm(msg)) {
 
         $("input[name='image_dataset_seq_num']:checked").each(function (i) {
         	imageDatasetDetailDelete($(this).val());
@@ -391,20 +392,19 @@ const addFile = function(obj, dtl_code){
 const imagesDatasetsFileUpload = function() {
     // 폼데이터 담기
     
-   	if(!confirm('등록 하시겠습니까?')) {
-	}else{
-	    if(fileNo == 0){
-	    	alert("학습 데이터 하나이상 첨부해주세요!");
-	    	return;
-	    }    
-	    if(fileNo2 == 0){
-	    	alert("검증 데이터 하나이상 첨부해주세요!");
-	    	return;
-	    }    
-	    if(fileNo3 == 0){
-	    	alert("테스트 데이터 하나이상 첨부해주세요!");
-	    	return;
-	    }    
+    if(fileNo == 0){
+    	alert("학습 데이터 하나이상 첨부해주세요!");
+    	return;
+    }    
+    if(fileNo2 == 0){
+    	alert("검증 데이터 하나이상 첨부해주세요!");
+    	return;
+    }    
+    if(fileNo3 == 0){
+    	alert("테스트 데이터 하나이상 첨부해주세요!");
+    	return;
+    }      
+   	if(confirm('등록 하시겠습니까?')) {
 	    
 	    let formData = new FormData();
 	    formData.append("url", '/services/sandbox/datasets/images/{{image_dataset_id}}/file-upload');

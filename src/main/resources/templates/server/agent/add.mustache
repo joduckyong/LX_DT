@@ -1,0 +1,170 @@
+{{>layout/header}}
+
+<div class="right_col" role="main">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="x_panel">
+				<div class="x_title">
+					<h2>HOME > 에이전트 관리 > 등록</h2>
+					<div class="clearfix"></div>
+				</div>
+				<div class="x_content">
+				  <div class="border_rows">
+				  
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-12">
+                        <div class="control-label" style="text-align: center;">지자체명</div>
+                        <div class="form-control_box"><input class="form-control" type="text" name="code_nm" id="code_nm"></div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-12">
+                        <div class="control-label" style="text-align: center;">지자체 코드</div>
+                        <div class="form-control_box">
+                        	<div class="col-md-9">
+                        		<input class="form-control" type="text" name="code" id="code">
+                        	</div>
+                        	<div class="col-md-3">
+	                        	<button class="btn btn-primary" onclick="agentDuplicate();">중복확인</button>
+	                        </div>
+                        </div>
+                      </div>                    
+                    </div>
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-12">
+                        <div class="control-label" style="text-align: center;">법정동 코드</div>
+                        <div class="form-control_box"><input class="form-control" type="text" name="local_code" id="local_code"></div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-12">
+                        <div class="control-label" style="text-align: center;">법정동 코드명</div>
+                        <div class="form-control_box"><input class="form-control" type="text" name="local_code_nm" id="local_code_nm"></div>
+                      </div>
+                    </div>                                        
+                    
+                  </div>
+                  <div class="d-flex justify-content-center align-items-center mt-2">
+                    <button class="btn btn-primary" onclick="agentAdd();">등록</button>
+                  </div>                    
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<input type="hidden" name="check" id="check" value="N">
+
+{{>layout/footer}}
+
+<script>
+	const url = '/server/agent';
+	
+
+	//에이전트 중복확인
+	const agentDuplicate = function () {
+			
+	    if($("#code").val() == '') {
+	        alert('지자체 코드를 입력하세요!');
+	        $("#code").focus();
+	        return;
+	    }
+	    
+	    const data = {
+	   		url: '/agent/code/duplicate',
+	   		code: $("#code").val(),	
+	   		user_id: 'user00',
+	    };		
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/agentDuplicate',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	
+		  	  if (data != null) {
+			  		let message = JSON.stringify(data.msg);
+			  		alert(message.replace(/\"/gi, ''));
+			  		
+			  		if(message.replace(/\"/gi, '') === 'AVAILABLE'){
+			  			$("#check").val($("#code").val());
+			  			$("#local_code").focus();
+			  		}else{
+			  			$("#check").val("N");
+			  			$("#code").focus();
+			  		}
+			  		
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	}
+	
+	//에이전트 등록
+	const agentAdd = function () {
+
+	    if($("#code_nm").val() == '') {
+	        alert('지자체명을 입력하세요!');
+	        $("#code_nm").focus();
+	        return;
+	    }
+	    if($("#code").val() == '') {
+	        alert('지자체 코드를 입력하세요!');
+	        $("#code").focus();
+	        return;
+	    }
+	    
+	    if($("#check").val() == 'N') {
+	        alert('중복확인을 확인하세요!');
+	        $("#code").focus();
+	        return;
+	    }
+	    
+	    if($("#local_code").val() == '') {
+	        alert('법정동 코드를 입력하세요!');
+	        $("#local_code").focus();
+	        return;
+	    }
+	    if($("#local_code_nm").val() == '') {
+	        alert('법정동 코드명을 입력하세요!');
+	        $("#local_code_nm").focus();
+	        return;
+	    }
+	    
+		if(confirm('등록 하시겠습니까?')) {
+			
+		    const data = {
+		   		url: '/agent/add',
+		   		code_nm: $("#code_nm").val(),	
+		   		code: $("#code").val(),	
+		   		local_code: $("#local_code").val(),	
+		   		local_code_nm: $("#local_code_nm").val(),	
+		   		user_id: 'user00',
+		    };		
+		    $.ajax({
+		        type: 'POST',
+		        url: url+'/agentAdd',
+		        dataType: 'json',
+		        contentType: 'application/json; charset-utf-8',
+		        data: JSON.stringify(data)
+		    }).done(function (data) {
+		    	
+			  	  if (data != null) {
+				  		let message = JSON.stringify(data.message);
+				  		alert(message.replace(/\"/gi, ''));
+				  		listPage();
+			  	  }
+		    	  
+		    }).fail(function (error) {
+		        alert(JSON.stringify(error));
+		    });	
+		}
+	}	
+	
+	//리스트 화면
+	const listPage = function () {
+		location.href = url+'/list';
+	}	
+</script>
+
