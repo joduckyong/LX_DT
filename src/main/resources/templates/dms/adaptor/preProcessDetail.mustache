@@ -228,27 +228,28 @@ const dpIngestPreDel = function(){
 //전처리 사용 체크
 const dpIngestPreIdDelChk = function(type){
 	
+    if($("#pre_nm").val() == '') {
+        alert('전처리 명을 입력하세요!');
+        $("#pre_nm").focus();
+        return;
+    }
+    if($("#property_type").val() == '') {
+        alert('속성유형을 선택하세요!');
+        $("#property_type").focus();
+        return;
+    }
+    if($("#chang_type").val() == '') {
+        alert('변경유형을 선택하세요!');
+        $("#chang_type").focus();
+        return;
+    }
+    
 	let message = '수정 하시겠습니까?';
 	if(type === 'D'){
 		message = '삭제 하시겠습니까?';
 	}
 	
 	if(confirm(message)) {
-	    if($("#pre_nm").val() == '') {
-	        alert('전처리 명을 입력하세요!');
-	        $("#pre_nm").focus();
-	        return;
-	    }
-	    if($("#property_type").val() == '') {
-	        alert('속성유형을 선택하세요!');
-	        $("#property_type").focus();
-	        return;
-	    }
-	    if($("#chang_type").val() == '') {
-	        alert('변경유형을 선택하세요!');
-	        $("#chang_type").focus();
-	        return;
-	    }
 	    
 		const data = {
 		   		url: '/dp/ingest/pre/id/delete/check',

@@ -216,33 +216,33 @@ const analysisModelsBasicInfo = function (page, size_per_page) {
 //분석 모델 기본정보 등록
 const analysisModelsBasicInfoEnroll = function () {
 	
-	if(!confirm('등록 하시겠습니까?')) {
-	}else{	
-	    if($("#anals_model_stage").val() == '') {
-	        alert('파라미터명을 입력하세요!');
-	        $("#anals_model_stage").focus();
-	        return;
-	    }
-	    if($("#anals_model_dfn").val() == '') {
-	        alert('정의를 입력하세요!');
-	        $("#anals_model_dfn").focus();
-	        return;
-	    }
-	    if($("#anals_model_desc").val() == '') {
-	        alert('등록가이드를 입력하세요!');
-	        $("#anals_model_desc").focus();
-	        return;
-	    }
-	    if($("#anals_use_prpos_cd").val() == '') {
-	        alert('사용 용도를 선택하세요!');
-	        $("#anals_use_prpos_cd").focus();
-	        return;
-	    }
-	    if($("#use_yn").val() == '') {
-	    	alert('사용 유무를 선택하세요!');
-	        $("#use_yn").focus();
-	        return;
-	    }
+    if($("#anals_model_stage").val() == '') {
+        alert('파라미터명을 입력하세요!');
+        $("#anals_model_stage").focus();
+        return;
+    }
+    if($("#anals_model_dfn").val() == '') {
+        alert('정의를 입력하세요!');
+        $("#anals_model_dfn").focus();
+        return;
+    }
+    if($("#anals_model_desc").val() == '') {
+        alert('등록가이드를 입력하세요!');
+        $("#anals_model_desc").focus();
+        return;
+    }
+    if($("#anals_use_prpos_cd").val() == '') {
+        alert('사용 용도를 선택하세요!');
+        $("#anals_use_prpos_cd").focus();
+        return;
+    }
+    if($("#use_yn").val() == '') {
+    	alert('사용 유무를 선택하세요!');
+        $("#use_yn").focus();
+        return;
+    }
+    
+	if(confirm('등록 하시겠습니까?')) {
 	    
 	    const data = {
 	   		url: '/services/sandbox/analysis-models/B04002/basic-infos/enroll',
@@ -319,33 +319,33 @@ const analysisModelsBasicInfoDetail = function (anals_model_bass_id) {
 //분석 모델 기본정보 수정
 const analysisModelsBasicInfoUpdate = function () {
 
-	if(!confirm('수정 하시겠습니까?')) {
-	}else{
-	    if($("#anals_model_stage").val() == '') {
-	        alert('파라미터명을 입력하세요!');
-	        $("#anals_model_stage").focus();
-	        return;
-	    }
-	    if($("#anals_model_dfn").val() == '') {
-	        alert('정의를 입력하세요!');
-	        $("#anals_model_dfn").focus();
-	        return;
-	    }
-	    if($("#anals_model_desc").val() == '') {
-	        alert('등록가이드를 입력하세요!');
-	        $("#anals_model_desc").focus();
-	        return;
-	    }
-	    if($("#anals_use_prpos_cd").val() == '') {
-	        alert('사용 용도를 선택하세요!');
-	        $("#anals_use_prpos_cd").focus();
-	        return;
-	    }
-	    if($("#use_yn").val() == '') {
-	    	alert('사용 유무를 선택하세요!');
-	        $("#use_yn").focus();
-	        return;
-	    }
+    if($("#anals_model_stage").val() == '') {
+        alert('파라미터명을 입력하세요!');
+        $("#anals_model_stage").focus();
+        return;
+    }
+    if($("#anals_model_dfn").val() == '') {
+        alert('정의를 입력하세요!');
+        $("#anals_model_dfn").focus();
+        return;
+    }
+    if($("#anals_model_desc").val() == '') {
+        alert('등록가이드를 입력하세요!');
+        $("#anals_model_desc").focus();
+        return;
+    }
+    if($("#anals_use_prpos_cd").val() == '') {
+        alert('사용 용도를 선택하세요!');
+        $("#anals_use_prpos_cd").focus();
+        return;
+    }
+    if($("#use_yn").val() == '') {
+    	alert('사용 유무를 선택하세요!');
+        $("#use_yn").focus();
+        return;
+    }
+    
+	if(confirm('수정 하시겠습니까?')) {
 	    
 	    const data = {
 	   		url: '/services/sandbox/analysis-models/B04002/basic-infos/'+$("#hidden_anals_model_bass_id").val()+'/update',
@@ -431,12 +431,12 @@ const commonCodeAnalysisUsePurpose = function (){
 //삭제버튼
 const btnDel = async function(){
 	
-    if(!confirm('삭제 하시겠습니까?')) {
-    } else {
-        if($("input[name='anals_model_bass_id']:checked").length < 1) {
-            alert('선택 항목이 없습니다.');
-            return;
-        }
+    if($("input[name='anals_model_bass_id']:checked").length < 1) {
+        alert('선택 항목이 없습니다.');
+        return;
+    }
+
+    if(confirm('삭제 하시겠습니까?')) {
 
         let tasks = new Array();
     	let chk_arr = $("input[name='anals_model_bass_id']:checked");

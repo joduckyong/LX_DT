@@ -275,24 +275,25 @@ const dpIngestAdapterIdChk = function(){
 //Adapter 저장
 const dpIngestAdapterSave = function(){
 	
+    if($("#adapter_nm").val() == '') {
+        alert('Adapter명을 입력하세요!');
+        $("#adapter_nm").focus();
+        return;
+    }
+    
+    if($("#adapter_type_id").val() == '') {
+        alert('Adapter유형을 선택하세요!');
+        $("#adapter_type_id").focus();
+        return;
+    }
+    
+	let use_yn = $("input[name='use_yn']:checked").val();
+    if($("input[name='use_yn']:checked").length < 1) {
+    	alert('사용 여부를 선택하세요!');
+        return;
+    }	 
+    
 	if(confirm('등록 하시겠습니까?')) {
-	    if($("#adapter_nm").val() == '') {
-	        alert('Adapter명을 입력하세요!');
-	        $("#adapter_nm").focus();
-	        return;
-	    }
-	    
-	    if($("#adapter_type_id").val() == '') {
-	        alert('Adapter유형을 선택하세요!');
-	        $("#adapter_type_id").focus();
-	        return;
-	    }
-	    
-		let use_yn = $("input[name='use_yn']:checked").val();
-	    if($("input[name='use_yn']:checked").length < 1) {
-	    	alert('사용 여부를 선택하세요!');
-	        return;
-	    }	 
 	    
 	    let adapter_id = $("#adapter_id").val();
 	    
@@ -376,24 +377,25 @@ const dpIngestAdapterDt = function(adapter_id){
 //이미지 데이터셋 수정
 const dpIngestAdapterUpdate = function () {
 
+    if($("#adapter_nm").val() == '') {
+        alert('Adapter명을 입력하세요!');
+        $("#adapter_nm").focus();
+        return;
+    }
+    
+    if($("#adapter_type_id").val() == '') {
+        alert('Adapter유형을 선택하세요!');
+        $("#adapter_type_id").focus();
+        return;
+    }
+    
+	let use_yn = $("input[name='use_yn']:checked").val();
+    if($("input[name='use_yn']:checked").length < 1) {
+    	alert('사용 여부를 선택하세요!');
+        return;
+    }	
+    
 	if(confirm('수정 하시겠습니까?')) {
-	    if($("#adapter_nm").val() == '') {
-	        alert('Adapter명을 입력하세요!');
-	        $("#adapter_nm").focus();
-	        return;
-	    }
-	    
-	    if($("#adapter_type_id").val() == '') {
-	        alert('Adapter유형을 선택하세요!');
-	        $("#adapter_type_id").focus();
-	        return;
-	    }
-	    
-		let use_yn = $("input[name='use_yn']:checked").val();
-	    if($("input[name='use_yn']:checked").length < 1) {
-	    	alert('사용 여부를 선택하세요!');
-	        return;
-	    }	
 	    
 	    const data = {
 	   		url: '/dp/ingest/adapter/update',

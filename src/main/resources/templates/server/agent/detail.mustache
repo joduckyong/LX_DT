@@ -38,8 +38,8 @@
                     
                   </div>
                   <div class="d-flex justify-content-center align-items-center mt-2">
-                    <button class="btn btn-info btn_update" onclick="btnUpdate();">수정</button>
-                    <button class="btn btn-danger" onclick="btnDel();">삭제</button>
+                    <button class="btn btn-info btn_update" onclick="agentUpd('U');">수정</button>
+                    <button class="btn btn-danger" onclick="agentUpd('D');">삭제</button>
                   </div>				
 				</div>
 			</div>
@@ -52,38 +52,81 @@
 <script>
 	const url = '/server/agent';
 	
-	//분석 모델 기본정보 수정
-	const agentUpd = function () {
+	//에이전트 상세
+	const agentDetail = function(){
+		
+		const data = {
+	   		url: '/agent/detail',
+	   		user_id: 'user00',
+	   		code: '{{code}}',
+	    };	
+		
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/agentDetail',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+		  	  if (data != null) {
+		  		
+		  		$("#code_nm").val(data.code_nm);
+		  		$("#local_code").val(data.local_code);
+		  		$("#local_code_nm").val(data.local_code_nm);
+		  		
+	 	      }
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	}	
+	
+	//에이전트 수정
+	const agentUpd = function (type) {
 
-		if(confirm('수정 하시겠습니까?')) {
-			
+		let data = {};
+		
+		if(type === 'U'){
+		
 		    if($("#code_nm").val() == '') {
-		        alert('파라미터명을 입력하세요!');
+		        alert('지자체명을 입력하세요!');
 		        $("#code_nm").focus();
 		        return;
 		    }
 		    if($("#local_code").val() == '') {
-		        alert('등록가이드를 입력하세요!');
+		        alert('법정동 코드를 입력하세요!');
 		        $("#local_code").focus();
 		        return;
 		    }
 		    if($("#local_code_nm").val() == '') {
-		        alert('사용 용도를 선택하세요!');
+		        alert('법정동 코드명을 입력하세요!');
 		        $("#local_code_nm").focus();
 		        return;
 		    }
-		    
-		    const data = {
-		   		url: '/services/sandbox/analysis-models/B04002/basic-infos/'+$("#hidden_anals_model_bass_id").val()+'/update',
-		   		anals_model_stage: $("#anals_model_stage").val(),	
-		   		anals_model_dfn: $("#anals_model_dfn").val(),	
-		   		anals_model_desc: $("#anals_model_desc").val(),	
-		   		anals_use_prpos_cd: $("#anals_use_prpos_cd").val(),	
-		   		use_yn: $("#use_yn").val(),	
-		   		modifier_id: 'user00',
+		    data = {
+		   		url: '/agent/update',
+		   		code_nm: $("#code_nm").val(),	
+		   		code: "{{code}}",	
+		   		local_code: $("#local_code").val(),	
+		   		local_code_nm: $("#local_code_nm").val(),	
 		   		user_id: 'user00',
-		   		menu_id: 'menu_id',
-		    };		
+		    };	
+		    
+		}else{
+		    data = {
+			   		url: '/agent/delete',
+			   		code: "{{code}}",	
+			   		user_id: 'user00',
+			};	
+		}
+		
+		
+		let message = '수정 하시겠습니까?';
+		if(type === 'D'){
+			message = '삭제 하시겠습니까?';
+		}
+		
+		if(confirm(message)) {
+		    
 		    $.ajax({
 		        type: 'POST',
 		        url: url+'/agentUpd',
@@ -93,7 +136,7 @@
 		    }).done(function (data) {
 		    	
 			  	  if (data != null) {
-				  		let message = JSON.stringify(data.return_msg);
+				  		let message = JSON.stringify(data.message);
 				  		alert(message.replace(/\"/gi, ''));
 				  		listPage();
 			  	  }
@@ -108,5 +151,8 @@
 	const listPage = function () {
 		location.href = url+'/list';
 	}		
+	
+	
+	agentDetail();
 </script>
 
