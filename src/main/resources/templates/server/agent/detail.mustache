@@ -1,0 +1,112 @@
+{{>layout/header}}
+
+<div class="right_col" role="main">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="x_panel">
+				<div class="x_title">
+					<h2>HOME > 에이전트 관리 > 등록</h2>
+					<div class="clearfix"></div>
+				</div>
+				<div class="x_content">
+				  <div class="border_rows">
+				  
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-12">
+                        <div class="control-label" style="text-align: center;">지자체명</div>
+                        <div class="form-control_box"><input class="form-control" type="text" name="code_nm" id="code_nm"></div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-12">
+                        <div class="control-label" style="text-align: center;">지자체 코드</div>
+                        <div class="form-control_box"><input class="form-control" type="text" name="code" id="code" value="{{code}}" disabled></div>
+                      </div>                    
+                    </div>
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-12">
+                        <div class="control-label" style="text-align: center;">법정동 코드</div>
+                        <div class="form-control_box"><input class="form-control" type="text" name="local_code" id="local_code"></div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-12">
+                        <div class="control-label" style="text-align: center;">법정동 코드명</div>
+                        <div class="form-control_box"><input class="form-control" type="text" name="local_code_nm" id="local_code_nm"></div>
+                      </div>
+                    </div>                                        
+                    
+                  </div>
+                  <div class="d-flex justify-content-center align-items-center mt-2">
+                    <button class="btn btn-info btn_update" onclick="btnUpdate();">수정</button>
+                    <button class="btn btn-danger" onclick="btnDel();">삭제</button>
+                  </div>				
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{{>layout/footer}}
+
+<script>
+	const url = '/server/agent';
+	
+	//분석 모델 기본정보 수정
+	const agentUpd = function () {
+
+		if(confirm('수정 하시겠습니까?')) {
+			
+		    if($("#code_nm").val() == '') {
+		        alert('파라미터명을 입력하세요!');
+		        $("#code_nm").focus();
+		        return;
+		    }
+		    if($("#local_code").val() == '') {
+		        alert('등록가이드를 입력하세요!');
+		        $("#local_code").focus();
+		        return;
+		    }
+		    if($("#local_code_nm").val() == '') {
+		        alert('사용 용도를 선택하세요!');
+		        $("#local_code_nm").focus();
+		        return;
+		    }
+		    
+		    const data = {
+		   		url: '/services/sandbox/analysis-models/B04002/basic-infos/'+$("#hidden_anals_model_bass_id").val()+'/update',
+		   		anals_model_stage: $("#anals_model_stage").val(),	
+		   		anals_model_dfn: $("#anals_model_dfn").val(),	
+		   		anals_model_desc: $("#anals_model_desc").val(),	
+		   		anals_use_prpos_cd: $("#anals_use_prpos_cd").val(),	
+		   		use_yn: $("#use_yn").val(),	
+		   		modifier_id: 'user00',
+		   		user_id: 'user00',
+		   		menu_id: 'menu_id',
+		    };		
+		    $.ajax({
+		        type: 'POST',
+		        url: url+'/agentUpd',
+		        dataType: 'json',
+		        contentType: 'application/json; charset-utf-8',
+		        data: JSON.stringify(data)
+		    }).done(function (data) {
+		    	
+			  	  if (data != null) {
+				  		let message = JSON.stringify(data.return_msg);
+				  		alert(message.replace(/\"/gi, ''));
+				  		listPage();
+			  	  }
+		    	  
+		    }).fail(function (error) {
+		        alert(JSON.stringify(error));
+		    });	
+		}
+	}
+	
+	//리스트 화면
+	const listPage = function () {
+		location.href = url+'/list';
+	}		
+</script>
+

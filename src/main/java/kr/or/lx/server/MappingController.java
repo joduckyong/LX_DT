@@ -30,7 +30,6 @@ public class MappingController {
 	
 	@GetMapping("/list")
 	public String mapping(ModelMap model) throws Exception{
-		log.info("mapping");
 		
 		return "server/mapping/list";
 	}
@@ -38,7 +37,6 @@ public class MappingController {
 	@ResponseBody
 	@PostMapping("{apiId}")
 	public Object receivePost(@RequestBody Map<String, Object> param, ModelMap model) throws Exception{
-		log.info("receivePost");
 		
 		String url = agentApiUrl+param.get("url");
 		
