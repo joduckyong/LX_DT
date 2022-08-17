@@ -281,7 +281,8 @@
 							<div class="metatable_box col-12">
 								<div class="form-group row">
 									<div class="x_content">
-										<div class="table_responsive" style="max-height: 30px; overflow: auto;">
+										<div class="table_responsive" style="max-height: 300px; overflow: auto;">
+											<pre id="execResult"></pre>
 										</div>
 									</div>
 								</div>
@@ -309,10 +310,6 @@
 	            <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
 	          </div>
 	          <div class="modal-body">
-	          	<div class="table_btns">
-                  <button class="btn-sm btn-primary" onclick="addPopupList();">+ 추가</button>
-                  <button class="btn-sm btn-danger" onclick="deletePopupList();">- 삭제</button>
-                </div>
 	       		<div class="table_responsive">
 	                <table class="table table-striped">
 	                  <colgroup>
@@ -332,7 +329,8 @@
 	          	</div>
 	          </div>
 	          <div class="modal-footer" id="modal_footer">
-	          	<button class="btn btn-primary" type="button" onclick="distributeSetupPopupSrvTargetReg();">저장</button>
+	          	<button class="btn btn-primary" type="button" onclick="distributeSetupPopupSrvTargetUpdate();">수정</button>
+	          	<button class="btn btn-danger" type="button" onclick="distributeSetupPopupSrvTargetDelete();">삭제</button>
 	        </div>
 	      </div>
 	    </div>
@@ -773,45 +771,104 @@ const distributeSetupSortList = function () {
     });	
 }
 
-//데이버분배 대상 설정팝업 저장
-const distributeSetupPopupSrvTargetReg = function(){
+//데이버분배 대상 설정팝업 수정
+const distributeSetupPopupSrvTargetUpdate = function(){
 	
-	let dataset = new Array();
-	$("#popupList > tr").each(function(idx, el){
-		let pop_ctprvnCd = $(this).find('td.pop_ctprvnCd > select').val();
-		let pop_signguCd = $(this).find('td.pop_signguCd > select').val();
-		let pop_srvkey = $(this).find('td.pop_srvkey > input').val();
-		let obj ={
-			ctprvnCd : pop_ctprvnCd,
-			signguCd : pop_signguCd,
-			srvkey : pop_srvkey,
-			
-		}
-		dataset.push(obj);
+	let dstbId = '{{dstbId}}';
+	
+	let ctprvnCd = '';
+	let signguCd = '';
+	let srvkey = '';
+	let delYn = '';
+	let seq = '';
+	$("input:radio[name=pop_dstbSeq]:checked").each(function(idx, el){
+		ctprvnCd = $(this).parents('tr.popup_list').find('td.pop_ctprvnCd > select').val();
+		signguCd = $(this).parents('tr.popup_list').find('td.pop_signguCd > select').val();
+		srvkey = $(this).parents('tr.popup_list').find('td.pop_srvkey > input').val();
+		delYn = $(this).data('delyn');
+		seq = $(this).val();
 	});
 	
+	if($("input:radio[name=pop_dstbSeq]:checked").length == 0){
+		alert("선택된 항목이 없습니다.");
+		return;
+	}
+	
 	const data = {
-   		url: '/services/distribute/setup/popup/srv/target/reg',
+   		url: '/services/distribute/setup/popup/srv/target/update',
    		userId: 'user00',
-   		data: dataset,
+   		dstbId: dstbId,
+   		srvkey: srvkey,
+   		ctprvnCd: ctprvnCd,
+   		signguCd: signguCd,
+   		delYn: delYn,
+   		seq: seq,
     };
 	
-	if(confirm("등록 하시겠습니까?")){
+	
+	if(confirm("수정 하시겠습니까?")){
 	    $.ajax({
 	        type: 'POST',
-	        url: url+'/distributeSetupPopupSrvTargetReg',
+	        url: url+'/distributeSetupPopupSrvTargetUpdate',
 	        dataType: 'json',
 	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
-	    	
-		  	  if (data != null) {
-	  	    	if(data.contents != ""){
-	  	    		targetList = data.contents;
-	  	    		closeModal();
-	  	    	}
-		  	  }
-	    	  
+	    	let message = JSON.stringify(data.returnMsg);
+	  		alert(message.replace(/\"/gi, ''));
+	  		closeModal();
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });
+	}
+}
+
+//데이버분배 대상 설정팝업 삭제
+const distributeSetupPopupSrvTargetDelete = function(){
+	
+	let dstbId = '{{dstbId}}';
+	
+	let ctprvnCd = '';
+	let signguCd = '';
+	let srvkey = '';
+	let delYn = '';
+	let seq = '';
+	$("input:radio[name=pop_dstbSeq]:checked").each(function(idx, el){
+		ctprvnCd = $(this).parents('tr.popup_list').find('td.pop_ctprvnCd > select').val();
+		signguCd = $(this).parents('tr.popup_list').find('td.pop_signguCd > select').val();
+		srvkey = $(this).parents('tr.popup_list').find('td.pop_srvkey > input').val();
+		delYn = $(this).data('delyn');
+		seq = $(this).val();
+	});
+	
+	if($("input:radio[name=pop_dstbSeq]:checked").length == 0){
+		alert("선택된 항목이 없습니다.");
+		return;
+	}
+	
+	const data = {
+   		url: '/services/distribute/setup/popup/srv/target/delete',
+   		userId: 'user00',
+   		dstbId: dstbId,
+   		srvkey: srvkey,
+   		ctprvnCd: ctprvnCd,
+   		signguCd: signguCd,
+   		delYn: 'Y',
+   		seq: seq,
+    };
+	
+	
+	if(confirm("삭제 하시겠습니까?")){
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/distributeSetupPopupSrvTargetDelete',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	let message = JSON.stringify(data.returnMsg);
+	  		alert(message.replace(/\"/gi, ''));
+	  		closeModal();
 	    }).fail(function (error) {
 	        alert(JSON.stringify(error));
 	    });
@@ -920,16 +977,18 @@ const distributeSetupDel = function(){
 //설정테스트 팝업 실행
 const distributeSetupPopupTest = function () {
 	
-	let dstbId = '';
+	let dstbId = '{{dstbId}}';
 	let pgngYn = $("#pgngYn").is(":checked") ? 'Y' : 'N';
 	let rowsOfPage = $("#rowsOfPageTest").val().replace(/,/gi,'');
 	let nowPageNum = $("#nowPageNumTest").val().replace(/,/gi,'');
 	let sqlText = $("#sqlText").text();
 	
-	if(!dstbId){
-		alert("분배 아이디가 없습니다.");
-		return;
-	}
+	let obj = {
+		pgngYn: pgngYn,
+	};
+	
+	let regex = /\{[0-9a-zA-Z_]+\}/ig;
+	let arr = sqlText.match(regex);
 	
 	if(!sqlText){
 		alert("쿼리를 생성하세요.");
@@ -948,94 +1007,103 @@ const distributeSetupPopupTest = function () {
 			$("#nowPageNumTest").focus();
 			return;
 		}
+		
+		obj['rowsOfPage'] = rowsOfPage;
+		obj['nowPageNum'] = nowPageNum;
 	}
 	
-	const data = {
+	if(arr){
+		for(let i=0; i<arr.length; i++){
+			let str = arr[i].replace('{','').replace('}','');
+			$(".cnd_cndNm > input").each(function(){
+				if(str == $(this).val()){
+					obj[str] = $(this).parents('.cnd_list').find('td.cnd_testValue > input').val();
+				}
+			});
+		}
+	}
+	
+	const t_data = {
    		url: '/services/distribute/setup/popup/test',
    		userId: 'user00',
    		dstbId: dstbId,
-   		pgngYn: pgngYn,
-   		rowsOfPage: rowsOfPage,
-   		nowPageNum: nowPageNum,
    		sqlText: sqlText,
     };
 	
-// 	console.log(data);
-	
-//     $.ajax({
-//         type: 'POST',
-//         url: url+'/distributeSetupPopupTest',
-//         dataType: 'json',
-//         contentType: 'application/json; charset=utf-8',
-//         data: JSON.stringify(data)
-//     }).done(function (data) {
-    	
-// 	  	  if (data != null) {
-//   	    	if(data.contents != ""){
-//   	    	}
-// 	  	  }
-    	  
-//     }).fail(function (error) {
-//         alert(JSON.stringify(error));
-//     });	
-}
-
-//데이터분배 대상 설정팝업 리스트
-const distributeSetupPopupSrvTargetList = function(){
-	
-	let dstbId = '{{dstbId}}';
-	
-	const data = {
-   		url: '/services/distribute/setup/popup/srv/target/list',
-   		userId: 'user00',
-   		dstbId: dstbId,
-    };
+	data = Object.assign(t_data, obj);
 	
     $.ajax({
         type: 'POST',
-        url: url+'/distributeSetupPopupSrvTargetList',
+        url: url+'/distributeSetupPopupTest',
         dataType: 'json',
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify(data)
     }).done(function (data) {
-    	
-	  	  if (data != null) {
-	  		let insertTr = '';
-  	    	if(data.contents != ""){
-  	    		
-				$.each(data.contents, function (idx, el) {
-		  	    	
-					insertTr += '<tr class="popup_list">';
-		  	  		insertTr += '	<td class="pop_dstbSeq"><input type="radio" name="pop_dstbSeq" value="'+el.seq+'"></td>';
-		  	  		insertTr += '	<td class="pop_ctprvnCd">';
-		  	  		insertTr += '		<select class="form-control" onchange="lxpfAdministSggList(this, \''+popIdx+'\');">';
-		  	  		insertTr +=	'			<option value="">시/도 선택</option>';
-		  	  		for(let i=0; i<ctprvnCdArr.length; i++){
-		  	  			if(ctprvnCdArr[i]['korNm']){
-		  	  				if(ctprvnCdArr[i]['cd'] == el.ctprvnCd){
-		  	  					insertTr +=	'			<option value="'+ctprvnCdArr[i]['cd']+'" selected>'+ctprvnCdArr[i]['korNm']+'</option>';
-		  	  				}else{
-		  	  					insertTr +=	'			<option value="'+ctprvnCdArr[i]['cd']+'">'+ctprvnCdArr[i]['korNm']+'</option>';
-		  	  				}
-		  	  			}
-		  	  		}
-		  	  		insertTr +=	'		</select>';
-		  	  		insertTr += '	</td>';
-		  	  		insertTr += '	<td class="pop_signguCd">';
-		  	  		insertTr += '		<select class="form-control" id="pop_signguCd'+popIdx+'">';
-		  	  		insertTr +=	'			<option value="">시/군/구 선택</option>';
-		  	  		insertTr +=	'		</select>';
-		  	  		insertTr += '	</td>';
-		  	  		insertTr += '	<td class="pop_srvkey"><input type="text" value="'+el.srvkey+'"></td>';
-		  	  		popIdx++;
-		  	    });
-  	    	}
-  	    	$("#popupList").html(insertTr);
-	  	  }
+    	$("#execResult").text(JSON.stringify(data,null,2));
     	  
     }).fail(function (error) {
         alert(JSON.stringify(error));
-    });
+    });	
+}
+
+//데이터분배 대상 설정팝업 리스트
+const distributeSetupPopupSrvTargetList = function(){
+	return new Promise(function(resolve, reject){
+		let dstbId = '{{dstbId}}';
+		
+		const data = {
+	   		url: '/services/distribute/setup/popup/srv/target/list',
+	   		userId: 'user00',
+	   		dstbId: dstbId,
+	    };
+		
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/distributeSetupPopupSrvTargetList',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	
+		  	  if (data != null) {
+		  		let insertTr = '';
+	  	    	if(data.contents != ""){
+	  	    		
+					$.each(data.contents, function (idx, el) {
+			  	    	
+						insertTr += '<tr class="popup_list">';
+			  	  		insertTr += '	<td class="pop_dstbSeq"><input type="radio" name="pop_dstbSeq" value="'+el.seq+'" data-delyn="'+el.delYn+'"></td>';
+			  	  		insertTr += '	<td class="pop_ctprvnCd">';
+			  	  		insertTr += '		<select class="form-control" onchange="lxpfAdministSggList(this);">';
+			  	  		insertTr +=	'			<option value="">시/도 선택</option>';
+			  	  		for(let i=0; i<ctprvnCdArr.length; i++){
+			  	  			if(ctprvnCdArr[i]['korNm']){
+			  	  				if(ctprvnCdArr[i]['cd'] == el.ctprvnCd){
+			  	  					insertTr +=	'			<option value="'+ctprvnCdArr[i]['cd']+'" selected>'+ctprvnCdArr[i]['korNm']+'</option>';
+			  	  				}else{
+			  	  					insertTr +=	'			<option value="'+ctprvnCdArr[i]['cd']+'">'+ctprvnCdArr[i]['korNm']+'</option>';
+			  	  				}
+			  	  			}
+			  	  		}
+			  	  		insertTr +=	'		</select>';
+			  	  		insertTr += '	</td>';
+			  	  		insertTr += '	<td class="pop_signguCd">';
+			  	  		insertTr += '		<select class="form-control">';
+			  	  		insertTr +=	'			<option value="">시/군/구 선택</option>';
+			  	  		insertTr +=	'		</select>';
+			  	  		insertTr += '	</td>';
+			  	  		insertTr += '	<td class="pop_srvkey"><input type="text" value="'+el.srvkey+'"></td>';
+			  	    });
+					
+					resolve(data);
+	  	    	}
+	  	    	$("#popupList").html(insertTr);
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });
+	});
 }
 
 //시도 리스트 검색
@@ -1069,11 +1137,23 @@ const lxpfAdministCtpvList = function(){
 }
 
 //시군구 리스트 검색
-const lxpfAdministSggList = function(obj, i){
+const lxpfAdministSggList = function(obj, target_data){
 	
 	let ctprvnCd = $(obj).val();
-	$("#pop_signguCd"+i+" option:gt(0)").remove();
+	let seq = $(obj).parents('tr.popup_list').find('td.pop_dstbSeq > input').val();
+	$(obj).parents('tr.popup_list').find('td.pop_signguCd > select option:gt(0)').remove();
 	let insertTr = '';
+	
+	let signguCd = '';
+	if(target_data != null){
+		if(target_data.contents != ""){
+			for(let i=0; i<target_data.contents.length; i++){
+				if(target_data.contents[i]['seq'] == seq){
+					signguCd = target_data.contents[i]['signguCd']
+				}
+			}
+		}
+	}
 	
 	if(ctprvnCd){
 		const data = {
@@ -1085,18 +1165,23 @@ const lxpfAdministSggList = function(obj, i){
 	        url: commonUrl+'/lxpfAdministSggList',
 	        dataType: 'json',
 	        contentType: 'application/json; charset=utf-8',
-	        data: JSON.stringify(data)
+	        data: JSON.stringify(data),
 	    }).done(function (data) {
 	    	
 		  	  if (data != null) {
 	  	    	if(data.contents != ""){
 	  	    		$.each(data.contents, function (idx, el) {
 	  	    			if(typeof el.korNm != "undefined"){
-	  		    			insertTr += '<option value="'+el.cd+'">'+el.korNm+'</option>';
+	  	    				if(el.cd == signguCd){
+	  	    					insertTr += '<option value="'+el.cd+'" selected>'+el.korNm+'</option>';
+	  	    				}else{
+	  	    					insertTr += '<option value="'+el.cd+'">'+el.korNm+'</option>';
+	  	    				}
+	  		    			
 	  	    			}
 	  	    		});
 	  	    	}
-	  	    	$("#pop_signguCd"+i).append(insertTr);
+	  	    	$(obj).parents('tr.popup_list').find('td.pop_signguCd > select').append(insertTr);
 		  	  }
 	    	  
 	    }).fail(function (error) {
@@ -1104,6 +1189,12 @@ const lxpfAdministSggList = function(obj, i){
 	    });
 	}
 	
+}
+//시군구 리스트 selected
+const setSggList = function(data){
+	$(".pop_ctprvnCd > select").each(function(idx, el){
+		lxpfAdministSggList($(this), data);
+	});
 }
 
 //서비스선택 체크값
@@ -1232,13 +1323,13 @@ const createQuery = function(){
 			for(let i=0; i<cndData.length; i++){
 				if(cndData[i]['cnd'].indexOf('From_To') > -1){
 					if(cndData[i]['cnd'] == 'From_To(From)'){
-						fromToSql += ' AND ' + cndData[i]['targetCol'] + ' BETWEEN ' + cndData[i]['cnd'] + ' ' + '{' +cndData[i]['cndNm'] + '}';
+						fromToSql += ' AND ' + cndData[i]['targetCol'] + ' BETWEEN ' + '#{' +cndData[i]['cndNm'] + '}';
 					}else if(cndData[i]['cnd'] == 'From_To(TO)'){
-						fromToSql += ' AND ' + cndData[i]['targetCol'] + ' ' + cndData[i]['cnd'] + ' ' + '{' +cndData[i]['cndNm'] + '}';
+						fromToSql += ' AND ' + '#{' +cndData[i]['cndNm'] + '}';
 						fromToSql += '<br>';
 					}
 				}else{
-					sqlText += ' AND ' + cndData[i]['targetCol'] + ' ' + cndData[i]['cnd'] + ' ' + '{' +cndData[i]['cndNm'] + '}';
+					sqlText += ' AND ' + cndData[i]['targetCol'] + ' ' + cndData[i]['cnd'] + ' ' + '#{' +cndData[i]['cndNm'] + '}';
 					sqlText += '<br>';
 				}
 				
@@ -1250,14 +1341,15 @@ const createQuery = function(){
 		if(sortData.length > 0){
 			let noTotFncSql = '';
 			let groupByStr = '';
-			sqlText += ' ORDER BY';
+			let orderBySql = '';
+			orderBySql += ' ORDER BY';
 			
 			for(let i=0; i<sortData.length; i++){
-				sqlText += ' ' + sortData[i]['colEng'] + ' ' + sortData[i]['sortMethod'];
+				orderBySql += ' ' + sortData[i]['colEng'] + ' ' + sortData[i]['sortMethod'];
 				if(i != sortData.length-1){
-					sqlText += ',';
+					orderBySql += ',';
 				}
-				sqlText += '<br>';
+				orderBySql += '<br>';
 				
 				if(noTotFncArr.includes(sortData[i]['colEng'])){
 					groupByStr = ' GROUP BY';
@@ -1273,7 +1365,7 @@ const createQuery = function(){
 			}
 			noTotFncSql += '<br>';
 			
-			sqlText += groupByStr + noTotFncSql;
+			sqlText += groupByStr + noTotFncSql + orderBySql;
 		}
 		
 	// 	console.log(sqlText);
@@ -1364,34 +1456,6 @@ const addSortList = function(){
 	sortNumbering();
 }
 
-//데이터분배 대상 설정팝업 추가
-let popIdx = 0;
-const addPopupList = function(){
-	
-	let insertTr = '<tr class="popup_list">';
-		insertTr += '	<td class="pop_dstbSeq"><input type="radio" name="pop_dstbSeq"></td>';
-		insertTr += '	<td class="pop_ctprvnCd">';
-		insertTr += '		<select class="form-control" onchange="lxpfAdministSggList(this, \''+popIdx+'\');">';
-		insertTr +=	'			<option value="">시/도 선택</option>';
-		for(let i=0; i<ctprvnCdArr.length; i++){
-			if(ctprvnCdArr[i]['korNm']){
-				insertTr +=	'			<option value="'+ctprvnCdArr[i]['cd']+'">'+ctprvnCdArr[i]['korNm']+'</option>';
-			}
-		}
-		insertTr +=	'		</select>';
-		insertTr += '	</td>';
-		insertTr += '	<td class="pop_signguCd">';
-		insertTr += '		<select class="form-control" id="pop_signguCd'+popIdx+'">';
-		insertTr +=	'			<option value="">시/군/구 선택</option>';
-		insertTr +=	'		</select>';
-		insertTr += '	</td>';
-		insertTr += '	<td class="pop_srvkey"><input type="text"></td>';
-		
-	$("#popupList").append(insertTr);
-	popIdx++;
-	
-}
-
 //조건항목 삭제
 const deleteCndList = function (){
 	$('input:checkbox[name="cnd_chk"]:checked').each(function() {
@@ -1408,12 +1472,6 @@ const deleteSortList = function (){
 	sortNumbering();
 }
 
-//데이터분배 대상 설정팝업 삭제
-const deletePopupList = function (){
-	
-	$('input:radio[name="pop_dstbSeq"]:checked').parents('tr.popup_list').remove();
-}
-
 //정렬순서 번호매기기
 const sortNumbering = function(){
 	$("#sortList > tr").each(function(idx, el){
@@ -1423,8 +1481,8 @@ const sortNumbering = function(){
 
 //조건항목 대상컬럼 선택
 const selectTargetCol = function(obj){
-	let cnd_no = $(obj).parents("tr").data("code");
-	$("#cnd_dataType"+cnd_no).text(columnObj[$(obj).val()]);
+	let col = $(obj).val();
+	$(obj).parents("tr").find("td.cnd_dataType").text(columnObj[$(obj).val()]);
 }
 
 const paingDefault = function(obj){
@@ -1551,8 +1609,6 @@ const init = function(){
 	/*정렬순서 초기화*/
 	$("#sortList").empty();
 	
-	popIdx = 0;	// 시/도 index
-	
 }
 
 //엔터키가 눌렸을 때
@@ -1564,10 +1620,18 @@ const enterkey = function(e) {
 
 //모달 추가
 const addModal = function(){
-	alert("작업중");
-	return;
 	lxpfAdministCtpvList();
-	distributeSetupPopupSrvTargetList();
+	
+	distributeSetupPopupSrvTargetList()
+	.then(function(data){
+		setSggList(data);
+	})
+	.catch(function(error){
+		console.log(error)
+	});
+	
+	
+	
 	$('#add_modal').modal('show');
 }
 
