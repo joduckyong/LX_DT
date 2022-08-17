@@ -82,7 +82,7 @@
 			            </div>
 			            <div class="x_content">
 			            	<div class="table_btns mt-4">
-		                    	<button class="btn btn-primary" type="button" onclick="colSaveBtn();">저장</button>
+		                    	<button class="btn btn-primary" type="button" onclick="colSaveBtn();" id="col_save_btn">저장</button>
 	                    	</div>
 	                    	<div class="table_responsive">
 			                    <table class="table table-bordered bulk_action table_center">
@@ -116,10 +116,11 @@
 				                            <th>데이터타입</th>
 				                            <th>
 				                                <select class="form-control" name="data_type" id="data_type" onchange="changeDataType(this);">
-				                                    <option value="varchar">varchar</option>
-				                                    <option value="integer">integer</option>
-				                                    <option value="Numeric">Numeric</option>
-				                                    <option value="timestamptz">timestamptz</option>
+				                                	<option value="">선택</option>
+				                                    <option value="VARCHAR">VARCHAR</option>
+				                                    <option value="INTEGER">INTEGER</option>
+				                                    <option value="NUMERIC">NUMERIC</option>
+				                                    <option value="TIMESTAMPTZ">TIMESTAMPTZ</option>
 				                                </select>
 				                            </th>
 				                            <th>데이터 길이</th>
@@ -389,7 +390,7 @@ const dpIngestMetaTblColDt = function (column_idntfc_id) {
   	    			$("#column_eng_nm").val(el.column_eng_nm);
   	    			$("#refrn_table_idntfc_id_nm").val(el.refrn_table_idntfc_id_nm);
   	    			$("#data_type").val(el.data_type).prop("selected", true);
-  	    			if(el.data_type == 'varchar' || el.data_type == 'Numeric'){
+  	    			if(el.data_type == 'VARCHAR' || el.data_type == 'NUMERIC'){
   	    				$('#data_lt').prop('disabled', false);
   	    			}else{
   	    				$('#data_lt').prop('disabled', true);
@@ -458,19 +459,19 @@ const dpIngestMetaTblSaveCol = function (){
 		return;
 	}
 	
-	if(data_type == 'varchar'){
-		data_lt = data_lt.replace(/,/gi,'');
-		if(Number(data_lt) > 99999999){
-			alert("최대 길이를 초과하였습니다. 99999999 이하의 숫자를 입력해주세요!");
-			return;
-		}
-	}else if(data_type == 'Numeric'){
-		let regex = /^[0-6]{1},[0-3]{1}$/;
-		if(!regex.test(data_lt)){
-			alert("최대 길이는 6,3입니다. 형식에 맞게 입력해주세요!");
-			return;
-		}
-	}
+// 	if(data_type == 'VARCHAR'){
+// 		data_lt = data_lt.replace(/,/gi,'');
+// 		if(Number(data_lt) > 99999999){
+// 			alert("최대 길이를 초과하였습니다. 99999999 이하의 숫자를 입력해주세요!");
+// 			return;
+// 		}
+// 	}else if(data_type == 'NUMERIC'){
+// 		let regex = /^[0-6]{1},[0-3]{1}$/;
+// 		if(!regex.test(data_lt)){
+// 			alert("최대 길이는 6,3입니다. 형식에 맞게 입력해주세요!");
+// 			return;
+// 		}
+// 	}
 	
 	const data = {
    		url: '/dp/ingest/meta/tables/save/column',
@@ -559,19 +560,19 @@ const dpIngestMetaTblUpdateCol = function (){
 		return;
 	}
 	
-	if(data_type == 'varchar'){
-		data_lt = data_lt.replace(/,/gi,'');
-		if(Number(data_lt) > 99999999){
-			alert("최대 길이를 초과하였습니다. 99999999 이하의 숫자를 입력해주세요!");
-			return;
-		}
-	}else if(data_type == 'Numeric'){
-		let regex = /^[0-6]{1},[0-3]{1}$/;
-		if(!regex.test(data_lt)){
-			alert("최대 길이는 6,3입니다. 형식에 맞게 입력해주세요!");
-			return;
-		}
-	}
+// 	if(data_type == 'VARCHAR'){
+// 		data_lt = data_lt.replace(/,/gi,'');
+// 		if(Number(data_lt) > 99999999){
+// 			alert("최대 길이를 초과하였습니다. 99999999 이하의 숫자를 입력해주세요!");
+// 			return;
+// 		}
+// 	}else if(data_type == 'NUMERIC'){
+// 		let regex = /^[0-6]{1},[0-3]{1}$/;
+// 		if(!regex.test(data_lt)){
+// 			alert("최대 길이는 6,3입니다. 형식에 맞게 입력해주세요!");
+// 			return;
+// 		}
+// 	}
 	
 	const data = {
    		url: '/dp/ingest/meta/tables/update/column',
@@ -691,16 +692,16 @@ const colSaveBtn = function () {
 const changeDataType = function(obj){
 	let val = $(obj).val();
 	$('#data_lt').val('');
-	if(val == 'varchar'){
+	if(val == 'VARCHAR'){
 		$('#column_stre_type').val('String');
 		$('#data_lt').prop('disabled', false);
-	}else if(val == 'integer'){
+	}else if(val == 'INTEGER'){
 		$('#column_stre_type').val('Integer');
 		$('#data_lt').prop('disabled', true);
-	}else if(val == 'Numeric'){
+	}else if(val == 'NUMERIC'){
 		$('#column_stre_type').val('Double');
 		$('#data_lt').prop('disabled', false);
-	}else if(val == 'timestamptz'){
+	}else if(val == 'TIMESTAMPTZ'){
 		$('#column_stre_type').val('Date');
 		$('#data_lt').prop('disabled', true);
 	}
@@ -708,6 +709,7 @@ const changeDataType = function(obj){
 
 //추가 버튼
 const btnAdd = function(){
+	$("#col_save_btn").text("저장");
 	$("#btn_type").val('I');
     $("#tbl_layer").show();
     initDetail();
@@ -717,6 +719,7 @@ const btnAdd = function(){
 
 //상세 버튼
 const btnDetail = function(){
+	$("#col_save_btn").text("수정");
 	$("#btn_type").val('U');
 	$("#tbl_layer").show();
     let offset = $('#dataset_layer').offset();
@@ -741,7 +744,7 @@ const initDetail = function(){
 	$("#refrn_table_idntfc_id").val("");
 	$("#column_eng_nm").val("");
 	$("#refrn_table_idntfc_id_nm").val("");
-	$("#data_type").val("varchar").prop("selected", true);
+	$("#data_type").val("").prop("selected", true);
 	$("#data_lt").val("");
 	$("#data_lt").prop("disabled",false);
 	$("#refrn_column_idntfc_id").val("");

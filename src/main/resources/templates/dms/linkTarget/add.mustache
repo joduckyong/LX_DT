@@ -266,7 +266,7 @@
 								<div class="form-group row">
 									<div class="x_content">
 										<div class="table_responsive" style="max-height: 300px; overflow: auto;">
-											<div id="sqlText"></div>
+											<textarea id="sqlText" rows="10" style="width: 100%;"></textarea>
 										</div>
 									</div>
 								</div>
@@ -541,7 +541,7 @@ const distributeSetupReg = function(){
 		let srvYn = $("#info_srvYn").val();
 		let pgngYn = $("#pgngYn").is(":checked") ? 'Y' : 'N';
 		let srvDesc = $("#info_srvDesc").val();
-		let sqlText = $("#sqlText").text().replace(/<br>/gi,'');
+		let sqlText = $("#sqlText").val().replace(/\n/gi,'');
 		
 		let svrData = getSvrData();
 		let cndData = getCndData();
@@ -605,7 +605,7 @@ const distributeSetupPopupTest = function () {
 	let pgngYn = $("#pgngYn").is(":checked") ? 'Y' : 'N';
 	let rowsOfPage = $("#rowsOfPageTest").val().replace(/,/gi,'');
 	let nowPageNum = $("#nowPageNumTest").val().replace(/,/gi,'');
-	let sqlText = $("#sqlText").text();
+	let sqlText = $("#sqlText").val();
 	
 	let obj = {
 		pgngYn: pgngYn,
@@ -829,6 +829,8 @@ const getSortData = function(){
 //쿼리 생성
 const createQuery = function(){
 	
+	$("#sqlText").val('');
+	
 	if(validationCheck()){
 		let svrData = getSvrData();
 		let cndData = getCndData();
@@ -838,7 +840,7 @@ const createQuery = function(){
 		
 		let sqlText = '';
 		if(svrData.length > 0){
-			sqlText += 'SELECT' + '<br>';
+			sqlText += 'SELECT' + '\n';
 			for(let i=0; i<svrData.length; i++){
 				if(svrData[i]['totFncYn'] == 'Y'){		//집합함수 사용
 					sqlText += ' ' + svrData[i]['totFncCd'] + '(' + svrData[i]['colEng'] + ')' + ' as ' + svrData[i]['srvColNm'];
@@ -850,11 +852,11 @@ const createQuery = function(){
 				if(i != svrData.length-1){
 					sqlText += ',';
 				}
-				sqlText += '<br>';
+				sqlText += '\n';
 			}
 			
-			sqlText += ' FROM ' + svrData[0]['tbl'] + '<br>';
-			sqlText += ' WHERE 1=1' + '<br>';
+			sqlText += ' FROM ' + svrData[0]['tbl'] + '\n';
+			sqlText += ' WHERE 1=1' + '\n';
 		}
 		
 		if(cndData.length > 0){
@@ -865,11 +867,11 @@ const createQuery = function(){
 						fromToSql += ' AND ' + cndData[i]['targetCol'] + ' BETWEEN ' + '#{' +cndData[i]['cndNm'] + '}';
 					}else if(cndData[i]['cnd'] == 'From_To(TO)'){
 						fromToSql += ' AND ' + '#{' +cndData[i]['cndNm'] + '}';
-						fromToSql += '<br>';
+						fromToSql += '\n';
 					}
 				}else{
 					sqlText += ' AND ' + cndData[i]['targetCol'] + ' ' + cndData[i]['cnd'] + ' ' + '#{' +cndData[i]['cndNm'] + '}';
-					sqlText += '<br>';
+					sqlText += '\n';
 				}
 				
 			}
@@ -888,27 +890,27 @@ const createQuery = function(){
 				if(i != sortData.length-1){
 					orderBySql += ',';
 				}
-				orderBySql += '<br>';
+				orderBySql += '\n';
 				
 				if(noTotFncArr.includes(sortData[i]['colEng'])){
 					groupByStr = ' GROUP BY';
 					noTotFncSql += ' ' + sortData[i]['colEng'] + ' ' + sortData[i]['sortMethod'];
 					noTotFncArr = noTotFncArr.filter((el) => el !== sortData[i]['colEng']);
 					noTotFncSql += ',';
-// 					noTotFncSql += '<br>';
+// 					noTotFncSql += '\n';
 				}
 			}
 			
 			if(noTotFncSql.indexOf(',') > -1){	//마지막 콤마 제거
 				noTotFncSql = noTotFncSql.substring(0, noTotFncSql.length-1);
 			}
-			noTotFncSql += '<br>';
+			noTotFncSql += '\n';
 			
 			sqlText += groupByStr + noTotFncSql + orderBySql;
 		}
 		
 	// 	console.log(sqlText);
-		$("#sqlText").html(sqlText);
+		$("#sqlText").val(sqlText);
 	}
 	
 }
@@ -1166,7 +1168,7 @@ const init = function(){
 	$("#info_srvYn").val("Y").prop("selected", true);
 	$("#info_srvUrl").val("");
 	$("#info_srvDesc").val("");
-	$("#sqlText").empty();
+	$("#sqlText").val('');
 	
 	/*서비스선택 초기화*/
 	$("#svrList").empty();

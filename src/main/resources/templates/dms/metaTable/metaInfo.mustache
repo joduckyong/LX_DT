@@ -161,12 +161,6 @@ const dpIngestMetaItem = function (page, size_per_page) {
 	
 	$("#query").val(query);	//검색어 갱신(검색버튼 클릭시)
 	
-	if(!query){
-		alert("데이터셋명을 입력하세요!");
-		$('#query').focus();
-		return;
-	}
-	
 	const data = {
    		url: '/dp/ingest/meta/item',
    		user_id: 'user00',	
@@ -308,6 +302,8 @@ const enterkey = function(e) {
 
 //분류 조회
 dpCmCategory();
+
+dpIngestMetaItem();
 
 </script>
 
