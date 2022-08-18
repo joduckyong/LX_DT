@@ -162,10 +162,10 @@
 	            <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
 	          </div>
 	          <div class="modal-body">
-	          	<div class="x_content" style="max-height:500px; overflow-y:auto;">
+	          	<div class="x_content" >
 	            	<div class="row">
-	            		<div class="table_responsive">
-		                    <table class="table" style="text-align: center;">
+	            		<div class="table_responsive" style="max-height:500px; overflow-y:auto;">
+		                    <table class="table" style="text-align: center;" id="tableDpIngestPopupPpPath" >
 		                      <thead>
 		                        <tr> 
 		                          <th>선택</th>
@@ -173,7 +173,7 @@
 		                          <th>항목명</th>
 		                        </tr>
 		                      </thead>
-		                      <tbody id="dpIngestPopupPpPath">
+		                      <tbody id="dpIngestPopupPpPath" >
 		                      </tbody>
 		                    </table>
 		               	</div>
@@ -181,7 +181,7 @@
 	             </div>
 	           </div>
 	           <div class="modal-footer" id="modal_footer">
-	           	<button class="btn btn-primary" type="button" onclick="dpIngestPopupPpPathSave();">선택</button>
+	           	<button class="btn btn-primary" type="button" onclick="dpIngestPopupPpPathSave();">저장</button>
 	           </div>
 	         </div>
 	       </div>
@@ -519,19 +519,18 @@ const dpIngestPopupPpPathSave = function(){
 	let lengthCnt = 0;
 	let contentsData = new Array();
 	
-	let adaptorSetDataConfigLen = $("#adaptorSetDataConfig tbody tr").length;
+	let adaptorSetDataConfigLen = $("#tableDpIngestPopupPpPath tbody tr").length;
 	
 	if(adaptorSetDataConfigLen > 0){
 		
-		$.each($("#adaptorSetDataConfig tbody tr"), function(){
+		$.each($("#tableDpIngestPopupPpPath tbody tr"), function(){
 			 let itemObject = new Object();
 			 itemObject.instance_id = '{{instance_id}}';
-			 itemObject.source_id = $(this).find("#source_id_"+lengthCnt).val();
-			 itemObject.source_path = $(this).find("#source_path_"+lengthCnt).val();
-			 itemObject.choice_yn = $(this).find("#choice_yn_"+lengthCnt).val();
+			 itemObject.source_id = $(this).find("#source_id").val();
+			 itemObject.source_path = $(this).find("#source_path").val();
+			 itemObject.choice_yn = $(this).find("#choice_yn").is(':checked') == true ?'Y':'N';
 			 itemObject.user_id = 'user00';
 			 contentsData.push(itemObject);
-			 lengthCnt++;
 		});
 		
 	    const data = {
@@ -542,6 +541,8 @@ const dpIngestPopupPpPathSave = function(){
 		   		contents: contentsData,
 		    };		
 		    
+	    	console.log('data:'+JSON.stringify(data));
+	    	
 		    $.ajax({
 		        type: 'POST',
 		        url: url+'/dpIngestPopupPpPathSave',
@@ -552,14 +553,14 @@ const dpIngestPopupPpPathSave = function(){
 			  	  if (data != null) {
 			  		  
 			  			errorMsg(data);
-			  		
-				  	   	if(data.contents != ""){    	
-		  		     	    let insertTr = '';
-		  			  	    $.each(data.contents, function (idx, el) {
-		  		     	         el.source_id;
-		  		     	         el.source_path;
-		  			  	    });
+			  			
+			  			if(data.contents[0].successYn === 'Y'){
+			  	 	  		let message = JSON.stringify(data.return_msg);
+			  		  		alert(message.replace(/\"/gi, ''));
 				  	   	}
+				  	   	
+				  	  	$('#apiDataSet').modal('hide');
+				  	   	
 			  	  }
 		    	  
 		    }).fail(function (error) {
@@ -599,9 +600,9 @@ const dpIngestPopupPpPath = function(){
     		     	    let insertTr = '';
     			  	    $.each(data.contents, function (idx, el) {
   		     	          insertTr += '<tr>';
-		     		      insertTr += ' <td><input type=checkbox value='+el.source_id+' name=source_id></td>';
-		     		      insertTr += ' <td>'+el.source_path+'</td>';
-		     		      insertTr += ' <td>'+el.source_id+'</td>';
+		     		      insertTr += ' <td><input type=checkbox name="choice_yn" id="choice_yn" value="Y"></td>';
+		     		      insertTr += ' <td><input type=hidden value='+el.source_path+' name="source_path" id="source_path" >'+el.source_path+'</td>';
+		     		      insertTr += ' <td><input type=hidden value='+el.source_id+' name="source_id" id="source_id" >'+el.source_id+'</td>';
 		                  insertTr += '</tr>';
 		                  i++;
     			  	    });	  			  	    
