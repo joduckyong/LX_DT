@@ -102,15 +102,18 @@
                         <h4>ID 목록</h4>
                       </div>
                       <div class="column-header">
-                        <h4>ID명(영문) | ID명(국문) | Type | Length</h4>
+						<table class="table table-striped table-bordered bulk_action">
+                          <thead>
+                            <tr>
+                              <th>ID명(영문)</th>
+                              <th>ID명(국문)</th>
+                              <th>Type</th>
+                              <th>Length</th>
+                            </tr>
+                          </thead>
+                        </table>                      
                       </div>
                       <ul class="task-list" id="drakeLeft">
-                        <li class="task">
-                          <p>C_NAME_03(Double)</p>
-                        </li>
-                        <li class="task">
-                          <p>C_NAME_05(Date)</p>
-                        </li>
                       </ul>
                     </li>
                     <li class="column doing-column">
@@ -118,25 +121,28 @@
                         <h4>선택 ID</h4>
                       </div>
                       <div class="column-header">
-                        <h4>ID명(영문) | ID명(국문) | Type | Length</h4>
+						<table class="table table-striped table-bordered bulk_action">
+                          <thead>
+                            <tr>
+                              <th>ID명(영문)</th>
+                              <th>ID명(국문)</th>
+                              <th>Type</th>
+                              <th>Length</th>
+                            </tr>
+                          </thead>
+                        </table>                         
                       </div>                      
                       <ul class="task-list" id="drakeRight">
-                        <li class="task">
+                        <!-- li class="task">
                           <p>C_NAME_02(Integer)</p>
-                        </li>
-                        <li class="task">
-                          <p>C_NAME_01(String)</p>
-                        </li>
-                        <li class="task">
-                          <p>C_NAME_04(Integer)</p>
-                        </li>
+                        </li-->
                       </ul>
                     </li>
                   </ul>
                 </div>
                 <div class="drake_result_box">
                   <div class="drake_title">ID</div>
-                  <div class="drake_result">C_NAME_02.C_NAME_01.C_NAME_04</div>
+                  <div class="drake_result" ><span id="id_mix_txt"></span></div>
                   <button class="btn btn-danger m-0">초기화</button>
                 </div>
               </div>
@@ -156,13 +162,13 @@
 	            <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
 	          </div>
 	          <div class="modal-body">
-	          	<div class="x_content">
+	          	<div class="x_content" style="max-height:500px; overflow-y:auto;">
 	            	<div class="row">
 	            		<div class="table_responsive">
 		                    <table class="table" style="text-align: center;">
 		                      <colgroup> 
-		                      	<col width="70px">     
-		                      	<col width="400px">     
+		                      	<col width="50px">     
+		                      	<col width="250px">     
 		                      	<col width="100px">     
 		                      </colgroup>
 		                      <thead>
@@ -196,6 +202,7 @@
        <input type="hidden" name="subfolder_yn" id="subfolder_yn">
        <input type="hidden" name="api_mix" id="api_mix">
        <input type="hidden" name="table_eng_nm" id="table_eng_nm">
+       <input type="hidden" name="table_idntfc_id" id="table_idntfc_id">
        
 {{>layout/footer}}        
 
@@ -282,11 +289,13 @@ const dpIngestAdapterItMatch = function(){
 			  	   		$("#dset_idntfc_id").val(data.contents[0].dset_idntfc_id);
 			  	   		$("#url_mix").val(data.contents[0].url_mix);
 			  	   		$("#id_mix").val(data.contents[0].id_mix);
+			  	   		$("#id_mix_txt").text(data.contents[0].id_mix);
 			  	   		$("#clct_mthd").val(data.contents[0].clct_mthd);
 			  	   		$("#clct_ty").val(data.contents[0].clct_ty);
 			  	   		$("#subfolder_yn").val(data.contents[0].subfolder_yn);
 			  	   		$("#table_eng_nm").val(data.contents[0].table_eng_nm);
 			  	   		$("#api_mix").val(data.contents[0].api_mix);
+			  	   		$("#table_idntfc_id").val(data.contents[0].table_idntfc_id);
 			  	   		
 			  	   	}
 		  	  }
@@ -358,9 +367,9 @@ const dpIngestAdapterItMatchSave = function(){
 
 const dpIngestDataModelsPp = function(){
 	
+	$("#drakeLeft").empty();
     const data = {
-	   		url: '/dp/ingest/data/models/property',
-	   		table_idntfc_id: $("#table_idntfc_id").val(),  
+	   		url: '/dp/ingest/data/models/property?table_idntfc_id='+$("#table_idntfc_id").val(),
 	    };		
 	    
 	    $.ajax({
@@ -372,10 +381,11 @@ const dpIngestDataModelsPp = function(){
 	    }).done(function (data) {
 		  	  if (data != null) {
 			  	   	if(data.contents != ""){    	
+			  	   		let li = '';
     			  	    $.each(data.contents, function (idx, el) {
-    			  	    	el.column_eng_nm;
-    			  	    	el.column_stre_type;
+    			  	    	li += '<li class="task"><p>'+el.column_eng_nm+'</p></li>';
     			  	    });
+    			  	 	$("#drakeLeft").append(li);
 			  	   	}
 		  	  }
 	    	  
@@ -515,7 +525,7 @@ const dpIngestPopupPpPathSave = function(){
 		});
 		
 	    const data = {
-		   		url: '/dp/ingest/popup/property/path',
+		   		url: '/dp/ingest/popup/property_path/save',
 		   		instance_id: '{{instance_id}}',	
 		   		user_id: 'user00',	
 		   		menu_id: 'menu_id',
@@ -553,7 +563,7 @@ const dpIngestPopupPpPath = function(){
 	$("#dpIngestPopupPpPath").empty();	
 	
     const data = {
-	   		url: '/dp/ingest/popup/property/path',
+	   		url: '/dp/ingest/popup/property_path',
 	   		instance_id: '{{instance_id}}',	
 	   		user_id: 'user00',	
 	   		menu_id: 'menu_id',
@@ -573,8 +583,8 @@ const dpIngestPopupPpPath = function(){
     			  	    $.each(data.contents, function (idx, el) {
   		     	          insertTr += '<tr>';
 		     		      insertTr += ' <td><input type=checkbox value='+el.source_id+' name=source_id></td>';
-		     		      insertTr += ' <td>'+el.source_id+'</td>';
 		     		      insertTr += ' <td>'+el.source_path+'</td>';
+		     		      insertTr += ' <td>'+el.source_id+'</td>';
 		                  insertTr += '</tr>';
 		                  i++;
     			  	    });	  			  	    
@@ -592,7 +602,7 @@ const dpIngestPopupPpPath = function(){
 const openModal = function(modalId){
 	
 	if(modalId === 'idSet'){
-		dpIngestAdapterItSource();
+		dpIngestDataModelsPp();
 	}else if(modalId === 'apiDataSet'){
 		dpIngestPopupPpPath();
 	}
