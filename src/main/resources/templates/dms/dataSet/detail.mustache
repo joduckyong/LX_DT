@@ -316,13 +316,53 @@ const dpLoadPopupHistory01 = function () {
   	    			insertTr += '	<td>'+el.ingest_count+'</td>';
   	    			insertTr += '	<td>'+el.load_count+'</td>';
   	    			insertTr += '	<td>'+el.error_count+'</td>';
-  	    			insertTr += '	<td><button class="btn btn-success btn-sm mx-0" type="button">다운로드</button></td>';
+  	    			insertTr += '	<td><button class="btn btn-success btn-sm mx-0" type="button" onclick="dpLoadPopupHistoryDown01(\''+el.modified_at+'\')">다운로드</button></td>';
   	    			insertTr += '</tr>';
   	    			
   	    		});
   	    		$("#popupHistory").html(insertTr);
   	    	}
   	    	
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//적재 이력 다운로드
+const dpLoadPopupHistoryDown01 = function (log_dt) {
+	
+	let table_idntfc_id = '{{table_idntfc_id}}';
+	let fileNm = 'history_'+log_dt;
+	let sheetNm = '적재이력';
+	
+	const data = {
+   		url: '/dp/load/popup/history/down/01',
+   		user_id: 'user00',	
+   		table_idntfc_id: table_idntfc_id,
+   		log_dt: log_dt,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpLoadPopupHistory01',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
+  	    	if(data.contents != ""){
+  	    		if(data.contents[0].down_data.length > 0){
+  	    			jsonToExcelDownload(fileNm, sheetNm, data.contents[0].down_data);
+  	    		}else{
+  	    			alert("적재 이력이 없습니다.");
+  	    		}
+  	    	}
 	  	  }
     	  
     }).fail(function (error) {
