@@ -129,7 +129,7 @@
 				                            </th>
 				                            <th>참조 컬럼 식별자</th>
 				                            <th colspan="3">
-				                                <select class="form-control" name="refrn_column_idntfc_id" id="refrn_column_idntfc_id">
+				                                <select class="form-control" name="refrn_column_idntfc_id" id="refrn_column_idntfc_id" onchange="changeRefrnColumnNm(this);">
 				                                </select>
 				                            </th>
 				                        </tr>
@@ -280,6 +280,8 @@
 const commonUrl = '/common';
 const url = '/metaTable';
 
+const refrnColumnObj = {};
+
 //메타테이블 항목 상세
 const dpIngestMetaTblTbl = function () {
 	
@@ -332,6 +334,7 @@ const dpIngestMetaTblCol = function () {
 	  		$("#total_count").text(data.totalCount);
   	    	if(data.contents != ""){
   	    		let insertTr = '';
+  	    		let refrnColStr = '<option value="">선택</option>';
   	    		$.each(data.contents, function (idx, el) {
 	  	    		insertTr += '<tr>';
 		  	    	insertTr += '	<td><input type="checkbox"></td>';
@@ -347,8 +350,14 @@ const dpIngestMetaTblCol = function () {
 		  	    	insertTr += '	<td>'+isEmpty(el.encpt_at)+'</td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.ordr)+'</td>';
 		  	    	insertTr += '</tr>';
+		  	    	
+		  	    	refrnColStr += '<option value="'+el.column_idntfc_id+'">'+el.column_korean_nm+'</option>';
+		  	    	
+		  	    	refrnColumnObj[el.column_idntfc_id] = el.column_eng_nm;
+		  	    	
   	    		});
   	    		$("#columnInfo").html(insertTr);
+  	    		$("#refrn_column_idntfc_id").html(refrnColStr);
   	    	}
 	  	  }
     	  
@@ -382,7 +391,7 @@ const dpIngestMetaTblColDt = function (column_idntfc_id) {
 	  	  if (data != null) {
 	  		  
   	    	if(data.contents != ""){
-  	    		
+  	    		let insertTr = '';
   	    		$.each(data.contents, function (idx, el) {
   	    			
   	    			$("#column_korean_nm").val(el.column_korean_nm);
@@ -396,10 +405,10 @@ const dpIngestMetaTblColDt = function (column_idntfc_id) {
   	    				$('#data_lt').prop('disabled', true);
   	    			}
   	    			$("#data_lt").val(el.data_lt);
-  	    			$("#refrn_column_idntfc_id").val(el.refrn_column_idntfc_id);
+  	    			$("#refrn_column_idntfc_id").val(el.refrn_column_idntfc_id).prop("selected", true);
   	    			$("#not_null_at").val(el.not_null_at).prop("selected", true);
   	    			$("#dset_knd").val(el.dset_knd).prop("selected", true);
-  	    			$("#refrn_column_idntfc_id_eng_nm").val(el.refrn_column_idntfc_id_eng_nm);
+  	    			$("#refrn_column_idntfc_id_eng_nm").val(refrnColumnObj[el.refrn_column_idntfc_id]);
   	    			$("#pk_info").val(el.pk_info).prop("selected", true);
   	    			$("#fk_info").val(el.fk_info).prop("selected", true);
   	    			$("#creat_table_at").val(el.creat_table_at);
@@ -413,6 +422,7 @@ const dpIngestMetaTblColDt = function (column_idntfc_id) {
   	    			$("#crud_se").val(el.crud_se);
   	    			
   	    		});
+  	    		
   	    	}
 	  	  }
     	  
@@ -763,6 +773,11 @@ const initDetail = function(){
 	$("#encpt_at").val("Y").prop("selected", true);
 	$("#crud_se").val("C").prop("selected", true);
   	
+}
+
+const changeRefrnColumnNm = function(obj){
+	let column_idntfc_id = $(obj).val();
+	$("#refrn_column_idntfc_id_eng_nm").val(refrnColumnObj[column_idntfc_id]);
 }
 
 //목록 페이지
