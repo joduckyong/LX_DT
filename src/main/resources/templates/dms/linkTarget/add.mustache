@@ -266,7 +266,7 @@
 								<div class="form-group row">
 									<div class="x_content">
 										<div class="table_responsive" style="max-height: 300px; overflow: auto;">
-											<div id="sqlText"></div>
+											<textarea id="sqlText" rows="10" style="width: 100%;"></textarea>
 										</div>
 									</div>
 								</div>
@@ -541,7 +541,7 @@ const distributeSetupReg = function(){
 		let srvYn = $("#info_srvYn").val();
 		let pgngYn = $("#pgngYn").is(":checked") ? 'Y' : 'N';
 		let srvDesc = $("#info_srvDesc").val();
-		let sqlText = $("#sqlText").text().replace(/<br>/gi,'');
+		let sqlText = $("#sqlText").val().replace(/\n/gi,'');
 		
 		let svrData = getSvrData();
 		let cndData = getCndData();
@@ -605,7 +605,7 @@ const distributeSetupPopupTest = function () {
 	let pgngYn = $("#pgngYn").is(":checked") ? 'Y' : 'N';
 	let rowsOfPage = $("#rowsOfPageTest").val().replace(/,/gi,'');
 	let nowPageNum = $("#nowPageNumTest").val().replace(/,/gi,'');
-	let sqlText = $("#sqlText").text();
+	let sqlText = $("#sqlText").val();
 	
 	let obj = {
 		pgngYn: pgngYn,
@@ -829,32 +829,39 @@ const getSortData = function(){
 //쿼리 생성
 const createQuery = function(){
 	
+	$("#sqlText").val('');
+	
 	if(validationCheck()){
 		let svrData = getSvrData();
 		let cndData = getCndData();
 		let sortData = getSortData();
 		
-		let noTotFncArr = [];	//집합함수 미체크 항목 리스트
+// 		let noTotFncArr = [];	//집합함수 미체크 항목 리스트
 		
 		let sqlText = '';
+		let noTotFncSql = '';
+		let groupByStr = ' GROUP BY';
 		if(svrData.length > 0){
-			sqlText += 'SELECT' + '<br>';
+			
+			sqlText += 'SELECT' + '\n';
 			for(let i=0; i<svrData.length; i++){
 				if(svrData[i]['totFncYn'] == 'Y'){		//집합함수 사용
 					sqlText += ' ' + svrData[i]['totFncCd'] + '(' + svrData[i]['colEng'] + ')' + ' as ' + svrData[i]['srvColNm'];
 				}else{
 					sqlText += ' ' + svrData[i]['colEng'] + ' as ' + svrData[i]['srvColNm'];
-					noTotFncArr.push(svrData[i]['colEng']);
+					noTotFncSql += ' ' + svrData[i]['colEng'];
+					noTotFncSql += ',';
+// 					noTotFncArr.push(svrData[i]['colEng']);
 				}
 				
 				if(i != svrData.length-1){
 					sqlText += ',';
 				}
-				sqlText += '<br>';
+				sqlText += '\n';
 			}
 			
-			sqlText += ' FROM ' + svrData[0]['tbl'] + '<br>';
-			sqlText += ' WHERE 1=1' + '<br>';
+			sqlText += ' FROM ' + svrData[0]['tbl'] + '\n';
+			sqlText += ' WHERE 1=1' + '\n';
 		}
 		
 		if(cndData.length > 0){
@@ -865,11 +872,11 @@ const createQuery = function(){
 						fromToSql += ' AND ' + cndData[i]['targetCol'] + ' BETWEEN ' + '#{' +cndData[i]['cndNm'] + '}';
 					}else if(cndData[i]['cnd'] == 'From_To(TO)'){
 						fromToSql += ' AND ' + '#{' +cndData[i]['cndNm'] + '}';
-						fromToSql += '<br>';
+						fromToSql += '\n';
 					}
 				}else{
 					sqlText += ' AND ' + cndData[i]['targetCol'] + ' ' + cndData[i]['cnd'] + ' ' + '#{' +cndData[i]['cndNm'] + '}';
-					sqlText += '<br>';
+					sqlText += '\n';
 				}
 				
 			}
@@ -878,8 +885,8 @@ const createQuery = function(){
 		}
 		
 		if(sortData.length > 0){
-			let noTotFncSql = '';
-			let groupByStr = '';
+// 			let noTotFncSql = '';
+// 			let groupByStr = '';
 			let orderBySql = '';
 			orderBySql += ' ORDER BY';
 			
@@ -888,27 +895,26 @@ const createQuery = function(){
 				if(i != sortData.length-1){
 					orderBySql += ',';
 				}
-				orderBySql += '<br>';
+				orderBySql += '\n';
 				
-				if(noTotFncArr.includes(sortData[i]['colEng'])){
-					groupByStr = ' GROUP BY';
-					noTotFncSql += ' ' + sortData[i]['colEng'] + ' ' + sortData[i]['sortMethod'];
-					noTotFncArr = noTotFncArr.filter((el) => el !== sortData[i]['colEng']);
-					noTotFncSql += ',';
-// 					noTotFncSql += '<br>';
-				}
+// 				if(noTotFncArr.includes(sortData[i]['colEng'])){
+// 					groupByStr = ' GROUP BY';
+// 					noTotFncSql += ' ' + sortData[i]['colEng'] + ' ' + sortData[i]['sortMethod'];
+// 					noTotFncArr = noTotFncArr.filter((el) => el !== sortData[i]['colEng']);
+// 					noTotFncSql += ',';
+// 				}
 			}
 			
 			if(noTotFncSql.indexOf(',') > -1){	//마지막 콤마 제거
 				noTotFncSql = noTotFncSql.substring(0, noTotFncSql.length-1);
 			}
-			noTotFncSql += '<br>';
+			noTotFncSql += '\n';
 			
 			sqlText += groupByStr + noTotFncSql + orderBySql;
 		}
 		
 	// 	console.log(sqlText);
-		$("#sqlText").html(sqlText);
+		$("#sqlText").val(sqlText);
 	}
 	
 }
@@ -1042,7 +1048,7 @@ const deleteSortList = function (){
 //데이터분배 대상 설정팝업 삭제
 const deletePopupList = function (){
 	
-	$('input:radio[name="pop_dstbSeq"]:checked').parents('tr.popup_list').remove();
+	$('tr.popup_list:last').remove();
 }
 
 //정렬순서 번호매기기
@@ -1112,12 +1118,6 @@ const validationCheck = function(){
 			return isValid;
 		}
     	
-    	if(!svrArr.includes(cnd_targetCol)){	//서비스 선택에서 체크되지 않은 항목 체크
-			alert("서비스 선택 항목에서 체크되지 않은 컬럼입니다.");
-			isValid = false;
-			return isValid;
-		}
-    	
     });
 	
 	if(!isValid){
@@ -1131,12 +1131,6 @@ const validationCheck = function(){
 		
 		if(sortArr.includes(sort_colEng)){
 			alert("동일한 정렬순서 컬럼이 선택되었습니다.");
-			isValid = false;
-			return isValid;
-		}
-		
-		if(!svrArr.includes(sort_colEng)){	//서비스 선택에서 체크되지 않은 항목 체크
-			alert("서비스 선택 항목에서 체크되지 않은 컬럼입니다.");
 			isValid = false;
 			return isValid;
 		}
@@ -1166,7 +1160,7 @@ const init = function(){
 	$("#info_srvYn").val("Y").prop("selected", true);
 	$("#info_srvUrl").val("");
 	$("#info_srvDesc").val("");
-	$("#sqlText").empty();
+	$("#sqlText").val('');
 	
 	/*서비스선택 초기화*/
 	$("#svrList").empty();

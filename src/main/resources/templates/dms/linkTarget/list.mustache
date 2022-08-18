@@ -126,7 +126,7 @@ const distributeSetupList = function (page, size_per_page) {
 		  	    $.each(data.contents, function (idx, el) {
 		  	    	
 		  	    	insertTr += '<tr>';
-		  	    	insertTr += '	<td><span class="blue bold" style="cursor:pointer" onclick="btnUpdate(\''+el.dstbId+'\');">'+isEmpty(el.srvNm)+'</td>';
+		  	    	insertTr += '	<td><span class="blue bold" style="cursor:pointer" onclick="btnUpdate(\''+el.dstbId+'\');">'+isEmpty(el.srvNm)+'</span></td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.srvUrl)+'</td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.srvYn)+'</td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.delYn)+'</td>';
