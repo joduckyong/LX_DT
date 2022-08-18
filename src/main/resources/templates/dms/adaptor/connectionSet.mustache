@@ -235,6 +235,7 @@ const dpIngestAdapterItDt = function(){
 			  	   		$("#clct_ty_txt").text($("#"+data.contents[0].clct_ty).val());
 			  	   		$("#clct_ty").val(data.contents[0].clct_ty);
 			  	   		$("#storage_cycle_txt").text(data.contents[0].storage_cycle);
+			  	   		$("#time_data_yn_txt").text(data.contents[0].time_data_yn === 'Y'?'예':'아니오');
 			  	   		$("#storage_type_txt").text(data.contents[0].storage_type);
 			  	   		$("#subforder_yn_txt").text(data.contents[0].subforder_yn === 'Y'?'포함':'미포함');
 			  	   		$("#use_yn_txt").text(data.contents[0].use_yn==='Y'?'사용':'사용안함');
@@ -405,7 +406,7 @@ const dpIngestAdapterItPpSave = function(url_mix){
 		 itemObject.item_nm = $(this).find("#item_nm_"+lengthCnt).val();
 		 itemObject.value = $(this).find("#item_value_"+lengthCnt).val();
 		 itemObject.item_described = $(this).find("#item_described_"+lengthCnt).val();
-		 itemObject.display_seq = ($(this).find("#display_seq_"+lengthCnt).val() === ''?i:$(this).find("#display_seq_"+lengthCnt).val());
+		 itemObject.display_seq = Number($(this).find("#display_seq_"+lengthCnt).val() === ''?i:$(this).find("#display_seq_"+lengthCnt).val());
 		 itemObject.essential_yn = $(this).find("#essential_yn_"+lengthCnt).val();
 		 itemObject.change_able_yn = $(this).find("#change_able_yn_"+lengthCnt).val();
 		 itemObject.clct_mthd = $("#clct_mthd").val();
@@ -436,16 +437,15 @@ const dpIngestAdapterItPpSave = function(url_mix){
         }).done(function (data) {
   	  	  if (data != null) {
 		  	   	if(data.contents != ""){    	   
-	  	   			if(data.contents[0].successYn === 'Y'){
-	  	   				dpIngestAdapterItPpSave();
-	  	   			}
+	  	 	  		let message = JSON.stringify(data.return_msg);
+	  		  		alert(message.replace(/\"/gi, ''));	  	   				
+				    dpIngestItPp();
 		  	   	}
 	  	  }
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });		
 	    
-	    dpIngestItPp();
 }
 
 //저장전 접속정보 설정 접속테스트
@@ -457,7 +457,6 @@ const dpIngestAdapterItPpTest = function(){
 		let itemObject = new Object();
 		$.each($("#tbDpIngestAdapterItPp tbody tr"), function(){
 			 console.log('item : '+$(this).find("#item_"+lengthCnt).val()+', item_value : '+$(this).find("#item_value_"+lengthCnt).val());
-	 		 itemObject["url_addr"]="https://testtest?";
 	 		 itemObject[($(this).find("#item_"+lengthCnt).val())]=$(this).find("#item_value_"+lengthCnt).val();
 			 lengthCnt++;
 		});
