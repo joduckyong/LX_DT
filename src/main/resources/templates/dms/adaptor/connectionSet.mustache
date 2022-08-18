@@ -406,7 +406,7 @@ const dpIngestAdapterItPpSave = function(url_mix){
 		 itemObject.item_nm = $(this).find("#item_nm_"+lengthCnt).val();
 		 itemObject.value = $(this).find("#item_value_"+lengthCnt).val();
 		 itemObject.item_described = $(this).find("#item_described_"+lengthCnt).val();
-		 itemObject.display_seq = ($(this).find("#display_seq_"+lengthCnt).val() === ''?i:$(this).find("#display_seq_"+lengthCnt).val());
+		 itemObject.display_seq = Number($(this).find("#display_seq_"+lengthCnt).val() === ''?i:$(this).find("#display_seq_"+lengthCnt).val());
 		 itemObject.essential_yn = $(this).find("#essential_yn_"+lengthCnt).val();
 		 itemObject.change_able_yn = $(this).find("#change_able_yn_"+lengthCnt).val();
 		 itemObject.clct_mthd = $("#clct_mthd").val();
@@ -437,16 +437,15 @@ const dpIngestAdapterItPpSave = function(url_mix){
         }).done(function (data) {
   	  	  if (data != null) {
 		  	   	if(data.contents != ""){    	   
-	  	   			if(data.contents[0].successYn === 'Y'){
-	  	   				dpIngestAdapterItPpSave();
-	  	   			}
+	  	 	  		let message = JSON.stringify(data.return_msg);
+	  		  		alert(message.replace(/\"/gi, ''));	  	   				
+				    dpIngestItPp();
 		  	   	}
 	  	  }
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });		
 	    
-	    dpIngestItPp();
 }
 
 //저장전 접속정보 설정 접속테스트
