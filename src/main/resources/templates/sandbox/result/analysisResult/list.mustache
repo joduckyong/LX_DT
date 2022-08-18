@@ -298,6 +298,8 @@ const sandboxResultsGet = function(){
             data: JSON.stringify(data)
         }).done(function (data) {
  		  	if (data != null) {
+ 		  		
+ 		  		errorMsg(data);
  		  	   	if(data.contents != ""){    	    
 					$("#sandboxResultsGet").empty();
 		     	    let i = 0;	

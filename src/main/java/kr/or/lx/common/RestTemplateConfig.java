@@ -2,6 +2,7 @@ package kr.or.lx.common;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -10,6 +11,9 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class RestTemplateConfig {
+	
+	@Autowired
+	private RestTemplateErrorHandler restTemplateErrorHandler;
 	
 	@Bean
 	public RestTemplate restTemplate() {
@@ -22,6 +26,7 @@ public class RestTemplateConfig {
 		factory.setReadTimeout(1000 * 5);
 		factory.setConnectTimeout(1000 * 5);
 		RestTemplate restTemplate = new RestTemplate(factory);
+		restTemplate.setErrorHandler(restTemplateErrorHandler);
 		return restTemplate;
 	}
 

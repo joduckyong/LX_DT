@@ -576,6 +576,8 @@ const dpIngestPopupPpPath = function(){
 	        contentType: 'application/json; charset-utf-8',
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
+	    	
+	    	  errorMsg(data);
 		  	  if (data != null) {
 			  	   	if(data.contents != ""){    	
     		     	    let i = 0;
