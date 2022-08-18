@@ -836,17 +836,22 @@ const createQuery = function(){
 		let cndData = getCndData();
 		let sortData = getSortData();
 		
-		let noTotFncArr = [];	//집합함수 미체크 항목 리스트
+// 		let noTotFncArr = [];	//집합함수 미체크 항목 리스트
 		
 		let sqlText = '';
+		let noTotFncSql = '';
+		let groupByStr = ' GROUP BY';
 		if(svrData.length > 0){
+			
 			sqlText += 'SELECT' + '\n';
 			for(let i=0; i<svrData.length; i++){
 				if(svrData[i]['totFncYn'] == 'Y'){		//집합함수 사용
 					sqlText += ' ' + svrData[i]['totFncCd'] + '(' + svrData[i]['colEng'] + ')' + ' as ' + svrData[i]['srvColNm'];
 				}else{
 					sqlText += ' ' + svrData[i]['colEng'] + ' as ' + svrData[i]['srvColNm'];
-					noTotFncArr.push(svrData[i]['colEng']);
+					noTotFncSql += ' ' + svrData[i]['colEng'];
+					noTotFncSql += ',';
+// 					noTotFncArr.push(svrData[i]['colEng']);
 				}
 				
 				if(i != svrData.length-1){
@@ -880,8 +885,8 @@ const createQuery = function(){
 		}
 		
 		if(sortData.length > 0){
-			let noTotFncSql = '';
-			let groupByStr = '';
+// 			let noTotFncSql = '';
+// 			let groupByStr = '';
 			let orderBySql = '';
 			orderBySql += ' ORDER BY';
 			
@@ -892,13 +897,12 @@ const createQuery = function(){
 				}
 				orderBySql += '\n';
 				
-				if(noTotFncArr.includes(sortData[i]['colEng'])){
-					groupByStr = ' GROUP BY';
-					noTotFncSql += ' ' + sortData[i]['colEng'] + ' ' + sortData[i]['sortMethod'];
-					noTotFncArr = noTotFncArr.filter((el) => el !== sortData[i]['colEng']);
-					noTotFncSql += ',';
-// 					noTotFncSql += '\n';
-				}
+// 				if(noTotFncArr.includes(sortData[i]['colEng'])){
+// 					groupByStr = ' GROUP BY';
+// 					noTotFncSql += ' ' + sortData[i]['colEng'] + ' ' + sortData[i]['sortMethod'];
+// 					noTotFncArr = noTotFncArr.filter((el) => el !== sortData[i]['colEng']);
+// 					noTotFncSql += ',';
+// 				}
 			}
 			
 			if(noTotFncSql.indexOf(',') > -1){	//마지막 콤마 제거
@@ -1044,7 +1048,7 @@ const deleteSortList = function (){
 //데이터분배 대상 설정팝업 삭제
 const deletePopupList = function (){
 	
-	$('input:radio[name="pop_dstbSeq"]:checked').parents('tr.popup_list').remove();
+	$('tr.popup_list:last').remove();
 }
 
 //정렬순서 번호매기기
@@ -1114,12 +1118,6 @@ const validationCheck = function(){
 			return isValid;
 		}
     	
-    	if(!svrArr.includes(cnd_targetCol)){	//서비스 선택에서 체크되지 않은 항목 체크
-			alert("서비스 선택 항목에서 체크되지 않은 컬럼입니다.");
-			isValid = false;
-			return isValid;
-		}
-    	
     });
 	
 	if(!isValid){
@@ -1133,12 +1131,6 @@ const validationCheck = function(){
 		
 		if(sortArr.includes(sort_colEng)){
 			alert("동일한 정렬순서 컬럼이 선택되었습니다.");
-			isValid = false;
-			return isValid;
-		}
-		
-		if(!svrArr.includes(sort_colEng)){	//서비스 선택에서 체크되지 않은 항목 체크
-			alert("서비스 선택 항목에서 체크되지 않은 컬럼입니다.");
 			isValid = false;
 			return isValid;
 		}
