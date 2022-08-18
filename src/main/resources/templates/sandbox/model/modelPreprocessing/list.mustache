@@ -171,6 +171,9 @@ const pretreatModels = function (page, size_per_page) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		$("#pretreatModels").empty();
   	    	$("#total_count").text(data.total_count);
   	    	
@@ -217,6 +220,9 @@ const pretreatModelsDetail = function (anals_model_id) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		$("#file_infos").empty();
 	  		$("#basic_infos").empty();
 	  	    	if(data.contents != ""){
@@ -263,6 +269,9 @@ const commonCodeAnalysisUsePurpose = function (){
             data: JSON.stringify(data)
         }).done(function (data) {
  		  	if (data != null) {
+ 		  		
+ 		  		errorMsg(data);
+ 		  		
  		  	   	if(data.contents != ""){    	    	
 					 $("#anals_use_prpos_cd").empty();
     				 let selOp = '<option value="">전체</option>';  

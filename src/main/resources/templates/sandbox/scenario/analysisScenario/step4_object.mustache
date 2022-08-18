@@ -334,6 +334,8 @@ const scenarioEnrollStepStatus = function (){
     	
     	 if (data != null) {
    	    	
+    		 errorMsg(data);
+    		 
    	    	if(data.contents != ""){
    	    		$("#regst_status_cd").val(data.contents.regst_status_cd);
    	    		$("#model_setup_status_cd").val(data.contents.model_setup_status_cd);
@@ -368,6 +370,9 @@ const analysisTargetImagesGet = function () {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		$("#imageDataset").empty();
   	    	
   	    	if(data.contents != ""){
@@ -444,6 +449,9 @@ const analysisImageTargetSettingUpdate = function(type){
 	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
 	    	let message = JSON.stringify(data.return_msg);
 // 	  		alert(message.replace(/\"/gi, ''));
 			alert("저장 되었습니다.");
@@ -481,6 +489,8 @@ const analysisTargetImagesDetail = function(){
     }).done(function (data) {
     	if (data != null) {
   	    	
+    		errorMsg(data);
+    		
   	    	if(data.contents != ""){
   	    		$('#anals_dataset_nm').val(data.contents.anals_dataset_nm);
   	    		$('#anals_dataset_desc').val(data.contents.anals_dataset_desc);

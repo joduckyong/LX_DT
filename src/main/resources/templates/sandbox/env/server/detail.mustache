@@ -140,6 +140,9 @@ const serverDetail = function (){
         data: JSON.stringify(data),
     }).done(function (data) {
     	if (data != null) {
+    		
+    		errorMsg(data);
+    		
 	  	   	if(data.contents != ""){
 				let insertTr = "<tr>";
 					insertTr += ' <td>'+data.contents.server_ip+'</td>';
@@ -182,6 +185,9 @@ const serverPortsListGet = function (page, size_per_page){
         data: JSON.stringify(data),
     }).done(function (data) {
     	if (data != null) {
+    		
+    		errorMsg(data);
+    		
 	  	   	if(data.contents != ""){
 	  	   		let insertTr = '';
 	  	   		$.each(data.contents, function (idx, el) {
@@ -251,6 +257,9 @@ const serverPortsInsert = function (){
 	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(data),
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));    	
 	  		jsDetail();
@@ -290,6 +299,9 @@ const serverPortsDelete = function (){
 	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(data),
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));    	
 	  		serverPortsListGet();

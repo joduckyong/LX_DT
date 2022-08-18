@@ -204,6 +204,9 @@ const sandboxAnalysisImagesGet = function(image_id){
 	    }).done(function (data) {
 	    	  $("#sandboxAnalysisImagesGet").empty();
 		  	  if (data != null) {
+		  		  
+		  			errorMsg(data);
+		  		
 		  	    	if(data.contents != ""){
 			    	    let insertTr = '';
 				  	    $.each(data.contents, function (idx, el) {
@@ -246,6 +249,9 @@ const sandboxImagesProgramsGet = function(image_id, docker_image_id){
 	    }).done(function (data) {
 	    	  $("#sandboxImagesProgramsGet").empty();
 		  	  if (data != null) {
+		  		  
+		  			errorMsg(data);
+		  		
 		  	    	if(data.contents != ""){
 		  	    		contents = data.contents;
 			     	    let insertTr = '';
@@ -286,6 +292,9 @@ const sandboxServerIpGet = function(){
 	    }).done(function (data) {
 	    	  $("#sandboxServerIpGet").empty();
 		  	  if (data != null) {
+		  		  
+		  			errorMsg(data);
+		  		
 		  	    	if(data.contents != ""){
 						 $("#sandboxServerIpGet").empty();
 	    				 let selOp = '<option value="">선택</option>';  
@@ -320,6 +329,9 @@ const sandboxServerPortGet = function(){
 	    }).done(function (data) {
 	    	  $("#sandboxServerPortGet").empty();
 		  	  if (data != null) {
+		  		  
+		  			errorMsg(data);
+		  		
 		  	    	if(data.contents != ""){
 		     	        let insertTr = '';
 				  	    $.each(data.contents, function (idx, el) {
@@ -350,6 +362,9 @@ const commonCodeAnalysisUsePurpose = function (){
             data: JSON.stringify(data)
         }).done(function (data) {
  		  	if (data != null) {
+ 		  		
+ 		  		errorMsg(data);
+ 		  		
  		  	   	if(data.contents != ""){    	    	
 					 $("#anals_use_prpos_cd").empty();
     				 let selOp = '<option value="">선택</option>';  
@@ -379,6 +394,9 @@ const sandboxSettingDetail = function(){
             data: JSON.stringify(data)
         }).done(function (data) {
 
+        	
+        	errorMsg(data);
+        	
          	if(data.contents != ""){
          		
          		$("#sandbox_nm").val(data.contents.sandbox_nm);     
@@ -487,6 +505,8 @@ const sandboxSettingUpdate = function (val) {
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	    	
+	    	errorMsg(data);
+	    	
 	    	if(val == 'B06001'){
 		    	sandboxEnrollStatus();
 	    	}else{
@@ -529,6 +549,9 @@ const sandboxNameDupCheck = function(){
             contentType: 'application/json; charset-utf-8',
             data: JSON.stringify(data)
         }).done(function (data) {
+        	
+        	errorMsg(data);
+        	
       		let message = JSON.stringify(data.return_msg);
       		alert(message.replace(/\"/gi, ''));
         }).fail(function (error) {
@@ -576,6 +599,8 @@ const sandboxEnrollStatus = function(){
             contentType: 'application/json; charset-utf-8',
             data: JSON.stringify(data)
         }).done(function (data) {
+        	
+        	errorMsg(data);
         	
          	if(data.contents != ""){
           		$("#sandbox_setup_status_cd").val(data.contents.sandbox_setup_status_cd);

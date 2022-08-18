@@ -243,6 +243,9 @@ const commonCodeAnalysisScenarioSetting = function (){
             data: JSON.stringify(data)
         }).done(function (data) {
  		  	if (data != null) {
+ 		  		
+ 		  		errorMsg(data);
+ 		  		
  		  	   	if(data.contents != ""){    	    	
 					 $("#commonCodeAnalysisScenarioSetting").empty();
     				 let selOp = '<option value="">선택</option>';  
@@ -287,6 +290,9 @@ const sandboxScenarioGet = function (scenario_id){
         }).done(function (data) {
 	    	  $("#sandboxScenarioGet").empty();
 		  	  if (data != null) {
+		  		  
+		  			errorMsg(data);
+		  		
 		  	    	if(data.contents != ""){
 		     	        let insertTr = '';
 				  	    $.each(data.contents, function (idx, el) {
@@ -324,6 +330,9 @@ const sandboxScenarioSettingDetail = function (scenario_id){
             data: JSON.stringify(data)
         }).done(function (data) {
  		  	if (data != null) {
+ 		  		
+ 		  		errorMsg(data);
+ 		  		
  		  	   	if(data.contents != ""){    	    	
 					 $("#scenario_desc").val("");
 		 	     	 $("#scenario_desc").val(data.contents.scenario_desc);        	
@@ -352,6 +361,9 @@ const sandboxScenarioSettingDetailSet = function (){
             data: JSON.stringify(data)
         }).done(function (data) {
  		  	if (data != null) {
+ 		  		
+ 		  		errorMsg(data);
+ 		  		
  		  	   	if(data.contents != ""){    	
  		  	   		$("#anals_use_prpos_cd_nm").val(data.contents.anals_use_prpos_cd_nm);
  		  	   		$("#commonCodeAnalysisScenarioSetting").val(data.contents.anals_scenario_setup_cd);
@@ -397,6 +409,8 @@ const analysisTargetImagesDetail = function(scenario_id){
 	    	  
 		  	  if (data != null) {
 		  		  
+			  		errorMsg(data);
+			  		
 		  	    	if(data.contents != ""){
 		  	    		
 		  	    		$("#analysisTargetImages").empty();
@@ -542,6 +556,9 @@ const sandboxScenarioSettingUpdate = function(val){
             contentType: 'application/json; charset-utf-8',
             data: JSON.stringify(data)
         }).done(function (data) {
+        	
+        	errorMsg(data);
+        	
       		let message = JSON.stringify(data.return_msg);
       		alert(message.replace(/\"/gi, ''));    	
       		
@@ -577,6 +594,9 @@ const analysisTargetSampleData = function(tbl_id){
             data: JSON.stringify(data)
         }).done(function (data) {
  		  	if (data != null) {
+ 		  		
+ 		  		errorMsg(data);
+ 		  		
  		  	   	if(data.contents != ""){    	
  		  	   	   let insertSize;		
  		  	   	   let insertTh;
@@ -647,6 +667,8 @@ const sandboxEnrollStatus = function(){
             contentType: 'application/json; charset-utf-8',
             data: JSON.stringify(data)
         }).done(function (data) {
+        	
+        	errorMsg(data);
         	
    	    	if(data.contents != ""){
    	    		$("#sandbox_setup_status_cd").val(data.contents.sandbox_setup_status_cd);

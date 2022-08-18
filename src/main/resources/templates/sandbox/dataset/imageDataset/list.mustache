@@ -155,6 +155,9 @@ const imagesDatasetsGet = function (page, size_per_page) {
     	
 		  $("#imagesDatasetsGet").empty();
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
   	    	$("#total_count").text(data.total_count);
   	    	
   	    	if(data.contents != ""){
@@ -222,6 +225,8 @@ const imagesDatasetsEnroll = function () {
 	    	
 		  	  if (data != null) {
 		  		
+		  		errorMsg(data);
+		  		
 		  		let message = JSON.stringify(data.return_msg);
 		  		alert(message.replace(/\"/gi, ''));
 		  		closeModal();
@@ -258,6 +263,9 @@ const imageDatasetDetail = function () {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+		  		errorMsg(data);
+		  		
 	  	    	if(data.contents != ""){
 	  	    		
 		  	   		$("#hidden_image_dataset_id").val(JSON.stringify(data.contents.image_dataset_id).replace(/\"/gi, ''));	
@@ -307,6 +315,9 @@ const imagesDatasetsUpdate = function () {
 	    }).done(function (data) {
 	    	
 		  	  if (data != null) {
+		  		  
+			  		errorMsg(data);	
+			  		
 			  		let message = JSON.stringify(data.return_msg);
 			  		alert(message.replace(/\"/gi, ''));
 			  		closeModal();
@@ -334,6 +345,9 @@ const imagesDatasetsDelete = function (image_dataset_id) {
         contentType: 'application/json; charset-utf-8',
         data: JSON.stringify(data)
     }).done(function (data) {
+    	
+    	errorMsg(data);
+    	
   		let message = JSON.stringify(data.return_msg);
   		alert(message.replace(/\"/gi, ''));
   		imagesDatasetsGet(page, size_per_page);

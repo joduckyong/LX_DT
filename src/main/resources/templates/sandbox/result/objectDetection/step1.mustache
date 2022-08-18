@@ -75,6 +75,9 @@ const sandboxResultsDataLoading = function(){
 	    }).done(function (data) {
 	    	  $("#sandboxResultsDataLoading").empty();
 		  	  if (data != null) {
+		  		  
+		  			errorMsg(data);
+		  		
 		  	    	if(data.contents != ""){
                         let i = 0;	
 		     	        let train_data_cnt = 0;

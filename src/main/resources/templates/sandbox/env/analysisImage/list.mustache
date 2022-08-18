@@ -91,6 +91,9 @@ const analysisImagesGet = function (page, size_per_page) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		$("#analysisImage").empty();
   	    	$("#total_count").text(data.total_count);
   	    	

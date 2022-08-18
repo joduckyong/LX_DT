@@ -83,10 +83,10 @@ function errorMsg(data){
 	if(data.status === 500){
 		alert(JSON.stringify(data.error).replace(/\"/gi, ''));
 		return;
-	}else if(data.return_code.indexOf("40") >= 0){
+	}else if(isEmpty(data.return_code).indexOf("40") >= 0){
 		alert(JSON.stringify(data.return_msg).replace(/\"/gi, ''));
 		return;
-	}else if(data.return_code.indexOf("50") >= 0){
+	}else if(isEmpty(data.return_code).indexOf("50") >= 0){
 		alert(JSON.stringify(data.return_msg).replace(/\"/gi, ''));
 		return;
 	}

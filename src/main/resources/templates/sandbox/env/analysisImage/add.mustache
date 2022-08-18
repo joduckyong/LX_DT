@@ -122,6 +122,9 @@ const commonCodeAnalysisUsePurpose = function (){
             async: false
         }).done(function (data) {
  		  	if (data != null) {
+ 		  		
+ 		  		errorMsg(data);
+ 		  		
  		  	   	if(data.contents != ""){
  		  	   		 $("#anals_use_prpos_cd_radio").empty();
 					 $("#anals_use_prpos_cd").empty();
@@ -169,6 +172,9 @@ const analysisImagesNmDupChk = function (){
         data: JSON.stringify(data),
     }).done(function (data) {
  	if (data != null) {
+ 		
+ 		errorMsg(data);
+ 		
  	   	if(data.contents.duplicated){
  	   		duplicateYn = 'Y';
  	   		alert("동일한 분석 이미지명이 있습니다.");
@@ -224,6 +230,9 @@ const analysisImagesInsert = function (){
 	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(data),
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));    	
 	  		jsList();
@@ -297,6 +306,9 @@ const analysisDockerImageProgramGet = function (docker_image_id){
         async: false
     }).done(function (data) {
 	 	if (data != null) {
+	 		
+	 		errorMsg(data);
+	 		
 	 		$("#docker_image_program").empty();
 	 		if(data.contents != ""){
 	 			$.each(data.contents, function (idx, el) {
