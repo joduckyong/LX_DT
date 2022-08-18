@@ -74,7 +74,7 @@ function prevDay(days, days2, id, id2) {
 	$("#"+id2).val(getDateStr(d));
 }
 
-/* 오늘로부터 며칠후 날짜 */
+/* 에러메세지 */
 function errorMsg(data){
 	
 	console.log(data.status);
