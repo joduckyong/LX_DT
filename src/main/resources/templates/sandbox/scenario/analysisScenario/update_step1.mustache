@@ -147,6 +147,8 @@ const scenarioEnrollStepStatus = function (){
     }).done(function (data) {
     	
     	 if (data != null) {
+    		 
+    		 errorMsg(data);
    	    	
    	    	if(data.contents != ""){
    	    		$("#regst_status_cd").val(data.contents.regst_status_cd);
@@ -180,6 +182,9 @@ const commonCodeAnalysisUsePurpose = function (){
             async: false
         }).done(function (data) {
  		  	if (data != null) {
+ 		  		
+ 		  		errorMsg(data);
+ 		  		
  		  	   	if(data.contents != ""){
  		  	   		 $("#anals_use_prpos_cd_radio").empty();
 					 $("#anals_use_prpos_cd").empty();
@@ -218,6 +223,9 @@ const commonCodeAnalysisScenarioSetting = function (){
             async: false
         }).done(function (data) {
  		  	if (data != null) {
+ 		  		
+ 		  		errorMsg(data);
+ 		  		
  		  	   	if(data.contents != ""){
  		  	   		 $("#anals_detail_setting_cd_radio").empty();
 					 $("#anals_detail_setting_cd").empty();
@@ -275,6 +283,9 @@ const analysisModelsNameDupCheck = function (t){
         data: JSON.stringify(data),
     }).done(function (data) {
  	if (data != null) {
+ 		
+ 		errorMsg(data);
+ 		
  		let text = ''
  	   	if(data.contents.duplicated){
 	 	   	duplicateYn = 'Y';
@@ -351,6 +362,9 @@ const scenarioWritingUpdate = function (){
 	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(data),
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
 	  		let message = JSON.stringify(data.return_msg);
 			alert("수정 되었습니다.");
 			jsNext(1, scenario_id);
@@ -384,6 +398,8 @@ const scenarioWritingDetail = function (){
     }).done(function (data) {
     	if (data != null) {
   	    	
+    		errorMsg(data);
+    		
   	    	if(data.contents != ""){
   	    		$('#scenario_nm_kor').val(data.contents.scenario_nm_kor);
   	    		$('#temp_scenario_nm_kor').val(data.contents.scenario_nm_kor);
