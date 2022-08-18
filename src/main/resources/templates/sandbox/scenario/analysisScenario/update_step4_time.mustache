@@ -282,6 +282,8 @@ const scenarioEnrollStepStatus = function (){
     	
     	 if (data != null) {
    	    	
+    		 errorMsg(data);
+    		 
    	    	if(data.contents != ""){
    	    		$("#regst_status_cd").val(data.contents.regst_status_cd);
    	    		$("#model_setup_status_cd").val(data.contents.model_setup_status_cd);
@@ -314,6 +316,9 @@ const analysisTargetSchemaGet = function () {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		$("#schemaname").empty();
   	    	
   	    	if(data.contents != ""){
@@ -356,6 +361,9 @@ const analysisTargetTableDatasetsGet = function () {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		$("#tableDataset").empty();
 	  		$("#columnDataset").empty();
   	    	
@@ -401,6 +409,9 @@ const analysisTargetTableColumnDatasetGet = function (tbl_id) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		$("#columnDataset").empty();
   	    	
   	    	if(data.contents != ""){
@@ -447,6 +458,9 @@ const analysisTargetTableDatasetsDetail = function () {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		$("#tableColumnDataset").empty();
   	    	
   	    	if(data.contents != ""){
@@ -512,6 +526,9 @@ const analysisTargetSampleData = function (tbl_id) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		$("#sampleDatasetColumn").empty();
 	  		$("#sampleDatasetData").empty();
   	    	
@@ -592,6 +609,10 @@ const analysisTagetTableDatasetUpdate = function(){
 	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
+	    	
 	    	let message = JSON.stringify(data.return_msg);
 // 	  		alert(message.replace(/\"/gi, ''));
 	    	alert("수정 되었습니다.");
