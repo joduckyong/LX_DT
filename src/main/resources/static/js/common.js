@@ -91,3 +91,12 @@ function errorMsg(data){
 		return;
 	}
 }
+
+function jsonToExcelDownload(fileNm, sheetNm, data){
+	let filename = fileNm + '.xlsx';
+	
+	let wb = XLSX.utils.book_new();
+	let ws = XLSX.utils.json_to_sheet(data);
+	XLSX.utils.book_append_sheet(wb, ws, sheetNm);
+	XLSX.writeFile(wb,(filename));
+}
