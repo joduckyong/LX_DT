@@ -304,6 +304,8 @@ const agentRecvData = function(type){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	    	
+	    	errorMsg(data);
+	    	
       		let message = JSON.stringify(data.message);
       		alert(message.replace(/\"/gi, ''));            	 
      // 		dataList = null;
@@ -335,6 +337,9 @@ const agentRecvLocalCol = function(table_nm, table_desc){
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
   	    	dataList = data;
  	    	
  	    	let insertTr = '';
@@ -378,6 +383,8 @@ const agentRecvLocalTable = function(){
     	
 	  	  if (data != null) {
  	    	
+	  		errorMsg(data);
+	  		
  	    	let insertTr = '';
 	  	    $.each(data.tbl_list, function (idx, el) {
 				insertTr += '<tr>';
@@ -548,6 +555,8 @@ const agentRecvLocalCsvList = function(){
     	
 	  	  if (data != null) {
  	    	
+	  		errorMsg(data);
+	  		
  	    	let insertTr = '';
  	    	let i = 0;
  	    	
@@ -634,6 +643,8 @@ const agentRecvDataMov = function(){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	    	
+	    	errorMsg(data);
+	    	
       		let message = JSON.stringify(data.message);
       		alert(message.replace(/\"/gi, ''));     
       		receivePage();
@@ -669,6 +680,9 @@ const agentRecvDir = function(){
 	      let rootDir;
     	  let insertLi = '<ul><li class="folder expanded">';
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		rootDir = data.root.replace('/root/','');
 	  	    insertLi += rootDir;
 	  	    insertLi += '<ul>';

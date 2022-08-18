@@ -70,6 +70,8 @@
 	    }).done(function (data) {
 		  	  if (data != null) {
 		  		
+		  		errorMsg(data);
+		  		
 		  		$("#code_nm").val(data.code_nm);
 		  		$("#local_code").val(data.local_code);
 		  		$("#local_code_nm").val(data.local_code_nm);
@@ -136,6 +138,9 @@
 		    }).done(function (data) {
 		    	
 			  	  if (data != null) {
+			  		  
+			  			errorMsg(data);
+			  		
 				  		let message = JSON.stringify(data.message);
 				  		alert(message.replace(/\"/gi, ''));
 				  		listPage();

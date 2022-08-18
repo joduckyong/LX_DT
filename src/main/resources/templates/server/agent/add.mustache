@@ -83,6 +83,9 @@
 	    }).done(function (data) {
 	    	
 		  	  if (data != null) {
+		  		  
+		  			errorMsg(data);
+		  		
 			  		let message = JSON.stringify(data.msg);
 			  		alert(message.replace(/\"/gi, ''));
 			  		
@@ -151,6 +154,9 @@
 		    }).done(function (data) {
 		    	
 			  	  if (data != null) {
+			  		  
+				  		errorMsg(data);
+				  		
 				  		let message = JSON.stringify(data.message);
 				  		alert(message.replace(/\"/gi, ''));
 				  		listPage();

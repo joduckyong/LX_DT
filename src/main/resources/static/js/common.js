@@ -73,3 +73,21 @@ function prevDay(days, days2, id, id2) {
 	d.setDate(dayOfMonth + days2);
 	$("#"+id2).val(getDateStr(d));
 }
+
+/* 에러메세지 */
+function errorMsg(data){
+	
+	console.log(data.status);
+	console.log(data.return_code);
+	
+	if(data.status === 500){
+		alert(JSON.stringify(data.error).replace(/\"/gi, ''));
+		return;
+	}else if(isEmpty(data.return_code).indexOf("40") >= 0){
+		alert(JSON.stringify(data.return_msg).replace(/\"/gi, ''));
+		return;
+	}else if(isEmpty(data.return_code).indexOf("50") >= 0){
+		alert(JSON.stringify(data.return_msg).replace(/\"/gi, ''));
+		return;
+	}
+}

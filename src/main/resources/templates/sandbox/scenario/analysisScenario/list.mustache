@@ -298,6 +298,8 @@ const scenarioEnrollStepStatus = function (scenarioId){
     	
     	 if (data != null) {
    	    	
+    		 errorMsg(data);
+    		 
    	    	if(data.contents != ""){
    	    		if(data.contents.last_status_cd == lastCd){	//전체 등록 완료
    	    			location.href = url+'/update/step1/'+scenarioId;
@@ -339,6 +341,9 @@ const analysisScenariosGet = function (page, size_per_page) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		$("#scenarioList").empty();
   	    	$("#total_count").text(data.total_count);
   	    	
@@ -386,6 +391,8 @@ const analysisScenariosPopupScenario = function (scenario_id) {
     	
 	  	  if (data != null) {
   	    	
+	  		errorMsg(data);
+	  		
   	    	if(data.contents != ""){
 		  	  $("#scenarioNmKor").text(data.contents.scenario_nm_kor);
 		  	  $("#scenarioNmEng").text(data.contents.scenario_nm_eng);
@@ -417,6 +424,9 @@ const analysisScenariosPopupAnalysisModel = function (scenario_id) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		$("#analysisModelInfo1").empty();
 	  		$("#analysisModelInfo2").empty();
 	  		
@@ -465,6 +475,9 @@ const analysisScenariosPopupPretreatModel = function (scenario_id) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		$("#pretreatModelInfo1").empty();
 	  		$("#pretreatModelInfo2").empty();
 	  		
@@ -513,6 +526,9 @@ const analysisScenariosPopupTarget = function (scenario_id) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		$("#analysisDatasetInfo").empty();
 	  		
   	    	if(data.contents != ""){
@@ -559,6 +575,9 @@ const scenarioDelete = function () {
 	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));
 	  		analysisScenariosGet(page, size_per_page);

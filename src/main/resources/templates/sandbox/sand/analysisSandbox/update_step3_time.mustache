@@ -320,6 +320,9 @@ const commonCodeAnalysisCycleSetting = function (){
             data: JSON.stringify(data)
         }).done(function (data) {
  		  	if (data != null) {
+ 		  		
+ 		  		errorMsg(data);
+ 		  		
  		  	   	if(data.contents != ""){    	    	
 					 $("#commonCodeAnalysisCycleSetting").empty();
 					 
@@ -362,6 +365,9 @@ const commonCodeAnalysisKind = function (){
             data: JSON.stringify(data)
         }).done(function (data) {
  		  	if (data != null) {
+ 		  		
+ 		  		errorMsg(data);
+ 		  		
  		  	   	if(data.contents != ""){    	    	
 					 $("#commonCodeAnalysisKind").empty();
 					 
@@ -456,6 +462,9 @@ const commonCodeBatchCycle = function(){
             data: JSON.stringify(data)
         }).done(function (data) {
  		  	if (data != null) {
+ 		  		
+ 		  		errorMsg(data);
+ 		  		
  		  	   	if(data.contents != ""){    	    	
 					 $("#commonCodeBatchCycle").empty();
     				 let selOp = '<option value="">선택</option>';  
@@ -485,6 +494,9 @@ const commonCodeImagesDatasetsCode = function(){
             data: JSON.stringify(data)
         }).done(function (data) {
  		  	if (data != null) {
+ 		  		
+ 		  		errorMsg(data);
+ 		  		
  		  	   	if(data.contents != ""){    	    	
  			  	   	codeContents = data.contents;
  		  	   	}
@@ -510,6 +522,9 @@ const sandboxAnalysisTableDatasetDetail = function(){
             data: JSON.stringify(data)
         }).done(function (data) {
  		  	if (data != null) {
+ 		  		
+ 		  		errorMsg(data);
+ 		  		
  		  	   	if(data.contents != ""){    
  		  	   		$.each(data.contents, function (idx, el) {
 	 		  	   		if(el.anals_data_sect_cd == 'B16001'){
@@ -603,6 +618,9 @@ const sandboxAnalysisMethodDetail = function(){
             data: JSON.stringify(data)
         }).done(function (data) {
  		  	if (data != null) {
+ 		  		
+ 		  		errorMsg(data);
+ 		  		
  		  	   	if(data.contents != ""){    
  		  	   		$("input:radio[id='"+data.contents.anals_period_dfn_cd+"']").prop("checked", true); 
  		  	   		div_show(data.contents.anals_period_dfn_cd);
@@ -638,6 +656,9 @@ const sandboxAnalysisImageDatasetGet = function(){
             data: JSON.stringify(data)
         }).done(function (data) {
  		  	if (data != null) {
+ 		  		
+ 		  		errorMsg(data);
+ 		  		
  		  	   	if(data.contents != ""){    	    
 					$("#sandboxAnalysisImageDatasetGet").empty();
 	     	        let insertTr = '';
@@ -957,6 +978,9 @@ const sandboxAnalysisMethodUpdate = function(val){
             contentType: 'application/json; charset-utf-8',
             data: JSON.stringify(data)
         }).done(function (data) {
+        	
+        	errorMsg(data);
+        	
       		let message = JSON.stringify(data.return_msg);
       		alert(message.replace(/\"/gi, ''));    	  
 
@@ -990,6 +1014,9 @@ const sandboxCreate = function(){
             contentType: 'application/json; charset-utf-8',
             data: JSON.stringify(data)
         }).done(function (data) {
+        	
+        	errorMsg(data);
+        	
       		let message = JSON.stringify(data.return_msg);
       		alert(message.replace(/\"/gi, ''));    	  
 
@@ -1014,6 +1041,9 @@ const sandboxDelete = function () {
         contentType: 'application/json; charset-utf-8',
         data: JSON.stringify(data)
     }).done(function (data) {
+    	
+    	errorMsg(data);
+    	
   		let message = JSON.stringify(data.return_msg);
   		alert(message.replace(/\"/gi, ''));
   		list();
@@ -1153,6 +1183,8 @@ const sandboxEnrollStatus = function(){
             contentType: 'application/json; charset-utf-8',
             data: JSON.stringify(data)
         }).done(function (data) {
+        	
+        	errorMsg(data);
         	
    	    	if(data.contents != ""){
    	    		$("#sandbox_setup_status_cd").val(data.contents.sandbox_setup_status_cd);

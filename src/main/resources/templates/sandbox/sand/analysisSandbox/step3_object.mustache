@@ -148,6 +148,9 @@ const commonCodeAnalysisCycleSetting = function (){
             data: JSON.stringify(data)
         }).done(function (data) {
  		  	if (data != null) {
+ 		  		
+ 		  		errorMsg(data);
+ 		  		
  		  	   	if(data.contents != ""){    	    	
 					 $("#commonCodeAnalysisCycleSetting").empty();
 					 
@@ -186,6 +189,9 @@ const commonCodeAnalysisKind = function (){
             data: JSON.stringify(data)
         }).done(function (data) {
  		  	if (data != null) {
+ 		  		
+ 		  		errorMsg(data);
+ 		  		
  		  	   	if(data.contents != ""){    	    	
 					 $("#commonCodeAnalysisKind").empty();
 					 
@@ -260,6 +266,9 @@ const commonCodeBatchCycle = function(){
             data: JSON.stringify(data)
         }).done(function (data) {
  		  	if (data != null) {
+ 		  		
+ 		  		errorMsg(data);
+ 		  		
  		  	   	if(data.contents != ""){    	    	
 					 $("#commonCodeBatchCycle").empty();
     				 let selOp = '<option value="">선택</option>';  
@@ -291,6 +300,9 @@ const sandboxAnalysisImageDatasetGet = function(){
             data: JSON.stringify(data)
         }).done(function (data) {
  		  	if (data != null) {
+ 		  		
+ 		  		errorMsg(data);
+ 		  		
  		  	   	if(data.contents != ""){    	    
  		  	   		contents = data.contents;
 					$("#sandboxAnalysisImageDatasetGet").empty();
@@ -372,6 +384,9 @@ const sandboxAnalysisMethodUpdate = function(val){
             contentType: 'application/json; charset-utf-8',
             data: JSON.stringify(data)
         }).done(function (data) {
+        	
+        	errorMsg(data);
+        	
       		let message = JSON.stringify(data.return_msg);
       		alert(message.replace(/\"/gi, ''));    	  
 
@@ -405,6 +420,9 @@ const sandboxCreate = function(){
             contentType: 'application/json; charset-utf-8',
             data: JSON.stringify(data)
         }).done(function (data) {
+        	
+        	errorMsg(data);
+        	
       		let message = JSON.stringify(data.return_msg);
       		alert(message.replace(/\"/gi, ''));    	  
 
@@ -429,6 +447,9 @@ const sandboxDelete = function () {
         contentType: 'application/json; charset-utf-8',
         data: JSON.stringify(data)
     }).done(function (data) {
+    	
+    	errorMsg(data);
+    	
   		let message = JSON.stringify(data.return_msg);
   		alert(message.replace(/\"/gi, ''));
   		list();
@@ -561,6 +582,8 @@ const sandboxEnrollStatus = function(){
             contentType: 'application/json; charset-utf-8',
             data: JSON.stringify(data)
         }).done(function (data) {
+        	
+        	errorMsg(data);
         	
    	    	if(data.contents != ""){
    	    		$("#sandbox_setup_status_cd").val(data.contents.sandbox_setup_status_cd);

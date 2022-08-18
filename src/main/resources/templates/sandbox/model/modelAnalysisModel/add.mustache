@@ -182,6 +182,9 @@ const commonCodeAnalysisUsePurpose = function (){
             async: false
         }).done(function (data) {
  		  	if (data != null) {
+ 		  		
+ 		  		errorMsg(data);
+ 		  		
  		  	   	if(data.contents != ""){
  		  	   		 $("#anals_use_prpos_cd_radio").empty();
 					 $("#anals_use_prpos_cd").empty();
@@ -229,6 +232,9 @@ const analysisModelsNameDupCheck = function (){
         data: JSON.stringify(data),
     }).done(function (data) {
  	if (data != null) {
+ 		
+ 		errorMsg(data);
+ 		
  	   	if(data.contents.duplicated){
  	   		duplicateYn = 'Y';
 	   		alert("동일한 분석 모델명이 있습니다.");
@@ -340,6 +346,9 @@ const analysisModelsEnroll = function (){
 	        processData: false,
 	   	    contentType: false,        
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));    	
 	  		jsList();
@@ -422,6 +431,8 @@ const initBasicInfo = function (code){
     	
 	  	  if (data != null) {
   	    	
+	  		errorMsg(data);
+	  		
   	    	if(data.contents != ""){
   	    		let insertTr = '';
   	    		$("#basic_infos").empty();
@@ -462,6 +473,9 @@ const analysisModelsGuide = function (){
         async: false
     }).done(function (data) {
  	if (data != null) {
+ 		
+ 		errorMsg(data);
+ 		
  	   	if(data.contents != ""){
  	   		 $("#guide").empty();
 				 let insertTr = '';

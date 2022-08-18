@@ -153,6 +153,8 @@ const scenarioEnrollStepStatus = function (){
     	
     	 if (data != null) {
    	    	
+    		 errorMsg(data);
+    		 
    	    	if(data.contents != ""){
    	    		$("#regst_status_cd").val(data.contents.regst_status_cd);
    	    		$("#model_setup_status_cd").val(data.contents.model_setup_status_cd);
@@ -188,6 +190,9 @@ const scenarioPretreatModelsGet = function (analsModelId) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		$("#pretreatModel").empty();
 	  		$("#file_infos").empty();
 	  		$("#parameter_infos").empty();
@@ -264,6 +269,8 @@ const scenarioPretreatModelsDetail = function (anals_model_id) {
     	
 	  	  if (data != null) {
   	    	
+	  		errorMsg(data);
+	  		
   	    	if(data.contents != ""){
   	    		let fileInfoTr = '';
   	   	   		 $.each(data.contents.file_infos, function (idx, el) {
@@ -334,6 +341,9 @@ const scenarioPretreatModelSetupUpdate = function(type){
 	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
 	    	let message = JSON.stringify(data.return_msg);
 // 	  		alert(message.replace(/\"/gi, ''));
 			alert("저장 되었습니다.");

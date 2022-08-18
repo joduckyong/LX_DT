@@ -116,6 +116,9 @@ const commonCodeAnalysisUsePurpose = function (){
             async: false
         }).done(function (data) {
  		  	if (data != null) {
+ 		  		
+ 		  		errorMsg(data);
+ 		  		
  		  	   	if(data.contents != ""){
  		  	   		 $("#anals_use_prpos_cd_radio").empty();
 					 $("#anals_use_prpos_cd").empty();
@@ -172,6 +175,9 @@ const analysisImagesNmDupChk = function (){
         async: false
     }).done(function (data) {
  	if (data != null) {
+ 		
+ 		errorMsg(data);
+ 		
  	   	if(data.contents.duplicated){
  	   		isDuplicate = true;
  	   	}
@@ -218,6 +224,9 @@ const analysisImagesUpdate = function (){
 	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(data),
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));    	
 	  		jsList();
@@ -244,6 +253,9 @@ const analysisImagesDelete = function (){
 	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(data),
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));    	
 	  		jsList();
@@ -280,6 +292,9 @@ const dockerImagesGet = function () {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		$("#dockerImage").empty();
 	  		$("#docker_image_program").empty();
   	    	
@@ -318,6 +333,9 @@ const analysisDockerImageProgramGet = function (docker_image_id){
         async: false
     }).done(function (data) {
 	 	if (data != null) {
+	 		
+	 		errorMsg(data);
+	 		
 	 		$("#docker_image_program").empty();
 	 		
 	 		if(data.contents != ""){
@@ -354,6 +372,9 @@ const analysisImagesDetail = function (){
 	        data: JSON.stringify(data),
 	    }).done(function (data) {
 	  		if (data != null) {
+	  			
+	  			errorMsg(data);
+	  			
 		  	   	if(data.contents != ""){    	    	
 				 $("#image_nm").val(data.contents.image_nm);
 				 $("#temp_image_nm").val(data.contents.image_nm);

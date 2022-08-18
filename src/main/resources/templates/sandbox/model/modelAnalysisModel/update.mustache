@@ -178,6 +178,9 @@ const commonCodeAnalysisUsePurpose = function (){
             async: false
         }).done(function (data) {
  		  	if (data != null) {
+ 		  		
+ 		  		errorMsg(data);
+ 		  		
  		  	   	if(data.contents != ""){
  		  	   		 $("#anals_use_prpos_cd_radio").empty();
 					 $("#anals_use_prpos_cd").empty();
@@ -229,6 +232,9 @@ const analysisModelsNameDupCheck = function (){
         async: false
     }).done(function (data) {
  	if (data != null) {
+ 		
+ 		errorMsg(data);
+ 		
  	   	if(data.contents.duplicated){
  	   		isDuplicate = true;
  	   	}
@@ -326,6 +332,9 @@ const analysisModelsUpdate = function (){
 	        processData: false,
 	   	    contentType: false,        
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));    	
 	  		jsList();
@@ -393,6 +402,9 @@ const analysisModelsDetail = function (){
         data: JSON.stringify(data)
     }).done(function (data) {
   		if (data != null) {
+  			
+  			errorMsg(data);
+  			
 	  	   	if(data.contents != ""){    	    	
 			 $("#anals_model_nm").val(data.contents.anals_model_nm);
 			 $("#temp_anals_model_nm").val(data.contents.anals_model_nm);
@@ -470,6 +482,9 @@ const analysisModelsGuide = function (){
         async: false
     }).done(function (data) {
  	if (data != null) {
+ 		
+ 		errorMsg(data);
+ 		
  	   	if(data.contents != ""){
  	   		 $("#guide").empty();
 				 let insertTr = '';

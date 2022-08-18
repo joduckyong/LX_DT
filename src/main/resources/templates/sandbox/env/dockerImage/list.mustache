@@ -159,6 +159,9 @@ const dockerImagesGet = function (page, size_per_page) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		$("#dockerImage").empty();
   	    	$("#total_count").text(data.total_count);
   	    	
@@ -201,6 +204,9 @@ const dockerImagesDetail = function (docker_image_id) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+		  		errorMsg(data);
+		  		
 	  	    	if(data.contents != ""){
 	  	    		$("#docker_image_nm").val(data.contents.docker_image_nm);
 	  	    		$("#temp_docker_image_nm").val(data.contents.docker_image_nm);
@@ -268,6 +274,9 @@ const dockerImageNameDupCheck = function (){
         data: JSON.stringify(data),
     }).done(function (data) {
  	if (data != null) {
+ 		
+ 		errorMsg(data);
+ 		
  	   	if(data.contents.duplicated){
  	   		duplicateYn = 'Y';
  	   		alert("동일한 도커 이미지명이 있습니다.");
@@ -308,6 +317,9 @@ const isDockerImageNameDupCheck= function (){
         async: false
     }).done(function (data) {
  	if (data != null) {
+ 		
+ 		errorMsg(data);
+ 		
  	   	if(data.contents.duplicated){
  	   		isDuplicate = true;
  	   	}
@@ -422,6 +434,9 @@ const dockerImagesInsert = function(){
 	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(data),
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
 	    	let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));    	
 	  		jsList();
@@ -531,6 +546,9 @@ const dockerImagesUpdate = function () {
 	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(data),
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
 	    	let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));    	
 	  		jsList();
@@ -565,6 +583,9 @@ const dockerImagesDelete = function () {
 	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));
 	  		jsList();
@@ -598,6 +619,9 @@ const analysisImagesDockerImageGet = function () {
 	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		console.log(message.replace(/\"/gi, ''));
 	  		resolve(data);
