@@ -235,6 +235,7 @@ const dpIngestAdapterItDt = function(){
 			  	   		$("#clct_ty_txt").text($("#"+data.contents[0].clct_ty).val());
 			  	   		$("#clct_ty").val(data.contents[0].clct_ty);
 			  	   		$("#storage_cycle_txt").text(data.contents[0].storage_cycle);
+			  	   		$("#time_data_yn_txt").text(data.contents[0].time_data_yn === 'Y'?'예':'아니오');
 			  	   		$("#storage_type_txt").text(data.contents[0].storage_type);
 			  	   		$("#subforder_yn_txt").text(data.contents[0].subforder_yn === 'Y'?'포함':'미포함');
 			  	   		$("#use_yn_txt").text(data.contents[0].use_yn==='Y'?'사용':'사용안함');
@@ -457,7 +458,6 @@ const dpIngestAdapterItPpTest = function(){
 		let itemObject = new Object();
 		$.each($("#tbDpIngestAdapterItPp tbody tr"), function(){
 			 console.log('item : '+$(this).find("#item_"+lengthCnt).val()+', item_value : '+$(this).find("#item_value_"+lengthCnt).val());
-	 		 itemObject["url_addr"]="https://testtest?";
 	 		 itemObject[($(this).find("#item_"+lengthCnt).val())]=$(this).find("#item_value_"+lengthCnt).val();
 			 lengthCnt++;
 		});
