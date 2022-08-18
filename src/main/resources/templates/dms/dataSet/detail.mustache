@@ -78,28 +78,7 @@
                           <th>다운로드</th>
                         </tr>
                       </thead>
-                      <tbody>
-                      	<tr>
-                      		<td>2019. 6. 18</td>
-                      		<td>100</td>
-                      		<td>99</td>
-                      		<td><span class="blue bold" style="cursor:pointer" onclick="fail_addModal();">1</span></td>
-                      		<td><button class="btn btn-success btn-sm mx-0" type="button">다운로드</button></td>
-                      	</tr>
-                      	<tr>
-                      		<td>2019. 6. 18</td>
-                      		<td>100</td>
-                      		<td>99</td>
-                      		<td><span class="blue bold" style="cursor:pointer" onclick="fail_addModal();">1</span></td>
-                      		<td><button class="btn btn-success btn-sm mx-0" type="button">다운로드</button></td>
-                      	</tr>
-                      	<tr>
-                      		<td>2019. 6. 18</td>
-                      		<td>100</td>
-                      		<td>99</td>
-                      		<td><span class="blue bold" style="cursor:pointer" onclick="fail_addModal();">1</span></td>
-                      		<td><button class="btn btn-success btn-sm mx-0" type="button">다운로드</button></td>
-                      	</tr>
+                      <tbody id="popupHistory">
                       </tbody>
                     </table>
               	</div>
@@ -145,12 +124,12 @@
                       </thead>
                       <tbody>
                       	<tr>
-                      		<td><input class="form-control" type="text"></td>
-                      		<td><input class="form-control" type="text"></td>
-                      		<td><input class="form-control" type="text"></td>
-                      		<td><input class="form-control" type="text"></td>
-                      		<td><button class="btn btn-success btn-sm mx-0" type="button">체크</button></td>
-                      	</tr>
+		              		<td><input class="form-control" type="text"></td>
+		              		<td><input class="form-control" type="text"></td>
+		              		<td><input class="form-control" type="text"></td>
+		              		<td><input class="form-control" type="text"></td>
+		              		<td><button class="btn btn-success btn-sm mx-0" type="button">체크</button></td>
+		              	</tr>
                       </tbody>
                     </table>
               	</div>
@@ -297,8 +276,53 @@ const dpLoadDsetDtList = function (fieldData, page, size_per_page) {
     });	
 }
 
+//이력 건수 조회
+const dpLoadPopupHistory01 = function () {
+	
+	let table_idntfc_id = '{{table_idntfc_id}}';
+	
+	const data = {
+   		url: '/dp/load/popup/history/01',
+   		user_id: 'user00',	
+   		table_idntfc_id: table_idntfc_id,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpLoadPopupHistory01',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		$("#popupHistory").empty();
+  	    	
+  	    	if(data.contents != ""){
+  	    		let insertTr = '';
+  	    		$.each(data.contents, function (idx, el) {
+  	    			insertTr += '<tr>';
+  	    			insertTr += '	<td>'+el.modified_at+'</td>';
+  	    			insertTr += '	<td>'+el.ingest_count+'</td>';
+  	    			insertTr += '	<td>'+el.load_count+'</td>';
+  	    			insertTr += '	<td>'+el.error_count+'</td>';
+  	    			insertTr += '	<td><button class="btn btn-success btn-sm mx-0" type="button">다운로드</button></td>';
+  	    			insertTr += '</tr>';
+  	    			
+  	    		});
+  	    		$("#popupHistory").html(insertTr);
+  	    	}
+  	    	
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
 //이력보기 모달 추가
 const addModal = function(){
+	dpLoadPopupHistory01();
 	$('#add_modal').modal('show');
 }
 
