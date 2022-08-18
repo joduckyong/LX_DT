@@ -331,6 +331,9 @@ const dpIngestMetaTblCol = function () {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		$("#total_count").text(data.totalCount);
   	    	if(data.contents != ""){
   	    		let insertTr = '';
@@ -389,6 +392,9 @@ const dpIngestMetaTblColDt = function (column_idntfc_id) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		  
   	    	if(data.contents != ""){
   	    		let insertTr = '';
@@ -652,6 +658,9 @@ const dpIngestPopupMetaTbl = function () {
         data: JSON.stringify(data)
     }).done(function (data) {
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
   	    	if(data.contents != ""){
   	    		let insertTr = '';
   	    		$.each(data.contents, function (idx, el) {

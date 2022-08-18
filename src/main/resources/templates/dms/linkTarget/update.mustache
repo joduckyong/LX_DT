@@ -370,6 +370,8 @@ const distributeSetupSchemaList = function (info_schemaNm) {
     	
 	  	  if (data != null) {
 	  		  
+	  		errorMsg(data);
+	  		
   	    	if(data.contents != ""){
   	    		let insertTr = '';
   	    		insertTr += '<option value="">스키마</option>';
@@ -419,6 +421,9 @@ const distributeSetupSchemaTblList = function (info_tbl) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		$("#tblList").empty();
   	    	if(data.contents != ""){
   	    		let insertTr = '';
@@ -465,6 +470,9 @@ const distributeSetupInfo = function () {
 	    }).done(function (data) {
 	    	
 		  	  if (data != null) {
+		  		  
+		  		errorMsg(data);
+		  		
 	  	    	if(data.contents != ""){
 				  	$("#info_schemaNm").val(data.contents.schemaNm);
 					$("#info_tbl").val(data.contents.tbl);
@@ -510,6 +518,9 @@ const distributeSetupColList = function (info_tbl) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		$("#svrList").empty();
   	    	if(data.contents != ""){
   	    		let insertTr = '';
@@ -561,6 +572,9 @@ const distributeSetupSrvList = function () {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
   	    	if(data.contents != ""){
 		  	    $.each(data.contents, function (idx, el) {
 		  	    	
@@ -634,6 +648,9 @@ const distributeSetupCndList = function () {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
   	    	if(data.contents != ""){
   	    		let insertTr = '';
 		  	    $.each(data.contents, function (idx, el) {
@@ -728,6 +745,9 @@ const distributeSetupSortList = function () {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
   	    	if(data.contents != ""){
   	    		let insertTr = '';
 		  	    $.each(data.contents, function (idx, el) {
@@ -800,6 +820,9 @@ const distributeSetupPopupSrvTargetRegOne = function(obj){
 	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
 	    	let message = JSON.stringify(data.returnMsg);
 	  		alert(message.replace(/\"/gi, ''));
 	  		console.log(message);
@@ -843,6 +866,9 @@ const distributeSetupPopupSrvTargetUpdate = function(){
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify(data)
     }).done(function (data) {
+    	
+    	errorMsg(data);
+    	
     	let message = JSON.stringify(data.returnMsg);
   		alert(message.replace(/\"/gi, ''));
     }).fail(function (error) {
@@ -893,6 +919,9 @@ const distributeSetupPopupSrvTargetDelete = function(){
 	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
 	    	let message = JSON.stringify(data.returnMsg);
 	  		alert(message.replace(/\"/gi, ''));
 	  		closeModal();
@@ -963,6 +992,9 @@ const distributeSetupUpdate = function(){
 		        contentType: 'application/json; charset=utf-8',
 		        data: JSON.stringify(data)
 		    }).done(function (data) {
+		    	
+		    	errorMsg(data);
+		    	
 		    	let message = JSON.stringify(data.returnMsg);
 		  		alert(message.replace(/\"/gi, ''));    	
 		    	location.reload();
@@ -1066,6 +1098,9 @@ const distributeSetupPopupTest = function () {
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify(data)
     }).done(function (data) {
+    	
+    	errorMsg(data);
+    	
     	$("#execResult").text(JSON.stringify(data,null,2));
     	  
     }).fail(function (error) {
@@ -1093,6 +1128,9 @@ const distributeSetupPopupSrvTargetList = function(){
 	    }).done(function (data) {
 	    	
 		  	  if (data != null) {
+		  		  
+		  		errorMsg(data);
+		  		
 		  		let insertTr = '';
 	  	    	if(data.contents != ""){
 	  	    		
@@ -1153,6 +1191,9 @@ const lxpfAdministCtpvList = function(){
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		$("#ctprvnCd option:gt(0)").remove();
   	    	if(data.contents != ""){
   	    		
@@ -1198,6 +1239,9 @@ const lxpfAdministSggList = function(obj, target_data){
 	    }).done(function (data) {
 	    	
 		  	  if (data != null) {
+		  		  
+		  		errorMsg(data);
+		  		
 	  	    	if(data.contents != ""){
 	  	    		$.each(data.contents, function (idx, el) {
 	  	    			if(typeof el.korNm != "undefined"){

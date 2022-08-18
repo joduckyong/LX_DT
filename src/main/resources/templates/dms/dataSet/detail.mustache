@@ -173,6 +173,8 @@ const dpLoadDsetDt = function () {
     	
 	  	  if (data != null) {
 	  		  
+	  		errorMsg(data);
+	  		
   	    	if(data.contents != ""){
 		  	  	$("#dset_korean_nm").text(data.contents[0].dset_korean_nm);
 		  	  	$("#table_eng_nm").text(data.contents[0].table_eng_nm);
@@ -207,6 +209,8 @@ const dpLoadDsetDtCt = function () {
 	    	
 		  	  if (data != null) {
 		  		  
+		  		errorMsg(data);
+		  		
 	  	    	if(data.contents != ""){
 	  	    		let insertTr = '<tr>';
 	  	    		$.each(data.contents, function (idx, el) {
@@ -252,6 +256,9 @@ const dpLoadDsetDtList = function (fieldData, page, size_per_page) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		$("#dsetDtList").empty();
   	    	$("#total_count").text(data.totalcount);
   	    	
@@ -296,6 +303,9 @@ const dpLoadPopupHistory01 = function () {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		$("#popupHistory").empty();
   	    	
   	    	if(data.contents != ""){

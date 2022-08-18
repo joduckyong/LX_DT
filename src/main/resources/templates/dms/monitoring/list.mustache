@@ -375,6 +375,9 @@ const dpCmMoniteringLogsPopup = function(id, log_type){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 		  	  if (data != null) {
+		  		  
+		  		errorMsg(data);
+		  		
 			  	   	if(data.contents != ""){    	
 				  	   	$("#log_dt_txt").text(isEmpty(data.contents[0].log_dt));
 				  	   	$("#adapter_nm_txt").text(isEmpty(data.contents[0].adapter_nm));
@@ -410,6 +413,9 @@ const dpCmMoniteringLogs = function(){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 		  	  if (data != null) {
+		  		  
+		  			errorMsg(data);
+		  		
 			  	   	if(data.contents != ""){    	
     		     	    let insertTr = '';
     			  	    $.each(data.contents, function (idx, el) {
@@ -446,6 +452,9 @@ const dpCmMoniteringStatus = function(){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 		  	  if (data != null) {
+		  		  
+		  			errorMsg(data);
+		  		
 			  	   	if(data.contents != ""){    	
 			  	   		
 			  	   		let adapter_start = isEmpty(data.contents[0].adapter_start) === '' ? 0:isEmpty(data.contents[0].adapter_start);
@@ -501,6 +510,9 @@ const dpCmMoniteringIngest = function(daytype){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 		  	  if (data != null) {
+		  		  
+		  			errorMsg(data);
+		  		
 			  	   	if(data.contents != ""){    	
 			  	   		
 			  	   		let chartTitle = [];

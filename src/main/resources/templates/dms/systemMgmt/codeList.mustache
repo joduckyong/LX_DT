@@ -292,6 +292,9 @@ const dpCmCodes = function (page, size_per_page) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		$("#codeGroupList").empty();
 	  		$("#total_count1").text(data.totalcount);
   	    	if(data.contents != ""){
@@ -355,6 +358,9 @@ const dpCmCodesDt = function (page, size_per_page) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		$("#codeList").empty();
 	  		$("#total_count2").text(data.totalcount);
   	    	if(data.contents != ""){
@@ -421,6 +427,9 @@ const dpCmCodesSave = function () {
 	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
 	    	alert("저장 되었습니다.");
 	    	dpCmCodes();
 	    	closeModal();
@@ -463,6 +472,9 @@ const dpCmCodesDtSave = function () {
 	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
 	    	alert("저장 되었습니다.");
 	    	dpCmCodesDt();
 	    	closeModal();
@@ -507,6 +519,9 @@ const dpCmCodesUpdate = function () {
 	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
 	    	alert("수정 되었습니다.");
 	    	dpCmCodes();
 	    	closeModal();
@@ -553,6 +568,9 @@ const dpCmCodesDtUpdate = function () {
 	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
 	    	alert("수정 되었습니다.");
 	    	dpCmCodesDt();
 	    	closeModal();
@@ -582,6 +600,9 @@ const dpCmCodesDel = function () {
 	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
 	    	alert("삭제 되었습니다.");
 	    	dpCmCodes();
 	    	closeModal();
@@ -613,6 +634,9 @@ const dpCmCodesDtDel = function () {
 	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
 	    	alert("삭제 되었습니다.");
 	    	dpCmCodesDt();
 	    	closeModal();

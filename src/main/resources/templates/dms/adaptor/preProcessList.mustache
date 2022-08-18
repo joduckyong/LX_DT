@@ -127,6 +127,9 @@ const dpIngestPre = function(page, size_per_page){
     	
 		  $("#dpIngestPre").empty();
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
   	    	$("#total_count").text(data.total_count);
   	    	
   	    	if(data.contents != ""){

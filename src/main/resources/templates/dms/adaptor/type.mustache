@@ -130,6 +130,9 @@ const dpCmCodesClctMthdInput = function (group_code) {
         data: JSON.stringify(data)
     }).done(function (data) {
 	  	  if (data != null) {
+	  		  
+	  			errorMsg(data);
+	  		
 		  	   	if(data.contents != ""){    	   
 	    	   		 $.each(data.contents, function (idx, el) {
 		    	   		 $("#divForm").append($("<input type='hidden' value='"+el.dtl_code_nm+"' id='"+el.dtl_code+"'>"));
@@ -160,6 +163,9 @@ const dpCmCodesClctTyInput = function (group_code) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  			errorMsg(data);
+	  		
 		  	   	if(data.contents != ""){    	    	
 	    	   		 $.each(data.contents, function (idx, el) {
 	    	   			$("#divForm").append($("<input type='hidden' value='"+el.dtl_code_nm+"' id='"+el.dtl_code+"'>"));
@@ -191,6 +197,9 @@ const dpCmCodesClctMthd = function (group_code, id) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  			errorMsg(data);
+	  		
 		  	   	if(data.contents != ""){    	    	
    					 let selOp = '<option value="">선택</option>';  
 	    	   		 $.each(data.contents, function (idx, el) {
@@ -230,6 +239,9 @@ const dpCmCodesClctTy = function (group_code, id) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  	
+	  			errorMsg(data);
+	  		
 		  	   	if(data.contents != ""){    	    	
    					 let selOp = '<option value="">선택</option>';  
 	    	   		 $.each(data.contents, function (idx, el) {
@@ -293,6 +305,9 @@ const dpIngestPpInfo = function(adapter_type_id){
 	    }).done(function (data) {
  	    	  $("#dpIngestPpInfo").empty();
 		  	  if (data != null) {
+		  		  
+		  			errorMsg(data);
+		  		
 			  	   	if(data.contents != ""){    	
     		     	    let insertTr = '';
     		     	    let i = 0;	
@@ -399,6 +414,9 @@ const dpIngestPpType = function(){
 	    }).done(function (data) {
  	    	  $("#dpIngestPpType").empty();
 		  	  if (data != null) {
+		  		  
+		  			errorMsg(data);
+		  		
 			  	   	if(data.contents != ""){    	
     		     	    let insertTr = '';
     		     	    let i = 0;	
@@ -442,6 +460,8 @@ const dpIngestPpDtDel = function(adapter_type_id, item){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	  		
+	    	errorMsg(data);
+	    	
 	    	message = JSON.stringify(data.return_msg);
 	    	
 	    }).fail(function (error) {
@@ -522,6 +542,8 @@ const dpIngestPpInfoDel = function(adapter_type_id){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	  		
+	    	errorMsg(data);
+	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));
 	  		dpIngestPpType();
@@ -561,6 +583,9 @@ const dpIngestPpInfoDelChk = function(){
 		    }).done(function (data) {
 		  		
 		    	if (data != null) {
+		    		
+		    		errorMsg(data);
+		    		
 			  	   	if(data.contents != ""){    	
 		    	   		 $.each(data.contents, function (idx, el) {
 		    	   			if(el.chk_yn == 'N'){
@@ -613,6 +638,8 @@ const dpIngestPpDtSave = function(){
 		        data: JSON.stringify(data)
 		    }).done(function (data) {
 		  		
+		    	errorMsg(data);
+		    	
 		  		let message = JSON.stringify(data.return_msg);
 		  		alert(message.replace(/\"/gi, ''));
 		  		$("#adaptorConfigSetAddCnt").val("0");
@@ -644,6 +671,8 @@ const dpIngestPpInfoSave = function(){
 		        data: JSON.stringify(data)
 		    }).done(function (data) {
 		  		
+		    	errorMsg(data);
+		    	
 		  		let message = JSON.stringify(data.return_msg);
 		  		alert(message.replace(/\"/gi, ''));
 		    	

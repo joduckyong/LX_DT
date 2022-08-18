@@ -108,6 +108,9 @@ const dpCmCategory = function (clsf_type, clsf_id) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		 if(clsf_type == '1'){	//대분류 선택시
 		  		$("#m_clsf option:gt(0)").remove();
 		  		$("#s_clsf option:gt(0)").remove();
@@ -180,6 +183,9 @@ const dpIngestMetaItem = function (page, size_per_page) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		$("#total_count").text(data.totalcount);
   	    	if(data.contents != ""){
   	    		let insertTr = '';
@@ -258,6 +264,9 @@ const dpIngestMetaItemSave = function () {
 	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(data),
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
 	  		alert("저장 되었습니다.");
 	    }).fail(function (error) {
 	        alert(JSON.stringify(error));

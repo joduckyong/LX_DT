@@ -338,6 +338,9 @@ const dpCmCodesClctMthd = function (group_code, id) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  			errorMsg(data);
+	  			
 		  	   	if(data.contents != ""){    	    	
    					 let selOp = '<option value="">선택</option>';  
 	    	   		 $.each(data.contents, function (idx, el) {
@@ -388,6 +391,9 @@ const dpCmCodesClctTy = function (group_code, id, sel) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  			errorMsg(data);
+	  			
 		  	   	if(data.contents != ""){    	
 		  	   		 let selOp;
 		  	   		 if(group_code === 'D40'){
@@ -430,6 +436,9 @@ const dpCmCodesClctMthdInput = function (group_code) {
         data: JSON.stringify(data)
     }).done(function (data) {
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 		  	   	if(data.contents != ""){    	   
 	    	   		 $.each(data.contents, function (idx, el) {
 		    	   		 $("#divForm").append($("<input type='hidden' value='"+el.dtl_code_nm+"' id='"+el.dtl_code+"'>"));
@@ -460,6 +469,9 @@ const dpCmCodesClctTyInput = function (group_code) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 		  	   	if(data.contents != ""){    	    	
 	    	   		 $.each(data.contents, function (idx, el) {
 	    	   			$("#divForm").append($("<input type='hidden' value='"+el.dtl_code_nm+"' id='"+el.dtl_code+"'>"));
@@ -493,6 +505,9 @@ const dpIngestAdapterIt = function(){
 	    	
 			  $("#dpIngestAdapterIt").empty();
 		  	  if (data != null) {
+		  		  
+		  		errorMsg(data);
+		  		
 	  	    	$("#total_count").text(data.total_count);
 	  	    	
 	  	    	if(data.contents != ""){
@@ -552,6 +567,9 @@ const dpIngestAdapterDt = function(){
 	    	  let adapter_type_nm;
 	    	  let use_yn;
 		  	  if (data != null) {
+		  		  
+		  		errorMsg(data);
+		  		
 			  	   	if(data.contents != ""){    	
 		    	   		 $.each(data.contents, function (idx, el) {
 		    	   			adapter_id = el.adapter_id;
@@ -807,6 +825,9 @@ const dpIngestAdapterItIdChk = function(){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 		  	  if (data != null) {
+		  		  
+		  			errorMsg(data);
+		  		
 			  	   	if(data.contents != ""){    	
 		    	    	 $("#instance_id").val(data.contents[0].instance_id);
 			  	   	}
@@ -1021,7 +1042,9 @@ const dpIngestAdapterItSave = function(type){
 		        contentType: 'application/json; charset-utf-8',
 		        data: JSON.stringify(data)
 		    }).done(function (data) {
-		  		
+		    	
+		    	errorMsg(data);
+		    	
 		  		let message = JSON.stringify(data.return_msg);
 		  		alert(message.replace(/\"/gi, ''));
 		  		closeModal('add_modal');
@@ -1061,6 +1084,9 @@ const dpIngestAdapterItDel = function(instance_id){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	  		
+	    	
+	    	errorMsg(data);
+	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));
 	  		dpIngestAdapterDt();
@@ -1091,6 +1117,9 @@ const dpIngestAdapterItDelChk = function(){
 		    }).done(function (data) {
 		  		
 		    	if (data != null) {
+		    		
+		    		errorMsg(data);
+		    		
 			  	   	if(data.contents != ""){    	
 		    	   		 $.each(data.contents, function (idx, el) {
 		    	   			if(el.chk_yn == 'N'){
@@ -1128,6 +1157,9 @@ const dpIngestAdapterItDt = function(){
 	    }).done(function (data) {
 	    	
 		  	  if (data != null) {
+		  		  
+		  			errorMsg(data);
+		  		
 			  	   	if(data.contents != ""){    	
 			  	   		
 			  	   		$("#instance_nm").val(data.contents[0].instance_nm);
@@ -1208,6 +1240,9 @@ const dpIngestPopupDset01 = function(){
 	    }).done(function (data) {
 	    	  $("#dataSetInfo").empty();
 		  	  if (data != null) {
+		  		  
+		  			errorMsg(data);
+		  		
 			  	   	if(data.contents != ""){    	
     		     	    let insertTr = '';
     			  	    $.each(data.contents, function (idx, el) {

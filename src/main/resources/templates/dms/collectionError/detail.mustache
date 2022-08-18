@@ -478,6 +478,8 @@ const dpIngestErrorsDt = function () {
     	
 	  	  if (data != null) {
 	  		  
+	  		errorMsg(data);
+	  		
   	    	if(data.contents != ""){
   	    		$("#adapter_nm").text(data.contents[0].adapter_nm);
   	    		$("#dset_korean_nm").text(data.contents[0].dset_korean_nm);
@@ -522,6 +524,8 @@ const dpIngestErrorsInstant = function () {
     	
 	  	  if (data != null) {
 	  		  
+	  		errorMsg(data);
+	  		
   	    	if(data.contents != ""){
   	    		alert("정상 처리되었습니다.");
   	    	}
@@ -551,6 +555,9 @@ const dpIngestAdapterItTbl = function() {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
   	    	if(data.contents != ""){
   	    		$("#pop_table_korean_nm").text(data.contents[0].table_korean_nm);
   	    		$("#pop_table_eng_nm").text(data.contents[0].table_eng_nm);
@@ -582,6 +589,9 @@ const dpIngestMetaTblCol = function () {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		$("#total_count").text(data.totalCount);
   	    	if(data.contents != ""){
   	    		let insertTr = '';
@@ -686,6 +696,9 @@ const dpIngestMetaTblSaveCol = function (){
 	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(data),
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
 	  		alert("저장 되었습니다.");
 	  		initDetail();
 	  		dpIngestMetaTblCol();
@@ -715,6 +728,9 @@ const dpIngestMetaTblRemake = function (){
 	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(data),
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
 	    	if(data.contents[0].successYN == 'Y'){
 		   		alert("테이블이 수정되었습니다.");
 	 	   	}else{
@@ -772,6 +788,9 @@ const dpIngestPopupMetaTbl = function () {
         data: JSON.stringify(data)
     }).done(function (data) {
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
   	    	if(data.contents != ""){
   	    		let insertTr = '';
   	    		$.each(data.contents, function (idx, el) {

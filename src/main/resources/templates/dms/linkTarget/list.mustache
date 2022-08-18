@@ -119,6 +119,9 @@ const distributeSetupList = function (page, size_per_page) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		$("#d_list").empty();
 	  		$("#total_count").text(data.totCnt);
   	    	if(data.contents != ""){

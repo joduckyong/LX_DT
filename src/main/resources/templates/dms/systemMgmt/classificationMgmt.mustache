@@ -101,6 +101,8 @@ const dpCmCategoryList = function () {
     	
 	  	  if (data != null) {
 	  		  
+	  		errorMsg(data);
+	  		
 	  		let arr = [];
     		let root = {
     			'id': 'Root',
@@ -231,6 +233,8 @@ const dpCmCategoryDt = function () {
     	
 	  	  if (data != null) {
 	  		  
+	  		errorMsg(data);
+	  		
   	    	if(data.contents.length > 0){
   	    		duplicateYn = 'Y';
   	    		alert("동일한 분류ID가 있습니다.");
@@ -301,6 +305,9 @@ const dpCmCategorySave = function () {
 	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
 	    	alert("저장 되었습니다.");
 	    	dpCmCategoryList();
 	    	  
@@ -365,6 +372,9 @@ const dpCmCategoryUpdate = function () {
 	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
 	    	alert("수정 되었습니다.");
 	    	dpCmCategoryList();
 	    	  
@@ -391,6 +401,9 @@ const dpCmCategoryDel = function (clsf_id) {
 	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
+	    	
+	    	errorMsg(data);
+	    	
 	    	alert("삭제 되었습니다.");
 	    	dpCmCategoryList();
 	    	  
@@ -419,6 +432,9 @@ const dpCmCategoryDelChk = function (clsf_id) {
         data: JSON.stringify(data),
         async: false
     }).done(function (data) {
+    	
+    	errorMsg(data);
+    	
     	isSuccess = true;
     	
     }).fail(function (error) {

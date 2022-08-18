@@ -132,6 +132,9 @@ const dpCmCategory = function (clsf_type, clsf_id) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
 	  		 if(clsf_type == '1'){	//대분류 선택시
 		  		$("#m_clsf option:gt(0)").remove();
 		  		$("#s_clsf option:gt(0)").remove();
@@ -183,6 +186,9 @@ const dpCmCodesClctMthdInput = function (group_code) {
         data: JSON.stringify(data)
     }).done(function (data) {
 	  	  if (data != null) {
+	  		  
+	  			errorMsg(data);
+	  		
 		  	   	if(data.contents != ""){    	   
 	    	   		 $.each(data.contents, function (idx, el) {
 		    	   		 $("#divForm").append($("<input type='hidden' value='"+el.dtl_code_nm+"' id='"+el.dtl_code+"'>"));
@@ -213,6 +219,9 @@ const dpCmCodesClctTyInput = function (group_code) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  			errorMsg(data);
+	  		
 		  	   	if(data.contents != ""){    	    	
 	    	   		 $.each(data.contents, function (idx, el) {
 	    	   			$("#divForm").append($("<input type='hidden' value='"+el.dtl_code_nm+"' id='"+el.dtl_code+"'>"));
@@ -265,6 +274,9 @@ const dpIngestItSeach = function(page, size_per_page){
     	
 		  $("#dpIngestItSeach").empty();
 	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
   	    	$("#total_count").text(data.total_count);
   	    	
   	    	if(data.contents != ""){

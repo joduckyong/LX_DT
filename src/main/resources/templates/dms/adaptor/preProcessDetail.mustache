@@ -142,6 +142,9 @@ const dpCmCodesClctTy = function (group_code, id) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  			errorMsg(data);
+	  		
 		  	   	if(data.contents != ""){    	    	
    					 let selOp = '<option value="">선택</option>';  
 	    	   		 $.each(data.contents, function (idx, el) {
@@ -188,6 +191,9 @@ const dpIngestPreUpdate = function(){
 	    }).done(function (data) {
   		
 	  	  if (data != null) {
+	  		  
+	  			errorMsg(data);
+	  		
 		  		let message = JSON.stringify(data.return_msg);
 		  		alert(message.replace(/\"/gi, ''));
 	  	  }
@@ -216,6 +222,9 @@ const dpIngestPreDel = function(){
 	    }).done(function (data) {
   		
 	  	  if (data != null) {
+	  		  
+	  			errorMsg(data);
+	  		
 		  		let message = JSON.stringify(data.return_msg);
 		  		alert(message.replace(/\"/gi, ''));
 	  	  }
@@ -267,6 +276,9 @@ const dpIngestPreIdDelChk = function(type){
 		    }).done(function (data) {
 	  		
 		  	  if (data != null) {
+		  		  
+		  			errorMsg(data);
+		  		
 			  		let message = JSON.stringify(data.return_msg);
 			  		alert(message.replace(/\"/gi, ''));
 			  	   	if(data.contents != ""){    	
@@ -309,6 +321,9 @@ const dpIngestPreDt = function(){
 	    }).done(function (data) {
   		
 	  	  if (data != null) {
+	  		  
+	  			errorMsg(data);
+	  		
 		  		let message = JSON.stringify(data.return_msg);
 		  		alert(message.replace(/\"/gi, ''));
 		  	   	if(data.contents != ""){    	

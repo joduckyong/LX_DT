@@ -231,6 +231,9 @@ const dpIngestAdapterItMatchList = function(){
 	    }).done(function (data) {
 	    	
 		  	  if (data != null) {
+		  		  
+		  			errorMsg(data);
+		  		
 			  	   	if(data.contents != ""){    	
 			  	   		
     		     	    let insertTr = '';
@@ -277,6 +280,9 @@ const dpIngestAdapterItMatch = function(){
 	    }).done(function (data) {
 	    	
 		  	  if (data != null) {
+		  		  
+		  			errorMsg(data);
+		  			
 			  	   	if(data.contents != ""){    	
 			  	   		$("#instance_nm_txt").text(data.contents[0].instance_nm);
 			  	   		$("#dset_korean_nm_txt").text(data.contents[0].dset_korean_nm);
@@ -345,6 +351,9 @@ const dpIngestAdapterItMatchSave = function(){
 	        data: JSON.stringify(data)
         }).done(function (data) {
   	  	  if (data != null) {
+  	  		  
+  	  			errorMsg(data);
+  	  		
 		  	   	if(data.contents != ""){    	   
 	  	   			if(data.contents[0].successYn === 'Y'){
 	  	   				dpIngestAdapterItPpSave();
@@ -375,6 +384,9 @@ const dpIngestDataModelsPp = function(){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 		  	  if (data != null) {
+		  		  
+		  			errorMsg(data);
+		  		
 			  	   	if(data.contents != ""){    	
 			  	   		let li = '';
     			  	    $.each(data.contents, function (idx, el) {
@@ -478,6 +490,9 @@ const dpIngestAdapterItSource = function(){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 		  	  if (data != null) {
+		  		  
+		  			errorMsg(data);
+		  		
 			  	   	if(data.contents != ""){    	
 	  			  	    
     		     	    let insertTr = '';
@@ -535,6 +550,9 @@ const dpIngestPopupPpPathSave = function(){
 		        data: JSON.stringify(data)
 		    }).done(function (data) {
 			  	  if (data != null) {
+			  		  
+			  			errorMsg(data);
+			  		
 				  	   	if(data.contents != ""){    	
 		  		     	    let insertTr = '';
 		  			  	    $.each(data.contents, function (idx, el) {
@@ -572,8 +590,10 @@ const dpIngestPopupPpPath = function(){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	    	
-	    	  errorMsg(data);
 		  	  if (data != null) {
+		  		  
+		  			errorMsg(data);
+		  			
 			  	   	if(data.contents != ""){    	
     		     	    let i = 0;
     		     	    let insertTr = '';

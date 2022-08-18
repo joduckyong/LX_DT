@@ -107,6 +107,9 @@ const dpCmCodesClctTyInput = function (group_code) {
     }).done(function (data) {
     	
 	  	  if (data != null) {
+	  		  
+	  			errorMsg(data);
+	  		
 		  	   	if(data.contents != ""){    	    	
 	    	   		 $.each(data.contents, function (idx, el) {
 	    	   			$("#divForm").append($("<input type='hidden' value='"+el.dtl_code_nm+"' id='"+el.dtl_code+"'>"));
@@ -141,6 +144,9 @@ const dpIngestAdapterStop = function(){
 		        data: JSON.stringify(data)
 		    }).done(function (data) {
 			  	  if (data != null) {
+			  		  
+			  			errorMsg(data);
+			  		
 				  	   	if(data.contents != ""){
 				  	   		//data.contents[0].successYn;
 				  	   		$("#startStop").html('<button class="btn btn-primary btn-sm" onclick=dpIngestAdapterStart();>시작</button>');
@@ -173,6 +179,9 @@ const dpIngestAdapterStart = function(){
 		        data: JSON.stringify(data)
 		    }).done(function (data) {
 			  	  if (data != null) {
+			  		  
+			  			errorMsg(data);
+			  		
 				  	   	if(data.contents != ""){
 				  	   		//data.contents[0].successYn;
 				  	   		$("#startStop").html('<button class="btn btn-primary btn-sm" onclick=dpIngestAdapterStop();>중지</button>');
@@ -202,6 +211,9 @@ const dpIngestAdapterStatus = function(){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 		  	  if (data != null) {
+		  		  
+		  			errorMsg(data);
+		  			
 			  	   	if(data.contents != ""){
 			  	   		
 			  	   		console.log('status1 : ' + data.contents[0].status);
@@ -240,6 +252,9 @@ const dpIngestAdapterOperation = function(){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 		  	  if (data != null) {
+		  		  
+		  			errorMsg(data);
+		  			
 			  	   	if(data.contents != ""){
 			  	   		$("#adapter_nm").text(data.contents[0].adapter_nm);
 			  	   		$("#use_yn").text(data.contents[0].use_yn === 'Y' ?'사용':'미사용');
@@ -273,6 +288,9 @@ const dpIngestAdapterItStop = function(instance_id){
 		        data: JSON.stringify(data)
 		    }).done(function (data) {
 			  	  if (data != null) {
+			  		  
+			  			errorMsg(data);
+			  		
 				  	   	if(data.contents != ""){
 				  	   		$("#td_"+instance_id).html('<button class="btn btn-primary btn-sm" onclick=dpIngestAdapterItStart("'+instance_id+'");>시작</button>');
 				  	   		$("#active_yn_"+instance_id).text('중지');
@@ -303,6 +321,9 @@ const dpIngestAdapterItStart = function(instance_id){
 		        data: JSON.stringify(data)
 		    }).done(function (data) {
 			  	  if (data != null) {
+			  		  
+			  			errorMsg(data);
+			  		
 				  	   	if(data.contents != ""){
 				  	   		$("#td_"+instance_id).html('<button class="btn btn-primary btn-sm" onclick=dpIngestAdapterItStop("'+instance_id+'");>중지</button>');
 				  	   		$("#active_yn_"+instance_id).text('실행');
@@ -335,6 +356,9 @@ const dpIngestAdapterItStatus = function(){
 		        data: JSON.stringify(data)
 		    }).done(function (data) {
 			  	  if (data != null) {
+			  		  
+			  			errorMsg(data);
+			  		
 				  	   	if(data.contents != ""){
 				  	   		console.log('status2 : '+data.contents[0].status);
 				  	   		if(data.contents[0].status === 'N' || data.contents[0].status === null){
@@ -371,6 +395,9 @@ const dpIngestAdapterOperationIt = function(){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 		  	  if (data != null) {
+		  		  
+		  			errorMsg(data);
+		  		
 			  	   	if(data.contents != ""){
 
 			     	    let insertTr = '';
