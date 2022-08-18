@@ -133,21 +133,18 @@
                         </table>                         
                       </div>                      
                       <ul class="task-list" id="drakeRight">
-                        <!-- li class="task">
-                          <p>C_NAME_02(Integer)</p>
-                        </li-->
                       </ul>
                     </li>
                   </ul>
                 </div>
                 <div class="drake_result_box">
                   <div class="drake_title">ID</div>
-                  <div class="drake_result" ><span id="id_mix_txt"></span></div>
+                  <div class="drake_result" >descLc.fcltyNo</div>
                   <button class="btn btn-danger m-0">초기화</button>
                 </div>
               </div>
               <div class="modal-footer"> 
-                <button class="btn btn-primary" type="button">적용</button>
+                <button class="btn btn-primary" onclick="idSetIdMix();" type="button">선택</button>
               </div>
             </div>
           </div>
@@ -290,7 +287,7 @@ const dpIngestAdapterItMatch = function(){
 			  	   		$("#dset_idntfc_id").val(data.contents[0].dset_idntfc_id);
 			  	   		$("#url_mix").val(data.contents[0].url_mix);
 			  	   		$("#id_mix").val(data.contents[0].id_mix);
-			  	   		$("#id_mix_txt").text(data.contents[0].id_mix);
+//			  	   		$(".drake_result").text(data.contents[0].id_mix+".");
 			  	   		$("#clct_mthd").val(data.contents[0].clct_mthd);
 			  	   		$("#clct_ty").val(data.contents[0].clct_ty);
 			  	   		$("#subfolder_yn").val(data.contents[0].subfolder_yn);
@@ -401,6 +398,10 @@ const dpIngestDataModelsPp = function(){
 	    });			
 }
 
+
+const idSetIdMix = function(){
+	$("#id_mix").val($(".drake_result").text());
+}
 //전처리 조회
 /*
 const dpIngestAdapterItPre = function(){
