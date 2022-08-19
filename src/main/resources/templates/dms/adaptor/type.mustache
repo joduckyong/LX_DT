@@ -263,12 +263,12 @@ const adaptorSetConfigAdd = function(){
 	let adaptorSetDataConfigLen = $("#adaptorSetDataConfig tbody tr").length;
 	console.log('adaptorSetDataConfigLen: '+adaptorSetDataConfigLen);
 	
-	if($("#adaptorConfigSetAddCnt").val() === '0'){
+//	if($("#adaptorConfigSetAddCnt").val() === '0'){
 	    let insertTr = '';
         insertTr += '<tr>';
         insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList" onclick=checkConfigOnlyOne(this); id="checkConfig_'+adaptorSetDataConfigLen+'" value=""></td>';
         insertTr += ' <td style="text-align: center;"><span id="displauSeq">'+(++adaptorSetDataConfigLen)+'</span></td>';
-        insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configItem" id="configItem"></td>';
+        insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configItem" id="configItem" oninput="this.value=this.value.replace(/[^0-9a-zA-Z_]/g, \'\')";></td>';
         insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configIteNm" id="configIteNm"></td>';
         insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configValue" id="configValue"></td>';
         insertTr += ' <td style="text-align: center;"><select id="change_able_yn">';
@@ -280,8 +280,8 @@ const adaptorSetConfigAdd = function(){
         insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configItemDescribed" id="configItemDescribed"></td>';
         insertTr += '</tr>';
   	    $("#dpIngestPpInfo").append(insertTr);		
-  	  	$("#adaptorConfigSetAddCnt").val(adaptorSetDataConfigLen);
-	}
+//  	  	$("#adaptorConfigSetAddCnt").val(adaptorSetDataConfigLen);
+//	}
 }
 
 //접속정보 설정 조회
@@ -315,7 +315,7 @@ const dpIngestPpInfo = function(adapter_type_id){
     		     	          insertTr += '<tr>';
     		     		      insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList" onclick=checkConfigOnlyOne(this); id="checkConfig_'+(i+1)+'" value="'+el.item+'"></td>';
     		     		      insertTr += ' <td style="text-align: center;">'+(++i)+'</td>';
-    		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+el.item+'" name="configItem" id="configItem_'+i+'"></td>';
+    		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+el.item+'" name="configItem" id="configItem_'+i+'" oninput="this.value=this.value.replace(/[^0-9a-zA-Z_]/g, \'\')";></td>';
     		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+el.item_nm+'" name="configIteNm" id="configIteNm_'+i+'"></td>';
     		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+el.value+'" name="configValue" id="configValue_'+i+'"></td>';
     		     		      insertTr += ' <td style="text-align: center;"><select id="change_able_yn_'+i+'">';

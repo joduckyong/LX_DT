@@ -106,6 +106,7 @@ const url = '/adaptor';
 let dpIngestItPpTypeCnt = 0;
 let dpIngestItPpInfoCnt = 0;
 
+
 //수집방식
 const dpCmCodesClctMthdInput = function (group_code) {
 	
@@ -260,7 +261,7 @@ const instanceSetConfigAdd = function(){
 	  insertTr += '<tr>';
 	  insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList"  id="checkConfig_'+instanceSetDataConfigLen+'" value=""></td>';
 	  insertTr += ' <td style="text-align: center;">'+(++instanceSetDataConfigLen)+'</td>';
-	  insertTr += ' <td style="text-align: center;"><input type="text" id="configItem" value=""></td>';
+	  insertTr += ' <td style="text-align: center;"><input type="text" id="configItem" value="" oninput="this.value=this.value.replace(/[^0-9a-zA-Z_]/g, \'\')";></td>';
 	  insertTr += ' <td style="text-align: center;"><input type="text" id="configIteNm" value=""></td>';
 	  insertTr += ' <td style="text-align: center;"><input type="text" id="configItemDescribed" value=""></td>';
       insertTr += '</tr>';
@@ -296,7 +297,7 @@ const dpIngestItPpInfo = function(connect_id){
  		      let i = 0;	
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+		 // 			errorMsg(data);
 		  		
 			  	   	if(data.contents != ""){    	
 			  	   		dpIngestItPpInfoData = data.contents;
@@ -304,7 +305,7 @@ const dpIngestItPpInfo = function(connect_id){
     		     	          insertTr += '<tr>';
     		     		      insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList" id="checkConfig_'+(i+1)+'" value="'+el.connect_id+'"></td>';
     		     		      insertTr += ' <td style="text-align: center;">'+(++i)+'</td>';
-    		     		      insertTr += ' <td style="text-align: center;"><input type="text" id="configItem_'+i+'" value="'+el.item+'"></td>';
+    		     		      insertTr += ' <td style="text-align: center;"><input type="text" id="configItem_'+i+'" value="'+el.item+'" oninput="this.value=this.value.replace(/[^0-9a-zA-Z_]/g, \'\')";></td>';
     		     		      insertTr += ' <td style="text-align: center;"><input type="text" id="configIteNm_'+i+'" value="'+el.item_nm+'"></td>';
     		     		      insertTr += ' <td style="text-align: center;"><input type="text" id="configItemDescribed_'+i+'" value="'+el.item_described+'"></td>';
     		                  insertTr += '</tr>';
@@ -350,16 +351,18 @@ const checkConfigOnlyOne = function(element) {
 //접속 유형상세 추가 
 const instanceSetAdd = function(){
 	
+	let instanceSetDataLen = $("#instanceSetData tbody tr").length +1;
+	
 	if($("#instanceSetAddCnt").val() === '0'){
 		let insertTr = '';
 	    insertTr += '<tr>';
-	    insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkList" onclick=checkOnlyOne(this,"0"); id="check_'+dpIngestItPpTypeCnt+'" value=""></td>';
-	    insertTr += ' <td style="text-align: center;">'+(++dpIngestItPpTypeCnt)+'</td>';
+	    insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkList" onclick=checkOnlyOne(this,"0"); id="check_'+instanceSetDataLen+'" value=""></td>';
+	    insertTr += ' <td style="text-align: center;">'+(instanceSetDataLen)+'</td>';
 	    insertTr += ' <td style="text-align: center;"><select id="clct_mthd" onchange=clctMthdType(this.value)></select></td>';
 	    insertTr += ' <td style="text-align: center;"><select id="clct_ty"></select></td>';
 	    insertTr += '</tr>';
 	    $("#dpIngestItPpType").append(insertTr);	
-	    $("#instanceSetAddCnt").val(dpIngestItPpTypeCnt);
+	    $("#instanceSetAddCnt").val(instanceSetDataLen);
 	    
 	    dpCmCodesClctMthd('D34', 'clct_mthd');
 	}
@@ -454,13 +457,21 @@ const dpIngestItPpDtDelChk = function(){
 	        connect_id = $(this).val();
 	    });
 	    
+		let check_config;
+	    $("input[name='checkConfigList']:checked").each(function(e){
+	    	check_config = $(this).val();
+	    });
+	    
 	    $.each($("#instanceSetDataConfig tbody tr"), function(){
 	    
 	    	let item = $(this).find("#configItem").val();
+	    	let clct_mthd = $("#clct_mthd_"+connect_id).val();
+	    	let clct_ty = $("#clct_ty_"+connect_id).val();
+	    	
 			const data = {
 			   		url: '/dp/ingest/instance/property/detail/delete/check',
-			   		clct_mthd: $("#clct_mthd_"+connect_id).val(),	
-			   		clct_ty: $("#clct_ty_"+connect_id).val(),	
+			   		clct_mthd: clct_mthd,	
+			   		clct_ty: clct_ty,	
 			   		item: item,	
 			   		user_id: 'user00',	
 			   		menu_id: 'menu_id',
@@ -537,40 +548,50 @@ const dpIngestItPpInfoDelChk = function(){
 	        connect_id = $(this).val();
 	    });
 	    
-		const data = {
-		   		url: '/dp/ingest/instance/property/info/delete/check',
-		   		connect_id: connect_id,	
-		   		clct_mthd: $("#clct_mthd_"+connect_id).val(),	
-		   		clct_ty: $("#clct_ty_"+connect_id).val(),	
-		   		user_id: 'user00',	
-		   		menu_id: 'menu_id',
-		    };		
-		    $.ajax({
-		        type: 'POST',
-		        url: url+'/dpIngestItPpDtDelChk',
-		        dataType: 'json',
-		        contentType: 'application/json; charset-utf-8',
-		        data: JSON.stringify(data)
-		    }).done(function (data) {
-		  		
-		    	if (data != null) {
-		    		
-		    		errorMsg(data);
-		    		
-			  	   	if(data.contents != ""){    	
-		    	   		 $.each(data.contents, function (idx, el) {
-		    	   			if(el.chk_yn == 'N'){
-		    	   				
-		    	   				dpIngestItPpInfoDel(connect_id);
-		    	   			}
-		 	     	     });
-			  	   	}
-		  	  } 
-		    	
-		    	
-		    }).fail(function (error) {
-		        alert(JSON.stringify(error));
-		    });
+	    console.log('connect_id:'+connect_id);
+	    if(connect_id === ''){
+	    	
+	    	$('#instanceSetData > tbody > tr:last').remove();
+	    	$("#instanceSetAddCnt").val("0");
+	    	
+	    }else{
+	    	
+			const data = {
+			   		url: '/dp/ingest/instance/property/info/delete/check',
+			   		connect_id: connect_id,	
+			   		clct_mthd: $("#clct_mthd_"+connect_id).val(),	
+			   		clct_ty: $("#clct_ty_"+connect_id).val(),	
+			   		user_id: 'user00',	
+			   		menu_id: 'menu_id',
+			    };		
+			    $.ajax({
+			        type: 'POST',
+			        url: url+'/dpIngestItPpDtDelChk',
+			        dataType: 'json',
+			        contentType: 'application/json; charset-utf-8',
+			        data: JSON.stringify(data)
+			    }).done(function (data) {
+			  		
+			    	if (data != null) {
+			    		
+			    		errorMsg(data);
+			    		
+				  	   	if(data.contents != ""){    	
+			    	   		 $.each(data.contents, function (idx, el) {
+			    	   			if(el.chk_yn == 'N'){
+			    	   				
+			    	   				dpIngestItPpInfoDel(connect_id);
+			    	   			}
+			 	     	     });
+				  	   	}
+			  	  } 
+			    	
+			    	
+			    }).fail(function (error) {
+			        alert(JSON.stringify(error));
+			    });
+	    }
+	    
 	}
 }
 
@@ -660,5 +681,6 @@ const dpIngestItPpInfoSave = function(){
 dpCmCodesClctMthdInput('D34');
 
 setTimeout(dpIngestItPpType, 300);
+
 </script>
 
