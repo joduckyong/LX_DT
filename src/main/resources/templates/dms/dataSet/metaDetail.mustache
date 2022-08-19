@@ -5,394 +5,653 @@
 	        <div class="col-md-12">
 	            <div class="x_panel">
 	                <div class="x_title"> 
-	                  <h2>HOME > 수집오류</h2>
+	                  <h2>HOME > 데이터셋 > 메타정보 상세</h2>
 	                  <div class="clearfix"> </div>
 	                </div>
 	                <div class="x_content">
-	                	<div class="cont_title_box">
-		                	<h3>메타정보 상세</h3>
-		                </div>
-		                <div class="border_rows">
-		                    <div class="row">
-		                      <div class="form-group row col-12 col-md-6">
-		                        <div class="control-label">데이터셋명</div>
-		                        <div class="form-control_box">
-		                        	<input class="form-control" type="text" readonly="readonly">
-		                        </div>
-		                      </div>
-		                      <div class="form-group row col-12 col-md-6">
-		                        <div class="control-label">메타데이터 파일식별자</div>
-		                        <div class="form-control_box">
-		                        	<input class="form-control" type="text">
-		                        </div>
-		                      </div>
-		                    </div>
-		                    <div class="row">
-		                      <div class="form-group row col-12 col-md-6">
-		                        <div class="control-label">메타데이터 언어</div>
-		                        <div class="form-control_box">
-		                        	<input class="form-control" type="text">
-		                        </div>
-		                      </div>
-		                      <div class="form-group row col-12 col-md-6">
-		                        <div class="control-label">메타데이터 적용대상명</div>
-		                        <div class="form-control_box">
-		                        	<input class="form-control" type="text">
-		                        </div>
-		                      </div>
-		                    </div>
-		                    <div class="row">
-		                      <div class="form-group row col-12 col-md-6">
-		                        <div class="control-label">메타데이터 작성일</div>
-		                        <div class="form-control_box">
-		                        	<input class="form-control" type="text">
-		                        </div>
-		                      </div>
-		                      <div class="form-group row col-12 col-md-6">
-		                        <div class="control-label">메타데이터 버전</div>
-		                        <div class="form-control_box">
-		                        	<input class="form-control" type="text">
-		                        </div>
-		                      </div>
-		                    </div>
-		                    <div class="row">
-		                      <div class="form-group row col-12 col-md-6">
-		                        <div class="control-label">책임기관명</div>
-		                        <div class="form-control_box">
-		                        	<input class="form-control" type="text">
-		                        </div>
-		                      </div>
-		                      <div class="form-group row col-12 col-md-6">
-		                        <div class="control-label">책임부서명</div>
-		                        <div class="form-control_box">
-		                        	<input class="form-control" type="text">
-		                        </div>
-		                      </div>
-		                    </div>
-		                    <div class="row">
-		                      <div class="form-group row col-12 col-md-6">
-		                        <div class="control-label">책임담당자</div>
-		                        <div class="form-control_box">
-		                        	<input class="form-control" type="text">
-		                        </div>
-		                      </div>
-		                      <div class="form-group row col-12 col-md-6">
-		                        <div class="control-label">전화</div>
-		                        <div class="form-control_box">
-		                        	<input class="form-control" type="text">
-		                        </div>
-		                      </div>
-		                    </div>
-		                    <div class="row">
-		                      <div class="form-group row col-12 col-md-6">
-		                        <div class="control-label">키워드</div>
-		                        <div class="form-control_box">
-		                        	<input class="form-control" type="text">
-		                        </div>
-		                      </div>
-		                      <div class="form-group row col-12 col-md-6">
-		                        <div class="control-label">업데이트 주기</div>
-		                        <div class="form-control_box">
-		                        	<input class="form-control" type="text">
-		                        </div>
-		                      </div>
-		                    </div>
-		                    <div class="row">
-		                      <div class="form-group row col-12 col-md-6">
-		                        <div class="control-label">팩스</div>
-		                        <div class="form-control_box">
-		                        	<input class="form-control" type="text">
-		                        </div>
-		                      </div>
-		                      <div class="form-group row col-12 col-md-6">
-		                        <div class="control-label">제공형태</div>
-		                        <div class="form-control_box">
-		                        	<input class="form-control" type="text">
-		                        </div>
-		                      </div>
-		                    </div>
-		                    <div class="row">
-		                      <div class="form-group row col-12 col-md-12">
-		                        <div class="control-label">주소</div>
-		                        <div class="form-control_box">
-		                        	<input class="form-control" type="text">
-		                        </div>
-		                      </div>
-		                    </div>
-		                    <div class="row">
-		                      <div class="form-group row col-12 col-md-12">
-		                        <div class="control-label">설명</div>
-		                        <div class="form-control_box">
-		                        	<textarea rows="4" style="width:100%;"></textarea>
-		                        </div>
-		                      </div>
-		                    </div>
-		                  </div>
-		                  
-		                  <div class="cont_title_box">
-		                	<h3>공간정보(데이터 품질)</h3>
+	                	<div id="cl_bass" style="display: none;">  
+		                	<div class="cont_title_box">
+			                	<h3>메타정보 상세</h3>
 			                </div>
 			                <div class="border_rows">
 			                    <div class="row">
 			                      <div class="form-group row col-12 col-md-6">
-			                        <div class="control-label">데이터요약</div>
+			                        <div class="control-label">데이터셋명</div>
 			                        <div class="form-control_box">
-			                        	<input class="form-control" type="text">
+			                        	<input class="form-control" type="text" name="dset_korean_nm" id="dset_korean_nm" readonly="readonly">
 			                        </div>
 			                      </div>
 			                      <div class="form-group row col-12 col-md-6">
-			                        <div class="control-label">품질적용대상</div>
+			                        <div class="control-label">메타데이터 파일식별자</div>
 			                        <div class="form-control_box">
-			                        	<input class="form-control" type="text">
-			                        </div>
-			                      </div>
-			                    </div>
-			                    <div class="row">
-			                      <div class="form-group row col-12 col-md-6">
-			                        <div class="control-label">항공사진 촬영일자</div>
-			                        <div class="form-control_box">
-			                        	<input class="form-control" type="text">
-			                        </div>
-			                      </div>
-			                      <div class="form-group row col-12 col-md-6">
-			                        <div class="control-label">항공레이다 촬영일자</div>
-			                        <div class="form-control_box">
-			                        	<input class="form-control" type="text">
+			                        	<input class="form-control" type="text" name="metadata_file_id" id="metadata_file_id">
 			                        </div>
 			                      </div>
 			                    </div>
 			                    <div class="row">
 			                      <div class="form-group row col-12 col-md-6">
-			                        <div class="control-label">3차원 공간정보 제작일자</div>
+			                        <div class="control-label">메타데이터 언어</div>
 			                        <div class="form-control_box">
-			                        	<input class="form-control" type="text">
+			                        	<input class="form-control" type="text" name="metadata_lang" id="metadata_lang">
 			                        </div>
 			                      </div>
 			                      <div class="form-group row col-12 col-md-6">
-			                        <div class="control-label">독취기명</div>
+			                        <div class="control-label">메타데이터 적용대상명</div>
 			                        <div class="form-control_box">
-			                        	<input class="form-control" type="text">
-			                        </div>
-			                      </div>
-			                    </div>
-			                    <div class="row">
-			                      <div class="form-group row col-12 col-md-6">
-			                        <div class="control-label">항공사진 제작일자</div>
-			                        <div class="form-control_box">
-			                        	<input class="form-control" type="text">
-			                        </div>
-			                      </div>
-			                      <div class="form-group row col-12 col-md-6">
-			                        <div class="control-label">DEM 제작일자</div>
-			                        <div class="form-control_box">
-			                        	<input class="form-control" type="text">
+			                        	<input class="form-control" type="text" name="metadata_aplcn_trget_nm" id="metadata_aplcn_trget_nm">
 			                        </div>
 			                      </div>
 			                    </div>
 			                    <div class="row">
 			                      <div class="form-group row col-12 col-md-6">
-			                        <div class="control-label">정사영상 제작일자</div>
+			                        <div class="control-label">메타데이터 작성일</div>
 			                        <div class="form-control_box">
-			                        	<input class="form-control" type="text">
+			                        	<input class="form-control" type="text" name="metadata_wrt_de" id="metadata_wrt_de">
 			                        </div>
 			                      </div>
 			                      <div class="form-group row col-12 col-md-6">
-			                        <div class="control-label">매질종류</div>
+			                        <div class="control-label">메타데이터 버전</div>
 			                        <div class="form-control_box">
-			                        	<input class="form-control" type="text">
-			                        </div>
-			                      </div>
-			                    </div>
-			                    <div class="row">
-			                      <div class="form-group row col-12 col-md-6">
-			                        <div class="control-label">위치(X)</div>
-			                        <div class="form-control_box">
-			                        	<input class="form-control" type="text">
-			                        </div>
-			                      </div>
-			                      <div class="form-group row col-12 col-md-6">
-			                        <div class="control-label">위치(Y)</div>
-			                        <div class="form-control_box">
-			                        	<input class="form-control" type="text">
+			                        	<input class="form-control" type="text" name="metadata_ver" id="metadata_ver">
 			                        </div>
 			                      </div>
 			                    </div>
 			                    <div class="row">
 			                      <div class="form-group row col-12 col-md-6">
-			                        <div class="control-label">대상명</div>
+			                        <div class="control-label">책임기관명</div>
 			                        <div class="form-control_box">
-			                        	<input class="form-control" type="text">
+			                        	<input class="form-control" type="text" name="rspnsbl_instt_nm" id="rspnsbl_instt_nm">
 			                        </div>
 			                      </div>
 			                      <div class="form-group row col-12 col-md-6">
-			                        <div class="control-label">원천자료</div>
+			                        <div class="control-label">책임부서명</div>
 			                        <div class="form-control_box">
-			                        	<input class="form-control" type="text">
+			                        	<input class="form-control" type="text" name="rspnsbl_dept_nm" id="rspnsbl_dept_nm">
 			                        </div>
 			                      </div>
 			                    </div>
 			                    <div class="row">
 			                      <div class="form-group row col-12 col-md-6">
-			                        <div class="control-label">평가기준문서</div>
+			                        <div class="control-label">책임담당자</div>
 			                        <div class="form-control_box">
-			                        	<input class="form-control" type="text">
+			                        	<input class="form-control" type="text" name="rspnsbl_chrg_man" id="rspnsbl_chrg_man">
 			                        </div>
 			                      </div>
 			                      <div class="form-group row col-12 col-md-6">
-			                        <div class="control-label">대상위치-도로명/지번주소</div>
+			                        <div class="control-label">전화</div>
 			                        <div class="form-control_box">
-			                        	<input class="form-control" type="text">
+			                        	<input class="form-control" type="text" name="tlphon" id="tlphon">
+			                        </div>
+			                      </div>
+			                    </div>
+			                    <div class="row">
+			                      <div class="form-group row col-12 col-md-6">
+			                        <div class="control-label">키워드</div>
+			                        <div class="form-control_box">
+			                        	<input class="form-control" type="text" name="kwrd" id="kwrd">
+			                        </div>
+			                      </div>
+			                      <div class="form-group row col-12 col-md-6">
+			                        <div class="control-label">업데이트 주기</div>
+			                        <div class="form-control_box">
+			                        	<input class="form-control" type="text" name="updt_cycle" id="updt_cycle">
+			                        </div>
+			                      </div>
+			                    </div>
+			                    <div class="row">
+			                      <div class="form-group row col-12 col-md-6">
+			                        <div class="control-label">팩스</div>
+			                        <div class="form-control_box">
+			                        	<input class="form-control" type="text" name="fax" id="fax">
+			                        </div>
+			                      </div>
+			                      <div class="form-group row col-12 col-md-6">
+			                        <div class="control-label">제공형태</div>
+			                        <div class="form-control_box">
+			                        	<input class="form-control" type="text" name="provd_stle" id="provd_stle">
+			                        </div>
+			                      </div>
+			                    </div>
+			                    <div class="row">
+			                      <div class="form-group row col-12 col-md-12">
+			                        <div class="control-label">주소</div>
+			                        <div class="form-control_box">
+			                        	<input class="form-control" type="text" name="addr" id="addr">
+			                        </div>
+			                      </div>
+			                    </div>
+			                    <div class="row">
+			                      <div class="form-group row col-12 col-md-12">
+			                        <div class="control-label">설명</div>
+			                        <div class="form-control_box">
+			                        	<textarea rows="4" style="width:100%;" name="dc" id="dc"></textarea>
 			                        </div>
 			                      </div>
 			                    </div>
 			                  </div>
+			              </div>
+		                  
+		                  <div id="cl_qlity" style="display: none;">  
+			                  	<div class="cont_title_box">
+			                	<h3>공간정보(데이터 품질)</h3>
+				                </div>
+				                <div class="border_rows">
+				                    <div class="row">
+				                      <div class="form-group row col-12 col-md-6">
+				                        <div class="control-label">데이터요약</div>
+				                        <div class="form-control_box">
+				                        	<input class="form-control" type="text" name="data_sumry" id="data_sumry">
+				                        </div>
+				                      </div>
+				                      <div class="form-group row col-12 col-md-6">
+				                        <div class="control-label">품질적용대상</div>
+				                        <div class="form-control_box">
+				                        	<input class="form-control" type="text" name="qlity_aplcn_trget" id="qlity_aplcn_trget">
+				                        </div>
+				                      </div>
+				                    </div>
+				                    <div class="row">
+				                      <div class="form-group row col-12 col-md-6">
+				                        <div class="control-label">항공사진 촬영일자</div>
+				                        <div class="form-control_box">
+				                        	<input class="form-control" type="text" name="flight_photo_potogrf_de" id="flight_photo_potogrf_de">
+				                        </div>
+				                      </div>
+				                      <div class="form-group row col-12 col-md-6">
+				                        <div class="control-label">항공레이다 촬영일자</div>
+				                        <div class="form-control_box">
+				                        	<input class="form-control" type="text" name="flight_rader_potogrf_de" id="flight_rader_potogrf_de">
+				                        </div>
+				                      </div>
+				                    </div>
+				                    <div class="row">
+				                      <div class="form-group row col-12 col-md-6">
+				                        <div class="control-label">3차원 공간정보 제작일자</div>
+				                        <div class="form-control_box">
+				                        	<input class="form-control" type="text" name="d_spainf_mnfct_de" id="d_spainf_mnfct_de">
+				                        </div>
+				                      </div>
+				                      <div class="form-group row col-12 col-md-6">
+				                        <div class="control-label">독취기명</div>
+				                        <div class="form-control_box">
+				                        	<input class="form-control" type="text" name="scaner_nm" id="scaner_nm">
+				                        </div>
+				                      </div>
+				                    </div>
+				                    <div class="row">
+				                      <div class="form-group row col-12 col-md-6">
+				                        <div class="control-label">항공사진 제작일자</div>
+				                        <div class="form-control_box">
+				                        	<input class="form-control" type="text" name="flight_photo_mnfct_de" id="flight_photo_mnfct_de">
+				                        </div>
+				                      </div>
+				                      <div class="form-group row col-12 col-md-6">
+				                        <div class="control-label">DEM 제작일자</div>
+				                        <div class="form-control_box">
+				                        	<input class="form-control" type="text" name="dem_mnfct_de" id="dem_mnfct_de">
+				                        </div>
+				                      </div>
+				                    </div>
+				                    <div class="row">
+				                      <div class="form-group row col-12 col-md-6">
+				                        <div class="control-label">정사영상 제작일자</div>
+				                        <div class="form-control_box">
+				                        	<input class="form-control" type="text" name="orthography" id="orthography">
+				                        </div>
+				                      </div>
+				                      <div class="form-group row col-12 col-md-6">
+				                        <div class="control-label">매질종류</div>
+				                        <div class="form-control_box">
+				                        	<input class="form-control" type="text" name="medium_knd" id="medium_knd">
+				                        </div>
+				                      </div>
+				                    </div>
+				                    <div class="row">
+				                      <div class="form-group row col-12 col-md-6">
+				                        <div class="control-label">위치(X)</div>
+				                        <div class="form-control_box">
+				                        	<input class="form-control" type="text" name="lc_x" id="lc_x">
+				                        </div>
+				                      </div>
+				                      <div class="form-group row col-12 col-md-6">
+				                        <div class="control-label">위치(Y)</div>
+				                        <div class="form-control_box">
+				                        	<input class="form-control" type="text" name="lc_y" id="lc_y">
+				                        </div>
+				                      </div>
+				                    </div>
+				                    <div class="row">
+				                      <div class="form-group row col-12 col-md-6">
+				                        <div class="control-label">대상명</div>
+				                        <div class="form-control_box">
+				                        	<input class="form-control" type="text" name="trget_nm" id="trget_nm">
+				                        </div>
+				                      </div>
+				                      <div class="form-group row col-12 col-md-6">
+				                        <div class="control-label">원천자료</div>
+				                        <div class="form-control_box">
+				                        	<input class="form-control" type="text" name="src_dta" id="src_dta">
+				                        </div>
+				                      </div>
+				                    </div>
+				                    <div class="row">
+				                      <div class="form-group row col-12 col-md-6">
+				                        <div class="control-label">평가기준문서</div>
+				                        <div class="form-control_box">
+				                        	<input class="form-control" type="text" name="evl_stdr_doc" id="evl_stdr_doc">
+				                        </div>
+				                      </div>
+				                      <div class="form-group row col-12 col-md-6">
+				                        <div class="control-label">대상위치-도로명/지번주소</div>
+				                        <div class="form-control_box">
+				                        	<input class="form-control" type="text" name="trget_lc_rn_lotno_addr" id="trget_lc_rn_lotno_addr">
+				                        </div>
+				                      </div>
+				                    </div>
+				                  </div>
+				                </div>
 			                  
-				              <div class="cont_title_box">
-			                	<h3>공간정보(좌표계)</h3>
-				                </div>
-				                <div class="border_rows">
-				                    <div class="row">
-				                      <div class="form-group row col-12 col-md-6">
-				                        <div class="control-label">기준타원체</div>
-				                        <div class="form-control_box">
-				                        	<input class="form-control" type="text">
-				                        </div>
-				                      </div>
-				                      <div class="form-group row col-12 col-md-6">
-				                        <div class="control-label">투영법</div>
-				                        <div class="form-control_box">
-				                        	<input class="form-control" type="text">
-				                        </div>
-				                      </div>
-				                    </div>
-				                    <div class="row">
-				                      <div class="form-group row col-12 col-md-12">
-				                        <div class="control-label">투영원점</div>
-				                        <div class="form-control_box">
-				                        	<input class="form-control" type="text">
-				                        </div>
-				                      </div>
-				                    </div>
-				                    <div class="row">
-				                      <div class="form-group row col-12 col-md-12">
-				                        <div class="control-label">Proj4</div>
-				                        <div class="form-control_box">
-				                        	<textarea rows="4" style="width:100%;"></textarea>
-				                        </div>
-				                      </div>
-				                    </div>
-				                  </div>
-				                  
-				               <div class="cont_title_box">
-			                	<h3>공간정보(배포)</h3>
-				                </div>
-				                <div class="border_rows">
-				                    <div class="row">
-				                      <div class="form-group row col-12 col-md-6">
-				                        <div class="control-label">배포포맷-포맷명칭</div>
-				                        <div class="form-control_box">
-				                        	<input class="form-control" type="text">
-				                        </div>
-				                      </div>
-				                      <div class="form-group row col-12 col-md-6">
-				                        <div class="control-label">배포포맷-포맷버전</div>
-				                        <div class="form-control_box">
-				                        	<input class="form-control" type="text">
-				                        </div>
-				                      </div>
-				                    </div>
-				                    <div class="row">
-				                      <div class="form-group row col-12 col-md-6">
-				                        <div class="control-label">배포자정보-배포기관명</div>
-				                        <div class="form-control_box">
-				                        	<input class="form-control" type="text">
-				                        </div>
-				                      </div>
-				                      <div class="form-group row col-12 col-md-6">
-				                        <div class="control-label">배포자정보-배포부서명</div>
-				                        <div class="form-control_box">
-				                        	<input class="form-control" type="text">
-				                        </div>
-				                      </div>
-				                    </div>
-				                    <div class="row">
-				                      <div class="form-group row col-12 col-md-12">
-				                        <div class="control-label">배포자정보-배포연락처</div>
-				                        <div class="form-control_box">
-				                        	<input class="form-control" type="text">
-				                        </div>
-				                      </div>
-				                    </div>
-				                  </div>
-				                  
-				                  
-				               <div class="cont_title_box">
-			                	<h3>문화재(속성)</h3>
-				                </div>
-				                <div class="border_rows">
-				                    <div class="row">
-				                      <div class="form-group row col-12 col-md-6">
-				                        <div class="control-label">종목코드</div>
-				                        <div class="form-control_box">
-				                        	<input class="form-control" type="text">
-				                        </div>
-				                      </div>
-				                      <div class="form-group row col-12 col-md-6">
-				                        <div class="control-label">종목명</div>
-				                        <div class="form-control_box">
-				                        	<input class="form-control" type="text">
-				                        </div>
-				                      </div>
-				                    </div>
-				                    <div class="row">
-				                      <div class="form-group row col-12 col-md-6">
-				                        <div class="control-label">시도코드</div>
-				                        <div class="form-control_box">
-				                        	<input class="form-control" type="text">
-				                        </div>
-				                      </div>
-				                      <div class="form-group row col-12 col-md-6">
-				                        <div class="control-label">시도명</div>
-				                        <div class="form-control_box">
-				                        	<input class="form-control" type="text">
-				                        </div>
-				                      </div>
-				                    </div>
-				                    <div class="row">
-				                      <div class="form-group row col-12 col-md-6">
-				                        <div class="control-label">시군구코드</div>
-				                        <div class="form-control_box">
-				                        	<input class="form-control" type="text">
-				                        </div>
-				                      </div>
-				                      <div class="form-group row col-12 col-md-6">
-				                        <div class="control-label">시군구명</div>
-				                        <div class="form-control_box">
-				                        	<input class="form-control" type="text">
-				                        </div>
-				                      </div>
-				                    </div>
-				                  </div>
-		                  
-		                  
-		                  
-		                  
-		                  
-		                  
+			                  	<div id="cl_cntm" style="display: none;">  
+					              	<div class="cont_title_box">
+				                	<h3>공간정보(좌표계)</h3>
+					                </div>
+					                <div class="border_rows">
+					                    <div class="row">
+					                      <div class="form-group row col-12 col-md-6">
+					                        <div class="control-label">기준타원체</div>
+					                        <div class="form-control_box">
+					                        	<input class="form-control" type="text" name="stdr_oval" id="stdr_oval">
+					                        </div>
+					                      </div>
+					                      <div class="form-group row col-12 col-md-6">
+					                        <div class="control-label">투영법</div>
+					                        <div class="form-control_box">
+					                        	<input class="form-control" type="text" name="prjctn_law" id="prjctn_law">
+					                        </div>
+					                      </div>
+					                    </div>
+					                    <div class="row">
+					                      <div class="form-group row col-12 col-md-12">
+					                        <div class="control-label">투영원점</div>
+					                        <div class="form-control_box">
+					                        	<input class="form-control" type="text" name="trnsprc_trgnpt" id="trnsprc_trgnpt">
+					                        </div>
+					                      </div>
+					                    </div>
+					                    <div class="row">
+					                      <div class="form-group row col-12 col-md-12">
+					                        <div class="control-label">Proj4</div>
+					                        <div class="form-control_box">
+					                        	<textarea rows="4" style="width:100%;" name="proj4" id="proj4"></textarea>
+					                        </div>
+					                      </div>
+					                    </div>
+					                  </div>
+					            	</div>
+				                
+				                 <div id="cl_wdtb" style="display: none;">  
+					               	<div class="cont_title_box">
+				                		<h3>공간정보(배포)</h3>
+					                </div>
+					                <div class="border_rows">
+					                    <div class="row">
+					                      <div class="form-group row col-12 col-md-6">
+					                        <div class="control-label">배포포맷-포맷명칭</div>
+					                        <div class="form-control_box">
+					                        	<input class="form-control" type="text" name="wdtb_frmat_nm" id="wdtb_frmat_nm">
+					                        </div>
+					                      </div>
+					                      <div class="form-group row col-12 col-md-6">
+					                        <div class="control-label">배포포맷-포맷버전</div>
+					                        <div class="form-control_box">
+					                        	<input class="form-control" type="text" name="wdtb_frmat_ver" id="wdtb_frmat_ver">
+					                        </div>
+					                      </div>
+					                    </div>
+					                    <div class="row">
+					                      <div class="form-group row col-12 col-md-6">
+					                        <div class="control-label">배포자정보-배포기관명</div>
+					                        <div class="form-control_box">
+					                        	<input class="form-control" type="text" name="wdtb_info_instt_nm" id="wdtb_info_instt_nm">
+					                        </div>
+					                      </div>
+					                      <div class="form-group row col-12 col-md-6">
+					                        <div class="control-label">배포자정보-배포부서명</div>
+					                        <div class="form-control_box">
+					                        	<input class="form-control" type="text" name="wdtb_info_dept_nm" id="wdtb_info_dept_nm">
+					                        </div>
+					                      </div>
+					                    </div>
+					                    <div class="row">
+					                      <div class="form-group row col-12 col-md-12">
+					                        <div class="control-label">배포자정보-배포연락처</div>
+					                        <div class="form-control_box">
+					                        	<input class="form-control" type="text" name="wdtb_info_cttpc" id="wdtb_info_cttpc">
+					                        </div>
+					                      </div>
+					                    </div>
+					                  </div>
+				                </div> 
+				                <div id="cl_crlts" style="display: none;">
+					               	<div class="cont_title_box">
+				                		<h3>문화재(속성)</h3>
+					                </div>
+					                <div class="border_rows" >
+					                    <div class="row">
+					                      <div class="form-group row col-12 col-md-6">
+					                        <div class="control-label">종목코드</div>
+					                        <div class="form-control_box">
+					                        	<input class="form-control" type="text" name="item_code" id="item_code">
+					                        </div>
+					                      </div>
+					                      <div class="form-group row col-12 col-md-6">
+					                        <div class="control-label">종목명</div>
+					                        <div class="form-control_box">
+					                        	<input class="form-control" type="text" name="item_nm" id="item_nm">
+					                        </div>
+					                      </div>
+					                    </div>
+					                    <div class="row">
+					                      <div class="form-group row col-12 col-md-6">
+					                        <div class="control-label">시도코드</div>
+					                        <div class="form-control_box">
+					                        	<input class="form-control" type="text" name="ctprvn_code" id="ctprvn_code">
+					                        </div>
+					                      </div>
+					                      <div class="form-group row col-12 col-md-6">
+					                        <div class="control-label">시도명</div>
+					                        <div class="form-control_box">
+					                        	<input class="form-control" type="text" name="ctprvn_nm" id="ctprvn_nm">
+					                        </div>
+					                      </div>
+					                    </div>
+					                    <div class="row">
+					                      <div class="form-group row col-12 col-md-6">
+					                        <div class="control-label">시군구코드</div>
+					                        <div class="form-control_box">
+					                        	<input class="form-control" type="text" name="signgu_code" id="signgu_code">
+					                        </div>
+					                      </div>
+					                      <div class="form-group row col-12 col-md-6">
+					                        <div class="control-label">시군구명</div>
+					                        <div class="form-control_box">
+					                        	<input class="form-control" type="text" name="signgu_nm" id="signgu_nm">
+					                        </div>
+					                      </div>
+					                    </div>
+					                  </div>
+					      		</div>
 		                  <div class="right_btns mt-4"> 
-		                    <button class="btn btn-primary">수정</button>
-		                    <button class="btn btn-danger">삭제</button>
-		                    <button class="btn btn-dark">목록</button>
+		                    <button class="btn btn-primary" onclick="dpIngestMetaDsetUpdate();">수정</button>
+		                    <button class="btn btn-danger" onclick="dpIngestMetaDsetDel();">삭제</button>
+		                    <button class="btn btn-dark" onclick="jsList();">목록</button>
 		                  </div>
 	            	</div>
 	        	</div>
 	    	</div>
 		</div>
 	</div>
-        
+    <input type="hidden" name="metadata_id" id="metadata_id"/>
 {{>layout/footer}}        
 
 <script>
+
+const commonUrl = '/common';
+const url = '/dataSet';
+
+//데이터 셋 메타정보 유형 조회
+const dpIngestMetaDsetType = function () {
+	
+	let dset_idntfc_id = '{{dset_idntfc_id}}';
+	
+	const data = {
+   		url: '/dp/ingest/meta/dataset/type',
+   		user_id: 'user00',
+   		dset_idntfc_id: dset_idntfc_id,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpIngestMetaDsetType',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
+  	    	if(data.contents != ""){
+  	    		for(key in data.contents[0]){
+  	    			if(data.contents[0][key] == 'Y'){
+  	    				$("#"+key).show();
+  	    			}
+  	    		}
+  	    	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//데이터 셋 메타정보 조회
+const dpIngestMetaDsetDt = function () {
+	
+	let dset_idntfc_id = '{{dset_idntfc_id}}';
+	
+	const data = {
+   		url: '/dp/ingest/meta/dataset/detail',
+   		user_id: 'user00',
+   		dset_idntfc_id: dset_idntfc_id,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpIngestMetaDsetDt',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
+  	    	if(data.contents != ""){
+  	    		for(key in data.contents[0]){
+  	    			$("#"+key).val(data.contents[0][key]);
+  	    		}
+  	    	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//데이터 셋 수정
+const dpIngestMetaDsetUpdate = function () {
+	
+	let dset_idntfc_id = '{{dset_idntfc_id}}';
+	let dset_korean_nm = $("#dset_korean_nm").val();
+	let metadata_id = $("#metadata_id").val();
+	let metadata_file_id = $("#metadata_file_id").val();
+	let metadata_lang = $("#metadata_lang").val();
+	let metadata_aplcn_trget_nm = $("#metadata_aplcn_trget_nm").val();
+	let metadata_wrt_de = $("#metadata_wrt_de").val();
+	let metadata_ver = $("#metadata_ver").val();
+	let rspnsbl_instt_nm = $("#rspnsbl_instt_nm").val();
+	let rspnsbl_dept_nm = $("#rspnsbl_dept_nm").val();
+	let rspnsbl_chrg_man = $("#rspnsbl_chrg_man").val();
+	let tlphon = $("#tlphon").val();
+	let fax = $("#fax").val();
+	let addr = $("#addr").val();
+	let trnsprc_trgnpt = $("#trnsprc_trgnpt").val();
+	let proj4 = $("#proj4").val();
+	let stdr_oval = $("#stdr_oval").val();
+	let prjctn_law = $("#prjctn_law").val();
+	let wdtb_frmat_nm = $("#wdtb_frmat_nm").val();
+	let wdtb_frmat_ver = $("#wdtb_frmat_ver").val();
+	let wdtb_info_instt_nm = $("#wdtb_info_instt_nm").val();
+	let wdtb_info_dept_nm = $("#wdtb_info_dept_nm").val();
+	let wdtb_info_cttpc = $("#wdtb_info_cttpc").val();
+	let data_sumry = $("#data_sumry").val();
+	let qlity_aplcn_trget = $("#qlity_aplcn_trget").val();
+	let flight_photo_potogrf_de = $("#flight_photo_potogrf_de").val();
+	let flight_rader_potogrf_de = $("#flight_rader_potogrf_de").val();
+	let d_spainf_mnfct_de = $("#d_spainf_mnfct_de").val();
+	let scaner_nm = $("#scaner_nm").val();
+	let flight_photo_mnfct_de = $("#flight_photo_mnfct_de").val();
+	let dem_mnfct_de = $("#dem_mnfct_de").val();
+	let orthography = $("#orthography").val();
+	let medium_knd = $("#medium_knd").val();
+	let lc_x = $("#lc_x").val();
+	let lc_y = $("#lc_y").val();
+	let trget_nm = $("#trget_nm").val();
+	let src_dta = $("#src_dta").val();
+	let evl_stdr_doc = $("#evl_stdr_doc").val();
+	let trget_lc_rn_lotno_addr = $("#trget_lc_rn_lotno_addr").val();
+	let item_code = $("#item_code").val();
+	let item_nm = $("#item_nm").val();
+	let ctprvn_code = $("#ctprvn_code").val();
+	let ctprvn_nm = $("#ctprvn_nm").val();
+	let signgu_code = $("#signgu_code").val();
+	let signgu_nm = $("#signgu_nm").val();
+	let provd_stle = $("#provd_stle").val();
+	let dc = $("#dc").val();
+	let kwrd = $("#kwrd").val();
+	let updt_cycle = $("#updt_cycle").val();
+	
+	
+	const data = {
+   		url: '/dp/ingest/meta/dataset/update',
+   		user_id: 'user00',
+   		dset_idntfc_id: dset_idntfc_id,
+   		dset_korean_nm: dset_korean_nm,
+   		metadata_id : metadata_id,
+   		metadata_file_id : metadata_file_id,
+   		metadata_lang : metadata_lang,
+   		metadata_aplcn_trget_nm : metadata_aplcn_trget_nm,
+   		metadata_wrt_de : metadata_wrt_de,
+   		metadata_ver : metadata_ver,
+   		rspnsbl_instt_nm : rspnsbl_instt_nm,
+   		rspnsbl_dept_nm : rspnsbl_dept_nm,
+   		rspnsbl_chrg_man : rspnsbl_chrg_man,
+   		tlphon : tlphon,
+   		fax : fax,
+   		addr : addr,
+   		trnsprc_trgnpt : trnsprc_trgnpt,
+   		proj4 : proj4,
+   		stdr_oval : stdr_oval,
+   		prjctn_law : prjctn_law,
+   		wdtb_frmat_nm : wdtb_frmat_nm,
+   		wdtb_frmat_ver : wdtb_frmat_ver,
+   		wdtb_info_instt_nm : wdtb_info_instt_nm,
+   		wdtb_info_dept_nm : wdtb_info_dept_nm,
+   		wdtb_info_cttpc : wdtb_info_cttpc,
+   		data_sumry : data_sumry,
+   		qlity_aplcn_trget : qlity_aplcn_trget,
+   		flight_photo_potogrf_de : flight_photo_potogrf_de,
+   		flight_rader_potogrf_de : flight_rader_potogrf_de,
+   		d_spainf_mnfct_de : d_spainf_mnfct_de,
+   		scaner_nm : scaner_nm,
+   		flight_photo_mnfct_de : flight_photo_mnfct_de,
+   		dem_mnfct_de : dem_mnfct_de,
+   		orthography : orthography,
+   		medium_knd : medium_knd,
+   		lc_x : lc_x,
+   		lc_y : lc_y,
+   		trget_nm : trget_nm,
+   		src_dta : src_dta,
+   		evl_stdr_doc : evl_stdr_doc,
+   		trget_lc_rn_lotno_addr : trget_lc_rn_lotno_addr,
+   		item_code : item_code,
+   		item_nm : item_nm,
+   		ctprvn_code : ctprvn_code,
+   		ctprvn_nm : ctprvn_nm,
+   		signgu_code : signgu_code,
+   		signgu_nm : signgu_nm,
+   		provd_stle : provd_stle,
+   		dc : dc,
+   		kwrd : kwrd,
+   		updt_cycle : updt_cycle,
+    };
+	
+	if(confirm("수정 하시겠습니까?")){
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestMetaDsetUpdate',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	
+		  	  if (data != null) {
+		  		  
+		  		errorMsg(data);
+		  		
+	  	    	if(data.contents != ""){
+	  	    		if(data.contents[0].successYN){
+	  	    			alert("수정 되었습니다.");
+	  	    			jsList();
+	  	    		}
+	  	    	}
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	}
+}
+
+//데이터 셋 삭제
+const dpIngestMetaDsetDel = function () {
+	
+	let dset_idntfc_id = '{{dset_idntfc_id}}';
+	
+	const data = {
+   		url: '/dp/ingest/meta/dataset/delete',
+   		user_id: 'user00',
+   		dset_idntfc_id: dset_idntfc_id,
+    };
+	
+	if(confirm("삭제 하시겠습니까?")){
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestMetaDsetDel',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	
+		  	  if (data != null) {
+		  		  
+		  		errorMsg(data);
+		  		
+	  	    	if(data.contents != ""){
+	  	    		if(data.contents[0].successYN){
+	  	    			alert("삭제 되었습니다.");
+	  	    			jsList();
+	  	    		}
+	  	    	}
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	}
+}
+
+//목록
+const jsList = function () {
+	location.href = url+'/list/';
+}
+
+dpIngestMetaDsetType();
+
+dpIngestMetaDsetDt();
 
 </script>
 

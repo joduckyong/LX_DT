@@ -809,6 +809,40 @@ const dpIngestPopupMetaTbl = function () {
     });	
 }
 
+//데이터 모델 속성 정보 조회
+const dpIngestDataModelsPp = function(){
+	
+	let table_idntfc_id = $("#table_idntfc_id").val();
+	
+    const data = {
+	   		url: '/dp/ingest/data/models/property?table_idntfc_id='+table_idntfc_id,
+	    };		
+	    
+	    $.ajax({
+	        type: 'POST',
+	        url: commonUrl+'/dpIngestDataModelsPp',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+		  	  if (data != null) {
+		  		  
+		  			errorMsg(data);
+		  		
+			  	   	if(data.contents != ""){    	
+			  	   		let li = '';
+    			  	    $.each(data.contents, function (idx, el) {
+    			  	    	li += '<li class="task"><p>'+el.column_eng_nm+'</p></li>';
+    			  	    });
+    			  	 	$("#drakeLeft").append(li);
+			  	   	}
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });			
+}
+
 //더블클릭 테이블명 전달
 const setTableNm = function(obj){
 	let table_idntfc_id = $(obj).data("idntfc_id");
