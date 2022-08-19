@@ -54,7 +54,7 @@
                       <div class="form-group row col-12 col-md-6">
                         <label class="control-label">변경유형</label>
                         <div class="form-control_box">
-                          <select class="form-control" id="chang_type" onchange="changeType(this.value)">
+                          <select class="form-control" id="change_type" onchange="changeType(this.value)">
                           </select>
                         </div>
                       </div>
@@ -200,9 +200,9 @@ const dpIngestPreSave = function(){
         $("#property_type").focus();
         return;
     }
-    if($("#chang_type").val() == '') {
+    if($("#change_type").val() == '') {
         alert('변경유형을 선택하세요!');
-        $("#chang_type").focus();
+        $("#change_type").focus();
         return;
     }
     
@@ -222,7 +222,7 @@ const dpIngestPreSave = function(){
 	//	   		integer: $("#integer").val(),	
 	//	   		decimal_point: $("#decimal_point").val(),	
 		   		change_word: $("#change_word").val(),	
-		   		chang_type: $("#chang_type").val(),	
+		   		change_type: $("#change_type").val(),	
 		   		user_id: 'user00',	
 		   		menu_id: 'menu_id',
 		    };		
@@ -252,7 +252,7 @@ const listPage = function(){
 }
 
 dpCmCodesClctTy('D07', 'property_type');
-dpCmCodesClctTy('D38', 'chang_type');
+dpCmCodesClctTy('D38', 'change_type');
 dpIngestPreIdChk();
 </script>
 
