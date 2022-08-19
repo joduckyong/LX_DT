@@ -317,10 +317,11 @@ const agentRecvData = function(type){
 }
 
 //로컬DB 컬럼 조회
-const agentRecvLocalCol = function(table_nm, table_desc){
+const agentRecvLocalCol = function(table_nm){
 	
 	$("#table_nm").val(table_nm);
-	$("#table_desc").val(table_desc);
+	$("#table_desc").val($("#table_"+table_nm).text());
+	
 	$("#agentRecvLocalCol").empty();
 	const data = {
    		url: '/recv/local/col',
@@ -388,8 +389,8 @@ const agentRecvLocalTable = function(){
  	    	let insertTr = '';
 	  	    $.each(data.tbl_list, function (idx, el) {
 				insertTr += '<tr>';
-				insertTr += '	<td style="text-align: left;cursor:pointer;" onclick=agentRecvLocalCol("'+el.tbl_nm+'","'+el.tbl_desc+'");>'+isEmpty(el.tbl_nm)+'</td>';
-				insertTr += '	<td style="text-align: left;cursor:pointer;" >'+isEmpty(el.tbl_desc)+'</td>';
+				insertTr += '	<td style="text-align: left;cursor:pointer;" onclick=agentRecvLocalCol("'+el.tbl_nm+'");>'+isEmpty(el.tbl_nm)+'</td>';
+				insertTr += '	<td style="text-align: left;" id="table_'+el.tbl_nm+'">'+isEmpty(el.tbl_desc)+'</td>';
 				insertTr += '</tr>';
 	  	    });
 			  	    
@@ -448,8 +449,8 @@ const receiveCol = function(len, clct_csv_file, trf_zip_file, file_nm, recv_zip_
 			if(el.table_nm !== ""){
 			    insertTr = '';
 				insertTr += '<tr>';
-				insertTr += '	<td style="text-align: left;cursor:pointer;" onclick=agentRecvLocalCol("'+el.table_nm+'","'+el.table_desc+'");>'+isEmpty(el.table_nm)+'</td>';
-				insertTr += '	<td style="text-align: left;cursor:pointer;" >'+isEmpty(el.table_desc)+'</td>';
+				insertTr += '	<td style="text-align: left;cursor:pointer;" onclick=agentRecvLocalCol("'+el.table_nm+'");>'+isEmpty(el.table_nm)+'</td>';
+				insertTr += '	<td style="text-align: left;" id="table_'+el.table_nm+'">'+isEmpty(el.table_desc)+'</td>';
 				insertTr += '</tr>';
 			   	$("#agentRecvLocalTable").html(insertTr);    
 			}
