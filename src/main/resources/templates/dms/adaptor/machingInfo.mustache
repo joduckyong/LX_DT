@@ -51,7 +51,7 @@
                   </div>
                                     
                   <div class="table_responsive">
-					<table class="table table-bordered bulk_action table_center" id="sandboxTable">
+					<table class="table table-bordered bulk_action table_center" id="tableDpIngestAdapterItMatchList">
                       <colgroup> 
                         <!-- col width="44px">
                         <col spna="2" width="100px">
@@ -102,16 +102,7 @@
                         <h4>ID 목록</h4>
                       </div>
                       <div class="column-header">
-						<table class="table table-striped table-bordered bulk_action">
-                          <thead>
-                            <tr>
-                              <th>ID명(영문)</th>
-                              <th>ID명(국문)</th>
-                              <th>Type</th>
-                              <th>Length</th>
-                            </tr>
-                          </thead>
-                        </table>                      
+                      	<h4>ID영문명(Type)</h4>
                       </div>
                       <ul class="task-list" id="drakeLeft">
                       </ul>
@@ -121,16 +112,7 @@
                         <h4>선택 ID</h4>
                       </div>
                       <div class="column-header">
-						<table class="table table-striped table-bordered bulk_action">
-                          <thead>
-                            <tr>
-                              <th>ID명(영문)</th>
-                              <th>ID명(국문)</th>
-                              <th>Type</th>
-                              <th>Length</th>
-                            </tr>
-                          </thead>
-                        </table>                         
+						<h4>ID영문명(Type)</h4>               
                       </div>                      
                       <ul class="task-list" id="drakeRight">
                       </ul>
@@ -139,8 +121,8 @@
                 </div>
                 <div class="drake_result_box">
                   <div class="drake_title">ID</div>
-                  <div class="drake_result" >descLc.fcltyNo</div>
-                  <button class="btn btn-danger m-0">초기화</button>
+                  <div class="drake_result"></div>
+                  <button class="btn btn-danger m-0" onclick="dpIngestDataModelsPp();">초기화</button>
                 </div>
               </div>
               <div class="modal-footer"> 
@@ -195,6 +177,7 @@
        <input type="hidden" name="api_mix" id="api_mix">
        <input type="hidden" name="table_eng_nm" id="table_eng_nm">
        <input type="hidden" name="table_idntfc_id" id="table_idntfc_id">
+       <input type="hidden" name="drake_pre" id="drake_pre">
        
 {{>layout/footer}}        
 
@@ -237,13 +220,13 @@ const dpIngestAdapterItMatchList = function(){
     		     	    let i = 0;
     			  	    $.each(data.contents, function (idx, el) {
   		     	          insertTr += '<tr>';
-		     		      insertTr += ' <td>'+el.column_eng_nm+'</td>';
-		     		      insertTr += ' <td>'+el.column_stre_type+'</td>';
-		     		      insertTr += ' <td><select id="source_id_'+i+'"><option value="'+el.source_id+'">'+el.source_id+'</option></select></td>';
-		     		      insertTr += ' <td><input type=text value='+el.source_path+' id=source_path_'+i+' name=source_path></td>';
-		     		      insertTr += ' <td><select id="pre_id_'+i+'"><option value=""'+el.pre_id+'"">'+el.pre_nm+'</option></select></td>';
-		     		      insertTr += ' <td><input type=text value='+el.property_type+' id=property_type_'+i+' name=property_type></td>';
-		     		      insertTr += ' <td><input type=text value='+el.pre_after+' id=pre_after_'+i+' name=pre_after></td>';
+		     		      insertTr += ' <td><input type=hidden id="column_eng_nm" name="column_eng_nm" value="'+el.column_eng_nm+'">'+el.column_eng_nm+'</td>';
+		     		      insertTr += ' <td><input type=hidden id="column_stre_type" name="column_stre_type" value="'+el.column_stre_type+'">'+el.column_stre_type+'</td>';
+		     		      insertTr += ' <td><select id="source_id" name="source_id"><option value="'+el.source_id+'">'+el.source_id+'</option></select></td>';
+		     		      insertTr += ' <td><input type=text id="source_path" name="source_path" value="'+el.source_path+'"></td>';
+		     		      insertTr += ' <td><select id="pre_id"><option value="'+el.pre_id+'">'+el.pre_nm+'</option></select></td>';
+		     		      insertTr += ' <td><input type=text id="property_type" name="property_type" value="'+el.property_type+'"></td>';
+		     		      insertTr += ' <td><input type=text id="pre_after" name="pre_after" value="'+el.pre_after+'"></td>';
 		                  insertTr += '</tr>';
 		                  i++;
     			  	    });
@@ -287,7 +270,7 @@ const dpIngestAdapterItMatch = function(){
 			  	   		$("#dset_idntfc_id").val(data.contents[0].dset_idntfc_id);
 			  	   		$("#url_mix").val(data.contents[0].url_mix);
 			  	   		$("#id_mix").val(data.contents[0].id_mix);
-//			  	   		$(".drake_result").text(data.contents[0].id_mix+".");
+			  	   		$("#drake_pre").val(data.contents[0].id_mix+".");
 			  	   		$("#clct_mthd").val(data.contents[0].clct_mthd);
 			  	   		$("#clct_ty").val(data.contents[0].clct_ty);
 			  	   		$("#subfolder_yn").val(data.contents[0].subfolder_yn);
@@ -310,20 +293,19 @@ const dpIngestAdapterItMatchSave = function(){
 
 	let lengthCnt = 0;
 	let contentsData = new Array();
-	$.each($("#adaptorSetDataConfig tbody tr"), function(){
+	$.each($("#tableDpIngestAdapterItMatchList tbody tr"), function(){
 		 let itemObject = new Object();
 		 itemObject.instance_id = '{{instance_id}}';
-		 itemObject.column_eng_nm = $(this).find("#column_eng_nm_"+lengthCnt).val();
-		 itemObject.column_stre_type = $(this).find("#column_stre_type_"+lengthCnt).val();
-		 itemObject.source_id = $(this).find("#source_id_"+lengthCnt).val();
-		 itemObject.source_path = $(this).find("#source_path_"+lengthCnt).val();
-		 itemObject.pre_nm = $(this).find("#pre_nm_"+lengthCnt).val();
-		 itemObject.property_type = $(this).find("#property_type_"+lengthCnt).val();
-		 itemObject.pre_after = $(this).find("#pre_after_"+lengthCnt).val();
-		 itemObject.pre_id = $(this).find("#pre_id_"+lengthCnt).val();
+		 itemObject.column_eng_nm = $(this).find("#column_eng_nm").val();
+		 itemObject.column_stre_type = $(this).find("#column_stre_type").val();
+		 itemObject.source_id = $(this).find("#source_id").val();
+		 itemObject.source_path = $(this).find("#source_path").val();
+		 itemObject.pre_nm = $(this).find("#pre_id").text();
+		 itemObject.property_type = $(this).find("#property_type").val();
+		 itemObject.pre_after = $(this).find("#pre_after").val();
+		 itemObject.pre_id = $(this).find("#pre_id").val();
 		 itemObject.user_id = 'user00';
 		 contentsData.push(itemObject);
-		 lengthCnt++;
 	});
 	
     const data = {
@@ -353,7 +335,8 @@ const dpIngestAdapterItMatchSave = function(){
   	  		
 		  	   	if(data.contents != ""){    	   
 	  	   			if(data.contents[0].successYn === 'Y'){
-	  	   				dpIngestAdapterItPpSave();
+		  	 	  		let message = JSON.stringify(data.return_msg);
+		  		  		alert(message.replace(/\"/gi, ''));
 	  	   			}
 		  	   	}
 	  	  }
@@ -361,7 +344,6 @@ const dpIngestAdapterItMatchSave = function(){
             alert(JSON.stringify(error));
         });	
 	    
-	    dpIngestAdapterItMatch();
 }
 
 //데이터 모델 속성 정보 조회
@@ -369,6 +351,8 @@ const dpIngestAdapterItMatchSave = function(){
 const dpIngestDataModelsPp = function(){
 	
 	$("#drakeLeft").empty();
+	$("#drakeRight").empty();
+	$(".drake_result").html("");
     const data = {
 	   		url: '/dp/ingest/data/models/property?table_idntfc_id='+$("#table_idntfc_id").val(),
 	    };		
@@ -387,7 +371,7 @@ const dpIngestDataModelsPp = function(){
 			  	   	if(data.contents != ""){    	
 			  	   		let li = '';
     			  	    $.each(data.contents, function (idx, el) {
-    			  	    	li += '<li class="task"><p>'+el.column_eng_nm+'</p></li>';
+    			  	    	li += '<li class="task"><p>'+el.column_eng_nm+'('+el.column_stre_type+')</p></li>';
     			  	    });
     			  	 	$("#drakeLeft").append(li);
 			  	   	}
@@ -400,7 +384,9 @@ const dpIngestDataModelsPp = function(){
 
 
 const idSetIdMix = function(){
-	$("#id_mix").val($(".drake_result").text());
+	$("#id_mix").val($(".drake_result").html());
+	
+	$('#idSet').modal('hide');
 }
 //전처리 조회
 /*
