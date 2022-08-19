@@ -209,7 +209,7 @@ const dpLoadDset = function (page, size_per_page) {
 		  	    	insertTr += '	<td>'+isEmpty(el.dset_mclas)+'</td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.dset_sclas)+'</td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.table_korean_nm)+'</td>';
-		  	    	insertTr += '	<td><button class="btn btn-success btn-sm mx-0" type="button">바로가기</button></td>';
+		  	    	insertTr += '	<td><button class="btn btn-success btn-sm mx-0" type="button" onclick="btnMetaDetail(\''+el.dset_idntfc_id+'\');">바로가기</button></td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.ingest_count)+'</td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.load_count)+'</td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.error_count)+'</td>';
@@ -236,6 +236,11 @@ const btnSearch = function(){
 //데이터셋 상세 조회
 const btnDetail = function (table_idntfc_id) {
 	location.href = url+'/detail/'+table_idntfc_id;
+}
+
+//메타정보 상세 조회
+const btnMetaDetail = function (dset_idntfc_id) {
+	location.href = url+'/metaDetail/'+dset_idntfc_id;
 }
 
 //페이징 함수 호출

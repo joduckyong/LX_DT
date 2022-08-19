@@ -43,9 +43,10 @@ public class DataSetController {
 		return "dms/dataSet/detail";
 	}	
 	
-	@GetMapping("/metaDetail")
-	public String metaDetail(ModelMap model) throws Exception{
+	@GetMapping("/metaDetail/{dsetIdntfcId}")
+	public String metaDetail(@PathVariable String dsetIdntfcId, ModelMap model) throws Exception{
 		
+		model.addAttribute("dset_idntfc_id", dsetIdntfcId);
 		
 		return "dms/dataSet/metaDetail";
 	}	
