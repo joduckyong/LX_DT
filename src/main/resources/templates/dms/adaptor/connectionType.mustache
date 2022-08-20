@@ -105,7 +105,7 @@ const url = '/adaptor';
 
 let dpIngestItPpTypeCnt = 0;
 let dpIngestItPpInfoCnt = 0;
-
+let connect_id_change;
 
 //수집방식
 const dpCmCodesClctMthdInput = function (group_code) {
@@ -261,13 +261,12 @@ const dpCmCodesClctTy = function (group_code, id) {
 const instanceSetConfigAdd = function(){
 	
 	let instanceSetDataConfigLen = $("#instanceSetDataConfig tbody tr").length;
-	console.log('instanceSetDataConfigLen: '+instanceSetDataConfigLen);
 	
 //	if($("#instanceConfigSetAddCnt").val() === '0'){
 	  let insertTr = '';
 	  let i = 0;	
-	  insertTr += '<tr>';
-	  insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList"  id="checkConfig_'+instanceSetDataConfigLen+'" value=""></td>';
+	  insertTr += '<tr id="trCheckConfig_'+instanceSetDataConfigLen+'">';
+	  insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList2"  id="checkConfig_'+instanceSetDataConfigLen+'" value="'+instanceSetDataConfigLen+'"></td>';
 	  insertTr += ' <td style="text-align: center;">'+(++instanceSetDataConfigLen)+'</td>';
 	  insertTr += ' <td style="text-align: center;"><input type="text" id="configItem" value="" oninput="this.value=this.value.replace(/[^0-9a-zA-Z_]/g, \'\')";></td>';
 	  insertTr += ' <td style="text-align: center;"><input type="text" id="configIteNm" value=""></td>';
@@ -329,17 +328,27 @@ const dpIngestItPpInfo = function(connect_id){
 //접속유형 체크
 const checkOnlyOne = function(element, id) {
 
-    const checkboxes = document.getElementsByName("checkList");
-    checkboxes.forEach((cb) => {
-        cb.checked = false;
-    })
-    element.checked = true;
+	if(connect_id_change !== id){
+	    const checkboxes = document.getElementsByName("checkList");
+	    checkboxes.forEach((cb) => {
+	        cb.checked = false;
+	    })
+	    element.checked = true;
+	}
 	
     if(id === '0'){
 	    $("#instanceSetDataConfigArea").hide();
     }else{
-	    $("#instanceSetDataConfigArea").show();
-	    dpIngestItPpInfo(id);
+		connect_id_change = id;
+	    
+		var len = $("input[name='checkList']:checked").length;
+		if(len === 0){
+			$("#instanceSetDataConfigArea").hide();
+		}else{
+		    $("#instanceSetDataConfigArea").show();
+		    dpIngestItPpInfo(id);
+		}
+		
     }
 }
 
@@ -468,13 +477,13 @@ const dpIngestItPpDtDelChk = function(){
 	        connect_id = $(this).val();
 	    });
 	    
-		let check_config;
+	    $("input[name='checkConfigList2']:checked").each(function(e){
+	    	let check_config = $(this).val();
+	    	$("#trCheckConfig_"+check_config).remove();
+	    });   	
+	    
 	    $("input[name='checkConfigList']:checked").each(function(e){
-	    	check_config = $(this).val();
-	    });
-	    
-	    $.each($("#instanceSetDataConfig tbody tr"), function(){
-	    
+	   
 	    	let item = $(this).find("#configItem").val();
 	    	let clct_mthd = $("#clct_mthd_"+connect_id).val();
 	    	let clct_ty = $("#clct_ty_"+connect_id).val();
@@ -509,6 +518,7 @@ const dpIngestItPpDtDelChk = function(){
 			    }).fail(function (error) {
 			        alert(JSON.stringify(error));
 			    });		
+	    
 	    });   	
 	}
 }
@@ -596,6 +606,9 @@ const dpIngestItPpInfoDelChk = function(){
 			    	   			if(el.chk_yn == 'N'){
 			    	   				
 			    	   				dpIngestItPpInfoDel(connect_id);
+			    	   			}else{
+			    	   				alert("사용중입니다.");
+			    	   				return;			    	   				
 			    	   			}
 			 	     	     });
 				  	   	}
@@ -664,6 +677,17 @@ const dpIngestItPpDtSave = function(){
 
 //접속유형 항목관리 저장
 const dpIngestItPpInfoSave = function(){
+	
+	if($("#clct_mthd").val() === ''){
+		alert("수집방식 을 선택해주세요!");
+		$("#clct_mthd").focus();
+		return;
+	}
+	if($("#clct_ty").val() === ''){
+		alert("수집유형을 선택해주세요!");
+		$("#clct_ty").focus();
+		return;
+	}
 	
 	if(confirm('저장 하시겠습니까?')) {
 		const data = {
