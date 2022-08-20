@@ -131,7 +131,9 @@ const dpCmCodesClctMthdInput = function (group_code) {
     }).done(function (data) {
 	  	  if (data != null) {
 	  		  
-	  			errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 		  	   	if(data.contents != ""){    	   
 	    	   		 $.each(data.contents, function (idx, el) {
@@ -164,7 +166,9 @@ const dpCmCodesClctTyInput = function (group_code) {
     	
 	  	  if (data != null) {
 	  		  
-	  			errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 		  	   	if(data.contents != ""){    	    	
 	    	   		 $.each(data.contents, function (idx, el) {
@@ -198,7 +202,9 @@ const dpCmCodesClctMthd = function (group_code, id) {
     	
 	  	  if (data != null) {
 	  		  
-	  			errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 		  	   	if(data.contents != ""){    	    	
    					 let selOp = '<option value="">선택</option>';  
@@ -240,7 +246,9 @@ const dpCmCodesClctTy = function (group_code, id) {
     	
 	  	  if (data != null) {
 	  		  	
-	  			errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 		  	   	if(data.contents != ""){    	    	
    					 let selOp = '<option value="">선택</option>';  
@@ -263,12 +271,12 @@ const adaptorSetConfigAdd = function(){
 	let adaptorSetDataConfigLen = $("#adaptorSetDataConfig tbody tr").length;
 	console.log('adaptorSetDataConfigLen: '+adaptorSetDataConfigLen);
 	
-	if($("#adaptorConfigSetAddCnt").val() === '0'){
+//	if($("#adaptorConfigSetAddCnt").val() === '0'){
 	    let insertTr = '';
-        insertTr += '<tr>';
-        insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList" onclick=checkConfigOnlyOne(this); id="checkConfig_'+adaptorSetDataConfigLen+'" value=""></td>';
+        insertTr += '<tr id="trCheckConfig_'+adaptorSetDataConfigLen+'">';
+        insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList2" onclick=checkConfigOnlyOne(this); id="checkConfig_'+adaptorSetDataConfigLen+'" value="'+adaptorSetDataConfigLen+'"></td>';
         insertTr += ' <td style="text-align: center;"><span id="displauSeq">'+(++adaptorSetDataConfigLen)+'</span></td>';
-        insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configItem" id="configItem"></td>';
+        insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configItem" id="configItem" oninput="this.value=this.value.replace(/[^0-9a-zA-Z_]/g, \'\')";></td>';
         insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configIteNm" id="configIteNm"></td>';
         insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configValue" id="configValue"></td>';
         insertTr += ' <td style="text-align: center;"><select id="change_able_yn">';
@@ -280,8 +288,8 @@ const adaptorSetConfigAdd = function(){
         insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configItemDescribed" id="configItemDescribed"></td>';
         insertTr += '</tr>';
   	    $("#dpIngestPpInfo").append(insertTr);		
-  	  	$("#adaptorConfigSetAddCnt").val(adaptorSetDataConfigLen);
-	}
+//  	  	$("#adaptorConfigSetAddCnt").val(adaptorSetDataConfigLen);
+//	}
 }
 
 //접속정보 설정 조회
@@ -306,7 +314,9 @@ const dpIngestPpInfo = function(adapter_type_id){
  	    	  $("#dpIngestPpInfo").empty();
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  		
 			  	   	if(data.contents != ""){    	
     		     	    let insertTr = '';
@@ -315,7 +325,7 @@ const dpIngestPpInfo = function(adapter_type_id){
     		     	          insertTr += '<tr>';
     		     		      insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList" onclick=checkConfigOnlyOne(this); id="checkConfig_'+(i+1)+'" value="'+el.item+'"></td>';
     		     		      insertTr += ' <td style="text-align: center;">'+(++i)+'</td>';
-    		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+el.item+'" name="configItem" id="configItem_'+i+'"></td>';
+    		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+el.item+'" name="configItem" id="configItem_'+i+'" oninput="this.value=this.value.replace(/[^0-9a-zA-Z_]/g, \'\')";></td>';
     		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+el.item_nm+'" name="configIteNm" id="configIteNm_'+i+'"></td>';
     		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+el.value+'" name="configValue" id="configValue_'+i+'"></td>';
     		     		      insertTr += ' <td style="text-align: center;"><select id="change_able_yn_'+i+'">';
@@ -380,17 +390,19 @@ const checkConfigOnlyOne = function(element) {
 //Adapter 유형관리 추가
 const adaptorSetAdd = function(){
 	
+	let adaptorSetDataLen = $("#adaptorSetData tbody tr").length +1;
+	
 	if($("#adaptorSetAddCnt").val() === '0'){
 	    let insertTr = '';
  	    insertTr += '<tr>';
- 		insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkList" onclick=checkOnlyOne(this,"0"); id="check_'+dpIngestPpTypeCnt+'" value=""></td>';
- 		insertTr += ' <td style="text-align: center;">'+(++dpIngestPpTypeCnt)+'</td>';
+ 		insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkList" onclick=checkOnlyOne(this,"0"); id="check_'+adaptorSetDataLen+'" value=""></td>';
+ 		insertTr += ' <td style="text-align: center;">'+(adaptorSetDataLen)+'</td>';
  		insertTr += ' <td style="text-align: center;"><input type="text" value="" name="adapter_type_nm" id="adapter_type_nm"></td>';
  		insertTr += ' <td style="text-align: center;"><select id="clct_mthd" onchange=clctMthdType(this.value)></select></td>';
  		insertTr += ' <td style="text-align: center;"><select id="clct_ty"></select></td>';
         insertTr += '</tr>';
   	    $("#dpIngestPpType").append(insertTr);
-  	    $("#adaptorSetAddCnt").val(dpIngestPpTypeCnt);
+  	    $("#adaptorSetAddCnt").val(adaptorSetDataLen);
   	    
   	  	dpCmCodesClctMthd('D34', 'clct_mthd');
 	}
@@ -415,7 +427,9 @@ const dpIngestPpType = function(){
  	    	  $("#dpIngestPpType").empty();
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  		
 			  	   	if(data.contents != ""){    	
     		     	    let insertTr = '';
@@ -460,7 +474,9 @@ const dpIngestPpDtDel = function(adapter_type_id, item){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	  		
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	    	
 	    	message = JSON.stringify(data.return_msg);
 	    	
@@ -482,12 +498,14 @@ const dpIngestPpDtDelChk = function(){
 	    	adapter_type_id = $(this).val();
 	    });
 	    
+	    $("input[name='checkConfigList2']:checked").each(function(e){
+	    	
+	    	let check_config = $(this).val();
+	    	$("#trCheckConfig_"+check_config).remove();
+	    	
+	    });   	
+	    
 	    $("input[name='checkConfigList']:checked").each(function(e){
-	    	
-	    	let item = $(this).val();
-	    	
-	    	console.log('item:'+item);
-	    	
 			const data = {
 			   		url: '/dp/ingest/property/detail/delete/check',
 			   		adapter_type_id: adapter_type_id,	
@@ -519,8 +537,7 @@ const dpIngestPpDtDelChk = function(){
 			    }).fail(function (error) {
 			        alert(JSON.stringify(error));
 			    });
-			    
-			   
+	    	
 	    });   	
 	}
 }
@@ -542,7 +559,9 @@ const dpIngestPpInfoDel = function(adapter_type_id){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	  		
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));
@@ -568,37 +587,52 @@ const dpIngestPpInfoDelChk = function(){
 	    	adapter_type_id = $(this).val();
 	    });
 	    
-		const data = {
-		   		url: '/dp/ingest/property/info/delete/check',
-		   		adapter_type_id: adapter_type_id,	
-		   		user_id: 'user00',	
-		   		menu_id: 'menu_id',
-		    };		
-		    $.ajax({
-		        type: 'POST',
-		        url: url+'/dpIngestPpInfoDelChk',
-		        dataType: 'json',
-		        contentType: 'application/json; charset-utf-8',
-		        data: JSON.stringify(data)
-		    }).done(function (data) {
-		  		
-		    	if (data != null) {
-		    		
-		    		errorMsg(data);
-		    		
-			  	   	if(data.contents != ""){    	
-		    	   		 $.each(data.contents, function (idx, el) {
-		    	   			if(el.chk_yn == 'N'){
-		    	   				dpIngestPpInfoDel(adapter_type_id);
-		    	   			}
-		 	     	     });
-			  	   	}
-		  	  } 
-		    	
-		    	
-		    }).fail(function (error) {
-		        alert(JSON.stringify(error));
-		    });	
+	    console.log('adapter_type_id:'+adapter_type_id);
+	    
+		if(adapter_type_id === ''){
+	    	
+	    	$('#adaptorSetData > tbody > tr:last').remove();
+	    	$("#adaptorSetAddCnt").val("0");
+	    	
+	    }else{
+	    	
+			const data = {
+			   		url: '/dp/ingest/property/info/delete/check',
+			   		adapter_type_id: adapter_type_id,	
+			   		user_id: 'user00',	
+			   		menu_id: 'menu_id',
+			    };		
+			    $.ajax({
+			        type: 'POST',
+			        url: url+'/dpIngestPpInfoDelChk',
+			        dataType: 'json',
+			        contentType: 'application/json; charset-utf-8',
+			        data: JSON.stringify(data)
+			    }).done(function (data) {
+			  		
+			    	if (data != null) {
+			    		
+			    		  if(errorMsg(data)){
+			  	          	 return;  
+		        	  	  }	
+			    		
+				  	   	if(data.contents != ""){    	
+			    	   		 $.each(data.contents, function (idx, el) {
+			    	   			if(el.chk_yn == 'N'){
+			    	   				dpIngestPpInfoDel(adapter_type_id);
+			    	   			}else{
+			    	   				alert("사용중입니다.");
+			    	   				return;
+			    	   			}
+			 	     	     });
+				  	   	}
+			  	  } 
+			    	
+			    	
+			    }).fail(function (error) {
+			        alert(JSON.stringify(error));
+			    });	
+	    }
 	}
 }
 
@@ -638,7 +672,9 @@ const dpIngestPpDtSave = function(){
 		        data: JSON.stringify(data)
 		    }).done(function (data) {
 		  		
-		    	errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		    	
 		  		let message = JSON.stringify(data.return_msg);
 		  		alert(message.replace(/\"/gi, ''));
@@ -654,6 +690,21 @@ const dpIngestPpDtSave = function(){
 //Adapter 유형관리 저장
 const dpIngestPpInfoSave = function(){
 	
+	if($("#adapter_type_nm").val() === ''){
+		alert("Adaptor 유형을 입력해주세요!");
+		$("#adapter_type_nm").focus();
+		return;
+	}
+	if($("#clct_mthd").val() === ''){
+		alert("수집방식 을 선택해주세요!");
+		$("#clct_mthd").focus();
+		return;
+	}
+	if($("#clct_ty").val() === ''){
+		alert("수집유형을 선택해주세요!");
+		$("#clct_ty").focus();
+		return;
+	}
 	if(confirm('저장 하시겠습니까?')) {
 		const data = {
 		   		url: '/dp/ingest/property/info/save',
@@ -671,7 +722,9 @@ const dpIngestPpInfoSave = function(){
 		        data: JSON.stringify(data)
 		    }).done(function (data) {
 		  		
-		    	errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		    	
 		  		let message = JSON.stringify(data.return_msg);
 		  		alert(message.replace(/\"/gi, ''));

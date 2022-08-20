@@ -321,7 +321,9 @@ const commonCodeAnalysisCycleSetting = function (){
         }).done(function (data) {
  		  	if (data != null) {
  		  		
- 		  		errorMsg(data);
+ 	    		  if(errorMsg(data)){
+ 	 	          	 return;  
+ 	       	  	  }	
  		  		
  		  	   	if(data.contents != ""){    	    	
 					 $("#commonCodeAnalysisCycleSetting").empty();
@@ -366,7 +368,9 @@ const commonCodeAnalysisKind = function (){
         }).done(function (data) {
  		  	if (data != null) {
  		  		
- 		  		errorMsg(data);
+ 	    		  if(errorMsg(data)){
+ 	 	          	 return;  
+ 	       	  	  }	
  		  		
  		  	   	if(data.contents != ""){    	    	
 					 $("#commonCodeAnalysisKind").empty();
@@ -463,7 +467,9 @@ const commonCodeBatchCycle = function(){
         }).done(function (data) {
  		  	if (data != null) {
  		  		
- 		  		errorMsg(data);
+ 	    		  if(errorMsg(data)){
+ 	 	          	 return;  
+ 	       	  	  }	
  		  		
  		  	   	if(data.contents != ""){    	    	
 					 $("#commonCodeBatchCycle").empty();
@@ -495,7 +501,9 @@ const commonCodeImagesDatasetsCode = function(){
         }).done(function (data) {
  		  	if (data != null) {
  		  		
- 		  		errorMsg(data);
+ 	    		  if(errorMsg(data)){
+ 	 	          	 return;  
+ 	       	  	  }	
  		  		
  		  	   	if(data.contents != ""){    	    	
  			  	   	codeContents = data.contents;
@@ -523,7 +531,9 @@ const sandboxAnalysisMethodDetail = function(){
         }).done(function (data) {
  		  	if (data != null) {
  		  		
- 		  		errorMsg(data);
+ 	    		  if(errorMsg(data)){
+ 	 	          	 return;  
+ 	       	  	  }	
  		  		
  		  	   	if(data.contents != ""){    	    
 			  	    $.each(data.contents, function (idx, el) {
@@ -552,7 +562,9 @@ const sandboxAnalysisImageDatasetGet = function(){
         }).done(function (data) {
  		  	if (data != null) {
  		  		
- 		  		errorMsg(data);
+ 	    		  if(errorMsg(data)){
+ 	 	          	 return;  
+ 	       	  	  }	
  		  		
  		  	   	if(data.contents != ""){    	    
 					$("#sandboxAnalysisImageDatasetGet").empty();
@@ -874,7 +886,9 @@ const sandboxAnalysisMethodUpdate = function(val){
             data: JSON.stringify(data)
         }).done(function (data) {
         	
-        	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
         	
       		let message = JSON.stringify(data.return_msg);
       		alert(message.replace(/\"/gi, ''));    	  
@@ -910,7 +924,9 @@ const sandboxCreate = function(){
             data: JSON.stringify(data)
         }).done(function (data) {
         	
-        	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
         	
       		let message = JSON.stringify(data.return_msg);
       		alert(message.replace(/\"/gi, ''));    	  
@@ -937,7 +953,9 @@ const sandboxDelete = function () {
         data: JSON.stringify(data)
     }).done(function (data) {
     	
-    	errorMsg(data);
+		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
     	
   		let message = JSON.stringify(data.return_msg);
   		alert(message.replace(/\"/gi, ''));
@@ -1079,7 +1097,9 @@ const sandboxEnrollStatus = function(){
             data: JSON.stringify(data)
         }).done(function (data) {
         	
-        	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
         	
    	    	if(data.contents != ""){
    	    		$("#sandbox_setup_status_cd").val(data.contents.sandbox_setup_status_cd);

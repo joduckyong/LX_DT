@@ -84,7 +84,9 @@
 	    	
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  		
 			  		let message = JSON.stringify(data.msg);
 			  		alert(message.replace(/\"/gi, ''));
@@ -155,7 +157,9 @@
 		    	
 			  	  if (data != null) {
 			  		  
-				  		errorMsg(data);
+		    		  if(errorMsg(data)){
+		  	          	 return;  
+	        	  	  }	
 				  		
 				  		let message = JSON.stringify(data.message);
 				  		alert(message.replace(/\"/gi, ''));

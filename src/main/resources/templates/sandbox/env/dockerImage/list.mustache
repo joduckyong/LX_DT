@@ -160,7 +160,9 @@ const dockerImagesGet = function (page, size_per_page) {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 	  		$("#dockerImage").empty();
   	    	$("#total_count").text(data.total_count);
@@ -205,7 +207,9 @@ const dockerImagesDetail = function (docker_image_id) {
     	
 	  	  if (data != null) {
 	  		  
-		  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 		  		
 	  	    	if(data.contents != ""){
 	  	    		$("#docker_image_nm").val(data.contents.docker_image_nm);
@@ -275,7 +279,9 @@ const dockerImageNameDupCheck = function (){
     }).done(function (data) {
  	if (data != null) {
  		
- 		errorMsg(data);
+		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
  		
  	   	if(data.contents.duplicated){
  	   		duplicateYn = 'Y';
@@ -318,7 +324,9 @@ const isDockerImageNameDupCheck= function (){
     }).done(function (data) {
  	if (data != null) {
  		
- 		errorMsg(data);
+		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
  		
  	   	if(data.contents.duplicated){
  	   		isDuplicate = true;
@@ -435,7 +443,9 @@ const dockerImagesInsert = function(){
 	        data: JSON.stringify(data),
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	    	
 	    	let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));    	
@@ -547,7 +557,9 @@ const dockerImagesUpdate = function () {
 	        data: JSON.stringify(data),
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	    	
 	    	let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));    	
@@ -584,7 +596,9 @@ const dockerImagesDelete = function () {
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));
@@ -620,7 +634,9 @@ const analysisImagesDockerImageGet = function () {
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		console.log(message.replace(/\"/gi, ''));

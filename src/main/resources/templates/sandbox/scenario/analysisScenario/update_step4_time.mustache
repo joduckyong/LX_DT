@@ -282,7 +282,9 @@ const scenarioEnrollStepStatus = function (){
     	
     	 if (data != null) {
    	    	
-    		 errorMsg(data);
+   		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
     		 
    	    	if(data.contents != ""){
    	    		$("#regst_status_cd").val(data.contents.regst_status_cd);
@@ -317,7 +319,9 @@ const analysisTargetSchemaGet = function () {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 	  		$("#schemaname").empty();
   	    	
@@ -362,7 +366,9 @@ const analysisTargetTableDatasetsGet = function () {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 	  		$("#tableDataset").empty();
 	  		$("#columnDataset").empty();
@@ -410,7 +416,9 @@ const analysisTargetTableColumnDatasetGet = function (tbl_id) {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 	  		$("#columnDataset").empty();
   	    	
@@ -459,7 +467,9 @@ const analysisTargetTableDatasetsDetail = function () {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 	  		$("#tableColumnDataset").empty();
   	    	
@@ -527,7 +537,9 @@ const analysisTargetSampleData = function (tbl_id) {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 	  		$("#sampleDatasetColumn").empty();
 	  		$("#sampleDatasetData").empty();
@@ -610,7 +622,9 @@ const analysisTagetTableDatasetUpdate = function(){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	    	
 	    	
 	    	let message = JSON.stringify(data.return_msg);

@@ -142,7 +142,9 @@ const dpCmCodesClctTy = function (group_code, id) {
     	
 	  	  if (data != null) {
 	  		  
-	  			errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 		  	   	if(data.contents != ""){    	    	
    					 let selOp = '<option value="">선택</option>';  
@@ -175,7 +177,9 @@ const dpIngestPreIdChk = function(){
 	    }).done(function (data) {
 		    if (data != null) {
 		    	
-		    	errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		    	
 		  	   	if(data.contents != ""){    
 		  	   		 $("#pre_id").val(data.contents[0].pre_id);
@@ -235,7 +239,9 @@ const dpIngestPreSave = function(){
 		        data: JSON.stringify(data)
 		    }).done(function (data) {
 		  		
-		    	errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		    	
 		  		let message = JSON.stringify(data.return_msg);
 		  		alert(message.replace(/\"/gi, ''));

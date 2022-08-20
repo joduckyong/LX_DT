@@ -184,7 +184,9 @@ const commonCodeAnalysisUsePurpose = function (){
         }).done(function (data) {
  		  	if (data != null) {
  		  		
- 		  		errorMsg(data);
+ 	    		  if(errorMsg(data)){
+ 	 	          	 return;  
+ 	       	  	  }	
  		  		
  		  	   	if(data.contents != ""){
  		  	   		 $("#anals_use_prpos_cd_radio").empty();
@@ -234,7 +236,9 @@ const pretreatModelsNameDupCheck = function (){
     }).done(function (data) {
  	if (data != null) {
  		
- 		errorMsg(data);
+		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
  		
  	   	if(data.contents.duplicated){
  	   		duplicateYn = 'Y';
@@ -348,7 +352,9 @@ const pretreatModelsEnroll = function (){
 	   	    contentType: false,        
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));    	
@@ -432,7 +438,9 @@ const initBasicInfo = function (code){
     	
 	  	  if (data != null) {
   	    	
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
   	    	if(data.contents != ""){
   	    		let insertTr = '';
@@ -476,7 +484,9 @@ const pretreatModelsGuide = function (){
     }).done(function (data) {
  	if (data != null) {
  		
- 		errorMsg(data);
+		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
  		
  	   	if(data.contents != ""){
  	   		 $("#guide").empty();

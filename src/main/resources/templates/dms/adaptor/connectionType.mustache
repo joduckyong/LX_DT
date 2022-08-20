@@ -105,6 +105,7 @@ const url = '/adaptor';
 
 let dpIngestItPpTypeCnt = 0;
 let dpIngestItPpInfoCnt = 0;
+let connect_id_change;
 
 //수집방식
 const dpCmCodesClctMthdInput = function (group_code) {
@@ -122,7 +123,9 @@ const dpCmCodesClctMthdInput = function (group_code) {
     }).done(function (data) {
 	  	  if (data != null) {
 	  		  
-	  			errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  			
 		  	   	if(data.contents != ""){    	   
 	    	   		 $.each(data.contents, function (idx, el) {
@@ -155,7 +158,9 @@ const dpCmCodesClctTyInput = function (group_code) {
     	
 	  	  if (data != null) {
 	  		  
-	  			errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 		  	   	if(data.contents != ""){    	    	
 	    	   		 $.each(data.contents, function (idx, el) {
@@ -189,7 +194,9 @@ const dpCmCodesClctMthd = function (group_code, id) {
     	
 	  	  if (data != null) {
 	  		  
-	  			errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 		  	   	if(data.contents != ""){    	    	
    					 let selOp = '<option value="">선택</option>';  
@@ -231,7 +238,9 @@ const dpCmCodesClctTy = function (group_code, id) {
     	
 	  	  if (data != null) {
 	  		  
-	  			errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 		  	   	if(data.contents != ""){    	    	
    					 let selOp = '<option value="">선택</option>';  
@@ -252,15 +261,14 @@ const dpCmCodesClctTy = function (group_code, id) {
 const instanceSetConfigAdd = function(){
 	
 	let instanceSetDataConfigLen = $("#instanceSetDataConfig tbody tr").length;
-	console.log('instanceSetDataConfigLen: '+instanceSetDataConfigLen);
 	
 //	if($("#instanceConfigSetAddCnt").val() === '0'){
 	  let insertTr = '';
 	  let i = 0;	
-	  insertTr += '<tr>';
-	  insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList"  id="checkConfig_'+instanceSetDataConfigLen+'" value=""></td>';
+	  insertTr += '<tr id="trCheckConfig_'+instanceSetDataConfigLen+'">';
+	  insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList2"  id="checkConfig_'+instanceSetDataConfigLen+'" value="'+instanceSetDataConfigLen+'"></td>';
 	  insertTr += ' <td style="text-align: center;">'+(++instanceSetDataConfigLen)+'</td>';
-	  insertTr += ' <td style="text-align: center;"><input type="text" id="configItem" value=""></td>';
+	  insertTr += ' <td style="text-align: center;"><input type="text" id="configItem" value="" oninput="this.value=this.value.replace(/[^0-9a-zA-Z_]/g, \'\')";></td>';
 	  insertTr += ' <td style="text-align: center;"><input type="text" id="configIteNm" value=""></td>';
 	  insertTr += ' <td style="text-align: center;"><input type="text" id="configItemDescribed" value=""></td>';
       insertTr += '</tr>';
@@ -296,15 +304,13 @@ const dpIngestItPpInfo = function(connect_id){
  		      let i = 0;	
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
-		  		
 			  	   	if(data.contents != ""){    	
 			  	   		dpIngestItPpInfoData = data.contents;
     			  	    $.each(data.contents, function (idx, el) {
     		     	          insertTr += '<tr>';
     		     		      insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList" id="checkConfig_'+(i+1)+'" value="'+el.connect_id+'"></td>';
     		     		      insertTr += ' <td style="text-align: center;">'+(++i)+'</td>';
-    		     		      insertTr += ' <td style="text-align: center;"><input type="text" id="configItem_'+i+'" value="'+el.item+'"></td>';
+    		     		      insertTr += ' <td style="text-align: center;"><input type="text" id="configItem_'+i+'" value="'+el.item+'" oninput="this.value=this.value.replace(/[^0-9a-zA-Z_]/g, \'\')";></td>';
     		     		      insertTr += ' <td style="text-align: center;"><input type="text" id="configIteNm_'+i+'" value="'+el.item_nm+'"></td>';
     		     		      insertTr += ' <td style="text-align: center;"><input type="text" id="configItemDescribed_'+i+'" value="'+el.item_described+'"></td>';
     		                  insertTr += '</tr>';
@@ -322,17 +328,27 @@ const dpIngestItPpInfo = function(connect_id){
 //접속유형 체크
 const checkOnlyOne = function(element, id) {
 
-    const checkboxes = document.getElementsByName("checkList");
-    checkboxes.forEach((cb) => {
-        cb.checked = false;
-    })
-    element.checked = true;
+	if(connect_id_change !== id){
+	    const checkboxes = document.getElementsByName("checkList");
+	    checkboxes.forEach((cb) => {
+	        cb.checked = false;
+	    })
+	    element.checked = true;
+	}
 	
     if(id === '0'){
 	    $("#instanceSetDataConfigArea").hide();
     }else{
-	    $("#instanceSetDataConfigArea").show();
-	    dpIngestItPpInfo(id);
+		connect_id_change = id;
+	    
+		var len = $("input[name='checkList']:checked").length;
+		if(len === 0){
+			$("#instanceSetDataConfigArea").hide();
+		}else{
+		    $("#instanceSetDataConfigArea").show();
+		    dpIngestItPpInfo(id);
+		}
+		
     }
 }
 
@@ -350,16 +366,18 @@ const checkConfigOnlyOne = function(element) {
 //접속 유형상세 추가 
 const instanceSetAdd = function(){
 	
+	let instanceSetDataLen = $("#instanceSetData tbody tr").length +1;
+	
 	if($("#instanceSetAddCnt").val() === '0'){
 		let insertTr = '';
 	    insertTr += '<tr>';
-	    insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkList" onclick=checkOnlyOne(this,"0"); id="check_'+dpIngestItPpTypeCnt+'" value=""></td>';
-	    insertTr += ' <td style="text-align: center;">'+(++dpIngestItPpTypeCnt)+'</td>';
+	    insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkList" onclick=checkOnlyOne(this,"0"); id="check_'+instanceSetDataLen+'" value=""></td>';
+	    insertTr += ' <td style="text-align: center;">'+(instanceSetDataLen)+'</td>';
 	    insertTr += ' <td style="text-align: center;"><select id="clct_mthd" onchange=clctMthdType(this.value)></select></td>';
 	    insertTr += ' <td style="text-align: center;"><select id="clct_ty"></select></td>';
 	    insertTr += '</tr>';
 	    $("#dpIngestItPpType").append(insertTr);	
-	    $("#instanceSetAddCnt").val(dpIngestItPpTypeCnt);
+	    $("#instanceSetAddCnt").val(instanceSetDataLen);
 	    
 	    dpCmCodesClctMthd('D34', 'clct_mthd');
 	}
@@ -384,7 +402,9 @@ const dpIngestItPpType = function(){
  	    	  $("#dpIngestItPpType").empty();
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  			
 			  	   	if(data.contents != ""){
 			  	   		
@@ -433,7 +453,10 @@ const dpIngestItPpDtDel = function(connect_id, item){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	  		
-    	errorMsg(data);	    	
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
+    	
 	  	message = JSON.stringify(data.return_msg);
 	    	
 	    }).fail(function (error) {
@@ -454,13 +477,21 @@ const dpIngestItPpDtDelChk = function(){
 	        connect_id = $(this).val();
 	    });
 	    
-	    $.each($("#instanceSetDataConfig tbody tr"), function(){
+	    $("input[name='checkConfigList2']:checked").each(function(e){
+	    	let check_config = $(this).val();
+	    	$("#trCheckConfig_"+check_config).remove();
+	    });   	
 	    
+	    $("input[name='checkConfigList']:checked").each(function(e){
+	   
 	    	let item = $(this).find("#configItem").val();
+	    	let clct_mthd = $("#clct_mthd_"+connect_id).val();
+	    	let clct_ty = $("#clct_ty_"+connect_id).val();
+	    	
 			const data = {
 			   		url: '/dp/ingest/instance/property/detail/delete/check',
-			   		clct_mthd: $("#clct_mthd_"+connect_id).val(),	
-			   		clct_ty: $("#clct_ty_"+connect_id).val(),	
+			   		clct_mthd: clct_mthd,	
+			   		clct_ty: clct_ty,	
 			   		item: item,	
 			   		user_id: 'user00',	
 			   		menu_id: 'menu_id',
@@ -487,6 +518,7 @@ const dpIngestItPpDtDelChk = function(){
 			    }).fail(function (error) {
 			        alert(JSON.stringify(error));
 			    });		
+	    
 	    });   	
 	}
 }
@@ -510,7 +542,9 @@ const dpIngestItPpInfoDel = function(connect_id){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	  		
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));
@@ -537,40 +571,55 @@ const dpIngestItPpInfoDelChk = function(){
 	        connect_id = $(this).val();
 	    });
 	    
-		const data = {
-		   		url: '/dp/ingest/instance/property/info/delete/check',
-		   		connect_id: connect_id,	
-		   		clct_mthd: $("#clct_mthd_"+connect_id).val(),	
-		   		clct_ty: $("#clct_ty_"+connect_id).val(),	
-		   		user_id: 'user00',	
-		   		menu_id: 'menu_id',
-		    };		
-		    $.ajax({
-		        type: 'POST',
-		        url: url+'/dpIngestItPpDtDelChk',
-		        dataType: 'json',
-		        contentType: 'application/json; charset-utf-8',
-		        data: JSON.stringify(data)
-		    }).done(function (data) {
-		  		
-		    	if (data != null) {
-		    		
-		    		errorMsg(data);
-		    		
-			  	   	if(data.contents != ""){    	
-		    	   		 $.each(data.contents, function (idx, el) {
-		    	   			if(el.chk_yn == 'N'){
-		    	   				
-		    	   				dpIngestItPpInfoDel(connect_id);
-		    	   			}
-		 	     	     });
-			  	   	}
-		  	  } 
-		    	
-		    	
-		    }).fail(function (error) {
-		        alert(JSON.stringify(error));
-		    });
+	    console.log('connect_id:'+connect_id);
+	    if(connect_id === ''){
+	    	
+	    	$('#instanceSetData > tbody > tr:last').remove();
+	    	$("#instanceSetAddCnt").val("0");
+	    	
+	    }else{
+	    	
+			const data = {
+			   		url: '/dp/ingest/instance/property/info/delete/check',
+			   		connect_id: connect_id,	
+			   		clct_mthd: $("#clct_mthd_"+connect_id).val(),	
+			   		clct_ty: $("#clct_ty_"+connect_id).val(),	
+			   		user_id: 'user00',	
+			   		menu_id: 'menu_id',
+			    };		
+			    $.ajax({
+			        type: 'POST',
+			        url: url+'/dpIngestItPpDtDelChk',
+			        dataType: 'json',
+			        contentType: 'application/json; charset-utf-8',
+			        data: JSON.stringify(data)
+			    }).done(function (data) {
+			  		
+			    	if (data != null) {
+			    		
+			    		  if(errorMsg(data)){
+			  	          	 return;  
+		        	  	  }	
+			    		
+				  	   	if(data.contents != ""){    	
+			    	   		 $.each(data.contents, function (idx, el) {
+			    	   			if(el.chk_yn == 'N'){
+			    	   				
+			    	   				dpIngestItPpInfoDel(connect_id);
+			    	   			}else{
+			    	   				alert("사용중입니다.");
+			    	   				return;			    	   				
+			    	   			}
+			 	     	     });
+				  	   	}
+			  	  } 
+			    	
+			    	
+			    }).fail(function (error) {
+			        alert(JSON.stringify(error));
+			    });
+	    }
+	    
 	}
 }
 
@@ -613,7 +662,9 @@ const dpIngestItPpDtSave = function(){
 		        data: JSON.stringify(data)
 		    }).done(function (data) {
 		  		
-		    	errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		    	
 		  		let message = JSON.stringify(data.return_msg);
 		  		alert(message.replace(/\"/gi, ''));
@@ -626,6 +677,17 @@ const dpIngestItPpDtSave = function(){
 
 //접속유형 항목관리 저장
 const dpIngestItPpInfoSave = function(){
+	
+	if($("#clct_mthd").val() === ''){
+		alert("수집방식 을 선택해주세요!");
+		$("#clct_mthd").focus();
+		return;
+	}
+	if($("#clct_ty").val() === ''){
+		alert("수집유형을 선택해주세요!");
+		$("#clct_ty").focus();
+		return;
+	}
 	
 	if(confirm('저장 하시겠습니까?')) {
 		const data = {
@@ -643,7 +705,9 @@ const dpIngestItPpInfoSave = function(){
 		        data: JSON.stringify(data)
 		    }).done(function (data) {
 		  		
-		    	errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		    	
 		  		let message = JSON.stringify(data.return_msg);
 		  		alert(message.replace(/\"/gi, ''));
@@ -660,5 +724,6 @@ const dpIngestItPpInfoSave = function(){
 dpCmCodesClctMthdInput('D34');
 
 setTimeout(dpIngestItPpType, 300);
+
 </script>
 
