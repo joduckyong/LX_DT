@@ -244,7 +244,9 @@ const commonCodeAnalysisScenarioSetting = function (){
         }).done(function (data) {
  		  	if (data != null) {
  		  		
- 		  		errorMsg(data);
+ 	    		  if(errorMsg(data)){
+ 	 	          	 return;  
+ 	       	  	  }	
  		  		
  		  	   	if(data.contents != ""){    	    	
 					 $("#commonCodeAnalysisScenarioSetting").empty();
@@ -291,7 +293,9 @@ const sandboxScenarioGet = function (){
 	    	  $("#sandboxScenarioGet").empty();
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  		
 		  	    	if(data.contents != ""){
 		     	        let insertTr = '';
@@ -327,7 +331,9 @@ const snadboxScenarioSettingDetail = function (scenario_id){
         }).done(function (data) {
  		  	if (data != null) {
  		  		
- 		  		errorMsg(data);
+ 	    		  if(errorMsg(data)){
+ 	 	          	 return;  
+ 	       	  	  }	
  		  		
  		  	   	if(data.contents != ""){    	    	
 					 $("#scenario_desc").val("");
@@ -366,7 +372,9 @@ const analysisTargetImagesDetail = function(scenario_id){
 	    	  
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  		
 		  	    	if(data.contents != ""){
 		  	    		
@@ -516,7 +524,9 @@ const sandboxScenarioSettingUpdate = function(val){
             data: JSON.stringify(data)
         }).done(function (data) {
         	
-        	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
         	
       		let message = JSON.stringify(data.return_msg);
       		alert(message.replace(/\"/gi, ''));    	
@@ -555,7 +565,9 @@ const analysisTargetSampleData = function(tbl_id){
         }).done(function (data) {
  		  	if (data != null) {
  		  		
- 		  		errorMsg(data);
+ 	    		  if(errorMsg(data)){
+ 	 	          	 return;  
+ 	       	  	  }	
  		  		
  		  	   	if(data.contents != ""){    	
  		  	   	   let insertSize;		
@@ -628,7 +640,9 @@ const sandboxEnrollStatus = function(){
             data: JSON.stringify(data)
         }).done(function (data) {
         	
-        	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
         	
    	    	if(data.contents != ""){
    	    		$("#sandbox_setup_status_cd").val(data.contents.sandbox_setup_status_cd);

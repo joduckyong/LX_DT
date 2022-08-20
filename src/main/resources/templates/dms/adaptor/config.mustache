@@ -175,7 +175,9 @@ const dpIngestAdapter = function (page, size_per_page) {
 		  $("#dpIngestAdapter").empty();
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
   	    	$("#total_count").text(data.total_count);
   	    	
@@ -229,7 +231,9 @@ const dpIngestAdapterType = function (adapter_type_id) {
     	
 	  	  if (data != null) {
 	  		  
-	  			errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 		  	   	if(data.contents != ""){    	    	
    					 let selOp = '<option value="">선택</option>';  
@@ -265,7 +269,9 @@ const dpIngestAdapterIdChk = function(){
 	    }).done(function (data) {
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  			
 			  	   	if(data.contents != ""){    	
 		    	   		 $.each(data.contents, function (idx, el) {
@@ -326,7 +332,9 @@ const dpIngestAdapterSave = function(){
 	    	
 		  	  if (data != null) {
 		  		
-		  		errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  		
 		  		let message = JSON.stringify(data.return_msg);
 		  		alert(message.replace(/\"/gi, ''));
@@ -365,7 +373,9 @@ const dpIngestAdapterDt = function(adapter_id){
 	    	  let use_yn;
 		  	  if (data != null) {
 		  		  
-			  		errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 			  		
 			  	   	if(data.contents != ""){    	
 		    	   		 $.each(data.contents, function (idx, el) {
@@ -430,7 +440,9 @@ const dpIngestAdapterUpdate = function () {
 	    	
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  		
 			  		let message = JSON.stringify(data.return_msg);
 			  		alert(message.replace(/\"/gi, ''));
@@ -460,7 +472,9 @@ const dpIngestAdapterDel = function () {
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	  		
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));
@@ -492,7 +506,9 @@ const dpIngestAdapterDelChk = function () {
 	  		
 	    	if (data != null) {
 	    		
-	    		errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 	    		
 		  	   	if(data.contents != ""){    	
 	    	   		 $.each(data.contents, function (idx, el) {

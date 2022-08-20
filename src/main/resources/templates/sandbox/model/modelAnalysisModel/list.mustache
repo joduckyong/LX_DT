@@ -171,7 +171,9 @@ const analysisModels = function (page, size_per_page) {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 	  		$("#analysisModels").empty();
   	    	$("#total_count").text(data.total_count);
@@ -220,7 +222,9 @@ const analysisModelsDetail = function (anals_model_id) {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 	  		$("#file_infos").empty();
 	  		$("#basic_infos").empty();
@@ -269,7 +273,9 @@ const commonCodeAnalysisUsePurpose = function (){
         }).done(function (data) {
  		  	if (data != null) {
  		  		
- 		  		errorMsg(data);
+ 	    		  if(errorMsg(data)){
+ 	 	          	 return;  
+ 	       	  	  }	
  		  		
  		  	   	if(data.contents != ""){    	    	
 					 $("#anals_use_prpos_cd").empty();

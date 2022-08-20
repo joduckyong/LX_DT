@@ -538,7 +538,7 @@ const dpCmCodesClctMthd = function(){
 	  		let insertTr = '';
   	    	if(data.contents != ""){
   	    		$.each(data.contents, function (idx, el) {
-  	    			insertTr += '<option value="'+el.dtl_code_nm+'" data-code="'+el.etc_code+'">'+el.dtl_code_nm+'</option>';
+  	    			insertTr += '<option value="'+el.dtl_code+'" data-code="'+el.etc_code+'">'+el.dtl_code_nm+'</option>';
   	    		});
   	    	}
   	    	$("#clct_mthd").append(insertTr);
@@ -576,10 +576,10 @@ const dpCmCodesClctTy = function(val){
 	  		let insertTr = '';
   	    	if(data.contents != ""){
   	    		$.each(data.contents, function (idx, el) {
-  	    			if(el.dtl_code_nm == val){
-  	    				insertTr += '<option value="'+el.dtl_code_nm+'" selected>'+el.dtl_code_nm+'</option>';
+  	    			if(el.dtl_code == val){
+  	    				insertTr += '<option value="'+el.dtl_code+'" selected>'+el.dtl_code_nm+'</option>';
   	    			}else{
-  	    				insertTr += '<option value="'+el.dtl_code_nm+'">'+el.dtl_code_nm+'</option>';
+  	    				insertTr += '<option value="'+el.dtl_code+'">'+el.dtl_code_nm+'</option>';
   	    			}
   	    			
   	    		});
@@ -612,7 +612,6 @@ const dpIngestMetaTblDset = function (dset_idntfc_id) {
 	  		errorMsg(data);
 	  		
   	    	if(data.contents != ""){
-  	    		dpCmCodesClctTy();
   	    		$("#dset_idntfc_id").val(dset_idntfc_id);
 	  	    	$("#dset_korean_nm").val(data.contents[0].dset_korean_nm);
 	  	    	$("#clct_mthd").val(data.contents[0].clct_mthd).prop("selected", true);
@@ -679,6 +678,7 @@ const dpIngestMetaTblTbl = function (table_idntfc_id) {
 	  	    	$("#crud_dc2").val(data.contents[0].crud_dc);
 	  	    	$("#use_at2").val(data.contents[0].use_at).prop("selected", true);
 	  	    	$("#creat_table_at2").val(data.contents[0].creat_table_at);
+	  	    	$("#table_dc").val(data.contents[0].table_dc);
   	    	}
 	  	  }
     }).fail(function (error) {
@@ -1304,6 +1304,7 @@ const initDetail = function(){
   	$("#crud_dc2").val("");
   	$("#use_at2").val("Y").prop("selected", true);
   	$("#creat_table_at2").val("");
+  	$("#table_dc").val("");
   	
 }
 

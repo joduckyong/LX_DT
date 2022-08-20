@@ -159,7 +159,9 @@ const dpCmCodesClctMthdInput = function (group_code) {
     }).done(function (data) {
 	  	  if (data != null) {
 	  		  
-	  			errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 		  	   	if(data.contents != ""){    	   
 	    	   		 $.each(data.contents, function (idx, el) {
@@ -192,7 +194,9 @@ const dpCmCodesClctTyInput = function (group_code) {
     	
 	  	  if (data != null) {
 	  		  
-	  			errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  			
 		  	   	if(data.contents != ""){    	    	
 	    	   		 $.each(data.contents, function (idx, el) {
@@ -226,7 +230,9 @@ const dpIngestAdapterItDt = function(){
 	    	
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  		
 			  	   	if(data.contents != ""){    	
 			  	   		
@@ -318,7 +324,9 @@ const dpIngestItPp = function(){
 	    	
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  			
 			   	    console.log('data.contents : ' +data.contents);
 			  	   	if(data.contents != ""){    	
@@ -374,7 +382,9 @@ const dpIngestAdapterItPp = function(){
 	    	
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  		
 			  	   	if(data.contents != ""){    	
 			  	   		
@@ -452,7 +462,9 @@ const dpIngestAdapterItPpSave = function(url_mix){
         }).done(function (data) {
   	  	  if (data != null) {
   	  		  
-  	  			errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
   	  		
 		  	   	if(data.contents != ""){    	   
 	  	 	  		let message = JSON.stringify(data.return_msg);
@@ -498,7 +510,9 @@ const dpIngestAdapterItPpTest = function(){
 	        }).done(function (data) {
 	  	  	  if (data != null) {
 	  	  		  
-	  	  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 	  	  		
 			  	   	if(data.contents != ""){    	
 			  	   		console.log('successYn : '+data.contents[0].successYn);
@@ -571,7 +585,10 @@ const dpIngestAdapterItPpDelChk = function(){
 		        }).done(function (data) {
 		    	  	  if (data != null) {
 		    	  		  
-		    	  			errorMsg(data);
+		        		  if(errorMsg(data)){
+		      	          	 return;  
+	            	  	  }	
+		    	  			
 		    		  	   	if(data.contents != ""){    	   
 			    	   			if(data.contents[0].chk_yn === 'N'){
 			    	   				dpIngestAdapterItPpDel(item);

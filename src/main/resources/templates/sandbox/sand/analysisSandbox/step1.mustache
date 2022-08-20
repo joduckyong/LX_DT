@@ -200,7 +200,9 @@ const sandboxAnalysisImagesGet = function(){
 	    	  $("#sandboxAnalysisImagesGet").empty();
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  		
 		  	    	if(data.contents != ""){
 			    	    let insertTr = '';
@@ -241,7 +243,9 @@ const sandboxImagesProgramsGet = function(image_id, docker_image_id){
 	    	  $("#sandboxImagesProgramsGet").empty();
 		  	  if (data != null) {
 		  		  
-			  		errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 			  		
 		  	    	if(data.contents != ""){
 		  	    		contents = data.contents;
@@ -284,7 +288,9 @@ const sandboxServerIpGet = function(){
 	    	  $("#sandboxServerIpGet").empty();
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  		
 		  	    	if(data.contents != ""){
 						 $("#sandboxServerIpGet").empty();
@@ -321,7 +327,9 @@ const sandboxServerPortGet = function(){
 	    	  $("#sandboxServerPortGet").empty();
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  		
 		  	    	if(data.contents != ""){
 		     	        let insertTr = '';
@@ -354,7 +362,9 @@ const commonCodeAnalysisUsePurpose = function (){
         }).done(function (data) {
  		  	if (data != null) {
  		  		
- 		  		errorMsg(data);
+ 	    		  if(errorMsg(data)){
+ 	 	          	 return;  
+ 	       	  	  }	
  		  		
  		  	   	if(data.contents != ""){    	    	
 					 $("#anals_use_prpos_cd").empty();
@@ -374,6 +384,20 @@ const commonCodeAnalysisUsePurpose = function (){
 const sandboxSettingEnroll = function (val) {
 		
 
+	let confirmMsg = '';
+	if(val == 'B06001'){	//임시 저장
+		confirmMsg = '임시저장 하시겠습니까?';
+	}else {		//다음
+		confirmMsg = '저장 후 다음으로 이동하시겠습니까?';
+	}
+	
+	let idcheck = $("#idcheck").val();
+	let image_id = $("input[name='image_id']:checked").val();
+	let docker_image_id = $("#docker_image_id").val();
+	let sandbox_nm = $("#sandbox_nm").val();
+	let sandbox_desc = $("#sandbox_desc").val();
+	let sandboxServerIpGet = $("#sandboxServerIpGet").val();
+	
     if($("input[name='image_id']:checked").length < 1) {
         alert('선택 항목이 없습니다.');
         return;
@@ -399,20 +423,6 @@ const sandboxSettingEnroll = function (val) {
 		alert("IP를 선택하세요");
 		return;
 	}	
-	
-	let confirmMsg = '';
-	if(val == 'B06001'){	//임시 저장
-		confirmMsg = '임시저장 하시겠습니까?';
-	}else {		//다음
-		confirmMsg = '저장 후 다음으로 이동하시겠습니까?';
-	}
-	
-	let idcheck = $("#idcheck").val();
-	let image_id = $("input[name='image_id']:checked").val();
-	let docker_image_id = $("#docker_image_id").val();
-	let sandbox_nm = $("#sandbox_nm").val();
-	let sandbox_desc = $("#sandbox_desc").val();
-	let sandboxServerIpGet = $("#sandboxServerIpGet").val();
 	
 	let program_list = new Array();
     $.each(contents, function (idx, el) {
@@ -449,7 +459,9 @@ const sandboxSettingEnroll = function (val) {
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));    	    
@@ -544,7 +556,9 @@ const sandboxSettingUpdate = function (val) {
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	  		step2();
 	  		
 	    }).fail(function (error) {
@@ -584,7 +598,9 @@ const sandboxNameDupCheck = function(){
             data: JSON.stringify(data)
         }).done(function (data) {
         	
-        	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
         	
       		let message = JSON.stringify(data.return_msg);
       		alert(message.replace(/\"/gi, ''));
@@ -634,7 +650,9 @@ const sandboxEnrollStatus = function(){
             data: JSON.stringify(data)
         }).done(function (data) {
         	
-        	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
         	
          	if(data.contents != ""){
           		$("#sandbox_setup_status_cd").val(data.contents.sandbox_setup_status_cd);
