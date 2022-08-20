@@ -102,7 +102,9 @@ const agentList = function(page, size_per_page){
     	
 	  	  if (data != null) {
 	  		
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
  	    	$("#total_count").text(data.total_count);
  	    	

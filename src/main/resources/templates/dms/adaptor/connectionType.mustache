@@ -123,7 +123,9 @@ const dpCmCodesClctMthdInput = function (group_code) {
     }).done(function (data) {
 	  	  if (data != null) {
 	  		  
-	  			errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  			
 		  	   	if(data.contents != ""){    	   
 	    	   		 $.each(data.contents, function (idx, el) {
@@ -156,7 +158,9 @@ const dpCmCodesClctTyInput = function (group_code) {
     	
 	  	  if (data != null) {
 	  		  
-	  			errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 		  	   	if(data.contents != ""){    	    	
 	    	   		 $.each(data.contents, function (idx, el) {
@@ -190,7 +194,9 @@ const dpCmCodesClctMthd = function (group_code, id) {
     	
 	  	  if (data != null) {
 	  		  
-	  			errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 		  	   	if(data.contents != ""){    	    	
    					 let selOp = '<option value="">선택</option>';  
@@ -232,7 +238,9 @@ const dpCmCodesClctTy = function (group_code, id) {
     	
 	  	  if (data != null) {
 	  		  
-	  			errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 		  	   	if(data.contents != ""){    	    	
    					 let selOp = '<option value="">선택</option>';  
@@ -297,8 +305,6 @@ const dpIngestItPpInfo = function(connect_id){
  		      let i = 0;	
 		  	  if (data != null) {
 		  		  
-		 // 			errorMsg(data);
-		  		
 			  	   	if(data.contents != ""){    	
 			  	   		dpIngestItPpInfoData = data.contents;
     			  	    $.each(data.contents, function (idx, el) {
@@ -387,7 +393,9 @@ const dpIngestItPpType = function(){
  	    	  $("#dpIngestItPpType").empty();
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  			
 			  	   	if(data.contents != ""){
 			  	   		
@@ -436,7 +444,10 @@ const dpIngestItPpDtDel = function(connect_id, item){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	  		
-    	errorMsg(data);	    	
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
+    	
 	  	message = JSON.stringify(data.return_msg);
 	    	
 	    }).fail(function (error) {
@@ -521,7 +532,9 @@ const dpIngestItPpInfoDel = function(connect_id){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	  		
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));
@@ -574,7 +587,9 @@ const dpIngestItPpInfoDelChk = function(){
 			  		
 			    	if (data != null) {
 			    		
-			    		errorMsg(data);
+			    		  if(errorMsg(data)){
+			  	          	 return;  
+		        	  	  }	
 			    		
 				  	   	if(data.contents != ""){    	
 			    	   		 $.each(data.contents, function (idx, el) {
@@ -634,7 +649,9 @@ const dpIngestItPpDtSave = function(){
 		        data: JSON.stringify(data)
 		    }).done(function (data) {
 		  		
-		    	errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		    	
 		  		let message = JSON.stringify(data.return_msg);
 		  		alert(message.replace(/\"/gi, ''));
@@ -664,7 +681,9 @@ const dpIngestItPpInfoSave = function(){
 		        data: JSON.stringify(data)
 		    }).done(function (data) {
 		  		
-		    	errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		    	
 		  		let message = JSON.stringify(data.return_msg);
 		  		alert(message.replace(/\"/gi, ''));

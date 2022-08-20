@@ -299,7 +299,9 @@ const sandboxResultsGet = function(){
         }).done(function (data) {
  		  	if (data != null) {
  		  		
- 		  		errorMsg(data);
+ 	    		  if(errorMsg(data)){
+ 	 	          	 return;  
+ 	       	  	  }	
  		  		
  		  	   	if(data.contents != ""){    	    
 					$("#sandboxResultsGet").empty();

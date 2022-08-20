@@ -179,7 +179,9 @@ const commonCodeAnalysisUsePurpose = function (){
         }).done(function (data) {
  		  	if (data != null) {
  		  		
- 		  		errorMsg(data);
+ 	    		  if(errorMsg(data)){
+ 	 	          	 return;  
+ 	       	  	  }	
  		  		
  		  	   	if(data.contents != ""){
  		  	   		 $("#anals_use_prpos_cd_radio").empty();
@@ -233,7 +235,9 @@ const analysisModelsNameDupCheck = function (){
     }).done(function (data) {
  	if (data != null) {
  		
- 		errorMsg(data);
+		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
  		
  	   	if(data.contents.duplicated){
  	   		isDuplicate = true;
@@ -333,7 +337,9 @@ const analysisModelsUpdate = function (){
 	   	    contentType: false,        
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));    	
@@ -403,7 +409,9 @@ const analysisModelsDetail = function (){
     }).done(function (data) {
   		if (data != null) {
   			
-  			errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
   			
 	  	   	if(data.contents != ""){    	    	
 			 $("#anals_model_nm").val(data.contents.anals_model_nm);
@@ -483,7 +491,9 @@ const analysisModelsGuide = function (){
     }).done(function (data) {
  	if (data != null) {
  		
- 		errorMsg(data);
+		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
  		
  	   	if(data.contents != ""){
  	   		 $("#guide").empty();

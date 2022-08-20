@@ -298,7 +298,9 @@ const scenarioEnrollStepStatus = function (scenarioId){
     	
     	 if (data != null) {
    	    	
-    		 errorMsg(data);
+   		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
     		 
    	    	if(data.contents != ""){
    	    		if(data.contents.last_status_cd == lastCd){	//전체 등록 완료
@@ -342,7 +344,9 @@ const analysisScenariosGet = function (page, size_per_page) {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 	  		$("#scenarioList").empty();
   	    	$("#total_count").text(data.total_count);
@@ -391,7 +395,9 @@ const analysisScenariosPopupScenario = function (scenario_id) {
     	
 	  	  if (data != null) {
   	    	
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
   	    	if(data.contents != ""){
 		  	  $("#scenarioNmKor").text(data.contents.scenario_nm_kor);
@@ -425,7 +431,9 @@ const analysisScenariosPopupAnalysisModel = function (scenario_id) {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 	  		$("#analysisModelInfo1").empty();
 	  		$("#analysisModelInfo2").empty();
@@ -476,7 +484,9 @@ const analysisScenariosPopupPretreatModel = function (scenario_id) {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 	  		$("#pretreatModelInfo1").empty();
 	  		$("#pretreatModelInfo2").empty();
@@ -527,7 +537,9 @@ const analysisScenariosPopupTarget = function (scenario_id) {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 	  		$("#analysisDatasetInfo").empty();
 	  		
@@ -576,7 +588,9 @@ const scenarioDelete = function () {
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));

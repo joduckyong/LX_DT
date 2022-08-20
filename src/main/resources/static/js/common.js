@@ -82,12 +82,14 @@ function errorMsg(data){
 	
 	if(data.status === 500){
 		alert(JSON.stringify(data.error).replace(/\"/gi, ''));
-		return;
+		return true;
 	}else if(isEmpty(data.return_code).indexOf("40") >= 0){
 		alert(JSON.stringify(data.return_msg).replace(/\"/gi, ''));
-		return;
+		return true;
 	}else if(isEmpty(data.return_code).indexOf("50") >= 0){
 		alert(JSON.stringify(data.return_msg).replace(/\"/gi, ''));
-		return;
+		return true;
 	}
+	
+	return false;
 }

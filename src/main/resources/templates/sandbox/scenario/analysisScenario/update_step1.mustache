@@ -148,7 +148,9 @@ const scenarioEnrollStepStatus = function (){
     	
     	 if (data != null) {
     		 
-    		 errorMsg(data);
+   		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
    	    	
    	    	if(data.contents != ""){
    	    		$("#regst_status_cd").val(data.contents.regst_status_cd);
@@ -183,7 +185,9 @@ const commonCodeAnalysisUsePurpose = function (){
         }).done(function (data) {
  		  	if (data != null) {
  		  		
- 		  		errorMsg(data);
+ 	    		  if(errorMsg(data)){
+ 	 	          	 return;  
+ 	       	  	  }	
  		  		
  		  	   	if(data.contents != ""){
  		  	   		 $("#anals_use_prpos_cd_radio").empty();
@@ -224,7 +228,9 @@ const commonCodeAnalysisScenarioSetting = function (){
         }).done(function (data) {
  		  	if (data != null) {
  		  		
- 		  		errorMsg(data);
+ 	    		  if(errorMsg(data)){
+ 	 	          	 return;  
+ 	       	  	  }	
  		  		
  		  	   	if(data.contents != ""){
  		  	   		 $("#anals_detail_setting_cd_radio").empty();
@@ -284,7 +290,9 @@ const analysisModelsNameDupCheck = function (t){
     }).done(function (data) {
  	if (data != null) {
  		
- 		errorMsg(data);
+		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
  		
  		let text = ''
  	   	if(data.contents.duplicated){
@@ -363,7 +371,9 @@ const scenarioWritingUpdate = function (){
 	        data: JSON.stringify(data),
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	    	
 	  		let message = JSON.stringify(data.return_msg);
 			alert("수정 되었습니다.");
@@ -398,7 +408,9 @@ const scenarioWritingDetail = function (){
     }).done(function (data) {
     	if (data != null) {
   	    	
-    		errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
     		
   	    	if(data.contents != ""){
   	    		$('#scenario_nm_kor').val(data.contents.scenario_nm_kor);

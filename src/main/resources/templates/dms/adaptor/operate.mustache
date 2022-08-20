@@ -108,7 +108,9 @@ const dpCmCodesClctTyInput = function (group_code) {
     	
 	  	  if (data != null) {
 	  		  
-	  			errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 		  	   	if(data.contents != ""){    	    	
 	    	   		 $.each(data.contents, function (idx, el) {
@@ -145,7 +147,9 @@ const dpIngestAdapterStop = function(){
 		    }).done(function (data) {
 			  	  if (data != null) {
 			  		  
-			  			errorMsg(data);
+		    		  if(errorMsg(data)){
+		  	          	 return;  
+	        	  	  }	
 			  		
 				  	   	if(data.contents != ""){
 				  	   		//data.contents[0].successYn;
@@ -180,7 +184,9 @@ const dpIngestAdapterStart = function(){
 		    }).done(function (data) {
 			  	  if (data != null) {
 			  		  
-			  			errorMsg(data);
+		    		  if(errorMsg(data)){
+		  	          	 return;  
+	        	  	  }	
 			  		
 				  	   	if(data.contents != ""){
 				  	   		//data.contents[0].successYn;
@@ -212,7 +218,9 @@ const dpIngestAdapterStatus = function(){
 	    }).done(function (data) {
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  			
 			  	   	if(data.contents != ""){
 			  	   		
@@ -253,7 +261,9 @@ const dpIngestAdapterOperation = function(){
 	    }).done(function (data) {
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  			
 			  	   	if(data.contents != ""){
 			  	   		$("#adapter_nm").text(data.contents[0].adapter_nm);
@@ -289,7 +299,9 @@ const dpIngestAdapterItStop = function(instance_id){
 		    }).done(function (data) {
 			  	  if (data != null) {
 			  		  
-			  			errorMsg(data);
+		    		  if(errorMsg(data)){
+		  	          	 return;  
+	        	  	  }	
 			  		
 				  	   	if(data.contents != ""){
 				  	   		$("#td_"+instance_id).html('<button class="btn btn-primary btn-sm" onclick=dpIngestAdapterItStart("'+instance_id+'");>시작</button>');
@@ -322,7 +334,9 @@ const dpIngestAdapterItStart = function(instance_id){
 		    }).done(function (data) {
 			  	  if (data != null) {
 			  		  
-			  			errorMsg(data);
+		    		  if(errorMsg(data)){
+		  	          	 return;  
+	        	  	  }	
 			  		
 				  	   	if(data.contents != ""){
 				  	   		$("#td_"+instance_id).html('<button class="btn btn-primary btn-sm" onclick=dpIngestAdapterItStop("'+instance_id+'");>중지</button>');
@@ -357,7 +371,9 @@ const dpIngestAdapterItStatus = function(){
 		    }).done(function (data) {
 			  	  if (data != null) {
 			  		  
-			  			errorMsg(data);
+		    		  if(errorMsg(data)){
+		  	          	 return;  
+	        	  	  }	
 			  		
 				  	   	if(data.contents != ""){
 				  	   		console.log('status2 : '+data.contents[0].status);
@@ -396,7 +412,9 @@ const dpIngestAdapterOperationIt = function(){
 	    }).done(function (data) {
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  		
 			  	   	if(data.contents != ""){
 

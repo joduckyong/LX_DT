@@ -200,7 +200,9 @@ const sandboxAnalysisImagesGet = function(){
 	    	  $("#sandboxAnalysisImagesGet").empty();
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  		
 		  	    	if(data.contents != ""){
 			    	    let insertTr = '';
@@ -241,7 +243,9 @@ const sandboxImagesProgramsGet = function(image_id, docker_image_id){
 	    	  $("#sandboxImagesProgramsGet").empty();
 		  	  if (data != null) {
 		  		  
-			  		errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 			  		
 		  	    	if(data.contents != ""){
 		  	    		contents = data.contents;
@@ -284,7 +288,9 @@ const sandboxServerIpGet = function(){
 	    	  $("#sandboxServerIpGet").empty();
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  		
 		  	    	if(data.contents != ""){
 						 $("#sandboxServerIpGet").empty();
@@ -321,7 +327,9 @@ const sandboxServerPortGet = function(){
 	    	  $("#sandboxServerPortGet").empty();
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  		
 		  	    	if(data.contents != ""){
 		     	        let insertTr = '';
@@ -354,7 +362,9 @@ const commonCodeAnalysisUsePurpose = function (){
         }).done(function (data) {
  		  	if (data != null) {
  		  		
- 		  		errorMsg(data);
+ 	    		  if(errorMsg(data)){
+ 	 	          	 return;  
+ 	       	  	  }	
  		  		
  		  	   	if(data.contents != ""){    	    	
 					 $("#anals_use_prpos_cd").empty();
@@ -449,7 +459,9 @@ const sandboxSettingEnroll = function (val) {
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));    	    
@@ -544,7 +556,9 @@ const sandboxSettingUpdate = function (val) {
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	  		step2();
 	  		
 	    }).fail(function (error) {
@@ -584,7 +598,9 @@ const sandboxNameDupCheck = function(){
             data: JSON.stringify(data)
         }).done(function (data) {
         	
-        	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
         	
       		let message = JSON.stringify(data.return_msg);
       		alert(message.replace(/\"/gi, ''));
@@ -634,7 +650,9 @@ const sandboxEnrollStatus = function(){
             data: JSON.stringify(data)
         }).done(function (data) {
         	
-        	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
         	
          	if(data.contents != ""){
           		$("#sandbox_setup_status_cd").val(data.contents.sandbox_setup_status_cd);
