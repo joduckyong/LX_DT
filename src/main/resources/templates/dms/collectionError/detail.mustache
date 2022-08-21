@@ -184,7 +184,8 @@
 			                        <tr>
 			                            <th>데이터타입</th>
 			                            <th>
-			                                <select class="form-control" name="data_type" id="data_type">
+			                                <select class="form-control" name="data_type" id="data_type" onchange="changeDataType(this);">
+			                                    <option value="">선택</option>
 			                                    <option value="VARCHAR">VARCHAR</option>
 												<option value="INTEGER">INTEGER</option>
 												<option value="NUMERIC">NUMERIC</option>
@@ -193,7 +194,7 @@
 			                            </th>
 			                            <th>데이터 길이</th>
 			                            <th>
-			                                <input class="form-control" type="text" name="data_lt" id="data_lt">
+			                                <input class="form-control" type="text" name="data_lt" id="data_lt" oninput="handleOnInputNumber(this);" readonly="readonly">
 			                            </th>
 			                        </tr>
 			                        <tr>
@@ -215,14 +216,16 @@
 			                        <tr>
 			                            <th>PK 정보</th>
 			                            <th>
-			                                <select class="form-control">
-			                                    <option value="">선택</option>
+			                                <select class="form-control" name="pk_info" id="pk_info">
+			                                    <option value="Y">예</option>
+				                                <option value="N">아니오</option>
 			                                </select>
 			                            </th>
 			                            <th>FK 정보</th>
 			                            <th>
-			                                <select class="form-control">
-			                                    <option value="">선택</option>
+			                                <select class="form-control" name="fk_info" id="fk_info">
+			                                    <option value="Y">예</option>
+				                                <option value="N">아니오</option>
 			                                </select>
 			                            </th>
 			                        </tr>
@@ -242,7 +245,9 @@
 			                        <tr>
 			                            <th>참조 컬럼 식별자</th>
 			                            <th>
-			                            	<input class="form-control" type="text"  name="refrn_column_idntfc_id" id="refrn_column_idntfc_id" readonly="readonly">
+			                            	<select class="form-control" name="refrn_column_idntfc_id" id="refrn_column_idntfc_id" onchange="changeRefrnColumnNm(this);">
+			                                	<option value="">선택</option>
+			                                </select>
 			                            </th>
 			                            <th>참조 컬럼명</th>
 			                            <th>
@@ -619,6 +624,50 @@ const dpIngestMetaTblCol = function () {
     });	
 }
 
+//참조 메타테이블 컬럼 항목
+const dpIngestMetaTblColRefrn = function (table_idntfc_id, refrn_column_idntfc_id) {
+	
+	const data = {
+   		url: '/dp/ingest/meta/tables/column',
+   		user_id: 'user00',
+   		table_idntfc_id: table_idntfc_id,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpIngestMetaTblColRefrn',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		  
+	  		errorMsg(data);
+	  		
+  	    	if(data.contents != ""){
+  	    		let insertTr = '';
+  	    		$("#refrn_column_idntfc_id option:gt(0)").remove();
+  	    		$.each(data.contents, function (idx, el) {
+		  	    	
+  	    			if(el.column_idntfc_id == refrn_column_idntfc_id){
+  	    				insertTr += '<option value="'+el.column_idntfc_id+'" data-engcol="'+el.column_eng_nm+'" selected>'+el.column_korean_nm+'</option>';
+  	    				$("#refrn_column_idntfc_id_eng_nm").val(el.column_eng_nm);
+  	    			}else{
+  	    				insertTr += '<option value="'+el.column_idntfc_id+'" data-engcol="'+el.column_eng_nm+'">'+el.column_korean_nm+'</option>';
+  	    			}
+		  	    	
+  	    		});
+  	    		$("#refrn_column_idntfc_id").append(insertTr);
+  	    		
+  	    	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
 //메타테이블 컬럼등록
 const dpIngestMetaTblSaveCol = function (){
 	let table_idntfc_id = $("#table_idntfc_id").val();
@@ -851,6 +900,11 @@ const setTableNm = function(obj){
 	$("#refrn_table_idntfc_id").val(table_idntfc_id);
 	$("#refrn_table_idntfc_id_nm").val(table_korean_nm);
 	
+	$("#refrn_column_idntfc_id").val("").prop("selected", true);
+	$("#refrn_column_idntfc_id_eng_nm").val("");
+	
+	dpIngestMetaTblColRefrn(table_idntfc_id);
+	
 	closeModal();
 }
 
@@ -898,7 +952,7 @@ const initDetail = function(){
 	$("#refrn_table_idntfc_id").val("");
 	$("#column_eng_nm").val("");
 	$("#refrn_table_idntfc_id_nm").val("");
-	$("#data_type").val("VARCHAR").prop("selected", true);
+	$("#data_type").val("").prop("selected", true);
 	$("#data_lt").val("");
 	$("#refrn_column_idntfc_id").val("");
 	$("#not_null_at").val("Y").prop("selected", true);
@@ -916,6 +970,34 @@ const initDetail = function(){
 	$("#encpt_at").val("Y").prop("selected", true);
 	$("#crud_se").val("");
   	
+}
+
+//데이터타입 선택시 데이터길이/컬럼저장타입 변경
+const changeDataType = function(obj){
+	let val = $(obj).val();
+	$('#data_lt').val('');
+	if(val == 'VARCHAR'){
+		$('#column_stre_type').val('String');
+		$('#data_lt').prop('readonly', false);
+	}else if(val == 'INTEGER'){
+		$('#column_stre_type').val('Integer');
+		$('#data_lt').prop('readonly', true);
+	}else if(val == 'NUMERIC'){
+		$('#column_stre_type').val('Double');
+		$('#data_lt').prop('readonly', false);
+	}else if(val == 'TIMESTAMPTZ'){
+		$('#column_stre_type').val('Date');
+		$('#data_lt').prop('readonly', true);
+	}else{
+		$('#column_stre_type').val('');
+		$('#data_lt').prop('readonly', false);
+	}
+}
+
+//참조컬럼식별자 변경 선택
+const changeRefrnColumnNm = function(obj){
+	let column_idntfc_id = $(obj).val();
+	$("#refrn_column_idntfc_id_eng_nm").val($(obj).find("option:selected").data("engcol"));
 }
 
 //목록 화면

@@ -125,7 +125,7 @@
 				                            </th>
 				                            <th>데이터 길이</th>
 				                            <th>
-				                                <input class="form-control" type="text" name="data_lt" id="data_lt" oninput="handleOnInputNumber(this);">
+				                                <input class="form-control" type="text" name="data_lt" id="data_lt" oninput="handleOnInputNumber(this);" readonly="readonly">
 				                            </th>
 				                            <th>참조 컬럼 식별자</th>
 				                            <th colspan="3">
@@ -760,16 +760,19 @@ const changeDataType = function(obj){
 	$('#data_lt').val('');
 	if(val == 'VARCHAR'){
 		$('#column_stre_type').val('String');
-		$('#data_lt').prop('disabled', false);
+		$('#data_lt').prop('readonly', false);
 	}else if(val == 'INTEGER'){
 		$('#column_stre_type').val('Integer');
-		$('#data_lt').prop('disabled', true);
+		$('#data_lt').prop('readonly', true);
 	}else if(val == 'NUMERIC'){
 		$('#column_stre_type').val('Double');
-		$('#data_lt').prop('disabled', false);
+		$('#data_lt').prop('readonly', false);
 	}else if(val == 'TIMESTAMPTZ'){
 		$('#column_stre_type').val('Date');
-		$('#data_lt').prop('disabled', true);
+		$('#data_lt').prop('readonly', true);
+	}else{
+		$('#column_stre_type').val('');
+		$('#data_lt').prop('readonly', false);
 	}
 }
 
@@ -831,6 +834,7 @@ const initDetail = function(){
   	
 }
 
+//참조컬럼식별자 변경 선택
 const changeRefrnColumnNm = function(obj){
 	let column_idntfc_id = $(obj).val();
 	$("#refrn_column_idntfc_id_eng_nm").val($(obj).find("option:selected").data("engcol"));
