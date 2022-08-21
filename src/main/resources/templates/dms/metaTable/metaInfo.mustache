@@ -226,6 +226,8 @@ const dpIngestMetaItemSave = function () {
 	let arr = new Array();
 	$("tr[name='dset_idntfc_id']").each(function(idx, el){
 		let dset_idntfc_id = $(el).data("idntfc_id");
+		let chgyn = $(el).data("chgyn");
+		
 		let cl_bass = $(el).find("input[name='cl_bass']").val();
 		let cl_qlity = $(el).find("input[name='cl_qlity']").val();
 		let cl_cntm = $(el).find("input[name='cl_cntm']").val();
@@ -241,15 +243,17 @@ const dpIngestMetaItemSave = function () {
             cl_wdtb: cl_wdtb,
             cl_crlts: cl_crlts,
 		}
+		if(chgyn == 'Y'){
+			arr.push(obj);
+		}
 		
-		arr.push(obj);
 	});
 	
 	if(arr.length == 0){
-		alert("선택된 항목이 없습니다!");
+		alert("변경된 항목이 없습니다!");
 		return;
 	}
-	
+
 	const data = {
    		url: '/dp/ingest/meta/item/save',
    		user_id: 'user00',	
@@ -284,6 +288,7 @@ const btnSearch = function(){
 
 //체크박스 클릭 값 갱신
 const setCheckValue = function(obj){
+	$(obj).parents("tr[name='dset_idntfc_id']").data("chgyn","Y");
 	if($(obj).is(":checked")){
 		$(obj).val("Y");
 	}else{

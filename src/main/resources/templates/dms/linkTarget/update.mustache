@@ -1365,7 +1365,7 @@ const createQuery = function(){
 	
 	$("#sqlText").val('');
 	
-	if(validationCheck()){
+	if(validationCheck('Y')){
 		let svrData = getSvrData();
 		let cndData = getCndData();
 		let sortData = getSortData();
@@ -1601,7 +1601,7 @@ const paingDefault = function(obj){
 }
 
 //유효성 검사
-const validationCheck = function(){
+const validationCheck = function(excludeYn){
 	
 	let isValid = true;
 	
@@ -1619,6 +1619,16 @@ const validationCheck = function(){
 			isValid = false;
 			return isValid;
 		}
+    	
+    	if(excludeYn != 'Y'){
+	        if(!svr_srvNmDesc){
+	            alert("명칭 설명을 입력하세요.");
+	            $(this).find('td.svr_srvNmDesc > input').focus();
+	            isValid = false;
+	            return isValid;
+	        }
+    	}
+        
     });
 	
 	if(!isValid){
