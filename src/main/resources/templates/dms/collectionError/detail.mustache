@@ -326,7 +326,7 @@
           <div class="modal-body">
           	<div class="x_content">
             	<div class="row">
-            		<div class="table_responsive">
+            		<div class="table_responsive" style="height: 500px; overflow: auto">
             			<div class="table_btns mt-1">
 	                      <button class="btn btn-primary">API 데이터 설정</button>
 	                    </div>
@@ -348,55 +348,7 @@
 	                          <th>예시</th>
 	                        </tr>
 	                      </thead>
-	                      <tbody>
-	                      	<tr>
-	                      		<td>C_NAME_01</td>
-	                      		<td>String</td>
-	                      		<td>
-	                      			<select class="form-control clct_mthd1" disabled>
-	                                	<option val="">선택</option>
-	                            	</select>
-	                      		</td>
-	                      		<td><input class="form-control" type="text" readonly="readonly"></td>
-	                      		<td>
-	                      			<select class="form-control clct_mthd1" disabled>
-	                                	<option val="">C_NAME_01</option>
-	                            	</select>
-	                      		</td>
-	                      		<td><input class="form-control" type="text" readonly="readonly"></td>
-	                      	</tr>
-	                      	<tr>
-	                      		<td>C_NAME_02</td>
-	                      		<td>Integer</td>
-	                      		<td>
-	                      			<select class="form-control clct_mthd1" disabled>
-	                                	<option val="">C_NAME_02</option>
-	                            	</select>
-	                      		</td>
-	                      		<td><input class="form-control" type="text" readonly="readonly"></td>
-	                      		<td>
-	                      			<select class="form-control clct_mthd1" disabled>
-	                                	<option val="">선택</option>
-	                            	</select>
-	                      		</td>
-	                      		<td><input class="form-control" type="text" readonly="readonly"></td>
-	                      	</tr>
-	                      	<tr>
-	                      		<td>C_NAME_03</td>
-	                      		<td>String</td>
-	                      		<td>
-	                      			<select class="form-control clct_mthd1">
-	                                	<option val="">C_NAME_03</option>
-	                            	</select>
-	                      		</td>
-	                      		<td><input class="form-control" type="text" readonly="readonly"></td>
-	                      		<td>
-	                      			<select class="form-control clct_mthd1">
-	                                	<option val="">선택</option>
-	                            	</select>
-	                      		</td>
-	                      		<td><input class="form-control" type="text"></td>
-	                      	</tr>
+	                      <tbody id="matchList">
 	                      </tbody>
 	                    </table>
 	               	</div>
@@ -892,6 +844,58 @@ const dpIngestDataModelsPp = function(){
 	    });			
 }
 
+//Instance 매칭정보 리스트 조회
+const dpIngestAdapterItMatchList = function(){
+	
+	let instance_id = '{{instance_id}}';
+	
+    const data = {
+   		url: '/dp/ingest/adapter/instance/match/list',
+   		user_id: 'user00',
+   		menu_id: '',
+   		instance_id: instance_id,
+    };		
+    
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpIngestAdapterItMatchList',
+        dataType: 'json',
+        contentType: 'application/json; charset-utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+	  	  if (data != null) {
+	  		  
+	  			errorMsg(data);
+	  		
+		  	   	if(data.contents != ""){    	
+		  	   		let insertTr = '';
+   			  	    $.each(data.contents, function (idx, el) {
+   			  	    	insertTr += '<tr>';
+   			  	    	insertTr += '	<td>'+el.column_eng_nm+'</td>';
+   			  	    	insertTr += '	<td>'+el.column_stre_type+'</td>';
+   			  	    	insertTr += '	<td>';
+   			  	    	insertTr += '		<select class="form-control clct_mthd1" disabled>';
+   			  	    	insertTr += '			<option>'+el.source_id+'</option>';
+   			  	    	insertTr += '		</select>';
+   			  	    	insertTr += '	</td>';
+   			  	    	insertTr += '	<td><input class="form-control" type="text" value="'+el.source_path+'" readonly="readonly"></td>';
+   			  	    	insertTr += '	<td>';
+   			  	    	insertTr += '		<select class="form-control clct_mthd1" disabled>';
+   			  	    	insertTr += '			<option>'+el.pre_nm+'</option>';
+   			  	    	insertTr += '		</select>';
+   			  	    	insertTr += '	</td>';
+   			  	    	insertTr += '	<td><input class="form-control" type="text" value="'+el.pre_after+'" readonly="readonly"></td>';
+   			  	    	insertTr += '</tr>';
+   			  	    });
+   			  	 	$("#matchList").append(insertTr);
+		  	   	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });			
+}
+
 //더블클릭 테이블명 전달
 const setTableNm = function(obj){
 	let table_idntfc_id = $(obj).data("idntfc_id");
@@ -931,6 +935,7 @@ const table_addModal = function(){
 
 //Instance 매칭정보 변경모달 추가
 const instance_addModal = function(){
+	dpIngestAdapterItMatchList();
 	$('#instance_add_modal').modal('show');
 }
 
