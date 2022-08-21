@@ -293,6 +293,120 @@ const adaptorSetConfigAdd = function(){
 }
 
 //접속정보 설정 조회
+const dpIngestItPpInfo = function(clct_mthd, clct_ty, connect_id){
+	
+    const data = {
+	   		url: '/dp/ingest/instance/property/info',
+	   		connect_id: connect_id,	
+	   		clct_mthd: clct_mthd,	
+	   		clct_ty: clct_ty,	
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',
+	    };		
+	    
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestItPpInfo',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+ 	    	 
+	    	if (data != null) {
+		  		  
+	    		if(errorMsg(data)){
+	  	          	 return;  
+      	 	 	}	
+		  		
+		  	   	if(data.contents != ""){    	
+   		     	    let insertTr = '';
+   		     	    let i = 0;	
+	  			    $.each(data.contents, function (idx, el) {
+	  		  //  		el.connect_id; 	          
+	  		  //  		el.item; 	          
+	  		  // 		el.item_nm; 	          
+	  		  //  		el.item_described; 	          
+	  		  //  		el.use_yn; 	          
+	  		    		
+		     	          insertTr += '<tr>';
+		     		      insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList" onclick=checkConfigOnlyOne(this); id="checkConfig_'+(i+1)+'" value="'+el.item+'"></td>';
+		     		      insertTr += ' <td style="text-align: center;">'+(++i)+'</td>';
+		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+el.item+'" name="configItem" id="configItem_'+i+'" oninput="this.value=this.value.replace(/[^0-9a-zA-Z_]/g, \'\')";></td>';
+		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+el.item_nm+'" name="configIteNm" id="configIteNm_'+i+'"></td>';
+		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configValue" id="configValue_'+i+'"></td>';
+		     		      insertTr += ' <td style="text-align: center;"><select id="change_able_yn_'+i+'">';
+		     		      if(el.change_able_yn === 'Y'){
+    		     		      insertTr += ' <option value="Y" selected>필수</option><option value="N">필수아님</option>';
+		     		      }else{
+    		     		      insertTr += ' <option value="Y" selected>필수</option><option value="N">필수아님</option>';
+		     		      }
+		     		      insertTr += ' </select></td>';
+		     		      insertTr += ' <td style="text-align: center;"><select id="essential_yn_'+i+'">';
+		     		      if(el.essential_yn === 'Y'){
+    		     		      insertTr += ' <option value="Y" selected>필수</option><option value="N">필수아님</option>';
+		     		      }else{
+    		     		      insertTr += ' <option value="Y">필수</option><option value="N" selected>필수아님</option>';
+		     		      }
+		     		      insertTr += ' </select></td>';
+		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+el.item_described+'" name="configItemDescribed" id="configItemDescribed_'+i+'"></td>';
+		                  insertTr += '</tr>';
+	  		    		
+	  			    });
+   			  	    
+   			  	    dpIngestPpInfoCnt = i;
+   	          	    $("#dpIngestPpInfo").append(insertTr);		
+   	          	    
+			  	}
+		  	   	
+		  	  }	  
+	    	
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });		
+}
+
+//접속유형 항목관리 리스트 조회
+const dpIngestItPpType = function(adapter_type_id){
+	
+    const data = {
+	   		url: '/dp/ingest/instance/property/type',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',
+	    };		
+	    
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestItPpType',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+ 	    	  
+	    	if (data != null) {
+		  		  
+	    		if(errorMsg(data)){
+	  	          	 return;  
+      	 	 	}	
+		  		
+		  	   	if(data.contents != ""){    	
+	  			    $.each(data.contents, function (idx, el) {
+	  			    		/*
+	  			    		let clct_mthd = el.clct_mthd;
+	  			    		let clct_ty = el.clct_ty;
+	  			    		let connect_id = el.connect_id;
+	  			    		dpIngestItPpInfo(clct_mthd, clct_ty, connect_id);
+	  			    	*/
+	  			    });
+			  	}
+		  	  }	  
+	    	
+
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });		
+}
+
+//접속정보 설정 조회
 const dpIngestPpInfo = function(adapter_type_id){
 	
     const data = {
@@ -318,6 +432,7 @@ const dpIngestPpInfo = function(adapter_type_id){
 	  	          	 return;  
         	  	  }	
 		  		
+	    		    console.log('adapter_type_id:'+adapter_type_id);
 			  	   	if(data.contents != ""){    	
     		     	    let insertTr = '';
     		     	    let i = 0;	
@@ -348,6 +463,8 @@ const dpIngestPpInfo = function(adapter_type_id){
     			  	    
     			  	    dpIngestPpInfoCnt = i;
     	          	    $("#dpIngestPpInfo").append(insertTr);		    	   			 
+			  	   	}else{
+				  	   	dpIngestItPpType(adapter_type_id);
 			  	   	}
 		  	  }
 	    	  
