@@ -1046,18 +1046,20 @@ const addPopupList = function(){
 
 //조건항목 삭제
 const deleteCndList = function (){
-	$('input:checkbox[name="cnd_chk"]:checked').each(function() {
-		$(this).parents('tr.cnd_list').remove();
-   });
+// 	$('input:checkbox[name="cnd_chk"]:checked').each(function() {
+// 		$(this).parents('tr.cnd_list').remove();
+//    });
+	$('tr.cnd_list:last').remove();
 }
 
 //정렬순서 삭제
 const deleteSortList = function (){
-	$('input:checkbox[name="sort_chk"]:checked').each(function() {
-		$(this).parents('tr.sort_list').remove();
-   	});
+// 	$('input:checkbox[name="sort_chk"]:checked').each(function() {
+// 		$(this).parents('tr.sort_list').remove();
+//    	});
+	$('tr.sort_list:last').remove();
 	
-	sortNumbering();
+// 	sortNumbering();
 }
 
 //데이터분배 대상 설정팝업 삭제
