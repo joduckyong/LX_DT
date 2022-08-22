@@ -352,7 +352,14 @@ const dpIngestAdapterItMatch = function(){
 			  	   		if(isEmpty(data.contents[0].id_mix) === ''){
 				  	   		$("#drake_pre").val(data.contents[0].table_eng_nm+".");
 			  	   		}else{
-				  	   		$("#drake_pre").val(data.contents[0].id_mix+".");
+			  	   			
+			  	   			if(isEmpty(data.contents[0].id_mix.substr(data.contents[0].id_mix.indexOf(".")+1)) === ''){
+					  	   		$("#drake_pre").val(data.contents[0].id_mix+".");
+			  	   			}else{
+				  	   			$("#drake_pre").val(data.contents[0].id_mix.substr(0, data.contents[0].id_mix.indexOf(".")+1));
+					  	   		$("#pk_data_set").val(data.contents[0].id_mix);
+			  	   			}
+			  	   			
 			  	   		}
 			  	   		$("#clct_mthd").val(data.contents[0].clct_mthd);
 			  	   		$("#clct_ty").val(data.contents[0].clct_ty);
@@ -448,6 +455,7 @@ const dpIngestAdapterItMatchSave = function(){
 
 const dpIngestDataModelsPp = function(){
 	
+	$("#pk_data_set").val("");
 	$("#drakeLeft").empty();
 	$("#drakeRight").empty();
 	$(".drake_result").html("");
