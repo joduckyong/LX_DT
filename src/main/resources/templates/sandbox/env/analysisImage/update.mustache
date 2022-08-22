@@ -117,7 +117,9 @@ const commonCodeAnalysisUsePurpose = function (){
         }).done(function (data) {
  		  	if (data != null) {
  		  		
- 		  		errorMsg(data);
+ 	    		  if(errorMsg(data)){
+ 	 	          	 return;  
+ 	       	  	  }	
  		  		
  		  	   	if(data.contents != ""){
  		  	   		 $("#anals_use_prpos_cd_radio").empty();
@@ -176,7 +178,9 @@ const analysisImagesNmDupChk = function (){
     }).done(function (data) {
  	if (data != null) {
  		
- 		errorMsg(data);
+		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
  		
  	   	if(data.contents.duplicated){
  	   		isDuplicate = true;
@@ -225,7 +229,9 @@ const analysisImagesUpdate = function (){
 	        data: JSON.stringify(data),
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));    	
@@ -254,7 +260,9 @@ const analysisImagesDelete = function (){
 	        data: JSON.stringify(data),
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));    	
@@ -293,7 +301,9 @@ const dockerImagesGet = function () {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 	  		$("#dockerImage").empty();
 	  		$("#docker_image_program").empty();
@@ -334,7 +344,9 @@ const analysisDockerImageProgramGet = function (docker_image_id){
     }).done(function (data) {
 	 	if (data != null) {
 	 		
-	 		errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	 		
 	 		$("#docker_image_program").empty();
 	 		
@@ -373,7 +385,9 @@ const analysisImagesDetail = function (){
 	    }).done(function (data) {
 	  		if (data != null) {
 	  			
-	  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 	  			
 		  	   	if(data.contents != ""){    	    	
 				 $("#image_nm").val(data.contents.image_nm);

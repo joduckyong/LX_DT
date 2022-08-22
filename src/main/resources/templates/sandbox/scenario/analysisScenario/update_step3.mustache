@@ -151,7 +151,9 @@ const scenarioEnrollStepStatus = function (){
     	
     	 if (data != null) {
    	    	
-    		 errorMsg(data);
+   		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
     		 
    	    	if(data.contents != ""){
    	    		$("#regst_status_cd").val(data.contents.regst_status_cd);
@@ -189,7 +191,9 @@ const scenarioPretreatModelsGet = function (analsModelId) {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 	  		$("#pretreatModel").empty();
 	  		$("#file_infos").empty();
@@ -267,7 +271,9 @@ const scenarioPretreatModelsDetail = function (anals_model_id) {
     	
 	  	  if (data != null) {
   	    	
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
   	    	if(data.contents != ""){
   	    		let fileInfoTr = '';
@@ -333,7 +339,9 @@ const scenarioPretreatModelSetupUpdate = function(type){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	    	
 	    	let message = JSON.stringify(data.return_msg);
 // 	  		alert(message.replace(/\"/gi, ''));

@@ -271,7 +271,9 @@ const sandboxesGet = function(page, size_per_page){
 	    	  $("#sandboxesGet").empty();
 		  	  if (data != null) {
 		  		  
-	  		  errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 	  		
 		      $("#total_count").text(data.total_count);
 		  	    	if(data.contents != ""){
@@ -341,7 +343,9 @@ const commonCodeSandboxLastStatus = function (){
         }).done(function (data) {
  		  	if (data != null) {
  		  		
- 		  		errorMsg(data);
+ 	    		  if(errorMsg(data)){
+ 	 	          	 return;  
+ 	       	  	  }	
  		  		
  		  	   	if(data.contents != ""){    	    	
 					 $("#sandbox_status_cd").empty();
@@ -373,7 +377,9 @@ const sandboxesRun = function (sandbox_id) {
         data: JSON.stringify(data)
     }).done(function (data) {
     	
-    	errorMsg(data);
+		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
     	
   		let message = JSON.stringify(data.return_msg);
   		alert(message.replace(/\"/gi, ''));
@@ -400,7 +406,9 @@ const sandboxesStop = function (sandbox_id) {
         data: JSON.stringify(data)
     }).done(function (data) {
     	
-    	errorMsg(data);
+		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
     	
   		let message = JSON.stringify(data.return_msg);
   		alert(message.replace(/\"/gi, ''));
@@ -427,7 +435,9 @@ const sandboxesAnalysisRun = function (sandbox_id) {
         data: JSON.stringify(data)
     }).done(function (data) {
     	
-    	errorMsg(data);
+		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
     	
   		let message = JSON.stringify(data.return_msg);
   		alert(message.replace(/\"/gi, ''));
@@ -453,7 +463,9 @@ const sandboxesAnalysisStop = function (sandbox_id) {
         data: JSON.stringify(data)
     }).done(function (data) {
     	
-    	errorMsg(data);
+		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
     	
   		let message = JSON.stringify(data.return_msg);
   		alert(message.replace(/\"/gi, ''));
@@ -479,7 +491,9 @@ const sandboxHealthCheck = function () {
         data: JSON.stringify(data)
     }).done(function (data) {
     	
-    	errorMsg(data);
+		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
     	
     	if(data.contents != ""){
 	   		$.each(data.contents, function (idx, el) {
@@ -512,7 +526,9 @@ const sandboxesPrograms = function(sandbox_id, sandbox_nm){
 	    	  $("#sandboxesPrograms").empty();
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  		
 		  	    	if(data.contents != ""){
 			    	    let insertTr = '';
@@ -560,7 +576,9 @@ const modelInfo = function(sandbox_id, sandbox_nm){
 	    }).done(function (data) {
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  		
 		  	    	if(data.contents != ""){
 			    	    let insertTr = '';
@@ -594,7 +612,9 @@ const modelInfo = function(sandbox_id, sandbox_nm){
 	    }).done(function (data) {
 		  	  if (data != null) {
 		  		  
-			  		errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 			  		
 		  	    	if(data.contents != ""){
 			    	    let insertTr = '';
@@ -684,7 +704,9 @@ const sandboxImageDatasetInfoGet = function(sandbox_id){
 	    	  $("#sandboxImageDatasetInfoGet").empty();
 		  	  if (data != null) {
 		  		  
-			  		errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 			  		
 		  	    	if(data.contents != ""){
 		  	    		contents = data.contents;
@@ -754,7 +776,9 @@ const sandboxAnalysisDataUpload = function() {
 	   	    contentType: false,        
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));    	
@@ -802,7 +826,9 @@ const sandboxDelete = function (sandbox_id) {
         data: JSON.stringify(data)
     }).done(function (data) {
     	
-    	errorMsg(data);
+		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
     	
   		let message = JSON.stringify(data.return_msg);
   		alert(message.replace(/\"/gi, ''));
