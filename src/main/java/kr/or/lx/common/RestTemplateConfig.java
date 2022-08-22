@@ -23,8 +23,8 @@ public class RestTemplateConfig {
 				.setMaxConnPerRoute(5)
 				.build();
 		factory.setHttpClient(httpClient);
-		factory.setReadTimeout(1000 * 5);
-		factory.setConnectTimeout(1000 * 5);
+		factory.setReadTimeout(1000 * 50);
+		factory.setConnectTimeout(1000 * 30);
 		RestTemplate restTemplate = new RestTemplate(factory);
 		restTemplate.setErrorHandler(restTemplateErrorHandler);
 		return restTemplate;
