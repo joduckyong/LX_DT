@@ -756,51 +756,65 @@ const dpIngestPpInfoDelChk = function(){
 //접속정보 설정 저장
 const dpIngestPpDtSave = function(){
 	
+	let message;
 	if(confirm('저장 하시겠습니까?')) {
 		let adapter_type_id;
 	    $("input[name='checkList']:checked").each(function(e){
 	    	adapter_type_id = $(this).val();
 	    });
 	    
-		const data = {
-		   		url: '/dp/ingest/property/detail/save',
-		   		adapter_type_id: adapter_type_id,	
-		   		clct_mthd: $("#clct_mthd_"+adapter_type_id).val(),	
-		   		clct_ty: $("#clct_ty_"+adapter_type_id).val(),	
-		   		user_id: 'user00',	
-		   		menu_id: 'menu_id',
-		   		displau_seq: $("#displauSeq").text(),
-		   		item: $("#configItem").val(),
-		   		item_nm: $("#configIteNm").val(),
-		   		value: $("#configValue").val(),
-		   		change_able_yn: $("#change_able_yn").val(),
-		   		essential_yn: $("#essential_yn").val(),
-		   		item_described: $("#configItemDescribed").val(),
-		    };		
-		
-		
-		console.log('data : '+JSON.stringify(data));
+	    $.each($("#adaptorSetDataConfig tbody tr"), function(){
+		    
+			const data = {
+			   		url: '/dp/ingest/property/detail/save',
+			   		adapter_type_id: adapter_type_id,	
+			   		clct_mthd: $("#clct_mthd_"+adapter_type_id).val(),	
+			   		clct_ty: $("#clct_ty_"+adapter_type_id).val(),	
+			   		user_id: 'user00',	
+			   		menu_id: 'menu_id',
+			   		displau_seq: $(this).find("#displauSeq").text(),
+			   		item: $(this).find("#configItem").val(),
+			   		item_nm: $(this).find("#configIteNm").val(),
+			   		value: $(this).find("#configValue").val(),
+			   		change_able_yn: $(this).find("#change_able_yn").val(),
+			   		essential_yn: $(this).find("#essential_yn").val(),
+			   		item_described: $(this).find("#configItemDescribed").val(),
+			   		
+			   		/*
+			   		displau_seq: $("#displauSeq").text(),
+			   		item: $("#configItem").val(),
+			   		item_nm: $("#configIteNm").val(),
+			   		value: $("#configValue").val(),
+			   		change_able_yn: $("#change_able_yn").val(),
+			   		essential_yn: $("#essential_yn").val(),
+			   		item_described: $("#configItemDescribed").val(),
+			   		*/
+			    };		
+			
+				console.log('data : '+JSON.stringify(data));
 
-		    $.ajax({
-		        type: 'POST',
-		        url: url+'/dpIngestPpDtSave',
-		        dataType: 'json',
-		        contentType: 'application/json; charset-utf-8',
-		        data: JSON.stringify(data)
-		    }).done(function (data) {
-		  		
-	    		  if(errorMsg(data)){
-	  	          	 return;  
-        	  	  }	
-		    	
-		  		let message = JSON.stringify(data.return_msg);
-		  		alert(message.replace(/\"/gi, ''));
-		  		$("#adaptorConfigSetAddCnt").val("0");
-		  		
-		  		dpIngestPpInfo(adapter_type_id);
-		    }).fail(function (error) {
-		        alert(JSON.stringify(error));
-		    });		
+			    $.ajax({
+			        type: 'POST',
+			        url: url+'/dpIngestPpDtSave',
+			        dataType: 'json',
+			        contentType: 'application/json; charset-utf-8',
+			        data: JSON.stringify(data)
+			    }).done(function (data) {
+			  		
+		    		  if(errorMsg(data)){
+		  	          	 return;  
+	        	  	  }	
+			    	
+			  		  message = JSON.stringify(data.return_msg);
+			  		
+			    }).fail(function (error) {
+			        alert(JSON.stringify(error));
+			    });		
+	    }); 
+	    
+ 		alert(message.replace(/\"/gi, ''));
+ 		$("#adaptorConfigSetAddCnt").val("0");
+	    dpIngestPpInfo(adapter_type_id);
 	}
 }
 
