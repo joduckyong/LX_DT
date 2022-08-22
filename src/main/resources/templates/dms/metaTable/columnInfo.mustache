@@ -398,36 +398,34 @@ const dpIngestMetaTblColDt = function (column_idntfc_id) {
 	  		  
   	    	if(data.contents != ""){
   	    		let insertTr = '';
-  	    		$.each(data.contents, function (idx, el) {
   	    			
-  	    			$("#column_korean_nm").val(el.column_korean_nm);
-  	    			$("#refrn_table_idntfc_id").val(el.refrn_table_idntfc_id);
-  	    			$("#column_eng_nm").val(el.column_eng_nm);
-  	    			$("#refrn_table_idntfc_id_nm").val(el.refrn_table_idntfc_id_nm);
-  	    			$("#data_type").val(el.data_type).prop("selected", true);
-  	    			if(el.data_type == 'VARCHAR' || el.data_type == 'NUMERIC'){
-  	    				$('#data_lt').prop('disabled', false);
-  	    			}else{
-  	    				$('#data_lt').prop('disabled', true);
-  	    			}
-  	    			$("#data_lt").val(el.data_lt);
-  	    			$("#refrn_column_idntfc_id").val(el.refrn_column_idntfc_id).prop("selected", true);
-  	    			$("#not_null_at").val(el.not_null_at).prop("selected", true);
-  	    			$("#dset_knd").val(el.dset_knd).prop("selected", true);
-  	    			$("#refrn_column_idntfc_id_eng_nm").val(refrnColumnObj[el.refrn_column_idntfc_id]);
-  	    			$("#pk_info").val(el.pk_info).prop("selected", true);
-  	    			$("#fk_info").val(el.fk_info).prop("selected", true);
-  	    			$("#creat_table_at").val(el.creat_table_at);
-  	    			$("#use_at").val(el.use_at).prop("selected", true);
-  	    			$("#column_stre_type").val(el.column_stre_type);
-  	    			$("#column_dc").val(el.column_dc);
-  	    			$("#crud_dc").val(el.crud_dc);
-  	    			$("#ordr").val(el.ordr);
-  	    			$("#indvdl_info_at").val(el.indvdl_info_at).prop("selected", true);
-  	    			$("#encpt_at").val(el.encpt_at).prop("selected", true);
-  	    			$("#crud_se").val(el.crud_se);
+    			$("#column_korean_nm").val(data.contents[0].column_korean_nm);
+    			$("#refrn_table_idntfc_id").val(data.contents[0].refrn_table_idntfc_id);
+    			$("#column_eng_nm").val(data.contents[0].column_eng_nm);
+    			$("#refrn_table_idntfc_id_nm").val(data.contents[0].refrn_table_idntfc_id_nm);
+    			$("#data_type").val(data.contents[0].data_type).prop("selected", true);
+    			if(data.contents[0].data_type == 'VARCHAR' || data.contents[0].data_type == 'NUMERIC'){
+    				$('#data_lt').prop('disabled', false);
+    			}else{
+    				$('#data_lt').prop('disabled', true);
+    			}
+    			$("#data_lt").val(data.contents[0].data_lt);
+    			$("#refrn_column_idntfc_id").val(data.contents[0].refrn_column_idntfc_id).prop("selected", true);
+    			$("#not_null_at").val(data.contents[0].not_null_at).prop("selected", true);
+    			$("#dset_knd").val(data.contents[0].dset_knd).prop("selected", true);
+    			$("#refrn_column_idntfc_id_eng_nm").val(refrnColumnObj[data.contents[0].refrn_column_idntfc_id]);
+    			$("#pk_info").val(data.contents[0].pk_info).prop("selected", true);
+    			$("#fk_info").val(data.contents[0].fk_info).prop("selected", true);
+    			$("#creat_table_at").val(data.contents[0].creat_table_at);
+    			$("#use_at").val(data.contents[0].use_at).prop("selected", true);
+    			$("#column_stre_type").val(data.contents[0].column_stre_type);
+    			$("#column_dc").val(data.contents[0].column_dc);
+    			$("#crud_dc").val(data.contents[0].crud_dc);
+    			$("#ordr").val(data.contents[0].ordr);
+    			$("#indvdl_info_at").val(data.contents[0].indvdl_info_at).prop("selected", true);
+    			$("#encpt_at").val(data.contents[0].encpt_at).prop("selected", true);
+    			$("#crud_se").val(data.contents[0].crud_se);
   	    			
-  	    		});
   	    		
   	    	}
 	  	  }
@@ -530,6 +528,7 @@ const dpIngestMetaTblSaveCol = function (){
 	    }).done(function (data) {
 	  		alert("저장 되었습니다.");
 	  		dpIngestMetaTblCol();
+	  		$("#tbl_layer").hide();
 	    }).fail(function (error) {
 	        alert(JSON.stringify(error));
 	    });	
@@ -632,6 +631,7 @@ const dpIngestMetaTblUpdateCol = function (){
 	    }).done(function (data) {
 	  		alert("수정 되었습니다.");
 	  		dpIngestMetaTblCol();
+	  		$("#tbl_layer").hide();
 	    }).fail(function (error) {
 	        alert(JSON.stringify(error));
 	    });	
