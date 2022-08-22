@@ -304,7 +304,9 @@ const agentRecvData = function(type){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+	  		  if(errorMsg(data)){
+	          	 return;  
+    	  	  }	
 	    	
       		let message = JSON.stringify(data.message);
       		alert(message.replace(/\"/gi, ''));            	 
@@ -339,7 +341,9 @@ const agentRecvLocalCol = function(table_nm){
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
   	    	dataList = data;
  	    	
@@ -384,7 +388,9 @@ const agentRecvLocalTable = function(){
     	
 	  	  if (data != null) {
  	    	
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
  	    	let insertTr = '';
 	  	    $.each(data.tbl_list, function (idx, el) {
@@ -556,7 +562,9 @@ const agentRecvLocalCsvList = function(){
     	
 	  	  if (data != null) {
  	    	
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
  	    	let insertTr = '';
  	    	let i = 0;
@@ -644,7 +652,9 @@ const agentRecvDataMov = function(){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	       	 return;  
+   	  	  }	
 	    	
       		let message = JSON.stringify(data.message);
       		alert(message.replace(/\"/gi, ''));     
@@ -682,7 +692,9 @@ const agentRecvDir = function(){
     	  let insertLi = '<ul><li class="folder expanded">';
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 	  		rootDir = data.root.replace('/root/','');
 	  	    insertLi += rootDir;

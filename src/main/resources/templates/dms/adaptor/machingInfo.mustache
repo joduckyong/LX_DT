@@ -212,7 +212,9 @@ const dpIngestAdapterItMatchList = function(){
 	    	
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  		
 			  	   	if(data.contents != ""){    	
 			  	   		
@@ -261,7 +263,9 @@ const dpIngestAdapterItMatch = function(){
 	    	
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  			
 			  	   	if(data.contents != ""){    	
 			  	   		$("#instance_nm_txt").text(data.contents[0].instance_nm);
@@ -331,7 +335,9 @@ const dpIngestAdapterItMatchSave = function(){
         }).done(function (data) {
   	  	  if (data != null) {
   	  		  
-  	  			errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
   	  		
 		  	   	if(data.contents != ""){    	   
 	  	   			if(data.contents[0].successYn === 'Y'){
@@ -366,7 +372,9 @@ const dpIngestDataModelsPp = function(){
 	    }).done(function (data) {
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  		
 			  	   	if(data.contents != ""){    	
 			  	   		let li = '';
@@ -478,7 +486,9 @@ const dpIngestAdapterItSource = function(){
 	    }).done(function (data) {
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  		
 			  	   	if(data.contents != ""){    	
 	  			  	    
@@ -539,7 +549,9 @@ const dpIngestPopupPpPathSave = function(){
 		    }).done(function (data) {
 			  	  if (data != null) {
 			  		  
-			  			errorMsg(data);
+		    		  if(errorMsg(data)){
+		  	          	 return;  
+	        	  	  }	
 			  			
 			  			if(data.contents[0].successYn === 'Y'){
 			  	 	  		let message = JSON.stringify(data.return_msg);
@@ -580,7 +592,9 @@ const dpIngestPopupPpPath = function(){
 	    	
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  			
 			  	   	if(data.contents != ""){    	
     		     	    let i = 0;

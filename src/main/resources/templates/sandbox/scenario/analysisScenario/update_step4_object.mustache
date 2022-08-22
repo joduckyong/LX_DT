@@ -332,7 +332,9 @@ const scenarioEnrollStepStatus = function (){
     	
     	 if (data != null) {
    	    	
-    		 errorMsg(data);
+   		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
     		 
    	    	if(data.contents != ""){
    	    		$("#regst_status_cd").val(data.contents.regst_status_cd);
@@ -369,7 +371,9 @@ const analysisTargetImagesGet = function () {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 	  		$("#imageDataset").empty();
   	    	
@@ -441,7 +445,9 @@ const analysisImageTargetSettingUpdate = function(){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	    	
 	    	let message = JSON.stringify(data.return_msg);
 // 	  		alert(message.replace(/\"/gi, ''));
@@ -476,7 +482,9 @@ const analysisTargetImagesDetail = function(){
     }).done(function (data) {
     	if (data != null) {
   	    	
-    		errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
     		
   	    	if(data.contents != ""){
   	    		$('#anals_dataset_nm').val(data.contents.anals_dataset_nm);

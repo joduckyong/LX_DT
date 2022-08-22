@@ -82,14 +82,15 @@ function errorMsg(data){
 	
 	if(data.status === 500){
 		alert(JSON.stringify(data.error).replace(/\"/gi, ''));
-		return;
+		return true;
 	}else if(isEmpty(data.return_code).indexOf("40") >= 0){
 		alert(JSON.stringify(data.return_msg).replace(/\"/gi, ''));
-		return;
+		return true;
 	}else if(isEmpty(data.return_code).indexOf("50") >= 0){
 		alert(JSON.stringify(data.return_msg).replace(/\"/gi, ''));
-		return;
+		return true;
 	}
+<<<<<<< HEAD
 }
 
 function jsonToExcelDownload(fileNm, sheetNm, data){
@@ -99,4 +100,8 @@ function jsonToExcelDownload(fileNm, sheetNm, data){
 	let ws = XLSX.utils.json_to_sheet(data);
 	XLSX.utils.book_append_sheet(wb, ws, sheetNm);
 	XLSX.writeFile(wb,(filename));
+=======
+	
+	return false;
+>>>>>>> feature/dev2
 }

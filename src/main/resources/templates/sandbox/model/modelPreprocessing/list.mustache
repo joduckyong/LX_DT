@@ -172,7 +172,9 @@ const pretreatModels = function (page, size_per_page) {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 	  		$("#pretreatModels").empty();
   	    	$("#total_count").text(data.total_count);
@@ -221,7 +223,9 @@ const pretreatModelsDetail = function (anals_model_id) {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 	  		$("#file_infos").empty();
 	  		$("#basic_infos").empty();
@@ -270,7 +274,9 @@ const commonCodeAnalysisUsePurpose = function (){
         }).done(function (data) {
  		  	if (data != null) {
  		  		
- 		  		errorMsg(data);
+ 	    		  if(errorMsg(data)){
+ 	 	          	 return;  
+ 	       	  	  }	
  		  		
  		  	   	if(data.contents != ""){    	    	
 					 $("#anals_use_prpos_cd").empty();

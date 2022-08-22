@@ -70,7 +70,9 @@
 	    }).done(function (data) {
 		  	  if (data != null) {
 		  		
-		  		errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  		
 		  		$("#code_nm").val(data.code_nm);
 		  		$("#local_code").val(data.local_code);
@@ -139,7 +141,9 @@
 		    	
 			  	  if (data != null) {
 			  		  
-			  			errorMsg(data);
+		    		  if(errorMsg(data)){
+		  	          	 return;  
+	        	  	  }	
 			  		
 				  		let message = JSON.stringify(data.message);
 				  		alert(message.replace(/\"/gi, ''));

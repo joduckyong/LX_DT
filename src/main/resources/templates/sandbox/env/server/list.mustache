@@ -140,7 +140,9 @@ const serverListGet = function (page, size_per_page) {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 	  		$("#serverList").empty();
   	    	$("#total_count").text(data.total_count);
@@ -195,7 +197,9 @@ const serverDupChk = function (){
     }).done(function (data) {
 	 	if (data != null) {
 	 		
-	 		errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	 		
 	 		if(data.total_count > 0){
 		   		isDuplicate = true;
@@ -258,7 +262,9 @@ const serverInsert = function (){
 	        data: JSON.stringify(data),
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));    	
@@ -313,7 +319,9 @@ const serverUpdate = function (){
 	        data: JSON.stringify(data),
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));    	
@@ -348,7 +356,9 @@ const serverDelete = function (){
 	        data: JSON.stringify(data),
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));    	
@@ -379,7 +389,9 @@ const serverDetail = function (){
     }).done(function (data) {
     	if (data != null) {
     		
-    		errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
     		
 	  	   	if(data.contents != ""){ 
 		  	   	$("#server_ip").val(data.contents.server_ip);
