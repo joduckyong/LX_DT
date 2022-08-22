@@ -342,7 +342,9 @@ const dpCmCategory = function (clsf_type, clsf_id) {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
 	  		
 	  		 if(clsf_type == '1'){	//대분류 선택시
 		  		$("#m_clsf option:gt(0)").remove();
@@ -403,7 +405,9 @@ const dpCmCategoryDataset = function (clsf_type, clsf_id) {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
 	  		
 	  		 if(clsf_type == '1'){	//대분류 선택시
 		  		$("#dset_mclas option:gt(0)").remove();
@@ -480,7 +484,9 @@ const dpIngestMetaTbl = function (page, size_per_page) {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
 	  		
 	  		$("#metaList").empty();
 	  		$("#total_count").text(data.totalcount);
@@ -532,7 +538,9 @@ const dpCmCodesClctMthd = function(){
     }).done(function (data) {
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
 	  		
 	  		$("#clct_mthd option:gt(0)").remove();
 	  		let insertTr = '';
@@ -570,7 +578,9 @@ const dpCmCodesClctTy = function(val){
     }).done(function (data) {
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
 	  		
 	  		$("#clct_ty option:gt(0)").remove();
 	  		let insertTr = '';
@@ -609,7 +619,9 @@ const dpIngestMetaTblDset = function (dset_idntfc_id) {
     }).done(function (data) {
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
 	  		
   	    	if(data.contents != ""){
   	    		$("#dset_idntfc_id").val(dset_idntfc_id);
@@ -664,7 +676,9 @@ const dpIngestMetaTblTbl = function (table_idntfc_id) {
     }).done(function (data) {
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
 	  		
   	    	if(data.contents != ""){
   	    		$("#table_idntfc_id").val(table_idntfc_id);
@@ -735,7 +749,9 @@ const dpIngestMetaTblSaveDset = function (){
 	        data: JSON.stringify(data),
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+          	 return;  
+   	  	  }				
 	    	
 	  		$("#rl_dset_idntfc_id").val(data.contents[0].dset_idntfc_id);
 	  		alert("저장 되었습니다.");
@@ -819,7 +835,9 @@ const dpIngestMetaTblSaveTbl = function (){
 	        data: JSON.stringify(data),
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+          	 return;  
+   	  	  }				
 	    	
 	  		alert("저장 되었습니다.");   	
 	  		dpIngestMetaTbl();
@@ -884,7 +902,9 @@ const dpIngestMetaTblUpdateDset = function (){
 	        data: JSON.stringify(data),
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+          	 return;  
+   	  	  }				
 	    	
 	  		alert("수정 되었습니다.");
 	  		dpIngestMetaTbl();
@@ -976,7 +996,9 @@ const dpIngestMetaTblUpdateTbl = function (){
 	        data: JSON.stringify(data),
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+          	 return;  
+   	  	  }				
 	    	
 	  		alert("수정 되었습니다.");   	
 	  		dpIngestMetaTbl();
@@ -1013,7 +1035,9 @@ const dpIngestMetaTblChk = function (){
         data: JSON.stringify(data),
     }).done(function (data) {
     	
-    	errorMsg(data);
+		  if(errorMsg(data)){
+          	 return;  
+   	  	  }				
     	
     	if(data.contents[0].successYN == 'N'){
  	   		duplicateYn = 'Y';
@@ -1047,7 +1071,9 @@ const dpIngestMetaTblMake = function (table_eng_nm){
         data: JSON.stringify(data),
     }).done(function (data) {
     	
-    	errorMsg(data);
+		  if(errorMsg(data)){
+          	 return;  
+   	  	  }				
     	
     	if(data.contents[0].successYN == 'Y'){
 	   		alert("테이블이 생성되었습니다.");
@@ -1078,7 +1104,9 @@ const dpIngestMetaTblRemake = function (table_eng_nm){
         data: JSON.stringify(data),
     }).done(function (data) {
     	
-    	errorMsg(data);
+		  if(errorMsg(data)){
+          	 return;  
+   	  	  }				
     	
     	if(data.contents[0].successYN == 'Y'){
 	   		alert("테이블이 존재하여 테이블명이 변경되었습니다.");
@@ -1112,7 +1140,9 @@ const dpIngestMetaTblDelChkTbl = function (){
         async: false,
     }).done(function (data) {
     	
-    	errorMsg(data);
+		  if(errorMsg(data)){
+          	 return;  
+   	  	  }				
     	
     	console.log("메타테이블 테이블 삭제 체크 완료!!");
     	isSuccess = true;
@@ -1143,7 +1173,9 @@ const dpIngestMetaTblDelDset = function (){
         async: false,
     }).done(function (data) {
     	
-    	errorMsg(data);
+		  if(errorMsg(data)){
+          	 return;  
+   	  	  }				
     	
     	console.log("메타테이블 데이터셋 삭제 완료!!");
     	isSuccess = true;
@@ -1174,7 +1206,9 @@ const dpIngestMetaTblDelTbl = function (){
         async: false,
     }).done(function (data) {
     	
-    	errorMsg(data);
+		  if(errorMsg(data)){
+          	 return;  
+   	  	  }				
     	
     	console.log("메타테이블 삭제 완료!!");
     	isSuccess = true;

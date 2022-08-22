@@ -293,7 +293,9 @@ const dpCmCodes = function (page, size_per_page) {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
 	  		
 	  		$("#codeGroupList").empty();
 	  		$("#total_count1").text(data.totalcount);
@@ -359,7 +361,9 @@ const dpCmCodesDt = function (page, size_per_page) {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
 	  		
 	  		$("#codeList").empty();
 	  		$("#total_count2").text(data.totalcount);
@@ -428,7 +432,9 @@ const dpCmCodesSave = function () {
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+          	 return;  
+   	  	  }				
 	    	
 	    	alert("저장 되었습니다.");
 	    	dpCmCodes();
@@ -473,7 +479,9 @@ const dpCmCodesDtSave = function () {
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+          	 return;  
+   	  	  }				
 	    	
 	    	alert("저장 되었습니다.");
 	    	dpCmCodesDt();
@@ -520,7 +528,9 @@ const dpCmCodesUpdate = function () {
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+          	 return;  
+   	  	  }				
 	    	
 	    	alert("수정 되었습니다.");
 	    	dpCmCodes();
@@ -569,7 +579,9 @@ const dpCmCodesDtUpdate = function () {
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+          	 return;  
+   	  	  }				
 	    	
 	    	alert("수정 되었습니다.");
 	    	dpCmCodesDt();
@@ -601,7 +613,9 @@ const dpCmCodesDel = function () {
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+          	 return;  
+   	  	  }				
 	    	
 	    	alert("삭제 되었습니다.");
 	    	dpCmCodes();
@@ -635,7 +649,9 @@ const dpCmCodesDtDel = function () {
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+          	 return;  
+   	  	  }				
 	    	
 	    	alert("삭제 되었습니다.");
 	    	dpCmCodesDt();

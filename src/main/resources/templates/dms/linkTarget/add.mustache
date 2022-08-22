@@ -367,7 +367,9 @@ const distributeSetupSchemaList = function () {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
 	  		
   	    	if(data.contents != ""){
   	    		let insertTr = '';
@@ -415,7 +417,9 @@ const distributeSetupSchemaTblList = function () {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
 	  		
 	  		$("#tblList").empty();
   	    	if(data.contents != ""){
@@ -461,7 +465,9 @@ const distributeSetupColList = function () {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
 	  		
 	  		$("#svrList").empty();
   	    	if(data.contents != ""){
@@ -527,7 +533,9 @@ const distributeSetupPopupSrvTargetReg = function(){
 	    	
 		  	  if (data != null) {
 		  		  
-		  		errorMsg(data);
+	    		  if(errorMsg(data)){
+    	          	 return;  
+        	  	  }				
 		  		
 	  	    	if(data.contents != ""){
 	  	    		targetList = data.contents;
@@ -600,7 +608,9 @@ const distributeSetupReg = function(){
 		        data: JSON.stringify(data)
 		    }).done(function (data) {
 		    	
-		    	errorMsg(data);
+	    		  if(errorMsg(data)){
+    	          	 return;  
+        	  	  }				
 		    	
 		    	let message = JSON.stringify(data.returnMsg);
 		  		alert(message.replace(/\"/gi, ''));    	
@@ -677,7 +687,9 @@ const distributeSetupPopupTest = function () {
         data: JSON.stringify(data)
     }).done(function (data) {
     	
-    	errorMsg(data);
+		  if(errorMsg(data)){
+          	 return;  
+   	  	  }				
     	
     	$("#execResult").text(JSON.stringify(data,null,2));
     	  
@@ -704,7 +716,9 @@ const lxpfAdministCtpvList = function(){
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
 	  		
 	  		$("#ctprvnCd option:gt(0)").remove();
   	    	if(data.contents != ""){
@@ -740,7 +754,9 @@ const lxpfAdministSggList = function(obj, i){
 	    	
 		  	  if (data != null) {
 		  		  
-		  		errorMsg(data);
+	    		  if(errorMsg(data)){
+    	          	 return;  
+        	  	  }				
 		  		
 	  	    	if(data.contents != ""){
 	  	    		$.each(data.contents, function (idx, el) {

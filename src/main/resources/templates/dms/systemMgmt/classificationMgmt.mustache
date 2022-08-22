@@ -101,7 +101,9 @@ const dpCmCategoryList = function () {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
 	  		
 	  		let arr = [];
     		let root = {
@@ -233,7 +235,9 @@ const dpCmCategoryDt = function () {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
 	  		
   	    	if(data.contents.length > 0){
   	    		duplicateYn = 'Y';
@@ -306,7 +310,9 @@ const dpCmCategorySave = function () {
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+          	 return;  
+   	  	  }				
 	    	
 	    	alert("저장 되었습니다.");
 	    	dpCmCategoryList();
@@ -373,7 +379,9 @@ const dpCmCategoryUpdate = function () {
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+          	 return;  
+   	  	  }				
 	    	
 	    	alert("수정 되었습니다.");
 	    	dpCmCategoryList();
@@ -402,7 +410,9 @@ const dpCmCategoryDel = function (clsf_id) {
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+          	 return;  
+   	  	  }				
 	    	
 	    	alert("삭제 되었습니다.");
 	    	dpCmCategoryList();
@@ -433,7 +443,9 @@ const dpCmCategoryDelChk = function (clsf_id) {
         async: false
     }).done(function (data) {
     	
-    	errorMsg(data);
+		  if(errorMsg(data)){
+          	 return;  
+   	  	  }				
     	
     	isSuccess = true;
     	

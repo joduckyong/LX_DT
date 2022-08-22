@@ -331,7 +331,9 @@ const dpIngestMetaTblCol = function () {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
 	  		
 	  		$("#total_count").text(data.totalCount);
   	    	if(data.contents != ""){
@@ -382,7 +384,9 @@ const dpIngestMetaTblColRefrn = function (table_idntfc_id, refrn_column_idntfc_i
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
 	  		
   	    	if(data.contents != ""){
   	    		let insertTr = '';
@@ -434,7 +438,9 @@ const dpIngestMetaTblColDt = function (column_idntfc_id) {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
 	  		
 	  		  
   	    	if(data.contents != ""){
@@ -701,7 +707,9 @@ const dpIngestPopupMetaTbl = function () {
     }).done(function (data) {
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
 	  		
   	    	if(data.contents != ""){
   	    		let insertTr = '';

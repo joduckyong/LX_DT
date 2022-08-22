@@ -90,7 +90,6 @@ function errorMsg(data){
 		alert(JSON.stringify(data.return_msg).replace(/\"/gi, ''));
 		return true;
 	}
-<<<<<<< HEAD
 }
 
 function jsonToExcelDownload(fileNm, sheetNm, data){
@@ -100,8 +99,6 @@ function jsonToExcelDownload(fileNm, sheetNm, data){
 	let ws = XLSX.utils.json_to_sheet(data);
 	XLSX.utils.book_append_sheet(wb, ws, sheetNm);
 	XLSX.writeFile(wb,(filename));
-=======
 	
 	return false;
->>>>>>> feature/dev2
 }

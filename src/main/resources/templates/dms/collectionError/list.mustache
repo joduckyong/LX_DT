@@ -118,7 +118,9 @@ const dpCmCategory = function (clsf_type, clsf_id) {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
 	  		
 	  		 if(clsf_type == '1'){	//대분류 선택시
 		  		$("#m_clsf option:gt(0)").remove();
@@ -195,7 +197,9 @@ const dpIngestErrors = function (page, size_per_page) {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
 	  		
 	  		$("#errorList").empty();
 	  		$("#total_count").text(data.totalcount);

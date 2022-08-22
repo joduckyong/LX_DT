@@ -120,7 +120,9 @@ const distributeSetupList = function (page, size_per_page) {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
 	  		
 	  		$("#d_list").empty();
 	  		$("#total_count").text(data.totCnt);

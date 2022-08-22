@@ -420,7 +420,9 @@ const dpIngestMetaDsetType = function () {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
 	  		
   	    	if(data.contents != ""){
   	    		for(key in data.contents[0]){
@@ -457,7 +459,9 @@ const dpIngestMetaDsetDt = function () {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
 	  		
   	    	if(data.contents != ""){
   	    		for(key in data.contents[0]){
@@ -590,7 +594,9 @@ const dpIngestMetaDsetUpdate = function () {
 	    	
 		  	  if (data != null) {
 		  		  
-		  		errorMsg(data);
+	    		  if(errorMsg(data)){
+    	          	 return;  
+        	  	  }				
 		  		
 	  	    	if(data.contents != ""){
 	  	    		if(data.contents[0].successYN){
@@ -628,7 +634,9 @@ const dpIngestMetaDsetDel = function () {
 	    	
 		  	  if (data != null) {
 		  		  
-		  		errorMsg(data);
+	    		  if(errorMsg(data)){
+    	          	 return;  
+        	  	  }				
 		  		
 	  	    	if(data.contents != ""){
 	  	    		if(data.contents[0].successYN){

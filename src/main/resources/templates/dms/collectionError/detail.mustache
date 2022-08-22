@@ -435,8 +435,10 @@ const dpIngestErrorsDt = function () {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
-	  		
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
+    		  
   	    	if(data.contents != ""){
   	    		$("#adapter_nm").text(data.contents[0].adapter_nm);
   	    		$("#dset_korean_nm").text(data.contents[0].dset_korean_nm);
@@ -481,7 +483,9 @@ const dpIngestErrorsInstant = function () {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+    	          	 return;  
+       	  	  }				
 	  		
   	    	if(data.contents != ""){
   	    		alert("정상 처리되었습니다.");
@@ -513,7 +517,9 @@ const dpIngestAdapterItTbl = function() {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+    	          	 return;  
+       	  	  }				
 	  		
   	    	if(data.contents != ""){
   	    		$("#pop_table_korean_nm").text(data.contents[0].table_korean_nm);
@@ -547,7 +553,9 @@ const dpIngestMetaTblCol = function () {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+    	          	 return;  
+       	  	  }				
 	  		
 	  		$("#total_count").text(data.totalCount);
   	    	if(data.contents != ""){
@@ -595,7 +603,9 @@ const dpIngestMetaTblColRefrn = function (table_idntfc_id, refrn_column_idntfc_i
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+    	          	 return;  
+       	  	  }				
 	  		
   	    	if(data.contents != ""){
   	    		let insertTr = '';
@@ -698,7 +708,9 @@ const dpIngestMetaTblSaveCol = function (){
 	        data: JSON.stringify(data),
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }				
 	    	
 	  		alert("저장 되었습니다.");
 	  		initDetail();
@@ -730,7 +742,9 @@ const dpIngestMetaTblRemake = function (){
 	        data: JSON.stringify(data),
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }				
 	    	
 	    	if(data.contents[0].successYN == 'Y'){
 		   		alert("테이블이 수정되었습니다.");
@@ -790,7 +804,9 @@ const dpIngestPopupMetaTbl = function () {
     }).done(function (data) {
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+    	          	 return;  
+       	  	  }				
 	  		
   	    	if(data.contents != ""){
   	    		let insertTr = '';
@@ -828,7 +844,9 @@ const dpIngestDataModelsPp = function(){
 	    }).done(function (data) {
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	    	          	 return;  
+        	  	  }				
 		  		
 			  	   	if(data.contents != ""){    	
 			  	   		let li = '';
@@ -865,7 +883,9 @@ const dpIngestAdapterItMatchList = function(){
     }).done(function (data) {
 	  	  if (data != null) {
 	  		  
-	  			errorMsg(data);
+    		  if(errorMsg(data)){
+    	          	 return;  
+       	  	  }				
 	  		
 		  	   	if(data.contents != ""){    	
 		  	   		let insertTr = '';
