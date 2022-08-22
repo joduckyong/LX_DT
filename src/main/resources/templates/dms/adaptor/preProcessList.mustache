@@ -128,7 +128,9 @@ const dpIngestPre = function(page, size_per_page){
 		  $("#dpIngestPre").empty();
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
   	    	$("#total_count").text(data.total_count);
   	    	
@@ -139,7 +141,7 @@ const dpIngestPre = function(page, size_per_page){
 
 	     	          insertTr += '<tr>';
 	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.pre_nm)+'</td>';
-	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.chang_type)+'</td>';
+	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.change_type)+'</td>';
 	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.property_type)+'</td>';
 	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.number_digit)+'</td>';
 	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.change_shape)+'</td>';

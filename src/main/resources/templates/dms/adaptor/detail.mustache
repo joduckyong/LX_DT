@@ -119,7 +119,7 @@
                       <div class="form-group row col-12 col-md-6">
                         <div class="control-label" style="text-align: center;">수집방식</div>
                         <div class="form-control_box">
-							<select class="form-control" id="clct_mthd" name="clct_mthd" onchange="clctMthdType(this.value, '');">
+							<select class="form-control" id="clct_mthd" name="clct_mthd" >
                             </select>                        
                         </div>
                       </div>
@@ -127,7 +127,6 @@
                         <div class="control-label" style="text-align: center;">수집유형</div>
                         <div class="form-control_box">
                             <select class="form-control" id="clct_ty" name="clct_ty">
-                              <option>선택</option>
                             </select>                          
                         </div>
                       </div>
@@ -305,6 +304,7 @@
         </div>
        </div>
        <input type="hidden" name="instance_id" id="instance_id">
+       <input type="hidden" name="adapter_type_id" id="adapter_type_id">
        <div id="divForm"></div>
         
 {{>layout/footer}}        
@@ -321,6 +321,7 @@ $('body').on('hidden.bs.modal', function () {
 });
 
 //수집방식
+/*
 const dpCmCodesClctMthd = function (group_code, id) {
 	
 	$("#"+id).empty();
@@ -339,7 +340,9 @@ const dpCmCodesClctMthd = function (group_code, id) {
     	
 	  	  if (data != null) {
 	  		  
-	  			errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  			
 		  	   	if(data.contents != ""){    	    	
    					 let selOp = '<option value="">선택</option>';  
@@ -355,10 +358,10 @@ const dpCmCodesClctMthd = function (group_code, id) {
     });
     
 }
-
+*/
 //수집방식 선택 
+/*
 const clctMthdType = function(val, sel){
-//	console.log('val'+val);
 	let clct_mthd = val.substring(0, val.indexOf('|'));
 	console.log('clct_mthd:'+clct_mthd);
 	
@@ -371,6 +374,7 @@ const clctMthdType = function(val, sel){
 	let group_code = val.substring(val.indexOf('|')+1);
 	dpCmCodesClctTy(group_code, 'clct_ty', sel);
 }
+*/
 
 //수집유형
 const dpCmCodesClctTy = function (group_code, id, sel) {
@@ -392,7 +396,9 @@ const dpCmCodesClctTy = function (group_code, id, sel) {
     	
 	  	  if (data != null) {
 	  		  
-	  			errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  			
 		  	   	if(data.contents != ""){    	
 		  	   		 let selOp;
@@ -437,7 +443,9 @@ const dpCmCodesClctMthdInput = function (group_code) {
     }).done(function (data) {
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 		  	   	if(data.contents != ""){    	   
 	    	   		 $.each(data.contents, function (idx, el) {
@@ -470,7 +478,9 @@ const dpCmCodesClctTyInput = function (group_code) {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 		  	   	if(data.contents != ""){    	    	
 	    	   		 $.each(data.contents, function (idx, el) {
@@ -506,7 +516,9 @@ const dpIngestAdapterIt = function(){
 			  $("#dpIngestAdapterIt").empty();
 		  	  if (data != null) {
 		  		  
-		  		errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  		
 	  	    	$("#total_count").text(data.total_count);
 	  	    	
@@ -543,6 +555,57 @@ const dpIngestAdapterIt = function(){
 	    });
 }
 
+//Adapter 유형 조회
+const dpIngestAdapterType = function(adapter_type_id){
+	
+    const data = {
+	   		url: '/dp/ingest/adapter/type',
+	    };		
+	    
+	    $.ajax({
+	        type: 'POST',
+	        url: commonUrl+'/dpIngestAdapterType',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	
+		  	  if (data != null) {
+		  		  
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
+		  		
+			  	   	if(data.contents != ""){  
+    			  	    $.each(data.contents, function (idx, el) {
+    			  //	    	let adapter_type_id = $("#adapter_type_id").val();
+    			  //	    	console.log('adapter_type_id :'+adapter_type_id);
+    			  //	    	console.log('el.adapter_type_id :'+el.adapter_type_id);
+    			  	    	if(adapter_type_id === el.adapter_type_id){
+    			  	    		
+    		   					 let selOp1 = '<option value="">선택</option>';  
+    		 	    				selOp1 += '<option value="'+el.clct_mthd+'">' + $("#"+el.clct_mthd).val() + '</option>';
+    				 	     	 $("#clct_mthd").append(selOp1);  
+    				 	     	 
+    		   					 let selOp2 = '<option value="">선택</option>';  
+    		 	    				selOp2 += '<option value="'+el.clct_ty+'">' + $("#"+el.clct_ty).val() + '</option>';
+    				 	     	 $("#clct_ty").append(selOp2);  
+    				 	     	 
+    			  	    	}
+    			  	    	
+  			  	   		 });
+    			  	    
+			  	   	}
+			  	   	
+		  	  }
+		  	  
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });
+	    
+}
+
 //Adapter 상세 조회
 const dpIngestAdapterDt = function(){
 	
@@ -561,29 +624,22 @@ const dpIngestAdapterDt = function(){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	    	
-	    	  let adapter_id;
-	    	  let adapter_nm;
-	    	  let adapter_type_id;
-	    	  let adapter_type_nm;
-	    	  let use_yn;
 		  	  if (data != null) {
 		  		  
-		  		errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  		
-			  	   	if(data.contents != ""){    	
-		    	   		 $.each(data.contents, function (idx, el) {
-		    	   			adapter_id = el.adapter_id;
-		    	   			adapter_nm = el.adapter_nm;
-		    	   			adapter_type_id = el.adapter_type_id;
-		    	   			adapter_type_nm = el.adapter_type_nm;
-		    	   			use_yn = el.use_yn;
-		 	     	     });
+			  	   	if(data.contents != ""){  
+		   	   		  $("#adapter_nm").text(data.contents[0].adapter_nm);
+		   	   		  $("#adapter_type_nm").text(data.contents[0].adapter_type_nm);
+		   //	   		  $("#adapter_type_id").text(data.contents[0].adapter_type_id);
+		   	   		  $("#use_yn").text(useYnText(data.contents[0].use_yn));
+		   	   		  
+		   	   		  dpIngestAdapterType(data.contents[0].adapter_type_id);
 			  	   	}
 		  	  }
 		  	  
-   	   		  $("#adapter_nm").text(adapter_nm);
-   	   		  $("#adapter_type_nm").text(adapter_type_nm);
-   	   		  $("#use_yn").text(useYnText(use_yn));
 	    	  
 	    }).fail(function (error) {
 	        alert(JSON.stringify(error));
@@ -826,7 +882,9 @@ const dpIngestAdapterItIdChk = function(){
 	    }).done(function (data) {
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  		
 			  	   	if(data.contents != ""){    	
 		    	    	 $("#instance_id").val(data.contents[0].instance_id);
@@ -877,7 +935,8 @@ const dpIngestAdapterItSave = function(type){
     
     let schedule_time_type = $("input:radio[name='schedule_time_type']:checked").val();
     let schedule_type = $("input:radio[name='schedule_type']:checked").val();
-    let clct_mthd = $('#clct_mthd').val().substring(0,$('#clct_mthd').val().indexOf('|'));
+//    let clct_mthd = $('#clct_mthd').val().substring(0,$('#clct_mthd').val().indexOf('|'));
+    let clct_mthd = $('#clct_mthd').val();
 	    
     console.log('schedule_type : '+schedule_type);
     if(schedule_type === "D39001"){
@@ -1043,7 +1102,9 @@ const dpIngestAdapterItSave = function(type){
 		        data: JSON.stringify(data)
 		    }).done(function (data) {
 		    	
-		    	errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		    	
 		  		let message = JSON.stringify(data.return_msg);
 		  		alert(message.replace(/\"/gi, ''));
@@ -1084,8 +1145,9 @@ const dpIngestAdapterItDel = function(instance_id){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	  		
-	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));
@@ -1118,7 +1180,9 @@ const dpIngestAdapterItDelChk = function(){
 		  		
 		    	if (data != null) {
 		    		
-		    		errorMsg(data);
+		    		  if(errorMsg(data)){
+		  	          	 return;  
+	        	  	  }	
 		    		
 			  	   	if(data.contents != ""){    	
 		    	   		 $.each(data.contents, function (idx, el) {
@@ -1158,16 +1222,20 @@ const dpIngestAdapterItDt = function(){
 	    	
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  		
 			  	   	if(data.contents != ""){    	
 			  	   		
 			  	   		$("#instance_nm").val(data.contents[0].instance_nm);
 			  	   		$("#dset_idntfc_id").val(data.contents[0].dset_idntfc_id);
 			  	   		$("#dset_korean_nm").val(data.contents[0].dset_korean_nm);
-			  	   		let clct_mthd_nm = $("#"+data.contents[0].clct_mthd).val();
-			  	   		$("select[name='clct_mthd'] option:contains('"+clct_mthd_nm+"')").prop("selected", true);
-			  	   		clctMthdType($("#clct_mthd").val(), data.contents[0].clct_ty);
+			  	   		$("#clct_mthd").val(data.contents[0].clct_mthd);
+			  	   		$("#clct_ty").val(data.contents[0].clct_ty);
+			  	  // 		let clct_mthd_nm = $("#"+data.contents[0].clct_mthd).val();
+			  	  // 		$("select[name='clct_mthd'] option:contains('"+clct_mthd_nm+"')").prop("selected", true);
+			  	 //  		clctMthdType($("#clct_mthd").val(), data.contents[0].clct_ty);
 			  	   		$("#storage_cycle").val(data.contents[0].storage_cycle);
 			  	   		
 				  	   	$("#clct_mthd").prop('disabled',true);
@@ -1241,7 +1309,9 @@ const dpIngestPopupDset01 = function(){
 	    	  $("#dataSetInfo").empty();
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  		
 			  	   	if(data.contents != ""){    	
     		     	    let insertTr = '';
@@ -1266,7 +1336,7 @@ dpCmCodesClctMthdInput('D34');
 //수집 스케줄 유형
 dpCmCodesClctTyInput('D39');
 
-dpCmCodesClctMthd('D34', 'clct_mthd');
+//dpCmCodesClctMthd('D34', 'clct_mthd');
 dpCmCodesClctTy('D40', 'ymdh', '');
 dpCmCodesClctTy('D39', 'div_schedule_type', '');
 dpCmCodesClctTy('D41', 'schedule_week', '');

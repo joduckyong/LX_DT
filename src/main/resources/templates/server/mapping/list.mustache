@@ -304,7 +304,9 @@ const agentRecvData = function(type){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+	  		  if(errorMsg(data)){
+	          	 return;  
+    	  	  }	
 	    	
       		let message = JSON.stringify(data.message);
       		alert(message.replace(/\"/gi, ''));            	 
@@ -317,10 +319,11 @@ const agentRecvData = function(type){
 }
 
 //로컬DB 컬럼 조회
-const agentRecvLocalCol = function(table_nm, table_desc){
+const agentRecvLocalCol = function(table_nm){
 	
 	$("#table_nm").val(table_nm);
-	$("#table_desc").val(table_desc);
+	$("#table_desc").val($("#table_"+table_nm).text());
+	
 	$("#agentRecvLocalCol").empty();
 	const data = {
    		url: '/recv/local/col',
@@ -338,7 +341,9 @@ const agentRecvLocalCol = function(table_nm, table_desc){
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
   	    	dataList = data;
  	    	
@@ -383,13 +388,15 @@ const agentRecvLocalTable = function(){
     	
 	  	  if (data != null) {
  	    	
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
  	    	let insertTr = '';
 	  	    $.each(data.tbl_list, function (idx, el) {
 				insertTr += '<tr>';
-				insertTr += '	<td style="text-align: left;cursor:pointer;" onclick=agentRecvLocalCol("'+el.tbl_nm+'","'+el.tbl_desc+'");>'+isEmpty(el.tbl_nm)+'</td>';
-				insertTr += '	<td style="text-align: left;cursor:pointer;" >'+isEmpty(el.tbl_desc)+'</td>';
+				insertTr += '	<td style="text-align: left;cursor:pointer;" onclick=agentRecvLocalCol("'+el.tbl_nm+'");>'+isEmpty(el.tbl_nm)+'</td>';
+				insertTr += '	<td style="text-align: left;" id="table_'+el.tbl_nm+'">'+isEmpty(el.tbl_desc)+'</td>';
 				insertTr += '</tr>';
 	  	    });
 			  	    
@@ -448,8 +455,8 @@ const receiveCol = function(len, clct_csv_file, trf_zip_file, file_nm, recv_zip_
 			if(el.table_nm !== ""){
 			    insertTr = '';
 				insertTr += '<tr>';
-				insertTr += '	<td style="text-align: left;cursor:pointer;" onclick=agentRecvLocalCol("'+el.table_nm+'","'+el.table_desc+'");>'+isEmpty(el.table_nm)+'</td>';
-				insertTr += '	<td style="text-align: left;cursor:pointer;" >'+isEmpty(el.table_desc)+'</td>';
+				insertTr += '	<td style="text-align: left;cursor:pointer;" onclick=agentRecvLocalCol("'+el.table_nm+'");>'+isEmpty(el.table_nm)+'</td>';
+				insertTr += '	<td style="text-align: left;" id="table_'+el.table_nm+'">'+isEmpty(el.table_desc)+'</td>';
 				insertTr += '</tr>';
 			   	$("#agentRecvLocalTable").html(insertTr);    
 			}
@@ -555,7 +562,9 @@ const agentRecvLocalCsvList = function(){
     	
 	  	  if (data != null) {
  	    	
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
  	    	let insertTr = '';
  	    	let i = 0;
@@ -643,7 +652,9 @@ const agentRecvDataMov = function(){
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	       	 return;  
+   	  	  }	
 	    	
       		let message = JSON.stringify(data.message);
       		alert(message.replace(/\"/gi, ''));     
@@ -681,7 +692,9 @@ const agentRecvDir = function(){
     	  let insertLi = '<ul><li class="folder expanded">';
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 	  		rootDir = data.root.replace('/root/','');
 	  	    insertLi += rootDir;

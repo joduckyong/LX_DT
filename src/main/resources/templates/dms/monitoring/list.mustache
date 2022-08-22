@@ -376,7 +376,9 @@ const dpCmMoniteringLogsPopup = function(id, log_type){
 	    }).done(function (data) {
 		  	  if (data != null) {
 		  		  
-		  		errorMsg(data);
+        		  if(errorMsg(data)){
+            			return;  
+           		  }	
 		  		
 			  	   	if(data.contents != ""){    	
 				  	   	$("#log_dt_txt").text(isEmpty(data.contents[0].log_dt));
@@ -414,8 +416,9 @@ const dpCmMoniteringLogs = function(){
 	    }).done(function (data) {
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
-		  		
+        		  if(errorMsg(data)){
+            			return;  
+            	  }			  		
 			  	   	if(data.contents != ""){    	
     		     	    let insertTr = '';
     			  	    $.each(data.contents, function (idx, el) {
@@ -453,8 +456,9 @@ const dpCmMoniteringStatus = function(){
 	    }).done(function (data) {
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
-		  		
+        		  if(errorMsg(data)){
+	          	 	 return;  
+          	  	  }		  		
 			  	   	if(data.contents != ""){    	
 			  	   		
 			  	   		let adapter_start = isEmpty(data.contents[0].adapter_start) === '' ? 0:isEmpty(data.contents[0].adapter_start);
@@ -511,8 +515,9 @@ const dpCmMoniteringIngest = function(daytype){
 	    }).done(function (data) {
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
-		  		
+        		  if(errorMsg(data)){
+            			return;  
+            	  }		  		
 			  	   	if(data.contents != ""){    	
 			  	   		
 			  	   		let chartTitle = [];

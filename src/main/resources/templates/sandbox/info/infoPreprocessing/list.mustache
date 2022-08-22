@@ -178,7 +178,9 @@ const pretreatModelsBasicInfo = function (page, size_per_page) {
     	  $("#pretreatModelsBasicInfo").empty();
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
   	    	$("#total_count").text(data.total_count);
     		
@@ -264,7 +266,9 @@ const pretreatModelsBasicInfoEnroll = function () {
 	    	
 		  	  if (data != null) {
 		  		
-		  		errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  		
 		  		let message = JSON.stringify(data.return_msg);
 		  		alert(message.replace(/\"/gi, ''));
@@ -298,7 +302,9 @@ const pretreatModelsBasicInfoDtail = function (anals_model_bass_id) {
     	
 	  	  if (data != null) {
 	  		  
-		  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 		  		
 	  	    	if(data.contents != ""){
 	  	    		
@@ -371,7 +377,9 @@ const pretreatModelsBasicInfoUpdate = function () {
 	    	
 		  	  if (data != null) {
 		  		  
-			  		errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 			  		
 			  		let message = JSON.stringify(data.return_msg);
 			  		alert(message.replace(/\"/gi, ''));
@@ -420,7 +428,11 @@ const commonCodeAnalysisUsePurpose = function (){
             data: JSON.stringify(data)
         }).done(function (data) {
  		  	if (data != null) {
- 		  		errorMsg(data);
+ 		  		
+ 	    		  if(errorMsg(data)){
+ 	 	          	 return;  
+ 	       	  	  }	
+ 		  		
  		  	   	if(data.contents != ""){    	    	
 					 $("#anals_use_prpos_cd").empty();
     				 let selOp = '<option value="">선택</option>';  

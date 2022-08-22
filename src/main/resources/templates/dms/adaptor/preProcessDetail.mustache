@@ -55,7 +55,7 @@
                       <div class="form-group row col-12 col-md-6">
                         <label class="control-label">변경유형</label>
                         <div class="form-control_box">
-                          <select class="form-control" id="chang_type" onchange="changeType(this.value)">
+                          <select class="form-control" id="change_type" onchange="changeType(this.value)">
                           </select>
                         </div>
                       </div>
@@ -143,7 +143,9 @@ const dpCmCodesClctTy = function (group_code, id) {
     	
 	  	  if (data != null) {
 	  		  
-	  			errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 		  	   	if(data.contents != ""){    	    	
    					 let selOp = '<option value="">선택</option>';  
@@ -177,7 +179,7 @@ const dpIngestPreUpdate = function(){
 //	   		integer: $("#integer").val(),	
 //	   		decimal_point: $("#decimal_point").val(),	
 	   		change_word: $("#change_word").val(),	
-	   		chang_type: $("#chang_type").val(),	
+	   		change_type: $("#change_type").val(),	
 	   		user_id: 'user00',	
 	   		menu_id: 'menu_id',	   		
 	    };		
@@ -192,7 +194,9 @@ const dpIngestPreUpdate = function(){
   		
 	  	  if (data != null) {
 	  		  
-	  			errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 		  		let message = JSON.stringify(data.return_msg);
 		  		alert(message.replace(/\"/gi, ''));
@@ -223,7 +227,9 @@ const dpIngestPreDel = function(){
   		
 	  	  if (data != null) {
 	  		  
-	  			errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 		  		let message = JSON.stringify(data.return_msg);
 		  		alert(message.replace(/\"/gi, ''));
@@ -247,9 +253,9 @@ const dpIngestPreIdDelChk = function(type){
         $("#property_type").focus();
         return;
     }
-    if($("#chang_type").val() == '') {
+    if($("#change_type").val() == '') {
         alert('변경유형을 선택하세요!');
-        $("#chang_type").focus();
+        $("#change_type").focus();
         return;
     }
     
@@ -277,7 +283,9 @@ const dpIngestPreIdDelChk = function(type){
 	  		
 		  	  if (data != null) {
 		  		  
-		  			errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 		  		
 			  		let message = JSON.stringify(data.return_msg);
 			  		alert(message.replace(/\"/gi, ''));
@@ -322,7 +330,9 @@ const dpIngestPreDt = function(){
   		
 	  	  if (data != null) {
 	  		  
-	  			errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
 		  		let message = JSON.stringify(data.return_msg);
 		  		alert(message.replace(/\"/gi, ''));
@@ -339,7 +349,7 @@ const dpIngestPreDt = function(){
 	    	//   			$("#integer").val(el.integer);
 	    	//   			$("#decimal_point").val(el.decimal_point);
 	    	   			$("#change_word").val(el.change_word);
-	    	   			$("#chang_type").val(el.chang_type);
+	    	   			$("#change_type").val(el.change_type);
 		 	     	 });			  	   		
 		  	   	}
 	  	  }
@@ -355,7 +365,7 @@ const listPage = function(){
 }
 
 dpCmCodesClctTy('D07', 'property_type');
-dpCmCodesClctTy('D38', 'chang_type');
+dpCmCodesClctTy('D38', 'change_type');
 dpIngestPreDt();
 </script>
 

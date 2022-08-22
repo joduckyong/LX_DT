@@ -186,7 +186,9 @@ const imageDatasetDetail = function() {
     	
 	  	  if (data != null) {
 	  		  
-	  		errorMsg(data);
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
 	  		
   	    	if(data.contents != ""){
   	    		$("#image_dataset_nm").val(data.contents.image_dataset_nm);
@@ -226,7 +228,9 @@ const imageDatasetsDetailList = function(page, size_per_page){
 	    	
 		  	  if (data != null) {
 		  		  
-			  		errorMsg(data); 
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 			  		
 		  	    	if(data.contents != ""){
 		  	    		$("#imageDatasetsDetailList").empty();
@@ -264,7 +268,9 @@ const commonCodeImagesDatasetsCode = function(){
 	    	
 		  	  if (data != null) {
 		  		  
-			  		errorMsg(data);
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
 			  		
 		  	    	if(data.contents != ""){
 		  	    		$("#commonCodeImagesDatasetsCode").empty();
@@ -300,7 +306,9 @@ const imageDatasetDetailDelete = function (image_dataset_seq_num) {
         data: JSON.stringify(data)
     }).done(function (data) {
     	
-    	errorMsg(data);
+		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
     	
   		let message = JSON.stringify(data.return_msg);
   		alert(message.replace(/\"/gi, ''));    	    	
@@ -446,7 +454,9 @@ const imagesDatasetsFileUpload = function() {
 	   	    contentType: false,        
 	    }).done(function (data) {
 	    	
-	    	errorMsg(data);
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
 	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));    	
