@@ -313,11 +313,11 @@ const dpIngestItPpInfo = function(clct_mthd, clct_ty, connect_id){
 	    }).done(function (data) {
  	    	 
 	    	if (data != null) {
-		  		  
+		  		/*  
 	    		if(errorMsg(data)){
 	  	          	 return;  
       	 	 	}	
-		  		
+		  		*/
 		  	   	if(data.contents != ""){    	
    		     	    let insertTr = '';
    		     	    let i = 0;	
@@ -331,8 +331,8 @@ const dpIngestItPpInfo = function(clct_mthd, clct_ty, connect_id){
 		     	          insertTr += '<tr>';
 		     		      insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList" onclick=checkConfigOnlyOne(this); id="checkConfig_'+(i+1)+'" value="'+el.item+'"></td>';
 		     		      insertTr += ' <td style="text-align: center;">'+(++i)+'</td>';
-		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+el.item+'" name="configItem" id="configItem_'+i+'" oninput="this.value=this.value.replace(/[^0-9a-zA-Z_]/g, \'\')";></td>';
-		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+el.item_nm+'" name="configIteNm" id="configIteNm_'+i+'"></td>';
+		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+isEmpty(el.item)+'" name="configItem" id="configItem_'+i+'" oninput="this.value=this.value.replace(/[^0-9a-zA-Z_]/g, \'\')";></td>';
+		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+isEmpty(el.item_nm)+'" name="configIteNm" id="configIteNm_'+i+'"></td>';
 		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configValue" id="configValue_'+i+'"></td>';
 		     		      insertTr += ' <td style="text-align: center;"><select id="change_able_yn_'+i+'">';
 		     		      if(el.change_able_yn === 'Y'){
@@ -348,7 +348,7 @@ const dpIngestItPpInfo = function(clct_mthd, clct_ty, connect_id){
     		     		      insertTr += ' <option value="Y">필수</option><option value="N" selected>필수아님</option>';
 		     		      }
 		     		      insertTr += ' </select></td>';
-		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+el.item_described+'" name="configItemDescribed" id="configItemDescribed_'+i+'"></td>';
+		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+isEmpty(el.item_described)+'" name="configItemDescribed" id="configItemDescribed_'+i+'"></td>';
 		                  insertTr += '</tr>';
 	  		    		
 	  			    });
@@ -390,12 +390,12 @@ const dpIngestItPpType = function(adapter_type_id){
 		  		
 		  	   	if(data.contents != ""){    	
 	  			    $.each(data.contents, function (idx, el) {
-	  			    		/*
+	  			    		
 	  			    		let clct_mthd = el.clct_mthd;
 	  			    		let clct_ty = el.clct_ty;
 	  			    		let connect_id = el.connect_id;
 	  			    		dpIngestItPpInfo(clct_mthd, clct_ty, connect_id);
-	  			    	*/
+	  			    	
 	  			    });
 			  	}
 		  	  }	  
@@ -408,6 +408,8 @@ const dpIngestItPpType = function(adapter_type_id){
 
 //접속정보 설정 조회
 const dpIngestPpInfo = function(adapter_type_id){
+	
+	$("#dpIngestPpInfo").empty();
 	
     const data = {
 	   		url: '/dp/ingest/property/info',
@@ -425,7 +427,7 @@ const dpIngestPpInfo = function(adapter_type_id){
 	        contentType: 'application/json; charset-utf-8',
 	        data: JSON.stringify(data)
 	    }).done(function (data) {
- 	    	  $("#dpIngestPpInfo").empty();
+ 	    	  
 		  	  if (data != null) {
 		  		  
 	    		  if(errorMsg(data)){
@@ -440,9 +442,9 @@ const dpIngestPpInfo = function(adapter_type_id){
     		     	          insertTr += '<tr>';
     		     		      insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList" onclick=checkConfigOnlyOne(this); id="checkConfig_'+(i+1)+'" value="'+el.item+'"></td>';
     		     		      insertTr += ' <td style="text-align: center;">'+(++i)+'</td>';
-    		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+el.item+'" name="configItem" id="configItem_'+i+'" oninput="this.value=this.value.replace(/[^0-9a-zA-Z_]/g, \'\')";></td>';
-    		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+el.item_nm+'" name="configIteNm" id="configIteNm_'+i+'"></td>';
-    		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+el.value+'" name="configValue" id="configValue_'+i+'"></td>';
+    		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+isEmpty(el.item)+'" name="configItem" id="configItem_'+i+'" oninput="this.value=this.value.replace(/[^0-9a-zA-Z_]/g, \'\')";></td>';
+    		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+isEmpty(el.item_nm)+'" name="configIteNm" id="configIteNm_'+i+'"></td>';
+    		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+isEmpty(el.value)+'" name="configValue" id="configValue_'+i+'"></td>';
     		     		      insertTr += ' <td style="text-align: center;"><select id="change_able_yn_'+i+'">';
     		     		      if(el.change_able_yn === 'Y'){
 	    		     		      insertTr += ' <option value="Y" selected>필수</option><option value="N">필수아님</option>';
@@ -457,7 +459,7 @@ const dpIngestPpInfo = function(adapter_type_id){
 	    		     		      insertTr += ' <option value="Y">필수</option><option value="N" selected>필수아님</option>';
     		     		      }
     		     		      insertTr += ' </select></td>';
-    		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+el.item_described+'" name="configItemDescribed" id="configItemDescribed_'+i+'"></td>';
+    		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+isEmpty(el.item_described)+'" name="configItemDescribed" id="configItemDescribed_'+i+'"></td>';
     		                  insertTr += '</tr>';
     			  	    });
     			  	    
@@ -756,51 +758,65 @@ const dpIngestPpInfoDelChk = function(){
 //접속정보 설정 저장
 const dpIngestPpDtSave = function(){
 	
+	let message;
 	if(confirm('저장 하시겠습니까?')) {
 		let adapter_type_id;
 	    $("input[name='checkList']:checked").each(function(e){
 	    	adapter_type_id = $(this).val();
 	    });
 	    
-		const data = {
-		   		url: '/dp/ingest/property/detail/save',
-		   		adapter_type_id: adapter_type_id,	
-		   		clct_mthd: $("#clct_mthd_"+adapter_type_id).val(),	
-		   		clct_ty: $("#clct_ty_"+adapter_type_id).val(),	
-		   		user_id: 'user00',	
-		   		menu_id: 'menu_id',
-		   		displau_seq: $("#displauSeq").text(),
-		   		item: $("#configItem").val(),
-		   		item_nm: $("#configIteNm").val(),
-		   		value: $("#configValue").val(),
-		   		change_able_yn: $("#change_able_yn").val(),
-		   		essential_yn: $("#essential_yn").val(),
-		   		item_described: $("#configItemDescribed").val(),
-		    };		
-		
-		
-		console.log('data : '+JSON.stringify(data));
+	    $.each($("#adaptorSetDataConfig tbody tr"), function(){
+		    
+			const data = {
+			   		url: '/dp/ingest/property/detail/save',
+			   		adapter_type_id: adapter_type_id,	
+			   		clct_mthd: $("#clct_mthd_"+adapter_type_id).val(),	
+			   		clct_ty: $("#clct_ty_"+adapter_type_id).val(),	
+			   		user_id: 'user00',	
+			   		menu_id: 'menu_id',
+			   		displau_seq: $(this).find("#displauSeq").text(),
+			   		item: $(this).find("#configItem").val(),
+			   		item_nm: $(this).find("#configIteNm").val(),
+			   		value: $(this).find("#configValue").val(),
+			   		change_able_yn: $(this).find("#change_able_yn").val(),
+			   		essential_yn: $(this).find("#essential_yn").val(),
+			   		item_described: $(this).find("#configItemDescribed").val(),
+			   		
+			   		/*
+			   		displau_seq: $("#displauSeq").text(),
+			   		item: $("#configItem").val(),
+			   		item_nm: $("#configIteNm").val(),
+			   		value: $("#configValue").val(),
+			   		change_able_yn: $("#change_able_yn").val(),
+			   		essential_yn: $("#essential_yn").val(),
+			   		item_described: $("#configItemDescribed").val(),
+			   		*/
+			    };		
+			
+				console.log('data : '+JSON.stringify(data));
 
-		    $.ajax({
-		        type: 'POST',
-		        url: url+'/dpIngestPpDtSave',
-		        dataType: 'json',
-		        contentType: 'application/json; charset-utf-8',
-		        data: JSON.stringify(data)
-		    }).done(function (data) {
-		  		
-	    		  if(errorMsg(data)){
-	  	          	 return;  
-        	  	  }	
-		    	
-		  		let message = JSON.stringify(data.return_msg);
-		  		alert(message.replace(/\"/gi, ''));
-		  		$("#adaptorConfigSetAddCnt").val("0");
-		  		
-		  		dpIngestPpInfo(adapter_type_id);
-		    }).fail(function (error) {
-		        alert(JSON.stringify(error));
-		    });		
+			    $.ajax({
+			        type: 'POST',
+			        url: url+'/dpIngestPpDtSave',
+			        dataType: 'json',
+			        contentType: 'application/json; charset-utf-8',
+			        data: JSON.stringify(data)
+			    }).done(function (data) {
+			  		
+		    		  if(errorMsg(data)){
+		  	          	 return;  
+	        	  	  }	
+			    	
+			  		  message = JSON.stringify(data.return_msg);
+			  		
+			    }).fail(function (error) {
+			        alert(JSON.stringify(error));
+			    });		
+	    }); 
+	    
+ 		alert(message.replace(/\"/gi, ''));
+ 		$("#adaptorConfigSetAddCnt").val("0");
+	    dpIngestPpInfo(adapter_type_id);
 	}
 }
 

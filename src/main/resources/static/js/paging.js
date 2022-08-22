@@ -21,6 +21,7 @@ const paging = function(totalData, dataPerPage, pageCount, currentPage) {
 	let pageHtml = "";
 
 	if (prev > 0) {
+		pageHtml += "<li class='page-item'><a href='javascript:void(0);' class='page-link' id='first'>&lt;&lt;</a></li>";
 		pageHtml += "<li class='page-item'><a href='javascript:void(0);' class='page-link' id='prev'>&lt;</a></li>";
 	}
 
@@ -36,6 +37,7 @@ const paging = function(totalData, dataPerPage, pageCount, currentPage) {
 
 	if (last < totalPage) {
 		pageHtml += "<li class='page-item'><a href='javascript:void(0);' class='page-link' id='next'>&gt;</a></li>";
+		pageHtml += "<li class='page-item'><a href='javascript:void(0);' class='page-link' id='last'>&gt;&gt;</a></li>";
 	}
 
 	$("#pagingul").html(pageHtml);
@@ -50,8 +52,10 @@ const paging = function(totalData, dataPerPage, pageCount, currentPage) {
 		let $id = $(this).attr("id");
 		selectedPage = $(this).text();
 	
+		if ($id == "first") selectedPage = 1;
 		if ($id == "next") selectedPage = next;
 		if ($id == "prev") selectedPage = prev;
+		if ($id == "last") selectedPage = totalPage;
 	
 		//전역변수에 선택한 페이지 번호를 담는다...
 		page = selectedPage;
@@ -84,6 +88,7 @@ const paging2 = function(totalData, dataPerPage, pageCount, currentPage) {
 	let pageHtml = "";
 
 	if (prev > 0) {
+		pageHtml += "<li class='page-item'><a href='javascript:void(0);' class='page-link' id='first'>&lt;&lt;</a></li>";
 		pageHtml += "<li class='page-item'><a href='javascript:void(0);'class='page-link' id='prev'>&lt;</a></li>";
 	}
 
@@ -99,6 +104,7 @@ const paging2 = function(totalData, dataPerPage, pageCount, currentPage) {
 
 	if (last < totalPage) {
 		pageHtml += "<li class='page-item'><a href='javascript:void(0);' class='page-link' id='next'>&gt;</a></li>";
+		pageHtml += "<li class='page-item'><a href='javascript:void(0);' class='page-link' id='last'>&gt;&gt;</a></li>";
 	}
 
 	$("#pagingul2").html(pageHtml);
@@ -113,9 +119,11 @@ const paging2 = function(totalData, dataPerPage, pageCount, currentPage) {
 		let $id = $(this).attr("id");
 		selectedPage = $(this).text();
 	
+		if ($id == "first") selectedPage = 1;
 		if ($id == "next") selectedPage = next;
 		if ($id == "prev") selectedPage = prev;
-	
+		if ($id == "last") selectedPage = totalPage;
+		
 		//전역변수에 선택한 페이지 번호를 담는다...
 		page = selectedPage;
 		
