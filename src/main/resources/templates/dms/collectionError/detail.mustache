@@ -330,7 +330,7 @@
             			<div class="table_btns mt-1">
 	                      <button class="btn btn-primary">API 데이터 설정</button>
 	                    </div>
-	                    <table class="table" style="text-align: center;">
+	                    <table class="table" style="text-align: center;" id="tableDpIngestAdapterItMatchList">
 	                      <colgroup> 
 	                      </colgroup>
 	                      <thead>
@@ -356,7 +356,7 @@
              </div>
            </div>
            <div class="modal-footer" id="modal_footer">
-           	<button class="btn btn-primary" type="button">수정</button>
+           	<button class="btn btn-primary" type="button" onclick="btnUpdate();">수정</button>
            </div>
          </div>
        </div>
@@ -891,23 +891,129 @@ const dpIngestAdapterItMatchList = function(){
 		  	   		let insertTr = '';
    			  	    $.each(data.contents, function (idx, el) {
    			  	    	insertTr += '<tr>';
-   			  	    	insertTr += '	<td>'+el.column_eng_nm+'</td>';
-   			  	    	insertTr += '	<td>'+el.column_stre_type+'</td>';
+   			  	    	insertTr += '	<td id="column_eng_nm" name="column_eng_nm">'+el.column_eng_nm+'</td>';
+   			  	    	insertTr += '	<td id="column_stre_type" name="column_stre_type">'+el.column_stre_type+'</td>';
    			  	    	insertTr += '	<td>';
-   			  	    	insertTr += '		<select class="form-control clct_mthd1" disabled>';
+   			  	    	insertTr += '		<select class="form-control clct_mthd1" id="source_id" name="source_id" disabled>';
    			  	    	insertTr += '			<option>'+el.source_id+'</option>';
    			  	    	insertTr += '		</select>';
    			  	    	insertTr += '	</td>';
-   			  	    	insertTr += '	<td><input class="form-control" type="text" value="'+el.source_path+'" readonly="readonly"></td>';
+   			  	    	insertTr += '	<td><input class="form-control" type="text" id="source_path" name="source_path" value="'+el.source_path+'" readonly="readonly"></td>';
    			  	    	insertTr += '	<td>';
-   			  	    	insertTr += '		<select class="form-control clct_mthd1" disabled>';
+   			  	    	insertTr += '		<select class="form-control clct_mthd1" id="pre_id" disabled>';
    			  	    	insertTr += '			<option>'+el.pre_nm+'</option>';
    			  	    	insertTr += '		</select>';
    			  	    	insertTr += '	</td>';
-   			  	    	insertTr += '	<td><input class="form-control" type="text" value="'+el.pre_after+'" readonly="readonly"></td>';
+   			  	    	insertTr += '	<td><input class="form-control" type="text" id="pre_after" name="pre_after" value="'+el.pre_after+'" readonly="readonly"></td>';
    			  	    	insertTr += '</tr>';
    			  	    });
    			  	 	$("#matchList").append(insertTr);
+		  	   	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });			
+}
+
+//Instance 매칭정보 저장
+const dpIngestAdapterItMatchSave = function(){
+	return new Promise(function(resolve, reject){
+
+		let lengthCnt = 0;
+		let contentsData = new Array();
+		
+		if($("#matchList tr.match_tr").length == 0){
+			alert("신규 항목이 없습니다.");
+			return;
+		}
+		
+		$.each($("#matchList tr.match_tr"), function(){
+			 let itemObject = new Object();
+			 itemObject.instance_id = '{{instance_id}}';
+			 itemObject.column_eng_nm = $(this).find("#column_eng_nm").text();
+			 itemObject.column_stre_type = $(this).find("#column_stre_type").text();
+			 itemObject.source_id = $(this).find("#source_id").val();
+			 itemObject.source_path = $(this).find("#source_path").val();
+			 itemObject.pre_nm = $(this).find("#pre_id").text();
+			 itemObject.property_type = $(this).find("#property_type").val();
+			 itemObject.pre_after = $(this).find("#pre_after").val();
+			 itemObject.pre_id = $(this).find("#pre_id").val();
+			 itemObject.user_id = 'user00';
+			 contentsData.push(itemObject);
+		});
+		
+	    const data = {
+		   		url: '/dp/ingest/adapter/instance/match/save',
+		   		instance_id: '{{instance_id}}',	
+		   		id_mix: "",
+		   		dset_idntfc_id: "",
+		   		clct_mthd: $("#clct_mthd").text(),
+		   		clct_ty: $("#clct_ty").text(),
+		   		subfolder_yn: "",
+		   		table_eng_nm: $("#table_eng_nm").text(),
+		   		user_id: 'user00',	
+		   		menu_id: 'menu_id',
+		   		contents: contentsData,
+		    };		
+	    
+	    if(confirm("수정 하시겠습니까?")){
+		    $.ajax({
+		        type: 'POST',
+		        url: url+'/dpIngestAdapterItMatchSave',
+		        dataType: 'json',
+		        contentType: 'application/json; charset-utf-8',
+		        data: JSON.stringify(data)
+	        }).done(function (data) {
+	  	  	  if (data != null) {
+	  	  		  
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+	       	  	  }	
+	  	  		
+			  	   	if(data.contents != ""){    	   
+		  	   			if(data.contents[0].successYn === 'Y'){
+	// 		  	 	  		let message = JSON.stringify(data.return_msg);
+	// 		  		  		alert(message.replace(/\"/gi, ''));
+		  	   				resolve(data);
+		  	   			}
+			  	   	}
+		  	  }
+	        }).fail(function (error) {
+	            alert(JSON.stringify(error));
+	        });	
+	    }
+	});
+}
+
+//Instance 매칭정보 리스트 조회
+const dpIngestAdapterItProcess = function(){
+	
+	let instance_id = '{{instance_id}}';
+	
+    const data = {
+   		url: '/dp/ingest/adapter/instance/process',
+   		user_id: 'user00',
+   		instance_id: instance_id,
+    };		
+    
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpIngestAdapterItProcess',
+        dataType: 'json',
+        contentType: 'application/json; charset-utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+	  	  if (data != null) {
+	  		  
+    		  if(errorMsg(data)){
+    	          	 return;  
+       	  	  }				
+	  		
+		  	   	if(data.contents != ""){    	
+			  	   	if(data.contents[0].successYn === 'Y'){
+		  		  		alert("정상 처리되었습니다.");
+	  	   			}
 		  	   	}
 	  	  }
     	  
@@ -1024,6 +1130,18 @@ const changeRefrnColumnNm = function(obj){
 	let column_idntfc_id = $(obj).val();
 	$("#refrn_column_idntfc_id_eng_nm").val($(obj).find("option:selected").data("engcol"));
 }
+
+//인스턴스 매칭정보 팝업 수정
+const btnUpdate = function() {
+	dpIngestAdapterItMatchSave()
+	.then(function(){
+		dpIngestAdapterItProcess();
+	})
+	.catch(function(error){
+		console.log(error)
+	});
+}
+
 
 //목록 화면
 const jsList = function () {
