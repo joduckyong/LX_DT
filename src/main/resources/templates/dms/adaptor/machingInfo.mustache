@@ -53,12 +53,6 @@
                   <div class="table_responsive">
 					<table class="table table-bordered bulk_action table_center" id="tableDpIngestAdapterItMatchList">
                       <colgroup> 
-                        <!-- col width="44px">
-                        <col spna="2" width="100px">
-                        <col span="8" width="90px">
-                        <col span="2" width="102px">
-                        <col span="2" width="90px">
-                        <col width="120px"-->
                       </colgroup>
                       <thead>
                         <tr> 
@@ -79,6 +73,7 @@
                       <tbody id="dpIngestAdapterItMatchList">
                       </tbody>
                     </table>
+                    
                   </div>
                 </div>
               </div>
@@ -185,6 +180,9 @@
 const commonUrl = '/common';
 const url = '/adaptor';
 
+let dpIngestAdapterItSourceData;
+let dpIngestAdapterItPreData;
+
 //Adapter 상세
 const listPage = function(){
 	location.href = url+'/detail/{{adapter_id}}';
@@ -221,48 +219,29 @@ const dpIngestMetaTblCol = function(){
 			  	   		
     		     	    let insertTr = '';
     			  	    $.each(data.contents, function (idx, el) {
-    			  	    	/*
-    			  	    	el.column_idntfc_id;
-    			  	    	el.rl_table_idntfc_id;
-    			  	    	el.dset_knd;
-    			  	    	el.ordr;
-    			  	    	el.refrn_table_idntfc_id;
-    			  	    	el.refrn_column_idntfc_id;
-    			  	    	el.table_eng_nm;
-    			  	    	el.column_eng_nm;
-    			  	    	el.column_korean_nm;
-    			  	    	el.column_dc;
-    			  	    	el.data_type;
-    			  	    	el.data_lt;
-    			  	    	el.data_frmat;
-    			  	    	el.not_null_at;
-    			  	    	el.pk_info;
-    			  	    	el.fk_info;
-    			  	    	el.ak_info;
-    			  	    	el.rstrct_cnd;
-    			  	    	el.indvdl_info_at;
-    			  	    	el.encpt_at;
-    			  	    	el.othbc_at;
-    			  	    	el.column_stre_type;
-    			  	    	el.column_nm;
-    			  	    	el.crud_se;
-    			  	    	el.crud_dc;
-    			  	    	el.use_at;
-    			  	    	el.creat_table_at;
-    			  	    	*/
-  		     	          insertTr += '<tr>';
-		     		      insertTr += ' <td><input type=hidden id="column_eng_nm" name="column_eng_nm" value="'+el.column_eng_nm+'">'+el.column_eng_nm+'</td>';
-		     		      insertTr += ' <td><input type=hidden id="column_stre_type" name="column_stre_type" value="'+el.column_stre_type+'">'+el.column_stre_type+'</td>';
-		     		      insertTr += ' <td></td>';
-		     		      insertTr += ' <td></td>';
-		     		      insertTr += ' <td></td>';
-		     		      insertTr += ' <td></td>';
-		     		      insertTr += ' <td></td>';
-		                  insertTr += '</tr>';
-		                  
+    			  	    	
+    		     	          insertTr += '<tr>';
+    		     		      insertTr += ' <td><input type=hidden id="column_eng_nm" name="column_eng_nm" value="'+el.column_eng_nm+'">'+el.column_eng_nm+'</td>';
+    		     		      insertTr += ' <td><input type=hidden id="column_stre_type" name="column_stre_type" value="'+el.column_stre_type+'">'+el.column_stre_type+'</td>';
+    		     		      insertTr += ' <td><select id="source_id" name="source_id" onchange="sourceIdChange('+idx+', this.value);"><option value="">선택</option>';
+    		     		      $.each(dpIngestAdapterItSourceData, function (idx2, el2) {
+    			     		      insertTr += ' <option value="'+el2.source_id+'" '+(el2.source_id === el.source_id?"selected":"")+'>'+el2.source_id+'</option>';
+    		     		      });		     		      
+    		     		      insertTr += ' </select></td>';
+    		     		      insertTr += ' <td><input type=text id="source_path_'+idx+'" name="source_path" value="" readonly></td>';
+    		     		      insertTr += ' <td><select id="pre_id" onchange="preIdChange('+idx+', this.value);"><option value="">선택</option>';
+    		     		      $.each(dpIngestAdapterItPreData, function (idx2, el2) {
+    			     		      insertTr += ' <option value="'+el2.pre_id+'" '+(el2.pre_id === el.pre_id?"selected":"")+'>'+el2.pre_nm+'</option>';
+    		     		      });
+    		     		      insertTr += ' </select></td>';
+    		     		      
+    		     		      insertTr += ' <td><input type=text id="property_type_'+idx+'" name="property_type" value="" readonly></td>';
+    		     		      insertTr += ' <td><input type=text id="pre_after_'+idx+'" name="pre_after" value="" readonly></td>';
+    		                  insertTr += '</tr>';
     			  	    });
-    	          	    $("#dpIngestAdapterItMatchList").append(insertTr);		  
-			  	   		
+    			  	    
+    			  	    $("#dpIngestAdapterItMatchList").append(insertTr);		
+    			  	    
 			  	   	}
 		  	  }
 	    	  
@@ -301,23 +280,35 @@ const dpIngestAdapterItMatchList = function(){
 			  	   	if(data.contents != ""){    	
 			  	   		
     		     	    let insertTr = '';
-    		     	    let i = 0;
     			  	    $.each(data.contents, function (idx, el) {
+    			  	    	
   		     	          insertTr += '<tr>';
 		     		      insertTr += ' <td><input type=hidden id="column_eng_nm" name="column_eng_nm" value="'+el.column_eng_nm+'">'+el.column_eng_nm+'</td>';
 		     		      insertTr += ' <td><input type=hidden id="column_stre_type" name="column_stre_type" value="'+el.column_stre_type+'">'+el.column_stre_type+'</td>';
-		     		      insertTr += ' <td><select id="source_id" name="source_id"><option value="'+el.source_id+'">'+el.source_id+'</option></select></td>';
+		     		      insertTr += ' <td><select id="source_id" name="source_id"><option value="">선택</option>';
+		     		      $.each(dpIngestAdapterItSourceData, function (idx2, el2) {
+			     		      insertTr += ' <option value="'+el2.source_id+'" '+(el2.source_id === el.source_id?"selected":"")+'>'+el2.source_id+'</option>';
+		     		      });		     		      
+		     		      insertTr += ' </select></td>';
 		     		      insertTr += ' <td><input type=text id="source_path" name="source_path" value="'+el.source_path+'"></td>';
-		     		      insertTr += ' <td><select id="pre_id"><option value="'+el.pre_id+'">'+el.pre_nm+'</option></select></td>';
+		     		      insertTr += ' <td><select id="pre_id"><option value="">선택</option>';
+		     		      $.each(dpIngestAdapterItPreData, function (idx2, el2) {
+			     		      insertTr += ' <option value="'+el2.pre_id+'" '+(el2.pre_id === el.pre_id?"selected":"")+'>'+el2.pre_nm+'</option>';
+		     		      });
+		     		      insertTr += ' </select></td>';
+		     		      
 		     		      insertTr += ' <td><input type=text id="property_type" name="property_type" value="'+el.property_type+'"></td>';
 		     		      insertTr += ' <td><input type=text id="pre_after" name="pre_after" value="'+el.pre_after+'"></td>';
 		                  insertTr += '</tr>';
-		                  i++;
+		                  
     			  	    });
     	          	    $("#dpIngestAdapterItMatchList").append(insertTr);		  
 			  	   		
 			  	   	}else{
-				  	   	dpIngestMetaTblCol();
+			  	   		
+			  	 		setTimeout(function() {
+			  	 			dpIngestMetaTblCol();
+			  	 		}, 300);
 			  	   	}
 		  	  }
 	    	  
@@ -373,7 +364,12 @@ const dpIngestAdapterItMatch = function(){
 	        alert(JSON.stringify(error));
 	    });		
 	    
-    	dpIngestAdapterItMatchList();   
+	    dpIngestAdapterItSource2();
+	    dpIngestAdapterItPre();
+	    
+ 		setTimeout(function() {
+ 			dpIngestAdapterItMatchList();
+ 		}, 300);
 }
 
 //Instance 매칭정보 저장
@@ -481,7 +477,7 @@ const idSetIdMix = function(){
 	$('#idSet').modal('hide');
 }
 //전처리 조회
-/*
+
 const dpIngestAdapterItPre = function(){
 	
     const data = {
@@ -499,26 +495,26 @@ const dpIngestAdapterItPre = function(){
 	    }).done(function (data) {
 		  	  if (data != null) {
 			  	   	if(data.contents != ""){    	
-				  	   	data.contents[0].pre_id;
-				  	 	data.contents[0].pre_nm;
-					  	data.contents[0].property_type;
-					  	data.contents[0].number_digit;
-					  	data.contents[0].change_shape;
-					  	data.contents[0].pre_before;
-					  	data.contents[0].pre_after;
-					  	data.contents[0].start_digit;
-					  	data.contents[0].end_digit;
-					  	data.contents[0].integer;
-					  	data.contents[0].decimal_point;
-					  	data.contents[0].change_word;
+					  	
+			  	   	dpIngestAdapterItPreData = data.contents;
+		                  let insertTr = '';
+					  	    $.each(data.contents, function (idx, el) {
+		    			  		  
+				                  $("#divForm").append($("<input type='hidden' value='"+el.property_type+"' id='div_"+el.pre_id+"_property_type'>"));
+				                  $("#divForm").append($("<input type='hidden' value='"+el.pre_after+"' id='div_"+el.pre_id+"_pre_after'>"));
+					  	    });
+			        //  	    $("#dpIngestAdapterItMatchList").append(insertTr);			                  
+		                  
 			  	   	}
+			  	   	
+		     	  			  	   	
 		  	  }
 	    	  
 	    }).fail(function (error) {
 	        alert(JSON.stringify(error));
 	    });		
 }
-*/
+
 
 //API 데이터 구조 조회
 /*
@@ -553,7 +549,6 @@ const dpIngestAdapterItPath = function(){
 //ID 설정 Source 조회
 const dpIngestAdapterItSource = function(){
 	
-	$("#dpIngestAdapterItSource").empty;		
     const data = {
 	   		url: '/dp/ingest/adapter/instance/source',
 	   		instance_id: '{{instance_id}}',	
@@ -573,25 +568,59 @@ const dpIngestAdapterItSource = function(){
 	    		  if(errorMsg(data)){
 	  	          	 return;  
         	  	  }	
-		  		
-			  	   	if(data.contents != ""){    	
-	  			  	    
-    		     	    let insertTr = '';
-    			  	    $.each(data.contents, function (idx, el) {
-  		     	          insertTr += '<tr>';
-		     		      insertTr += ' <td><input type=checkbox value="Y" id="choice_yn" name="choice_yn" '+(el.choice_yn === 'Y'?'checked':'')+'></td>';
-		     		      insertTr += ' <td>'+el.source_id+'<input type="hidden" name="source_id" id="source_id" value="'+el.source_id+'"></td>';
-		     		      insertTr += ' <td>'+el.source_path+'<input type="hidden" name="source_path" id="source_path" value="'+el.source_path+'"><input type="hidden" name="match_yn" id="match_yn" value="'+el.match_yn+'"></td>';
-		                  insertTr += '</tr>';
-		                  i++;
-    			  	    });	  			  	    
-	  	          	    $("#dpIngestAdapterItSource").append(insertTr);		  	  			  	    
+			  	   	if(data.contents != ""){    
+				  	   	
+			  	   		$.each(data.contents, function (idx, el) {
+				  	  		$("#divForm").append($("<input type='hidden' value='"+el.choice_yn+"' id='div_"+el.source_id.replace(/\./gi, '_')+"_"+el.source_path.replace(/\./gi, '_')+"'>"));
+			  		    });	  
 			  	   	}
 		  	  }
 	    	  
 	    }).fail(function (error) {
 	        alert(JSON.stringify(error));
 	    });		
+	    
+	    dpIngestPopupPpPath();
+}
+
+//ID 설정 Source 조회
+const dpIngestAdapterItSource2 = function(){
+	
+    const data = {
+	   		url: '/dp/ingest/adapter/instance/source',
+	   		instance_id: '{{instance_id}}',	
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',
+	    };		
+	    
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestAdapterItSource',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+		  	  if (data != null) {
+		  		  
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
+			  	   	if(data.contents != ""){    	
+			  	   	dpIngestAdapterItSourceData = data.contents;
+			  	   	
+			  	   	let insertTr = '';
+			  	   		$.each(data.contents, function (idx, el) {
+			  	   				
+			  	   			  $("#divForm").append($("<input type='hidden' value='"+el.source_path+"' id='div_"+el.source_id+"'>"));
+			  		    });	  
+			  	   		
+			  	   	}
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });		
+	    
 }
 
 //API 수신경로 전체 저장
@@ -681,18 +710,20 @@ const dpIngestPopupPpPath = function(){
         	  	  }	
 		  			
 			  	   	if(data.contents != ""){    	
-    		     	    let i = 0;
-    		     	    let insertTr = '';
+	   		     	    let insertTr = '';
     			  	    $.each(data.contents, function (idx, el) {
-  		     	          insertTr += '<tr>';
-		     		      insertTr += ' <td><input type=checkbox name="choice_yn" id="choice_yn" value="Y"></td>';
-		     		      insertTr += ' <td><input type=hidden value='+el.source_path+' name="source_path" id="source_path" >'+el.source_path+'</td>';
-		     		      insertTr += ' <td><input type=hidden value='+el.source_id+' name="source_id" id="source_id" >'+el.source_id+'</td>';
-		                  insertTr += '</tr>';
-		                  i++;
+    			  	    	
+	  		     	          insertTr += '<tr>';
+			     		      insertTr += ' <td><input type=checkbox name="choice_yn" id="choice_yn" value="Y" '+($("#div_"+el.source_id.replace(/\./gi, '_')+"_"+el.source_path.replace(/\./gi, '_')).val() === 'Y'?'checked':'')+'></td>';
+			     		      insertTr += ' <td><input type=hidden value='+el.source_path+' name="source_path" id="source_path" >'+el.source_path+'</td>';
+			     		      insertTr += ' <td><input type=hidden value='+el.source_id+' name="source_id" id="source_id" >'+el.source_id+'</td>';
+			                  insertTr += '</tr>';
+		    			  	    
     			  	    });	  			  	    
-	  	          	    $("#dpIngestPopupPpPath").append(insertTr);		  
+     			  	   $("#dpIngestPopupPpPath").append(insertTr);		 
+    			  	    
 			  	   	}
+			  	  	
 		  	  }
 	    	  
 		  	  
@@ -701,13 +732,24 @@ const dpIngestPopupPpPath = function(){
 	    });		
 }
 
+const sourceIdChange = function(idx, source_id){
+	
+	$("#source_path_"+idx).val($("#div_"+source_id).val());
+}
+
+const preIdChange = function(idx, pre_id){
+	
+	$("#property_type_"+idx).val($("#div_"+pre_id+"_property_type").val());
+	$("#pre_after_"+idx).val($("#div_"+pre_id+"_pre_after").val());
+}
+
 //모달 열기
 const openModal = function(modalId){
 	
 	if(modalId === 'idSet'){
 		dpIngestDataModelsPp();
 	}else if(modalId === 'apiDataSet'){
-		dpIngestPopupPpPath();
+		dpIngestAdapterItSource();
 	}
 	$('#'+modalId).modal('show');
 }

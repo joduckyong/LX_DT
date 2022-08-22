@@ -275,7 +275,7 @@ const adaptorSetConfigAdd = function(){
 	    let insertTr = '';
         insertTr += '<tr id="trCheckConfig_'+adaptorSetDataConfigLen+'">';
         insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList2" onclick=checkConfigOnlyOne(this); id="checkConfig_'+adaptorSetDataConfigLen+'" value="'+adaptorSetDataConfigLen+'"></td>';
-        insertTr += ' <td style="text-align: center;"><span id="displauSeq">'+(++adaptorSetDataConfigLen)+'</span></td>';
+        insertTr += ' <td style="text-align: center;" id="displauSeq">'+(++adaptorSetDataConfigLen)+'</td>';
         insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configItem" id="configItem" oninput="this.value=this.value.replace(/[^0-9a-zA-Z_]/g, \'\')";></td>';
         insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configIteNm" id="configIteNm"></td>';
         insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configValue" id="configValue"></td>';
@@ -330,7 +330,7 @@ const dpIngestItPpInfo = function(clct_mthd, clct_ty, connect_id){
 	  		    		
 		     	          insertTr += '<tr>';
 		     		      insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList" onclick=checkConfigOnlyOne(this); id="checkConfig_'+(i+1)+'" value="'+el.item+'"></td>';
-		     		      insertTr += ' <td style="text-align: center;">'+(++i)+'</td>';
+		     		      insertTr += ' <td style="text-align: center;" id="displauSeq">'+(++i)+'</td>';
 		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+isEmpty(el.item)+'" name="configItem" id="configItem_'+i+'" oninput="this.value=this.value.replace(/[^0-9a-zA-Z_]/g, \'\')";></td>';
 		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+isEmpty(el.item_nm)+'" name="configIteNm" id="configIteNm_'+i+'"></td>';
 		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configValue" id="configValue_'+i+'"></td>';
@@ -441,7 +441,7 @@ const dpIngestPpInfo = function(adapter_type_id){
     			  	    $.each(data.contents, function (idx, el) {
     		     	          insertTr += '<tr>';
     		     		      insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList" onclick=checkConfigOnlyOne(this); id="checkConfig_'+(i+1)+'" value="'+el.item+'"></td>';
-    		     		      insertTr += ' <td style="text-align: center;">'+(++i)+'</td>';
+    		     		      insertTr += ' <td style="text-align: center;" id="displauSeq">'+(++i)+'</td>';
     		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+isEmpty(el.item)+'" name="configItem" id="configItem_'+i+'" oninput="this.value=this.value.replace(/[^0-9a-zA-Z_]/g, \'\')";></td>';
     		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+isEmpty(el.item_nm)+'" name="configIteNm" id="configIteNm_'+i+'"></td>';
     		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+isEmpty(el.value)+'" name="configValue" id="configValue_'+i+'"></td>';
@@ -774,7 +774,7 @@ const dpIngestPpDtSave = function(){
 			   		clct_ty: $("#clct_ty_"+adapter_type_id).val(),	
 			   		user_id: 'user00',	
 			   		menu_id: 'menu_id',
-			   		displau_seq: $(this).find("#displauSeq").text(),
+			   		displau_seq: Number($(this).find("#displauSeq").text()),
 			   		item: $(this).find("#configItem").val(),
 			   		item_nm: $(this).find("#configIteNm").val(),
 			   		value: $(this).find("#configValue").val(),
@@ -807,14 +807,13 @@ const dpIngestPpDtSave = function(){
 		  	          	 return;  
 	        	  	  }	
 			    	
-			  		  message = JSON.stringify(data.return_msg);
 			  		
 			    }).fail(function (error) {
 			        alert(JSON.stringify(error));
 			    });		
 	    }); 
 	    
- 		alert(message.replace(/\"/gi, ''));
+ 		alert("저장되었습니다.");
  		$("#adaptorConfigSetAddCnt").val("0");
 	    dpIngestPpInfo(adapter_type_id);
 	}
