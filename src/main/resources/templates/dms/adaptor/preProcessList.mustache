@@ -139,7 +139,7 @@ const dpIngestPre = function(page, size_per_page){
 	     	    let insertTr = '';
 		  	    $.each(data.contents, function (idx, el) {
 
-	     	          insertTr += '<tr>';
+	     	          insertTr += '<tr style="cursor:pointer;" onclick=detailModal("'+el.pre_id+'");>';
 	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.pre_nm)+'</td>';
 	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.change_type)+'</td>';
 	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.property_type)+'</td>';
@@ -184,6 +184,11 @@ const enterkey = function(e) {
 //등록 페이지
 const addModal = function(){
 	location.href = url+'/preProcessAdd';
+}
+
+//상세 페이지
+const detailModal = function(pre_id){
+	location.href = url+'/preProcessDetail/'+pre_id;
 }
 
 dpIngestPre();

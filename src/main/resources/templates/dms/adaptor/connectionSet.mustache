@@ -487,8 +487,10 @@ const dpIngestAdapterItPpTest = function(){
 		let itemObject = new Object();
 		$.each($("#tbDpIngestAdapterItPp tbody tr"), function(){
 			 console.log('item : '+$(this).find("#item_"+lengthCnt).val()+', item_value : '+$(this).find("#item_value_"+lengthCnt).val());
-	 		 itemObject[($(this).find("#item_"+lengthCnt).val())]=$(this).find("#item_value_"+lengthCnt).val();
-			 lengthCnt++;
+			 if($(this).find("#item_"+lengthCnt).val() !== '' && $(this).find("#item_value_"+lengthCnt).val() !== ''){
+		 		 itemObject[($(this).find("#item_"+lengthCnt).val())]=$(this).find("#item_value_"+lengthCnt).val();
+				 lengthCnt++;
+			 }
 		});
 		
 		contentsData.push(itemObject);

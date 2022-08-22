@@ -287,8 +287,6 @@ const dpIngestPreIdDelChk = function(type){
 	  	          	 return;  
         	  	  }	
 		  		
-			  		let message = JSON.stringify(data.return_msg);
-			  		alert(message.replace(/\"/gi, ''));
 			  	   	if(data.contents != ""){    	
 		    	   		 $.each(data.contents, function (idx, el) {
 		     	   			if(el.chk_yn == 'N'){
@@ -334,11 +332,11 @@ const dpIngestPreDt = function(){
   	          	 return;  
        	  	  }	
 	  		
-		  		let message = JSON.stringify(data.return_msg);
-		  		alert(message.replace(/\"/gi, ''));
 		  	   	if(data.contents != ""){    	
 	    	   		 $.each(data.contents, function (idx, el) {
 	    	   			$("#pre_nm").val(el.pre_nm);
+	    	   			
+	    	   			//속성유형
 	    	   			$("#property_type").val(el.property_type);
 	    	   			$("#number_digit").val(el.number_digit);
 	    	   			$("#change_shape").val(el.change_shape);
@@ -349,6 +347,8 @@ const dpIngestPreDt = function(){
 	    	//   			$("#integer").val(el.integer);
 	    	//   			$("#decimal_point").val(el.decimal_point);
 	    	   			$("#change_word").val(el.change_word);
+	    	   			
+	    	   			//변경유형
 	    	   			$("#change_type").val(el.change_type);
 		 	     	 });			  	   		
 		  	   	}
