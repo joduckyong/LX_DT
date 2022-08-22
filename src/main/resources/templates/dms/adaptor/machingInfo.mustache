@@ -191,6 +191,88 @@ const listPage = function(){
 }
 
 //Instance 매칭정보 리스트 조회
+const dpIngestMetaTblCol = function(){
+
+	$("#dpIngestAdapterItMatchList").empty();	
+	
+	console.log('table_idntfc_id : '+$("#table_idntfc_id").val());
+    const data = {
+	   		url: '/dp/ingest/meta/tables/column',
+	   		table_idntfc_id: $("#table_idntfc_id").val(),	
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',
+	    };		
+	    
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestMetaTblCol',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	
+		  	  if (data != null) {
+		  		  
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
+		  		
+			  	   	if(data.contents != ""){    	
+			  	   		
+    		     	    let insertTr = '';
+    			  	    $.each(data.contents, function (idx, el) {
+    			  	    	/*
+    			  	    	el.column_idntfc_id;
+    			  	    	el.rl_table_idntfc_id;
+    			  	    	el.dset_knd;
+    			  	    	el.ordr;
+    			  	    	el.refrn_table_idntfc_id;
+    			  	    	el.refrn_column_idntfc_id;
+    			  	    	el.table_eng_nm;
+    			  	    	el.column_eng_nm;
+    			  	    	el.column_korean_nm;
+    			  	    	el.column_dc;
+    			  	    	el.data_type;
+    			  	    	el.data_lt;
+    			  	    	el.data_frmat;
+    			  	    	el.not_null_at;
+    			  	    	el.pk_info;
+    			  	    	el.fk_info;
+    			  	    	el.ak_info;
+    			  	    	el.rstrct_cnd;
+    			  	    	el.indvdl_info_at;
+    			  	    	el.encpt_at;
+    			  	    	el.othbc_at;
+    			  	    	el.column_stre_type;
+    			  	    	el.column_nm;
+    			  	    	el.crud_se;
+    			  	    	el.crud_dc;
+    			  	    	el.use_at;
+    			  	    	el.creat_table_at;
+    			  	    	*/
+  		     	          insertTr += '<tr>';
+		     		      insertTr += ' <td><input type=hidden id="column_eng_nm" name="column_eng_nm" value="'+el.column_eng_nm+'">'+el.column_eng_nm+'</td>';
+		     		      insertTr += ' <td><input type=hidden id="column_stre_type" name="column_stre_type" value="'+el.column_stre_type+'">'+el.column_stre_type+'</td>';
+		     		      insertTr += ' <td></td>';
+		     		      insertTr += ' <td></td>';
+		     		      insertTr += ' <td></td>';
+		     		      insertTr += ' <td></td>';
+		     		      insertTr += ' <td></td>';
+		                  insertTr += '</tr>';
+		                  
+    			  	    });
+    	          	    $("#dpIngestAdapterItMatchList").append(insertTr);		  
+			  	   		
+			  	   	}
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	    
+}
+
+//Instance 매칭정보 리스트 조회
 const dpIngestAdapterItMatchList = function(){
 
 	$("#dpIngestAdapterItMatchList").empty();	
@@ -234,6 +316,8 @@ const dpIngestAdapterItMatchList = function(){
     			  	    });
     	          	    $("#dpIngestAdapterItMatchList").append(insertTr);		  
 			  	   		
+			  	   	}else{
+				  	   	dpIngestMetaTblCol();
 			  	   	}
 		  	  }
 	    	  
