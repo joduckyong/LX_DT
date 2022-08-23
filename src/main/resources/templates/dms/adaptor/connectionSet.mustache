@@ -268,6 +268,7 @@ const dpIngestAdapterItDt = function(){
 			  	   		
 			  	   		console.log(data.contents[0].subforder_yn);
 			  	   		
+			  	   		dpIngestAdapterItPp(data.contents[0].adapter_type_id, data.contents[0].clct_mthd, data.contents[0].clct_ty);
 			  	   	}
 		  	  }
 	    	  
@@ -275,7 +276,7 @@ const dpIngestAdapterItDt = function(){
 	        alert(JSON.stringify(error));
 	    });		
 	    
-	    dpIngestItPp();
+	    
 }
 
 //접속정보 설정 추가
@@ -301,15 +302,15 @@ const connectionSetAdd = function(){
 }
 
 //Adapter 유형별 접속정보 조회
-const dpIngestItPp = function(){
+const dpIngestItPp = function(adapter_type_id, clct_mthd, clct_ty){
 	
 	$("#dpIngestAdapterItPp").empty();	
 	
     const data = {
 	   		url: '/dp/ingest/instance/property',
-	   		adapter_type_id: $("#adapter_type_id").val(),	
-	   		clct_mthd: $("#clct_mthd").val(),
-	   		clct_ty: $("#clct_ty").val(),
+	   		adapter_type_id: adapter_type_id,	
+	   		clct_mthd: clct_mthd,
+	   		clct_ty: clct_ty,
 	   		user_id: 'user00',	
 	   		menu_id: 'menu_id',
 	    };		
@@ -350,8 +351,6 @@ const dpIngestItPp = function(){
     			  	    });
     	          	    $("#dpIngestAdapterItPp").append(insertTr);		  
 			  	   		
-			  	   	}else{
-				  		dpIngestAdapterItPp();
 			  	   	}
 		  	  }
 	    	  
@@ -361,7 +360,7 @@ const dpIngestItPp = function(){
 }
 
 //접속정보 설정 조회
-const dpIngestAdapterItPp = function(){
+const dpIngestAdapterItPp = function(adapter_type_id, clct_mthd, clct_ty){
 	
 	$("#dpIngestAdapterItPp").empty();	
 	
@@ -408,6 +407,8 @@ const dpIngestAdapterItPp = function(){
     			  	    });
     	          	    $("#dpIngestAdapterItPp").append(insertTr);		  
 			  	   		
+			  	   	}else{
+				  	   	dpIngestItPp(adapter_type_id, clct_mthd, clct_ty);
 			  	   	}
 		  	  }
 	    	  
