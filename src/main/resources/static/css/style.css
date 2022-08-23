@@ -1495,7 +1495,7 @@ table .input-group-addon {
 }
 
 table tbody tr:hover{
-	background-color: #dedede;
+	background-color: #e9ecef;
 }
 
 @media (min-width: 480px) {

@@ -89,15 +89,12 @@
         	  	  }	
 		  		
 			  		let message = JSON.stringify(data.msg);
-			  		alert(message.replace(/\"/gi, ''));
 			  		
-			  		if(message.replace(/\"/gi, '') === 'AVAILABLE'){
-			  			$("#check").val($("#code").val());
-			  			$("#local_code").focus();
-			  		}else{
-			  			$("#check").val("N");
-			  			$("#code").focus();
-			  		}
+			  		message = message.replace(/\"/gi, '');
+			  		alert(message);
+			  		
+		  			$("#check").val($("#code").val());
+		  			$("#local_code").focus();
 			  		
 		  	  }
 	    	  

@@ -30,16 +30,16 @@
                     <table class="table table-striped">
                       <colgroup> 
                         <col width="11%">
-                        <col width="22%">
                         <col width="21%">
+                        <col width="22%">
                         <col width="23%">
                         <col width="23%">
                       </colgroup>
                       <thead>
                         <tr> 
                           <th style="text-align: center;">no.</th>
-                          <th style="text-align: center;">지자체명</th>
                           <th style="text-align: center;">지자체 코드</th>
+                          <th style="text-align: center;">지자체명</th>
                           <th style="text-align: center;">법정동 코드</th>
                           <th style="text-align: center;">법정동 코드명</th>
                         </tr>
@@ -114,8 +114,8 @@ const agentList = function(page, size_per_page){
 		  	    $.each(data.content, function (idx, el) {
 					insertTr += '<tr>';
 					insertTr += '	<td style="text-align: center;">'+el.no+'</td>';
-					insertTr += '	<td style="text-align: center;">'+el.code_nm+'</td>';
 					insertTr += ' 	<td style="text-align: center;"><span class="blue bold" style="cursor:pointer" onclick=detailPage("'+el.code+'");>'+el.code+'</span></td>';
+					insertTr += '	<td style="text-align: center;">'+el.code_nm+'</td>';
 					insertTr += '	<td style="text-align: center;">'+el.local_code+'</td>';
 					insertTr += '	<td style="text-align: center;">'+el.local_code_nm+'</td>';
 					insertTr += '</tr>';
