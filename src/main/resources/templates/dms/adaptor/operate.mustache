@@ -225,11 +225,13 @@ const dpIngestAdapterStatus = function(){
 			  	   	if(data.contents != ""){
 			  	   		
 			  	   		console.log('status1 : ' + data.contents[0].status);
-			  	   		$("#status_nm").text(data.contents[0].status === 'stop' ?'중지':'실행');
+			  	   		$("#status_nm").text(data.contents[0].status === 'stop' ?'중지':(data.contents[0].status === 'agent does not exist' ? '':'실행'));
 			  	   		
 			  	   		$("#startStop").empty();	
 			  	   		if(data.contents[0].status === 'stop'){
 			  	   			$("#startStop").html('<button class="btn btn-primary btn-sm" onclick=dpIngestAdapterStart();>시작</button>');
+			  	   		}else if(data.contents[0].status === 'agent does not exist'){
+			  	   			$("#startStop").html('');
 			  	   		}else{
 				  	   		$("#startStop").html('<button class="btn btn-primary btn-sm" onclick=dpIngestAdapterStop();>중지</button>');
 			  	   		}

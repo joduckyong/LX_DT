@@ -181,6 +181,12 @@ const enterkey = function(e) {
     }
 }
 
+
+//페이징 함수 호출
+const pagingFun = function(page, size_per_page){
+	dpIngestPre(page, size_per_page);
+}
+
 //등록 페이지
 const addModal = function(){
 	location.href = url+'/preProcessAdd';
