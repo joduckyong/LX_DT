@@ -120,7 +120,7 @@
 			                            </th>
 			                            <th>수집 방식</th>
 			                            <th>
-			                            	<select class="form-control clct_mthd1" name="clct_mthd" id="clct_mthd" onchange="dpCmCodesClctTy();">
+			                            	<select class="form-control clct_mthd1" name="clct_mthd" id="clct_mthd" onchange="dpCmCodesClctTy();" disabled="disabled">
 			                                	<option value="">선택</option>
 			                            	</select>
 			                            </th>
@@ -138,7 +138,7 @@
 			                            </th>
 			                            <th>수집 유형</th>
 			                            <th>
-			                                <select class="form-control clct_ty1" name="clct_ty" id="clct_ty">
+			                                <select class="form-control clct_ty1" name="clct_ty" id="clct_ty" disabled="disabled">
 			                                    <option value="">선택</option>
 			                                </select>
 			                            </th>
@@ -494,7 +494,7 @@ const dpIngestMetaTbl = function (page, size_per_page) {
   	    		let insertTr = '';
 		  	    $.each(data.contents, function (idx, el) {
 		  	    	insertTr += '<tr>';
-		  	    	insertTr += '	<td><input type="radio" name="tbl_chk" data-createyn="'+isEmpty(el.creat_table_at)+'" data-eng="'+isEmpty(el.table_eng_nm)+'"></td>';
+		  	    	insertTr += '	<td><input type="radio" name="tbl_chk" data-createyn="'+isEmpty(el.creat_table_at)+'" data-eng="'+isEmpty(el.table_eng_nm)+'" data-dsetid="'+isEmpty(el.rl_dset_idntfc_id)+'" data-tblid="'+isEmpty(el.table_idntfc_id)+'"></td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.dset_lclas)+'</td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.dset_mclas)+'</td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.dset_sclas)+'</td>';
@@ -1121,7 +1121,7 @@ const dpIngestMetaTblRemake = function (table_eng_nm){
 }
 
 //메타테이블 테이블 삭제 체크
-const dpIngestMetaTblDelChkTbl = function (){
+const dpIngestMetaTblDelChkTbl = function (table_idntfc_id){
 	
 	let isSuccess = false;
 	
@@ -1154,7 +1154,7 @@ const dpIngestMetaTblDelChkTbl = function (){
 }
 
 //메타테이블 데이터셋 삭제
-const dpIngestMetaTblDelDset = function (){
+const dpIngestMetaTblDelDset = function (dset_idntfc_id){
 	
 	let isSuccess = false;
 	
@@ -1187,7 +1187,7 @@ const dpIngestMetaTblDelDset = function (){
 }
 
 //메타테이블 삭제
-const dpIngestMetaTblDelTbl = function (){
+const dpIngestMetaTblDelTbl = function (table_eng_nm){
 	
 	let isSuccess = false;
 	
@@ -1301,7 +1301,32 @@ const btnDetail = function(){
 
 //삭제 버튼
 const btnDelete = function(){
-	alert("작업중");
+	let dset_id = $("input:radio[name=tbl_chk]:checked").data("dsetid");
+	let tbl_id = $("input:radio[name=tbl_chk]:checked").data("tblid");
+	let table_eng_nm = $("input:radio[name=tbl_chk]:checked").data("eng");
+	
+	let dset_ret = true;
+	let tbl_ret = true;
+	let table_ret = true;
+	if(confirm("삭제 하시겠습니까?")){
+		if(dset_id){
+			dset_ret = dpIngestMetaTblDelDset(dset_id);
+		}
+		
+		if(tbl_id){
+			tbl_ret = dpIngestMetaTblDelChkTbl(tbl_id);
+		}
+		
+		if(table_eng_nm){
+			table_ret = dpIngestMetaTblDelTbl(table_eng_nm);
+		}
+		
+		if(dset_ret && tbl_ret && table_ret){
+			alert("삭제 되었습니다.");
+			$("#tbl_layer").hide();
+		}
+	}
+	
 // 	if(dpIngestMetaTblDelChkTbl()){
 // 		if(dpIngestMetaTblDelDset()){
 // 			let ret = dpIngestMetaTblDelTbl();
