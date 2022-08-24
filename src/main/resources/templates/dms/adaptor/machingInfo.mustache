@@ -457,8 +457,8 @@ const dpIngestAdapterItMatchSave = function(){
 const dpIngestDataModelsPp = function(){
 	
 //	$("#pk_data_set").val("");
-//	$("#drakeLeft").empty();
-//	$("#drakeRight").empty();
+	$("#drakeLeft").empty();
+	$("#drakeRight").empty();
 //	$(".drake_result").html("&nbsp;");
     const data = {
 	   		url: '/dp/ingest/data/models/property?table_idntfc_id='+$("#table_idntfc_id").val(),
@@ -479,6 +479,7 @@ const dpIngestDataModelsPp = function(){
 		  		
 			  	   	if(data.contents != ""){    	
 			  	   		let li = '';
+			  	   		let li2 = '';
 			  	   		
 			  	   		let pk_data_set = $("#pk_data_set").val();
 			  	   		let arr;
@@ -488,22 +489,27 @@ const dpIngestDataModelsPp = function(){
 			  	   		
     			  	    $.each(data.contents, function (idx, el) {
     			  	    	
-    			  	    	console.log('arr[idx] : '+arr[idx]);
-    			  	    	console.log('el.column_eng_nm : '+el.column_eng_nm);
-    			  	 //   	if(arr[idx] !== el.column_eng_nm){
-		    			  	   	li += '<li class="task"><p>'+el.column_eng_nm+'('+el.column_stre_type+')</p></li>';
-    			  	  //  	}
-    			  	    });
-    			  	 	$("#drakeLeft").append(li);
-    			  	 /*	
-    			  	 	li = '';
-    			  	    $.each(data.contents, function (idx, el) {
-    			  	    	if(arr[idx] === el.column_eng_nm){
-		    			  	   	li += '<li class="task"><p>'+el.column_eng_nm+'('+el.column_stre_type+')</p></li>';
+    			  	    	for(var i=1; i<arr.length;i++){
+	    			  	    	if(arr[i] === el.column_eng_nm){
+			    			  	   	li = '<li class="task"><p>'+el.column_eng_nm+'('+el.column_stre_type+')</p></li>';
+			    			  	 	$("#drakeRight").append(li);
+	    			  	    	}
     			  	    	}
     			  	    });
-    			  	 	$("#drakeRight").append(li);
-    			  	 */	
+    			  	    
+    			  	    $.each(data.contents, function (idx, el) {
+    			  	    	
+    			  	    	console.log();
+    			  	    	for(var i=1; i<arr.length;i++){
+	    			  	    	if(arr[i] !== el.column_eng_nm){
+			    			  	   	li2 += '<li class="task"><p>'+el.column_eng_nm+'('+el.column_stre_type+')</p></li>';
+	    			  	    	}
+		    			  	 	$("#drakeLet").append(li2);
+    			  	    	}
+    			  	    	
+    			  	    });
+    			  	 
+    			  	 	
 			  	   	}
 		  	  }
 	    	  
