@@ -1,0 +1,179 @@
+{{>layout/header}}
+
+<div class="right_col" role="main">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="x_panel">
+				<div class="x_title">
+					<h2>HOME > DMS > 데이터관리 > Match Key</h2>
+					<div class="clearfix"></div>
+				</div>
+				<div class="x_content">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="x_panel">
+								<div class="x_content">
+								<div class="x_title col-md-11 mb-4">
+									<h2>Match Key 리스트</h2>
+								</div>								
+									<div class="col-12 col-md-11">
+										<div class="form-group row">
+											<label class="control-label">검색</label>
+											<div class="form-control_box">
+												<div class="col-md-3 pl-0">
+													<select class="form-control" id="search_type">
+														<option value="">선 택</option>
+													</select>
+												</div>
+												<div class="col-md-9 pr-0">
+													<input class="form-control" type="text" placeholder="" id="query" onkeypress="enterkey(event);">
+												</div>
+												<div class="col-md-1 pr-0"></div>
+											</div>
+										</div>
+									</div>
+									<div class="col-12 col-md-1 btn_search_box">
+										<button class="btn btn-primary" onclick="btnSearch();">
+											<i class="glyphicon glyphicon-search"></i>
+										</button>
+									</div>
+								</div>
+
+								<div class="x_content">
+									<div class="table_responsive">
+										<div class="talbel_total mb-2">총<span id="total_count"></span>개</div>
+										<table class="table table-striped" id="adaptorConfigData">
+											<colgroup>
+											</colgroup>
+											<thead>
+												<tr>
+													<th style="text-align: center;">Match Key</th>
+													<th style="text-align: center;">Lod</th>
+													<th style="text-align: center;">시도</th>
+													<th style="text-align: center;">시군구</th>
+													<th style="text-align: center;">3ds 파이</th>
+													<th style="text-align: center;">PNU</th>
+													<th style="text-align: center;">건물관리번호</th>
+													<th style="text-align: center;">좌표계</th>
+													<th style="text-align: center;">중심좌표</th>
+												</tr>
+											</thead>
+											<tbody id="dataManageMatchKeysGet">
+											</tbody>
+										</table>
+					                    <div class="nav justify-content-center"> 
+										  <ul id="pagingul" class="pagination">
+										  </ul>                    
+					                    </div>   
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{{>layout/footer}}
+
+<script>
+const commonUrl = '/common';
+const url = '/dataMgmt';
+
+let init_page = 1;				//초기 페이지
+let page = 1;					//페이지
+let init_size_per_page = 10;	//초기 개수
+let size_per_page = 10;	 		//가져올 개수
+let pageCount = 10;		 		//페이징에 나타낼 페이지 수
+
+
+//Match Key 조회
+const dataManageMatchKeysGet = function (page, size_per_page) {
+
+	$("#dataManageMatchKeysGet").empty();
+	if(!page){
+		page = init_page;
+	}
+	if(!size_per_page){
+		size_per_page = init_size_per_page;
+	}
+	
+	let search_type = $("#search_type").val() != null ? $("#search_type").val() : '';
+	let query = $("#query").data("search");
+	$("#query").val(query);	//검색어 갱신(검색버튼 클릭시)
+	
+	const data = {
+   		url: '/services/dms/datamanage/matchkeys/get',
+   		userId: 'user00',	
+   		search: query,
+   		search_type: search_type,
+   		nowPageNum: page,
+   		rowsOfPage: size_per_page,
+    };		
+    $.ajax({
+        type: 'POST',
+        url: url+'/dataManageMatchKeysGet',
+        dataType: 'json',
+        contentType: 'application/json; charset-utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		  
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
+	  		
+  	    	$("#total_count").text(data.total_count);
+  	    	
+  	    	if(data.contents != ""){
+  	    		
+	     	    let insertTr = '';
+	     	    let i = 0;	
+		  	    $.each(data.contents, function (idx, el) {
+
+	     	          insertTr += '<tr>';
+	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.matchKey)+'</td>';
+	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.lodLvl)+'</td>';
+	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.ctpvnNm)+'</td>';
+	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.signguNm)+'</td>';
+	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.fileNm)+'</td>';
+	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.pnuCd)+'</td>';
+	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.bgMgtSn)+'</td>';
+	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.srid)+'</td>';
+	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.lot)+','+isEmpty(el.lat)+'</td>';
+	                  insertTr += '</tr>';
+		  	    });
+          	    $("#dataManageMatchKeysGet").append(insertTr);
+  	    	}
+  	    	
+  	    	//페이징 보여줌
+  	    	paging(data.total_count, size_per_page, pageCount, page);
+  	    	
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//페이징 함수 호출
+const pagingFun = function(page, size_per_page){
+	dataManageMatchKeysGet(page, size_per_page);
+}
+
+//엔터키가 눌렸을 때
+const enterkey = function(e) {
+	if (e.keyCode == 13) {
+		dataManageMatchKeysGet();
+    }
+}
+
+dataManageMatchKeysGet();
+</script>
+
+
+
