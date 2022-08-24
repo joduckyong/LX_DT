@@ -117,7 +117,7 @@
                 <div class="drake_result_box">
                   <div class="drake_title">ID</div>
                   <div class="drake_result"></div>
-                  <button class="btn btn-danger m-0" onclick="dpIngestDataModelsPp();">초기화</button>
+                  <button class="btn btn-danger m-0" onclick="dpIngestDataModelsPpInit();">초기화</button>
                 </div>
               </div>
               <div class="modal-footer"> 
@@ -356,7 +356,7 @@ const dpIngestAdapterItMatch = function(){
 			  	   			if(isEmpty(data.contents[0].id_mix.substr(data.contents[0].id_mix.indexOf(".")+1)) === ''){
 					  	   		$("#drake_pre").val(data.contents[0].id_mix+".");
 			  	   			}else{
-				  	   	//		$("#drake_pre").val(data.contents[0].id_mix.substr(0, data.contents[0].id_mix.indexOf(".")+1));
+				  	   			$("#drake_pre").val(data.contents[0].id_mix.substr(0, data.contents[0].id_mix.indexOf(".")+1));
 						  	   	$(".drake_result").html(data.contents[0].id_mix);
 					  	   		$("#pk_data_set").val(data.contents[0].id_mix);
 			  	   			}
@@ -452,14 +452,15 @@ const dpIngestAdapterItMatchSave = function(){
 	    
 }
 
-//데이터 모델 속성 정보 조회
+//데이터 모델 속성 정보 조회 초기화
+const dpIngestDataModelsPpInit = function(){
 
-const dpIngestDataModelsPp = function(){
-	
-//	$("#pk_data_set").val("");
-	$("#drakeLeft").empty();
-	$("#drakeRight").empty();
-//	$(".drake_result").html("&nbsp;");
+	$("#drakeLeft").html("");
+	$("#drakeRight").html("");
+
+	let drake_pre = $("#drake_pre").val();
+   	$(".drake_result").html(drake_pre);
+	  	   	
     const data = {
 	   		url: '/dp/ingest/data/models/property?table_idntfc_id='+$("#table_idntfc_id").val(),
 	    };		
@@ -479,37 +480,97 @@ const dpIngestDataModelsPp = function(){
 		  		
 			  	   	if(data.contents != ""){    	
 			  	   		let li = '';
-			  	   		let li2 = '';
-			  	   		
+    			  	    $.each(data.contents, function (idx, el) {
+	    			  	   	li += '<li class="task"><p>'+el.column_eng_nm+'('+el.column_stre_type+')</p></li>';
+    			  	    });
+    			  	 	$("#drakeLeft").append(li);
+			  	   	}
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });			
+}
+
+//데이터 모델 속성 정보 조회
+const dpIngestDataModelsPp = function(){
+	
+	$("#drakeLeft").empty();
+	$("#drakeRight").empty();
+	
+	if($(".drake_result").html() === ''){
+		let drake_pre = $("#drake_pre").val();
+	   	$(".drake_result").html(drake_pre);		
+	}
+    const data = {
+	   		url: '/dp/ingest/data/models/property?table_idntfc_id='+$("#table_idntfc_id").val(),
+	    };		
+	    
+	    $.ajax({
+	        type: 'POST',
+	        url: commonUrl+'/dpIngestDataModelsPp',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+		  	  if (data != null) {
+		  		  
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
+		  		
+			  	   	if(data.contents != ""){    	
+			  	   		let li = '';
 			  	   		let pk_data_set = $("#pk_data_set").val();
 			  	   		let arr;
+			  	   		let arrValue = [];
+			  	   		let arr2 = [];
+			  	   		
 			  	   		if(pk_data_set !== ''){
 			  	   			arr = pk_data_set.split(".");
 			  	   		}
+			  	   		//오른쪽
 			  	   		
     			  	    $.each(data.contents, function (idx, el) {
     			  	    	
+    			  	    	if(isEmpty(arr) !== ''){
+	    			  	    	for(var i=0; i<arr.length;i++){
+		    			  	    	if(arr[i] === el.column_eng_nm){
+		    			  	    		arrValue.push(el.column_stre_type);
+		    			  	    	}
+	    			  	    	}
+    			  	    	}
+    			  	    	arr2.push(el.column_eng_nm);
+    			  	    });
+			  	   		
+    			  	   if(isEmpty(arr) !== ''){
     			  	    	for(var i=1; i<arr.length;i++){
-	    			  	    	if(arr[i] === el.column_eng_nm){
-			    			  	   	li = '<li class="task"><p>'+el.column_eng_nm+'('+el.column_stre_type+')</p></li>';
+    			  	    		if(arr[i] !== ''){
+			    			  	   	li = '<li class="task"><p>'+arr[i]+'('+arrValue[i-1]+')</p></li>';
 			    			  	 	$("#drakeRight").append(li);
-	    			  	    	}
+    			  	    		}
     			  	    	}
-    			  	    });
-    			  	    
-    			  	    $.each(data.contents, function (idx, el) {
-    			  	    	
-    			  	    	console.log();
-    			  	    	for(var i=1; i<arr.length;i++){
-	    			  	    	if(arr[i] !== el.column_eng_nm){
-			    			  	   	li2 += '<li class="task"><p>'+el.column_eng_nm+'('+el.column_stre_type+')</p></li>';
+		    			  	//왼쪽
+	    			  	  	let values = arr2.filter(x => !arr.includes(x));
+	    			  	    $.each(data.contents, function (idx, el) {
+	    			  	    	for(var i=0; i<values.length;i++){
+		    			  	    	if(el.column_eng_nm === values[i]){
+				    			  	   	li = '<li class="task"><p>'+el.column_eng_nm+'('+el.column_stre_type+')</p></li>';
+				    			  	 	$("#drakeLeft").append(li);
+		    			  	    	}
 	    			  	    	}
-		    			  	 	$("#drakeLet").append(li2);
-    			  	    	}
-    			  	    	
-    			  	    });
-    			  	 
-    			  	 	
+	    			  	    });
+    			  		}else{
+    			  			
+    				  	   	if(data.contents != ""){    	
+    				  	   		let li = '';
+    	    			  	    $.each(data.contents, function (idx, el) {
+    		    			  	   	li += '<li class="task"><p>'+el.column_eng_nm+'('+el.column_stre_type+')</p></li>';
+    	    			  	    });
+    	    			  	 	$("#drakeLeft").append(li);
+    				  	   	}    			  			
+    			  		}
+    			  	  
 			  	   	}
 		  	  }
 	    	  
