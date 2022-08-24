@@ -784,6 +784,13 @@ const jsScheduleType = function() {
 		$("#schedule_minute").show();
 		$("#schedule_minuteTxt").show();        
     }
+    
+   	$("#schedule_year").val("");
+   	$("#schedule_month").val("");
+   	$("#schedule_day").val("");
+   	$("#schedule_hour").val("");
+   	$("#schedule_minute").val("");
+   	$('input[name=schedule_now_exe]').removeAttr('checked');
 }
 
 const scheduleTimeTypeSel = function(){

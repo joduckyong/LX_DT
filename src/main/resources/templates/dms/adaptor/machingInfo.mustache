@@ -356,7 +356,8 @@ const dpIngestAdapterItMatch = function(){
 			  	   			if(isEmpty(data.contents[0].id_mix.substr(data.contents[0].id_mix.indexOf(".")+1)) === ''){
 					  	   		$("#drake_pre").val(data.contents[0].id_mix+".");
 			  	   			}else{
-				  	   			$("#drake_pre").val(data.contents[0].id_mix.substr(0, data.contents[0].id_mix.indexOf(".")+1));
+				  	   	//		$("#drake_pre").val(data.contents[0].id_mix.substr(0, data.contents[0].id_mix.indexOf(".")+1));
+						  	   	$(".drake_result").html(data.contents[0].id_mix);
 					  	   		$("#pk_data_set").val(data.contents[0].id_mix);
 			  	   			}
 			  	   			
@@ -455,10 +456,10 @@ const dpIngestAdapterItMatchSave = function(){
 
 const dpIngestDataModelsPp = function(){
 	
-	$("#pk_data_set").val("");
-	$("#drakeLeft").empty();
-	$("#drakeRight").empty();
-	$(".drake_result").html("&nbsp;");
+//	$("#pk_data_set").val("");
+//	$("#drakeLeft").empty();
+//	$("#drakeRight").empty();
+//	$(".drake_result").html("&nbsp;");
     const data = {
 	   		url: '/dp/ingest/data/models/property?table_idntfc_id='+$("#table_idntfc_id").val(),
 	    };		
@@ -478,10 +479,31 @@ const dpIngestDataModelsPp = function(){
 		  		
 			  	   	if(data.contents != ""){    	
 			  	   		let li = '';
+			  	   		
+			  	   		let pk_data_set = $("#pk_data_set").val();
+			  	   		let arr;
+			  	   		if(pk_data_set !== ''){
+			  	   			arr = pk_data_set.split(".");
+			  	   		}
+			  	   		
     			  	    $.each(data.contents, function (idx, el) {
-    			  	    	li += '<li class="task"><p>'+el.column_eng_nm+'('+el.column_stre_type+')</p></li>';
+    			  	    	
+    			  	    	console.log('arr[idx] : '+arr[idx]);
+    			  	    	console.log('el.column_eng_nm : '+el.column_eng_nm);
+    			  	 //   	if(arr[idx] !== el.column_eng_nm){
+		    			  	   	li += '<li class="task"><p>'+el.column_eng_nm+'('+el.column_stre_type+')</p></li>';
+    			  	  //  	}
     			  	    });
     			  	 	$("#drakeLeft").append(li);
+    			  	 /*	
+    			  	 	li = '';
+    			  	    $.each(data.contents, function (idx, el) {
+    			  	    	if(arr[idx] === el.column_eng_nm){
+		    			  	   	li += '<li class="task"><p>'+el.column_eng_nm+'('+el.column_stre_type+')</p></li>';
+    			  	    	}
+    			  	    });
+    			  	 	$("#drakeRight").append(li);
+    			  	 */	
 			  	   	}
 		  	  }
 	    	  
