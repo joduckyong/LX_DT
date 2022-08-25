@@ -161,7 +161,7 @@
           		<div class="row"> 
                      	<div class="table_responsive">
                      		<div class="table_btns mt-1">
-		                      <button class="btn btn-primary" onclick="dpIngestMetaTblSaveCol();">저장</button>
+		                      <button class="btn btn-primary" onclick="colSaveBtn();" id="col_save_btn">저장</button>
 		                    </div>
 		            		<table class="table table-bordered bulk_action table_center">
 		                        <colgroup>
@@ -433,6 +433,8 @@
 	       </div>
        </div>
 	<input type="hidden" name="table_idntfc_id" id="table_idntfc_id"/>
+	<input type="hidden" name="column_idntfc_id" id="column_idntfc_id"/>
+	<input type="hidden" name="btn_type" id="btn_type"/>
         
 {{>layout/footer}}        
 
@@ -595,7 +597,11 @@ const dpIngestMetaTblCol = function () {
 	  	    	if(data.contents != ""){
 	  	    		let insertTr = '';
 	  	    		$.each(data.contents, function (idx, el) {
-		  	    		insertTr += '<tr>';
+	  	    			if(el.creat_table_at == 'N'){
+	  	    				insertTr += '<tr style="cursor:pointer;" onclick="dpIngestMetaTblColDt(\''+el.column_idntfc_id+'\');">';
+	 	  	    		}else{
+	 	  	    			insertTr += '<tr>';
+	 	  	    		}
 		  	    		insertTr += '	<td></td>';
 			  	    	insertTr += '	<td>'+el.column_korean_nm+'</td>';
 			  	    	insertTr += '	<td>'+el.column_eng_nm+'</td>';
@@ -616,9 +622,14 @@ const dpIngestMetaTblCol = function () {
 }
 
 //메타테이블 컬럼 항목(테이블 컬럼 변경)
-const dpIngestErrorsSourceListTbl = function () {
+const dpIngestErrorsSourceListTbl = function (colData) {
 	
 	let instance_id = '{{instance_id}}';
+	let colArr = new Array();
+	
+	$.each(colData.contents, function (idx, el) {
+		colArr.push(el.column_eng_nm);
+	});
 	
 	const data = {
    		url: '/dp/ingest/errors/source/list',
@@ -644,19 +655,21 @@ const dpIngestErrorsSourceListTbl = function () {
   	    	if(data.contents != ""){
   	    		let insertTr = '';
   	    		$.each(data.contents, function (idx, el) {
-	  	    		insertTr += '<tr style="cursor:pointer;" onclick="setEngColumn(\''+el.source_id+'\');">';
-	  	    		
-// 	  	    		if(el.creat_table_at == 'N'){
-// 	  	    			insertTr += '	<td>신규</td>';
-// 	  	    		}else{
-// 	  	    			insertTr += '	<td></td>';
-// 	  	    		}
-	  	    		insertTr += '	<td>신규</td>';
-		  	    	insertTr += '	<td></td>';
-		  	    	insertTr += '	<td>'+el.source_id+'</td>';
-		  	    	insertTr += '	<td></td>';
-		  	    	insertTr += '	<td></td>';
-		  	    	insertTr += '</tr>';
+  	    			if(!colArr.includes(el.source_id)){
+		  	    		insertTr += '<tr style="cursor:pointer;" onclick="setEngColumn(\''+el.source_id+'\');">';
+		  	    		
+	// 	  	    		if(el.creat_table_at == 'N'){
+	// 	  	    			insertTr += '	<td>신규</td>';
+	// 	  	    		}else{
+	// 	  	    			insertTr += '	<td></td>';
+	// 	  	    		}
+		  	    		insertTr += '	<td>신규</td>';
+			  	    	insertTr += '	<td></td>';
+			  	    	insertTr += '	<td>'+el.source_id+'</td>';
+			  	    	insertTr += '	<td></td>';
+			  	    	insertTr += '	<td></td>';
+			  	    	insertTr += '</tr>';
+  	    			}
 		  	    	
   	    		});
   	    		$("#columnInfo").append(insertTr);
@@ -779,6 +792,78 @@ const dpIngestMetaTblColRefrn = function (table_idntfc_id, refrn_column_idntfc_i
     });	
 }
 
+//메타테이블 컬럼 항목 상세
+const dpIngestMetaTblColDt = function (column_idntfc_id) {
+	
+	btnDetail();
+	let table_idntfc_id = $("#table_idntfc_id").val();
+	$("#column_idntfc_id").val(column_idntfc_id);
+	
+	$("#refrn_column_idntfc_id").find("option:gt(0)").remove();
+	$("#refrn_column_idntfc_id_eng_nm").val("");
+	
+	const data = {
+   		url: '/dp/ingest/meta/tables/column/detail',
+   		user_id: 'user00',
+   		table_idntfc_id: table_idntfc_id,
+   		column_idntfc_id: column_idntfc_id,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpIngestMetaTblColDt',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		  
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
+	  		
+	  		  
+  	    	if(data.contents != ""){
+  	    		let insertTr = '';
+  	    			
+    			$("#column_korean_nm").val(data.contents[0].column_korean_nm);
+    			$("#refrn_table_idntfc_id").val(data.contents[0].refrn_table_idntfc_id);
+    			$("#column_eng_nm").val(data.contents[0].column_eng_nm);
+    			$("#refrn_table_idntfc_id_nm").val(data.contents[0].refrn_table_idntfc_id_nm);
+    			$("#data_type").val(data.contents[0].data_type).prop("selected", true);
+    			if(data.contents[0].data_type == 'VARCHAR' || data.contents[0].data_type == 'NUMERIC'){
+    				$('#data_lt').prop('disabled', false);
+    			}else{
+    				$('#data_lt').prop('disabled', true);
+    			}
+    			$("#data_lt").val(data.contents[0].data_lt);
+//     			$("#refrn_column_idntfc_id").val(data.contents[0].refrn_column_idntfc_id).prop("selected", true);
+    			$("#not_null_at").val(data.contents[0].not_null_at).prop("selected", true);
+    			$("#dset_knd").val(data.contents[0].dset_knd).prop("selected", true);
+//     			$("#refrn_column_idntfc_id_eng_nm").val($("#refrn_column_idntfc_id").data("engcol"));
+    			$("#pk_info").val(data.contents[0].pk_info).prop("selected", true);
+    			$("#fk_info").val(data.contents[0].fk_info).prop("selected", true);
+    			$("#creat_table_at").val(data.contents[0].creat_table_at);
+    			$("#use_at").val(data.contents[0].use_at).prop("selected", true);
+    			$("#column_stre_type").val(data.contents[0].column_stre_type);
+    			$("#column_dc").val(data.contents[0].column_dc);
+    			$("#crud_dc").val(data.contents[0].crud_dc);
+    			$("#ordr").val(data.contents[0].ordr);
+    			$("#indvdl_info_at").val(data.contents[0].indvdl_info_at).prop("selected", true);
+    			$("#encpt_at").val(data.contents[0].encpt_at).prop("selected", true);
+    			$("#crud_se").val(data.contents[0].crud_se);
+  	    		
+    			dpIngestMetaTblColRefrn(data.contents[0].refrn_table_idntfc_id, data.contents[0].refrn_column_idntfc_id);
+  	    		
+  	    	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
 //메타테이블 컬럼등록
 const dpIngestMetaTblSaveCol = function (){
 	let table_idntfc_id = $("#table_idntfc_id").val();
@@ -862,6 +947,95 @@ const dpIngestMetaTblSaveCol = function (){
    	  	  }				
 	    	
 	  		alert("저장 되었습니다.");
+	  		initDetail();
+	  		MetaTblColList();
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	}
+	
+}
+
+//메타테이블 컬럼 수정
+const dpIngestMetaTblUpdateCol = function (){
+	let table_idntfc_id = $("#table_idntfc_id").val();
+	let column_korean_nm = $("#column_korean_nm").val();
+	let refrn_table_idntfc_id = $("#refrn_table_idntfc_id").val();
+	let column_eng_nm = $("#column_eng_nm").val();
+	let refrn_table_idntfc_id_nm = $("#refrn_table_idntfc_id_nm").val();
+	let data_type = $("#data_type").val();
+	let data_lt = $("#data_lt").val();
+	let refrn_column_idntfc_id = $("#refrn_column_idntfc_id").val();
+	let not_null_at = $("#not_null_at").val();
+	let dset_knd = $("#dset_knd").val();
+	let refrn_column_idntfc_id_eng_nm = $("#refrn_column_idntfc_id_eng_nm").val();
+	let pk_info = $("#pk_info").val();
+	let fk_info = $("#fk_info").val();
+	let creat_table_at = $("#creat_table_at").val();
+	let use_at = $("#use_at").val();
+	let column_stre_type = $("#column_stre_type").val();
+	let column_dc = $("#column_dc").val();
+	let crud_dc = $("#crud_dc").val();
+	let ordr = $("#ordr").val();
+	let indvdl_info_at = $("#indvdl_info_at").val();
+	let encpt_at = $("#encpt_at").val();
+	let crud_se = $("#crud_se").val();
+	let table_eng_nm = $("#table_eng_nm").text();
+	let column_idntfc_id = $("#column_idntfc_id").val();
+	
+	if(!column_korean_nm){
+		alert("한글명을 입력하세요!");
+		$('#column_korean_nm').focus();
+		return;
+	}
+	
+	if(!column_eng_nm){
+		alert("영문명을 입력하세요!");
+		$('#column_eng_nm').focus();
+		return;
+	}
+	
+	const data = {
+   		url: '/dp/ingest/meta/tables/update/column',
+   		column_idntfc_id: column_idntfc_id,
+		user_id: 'user00',
+		rl_table_idntfc_id: table_idntfc_id,
+		dset_knd: dset_knd,
+		ordr: Number(ordr),
+		refrn_table_idntfc_id: refrn_table_idntfc_id,
+		refrn_column_idntfc_id: refrn_column_idntfc_id,
+		table_eng_nm: table_eng_nm,
+		column_eng_nm: column_eng_nm,
+		column_korean_nm: column_korean_nm,
+		column_dc: column_dc,
+		data_type: data_type,
+		data_lt: data_lt,
+		data_frmat: null,
+		not_null_at: not_null_at,
+		pk_info: pk_info,
+		fk_info: fk_info,
+		ak_info: null,
+		rstrct_cnd: null,
+		indvdl_info_at: indvdl_info_at,
+		encpt_at: encpt_at,
+		othbc_at: null,
+		column_stre_type: column_stre_type,
+		column_nm: null,
+		crud_se: crud_se,
+		crud_dc: crud_dc,
+		use_at: use_at,
+		creat_table_at: creat_table_at,
+    };
+	
+	if(confirm("수정 하시겠습니까?")){
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestMetaTblSaveCol',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data),
+	    }).done(function (data) {
+	  		alert("수정 되었습니다.");
 	  		initDetail();
 	  		MetaTblColList();
 	    }).fail(function (error) {
@@ -1368,7 +1542,7 @@ const dpIngestPopupPpPathSave = function(){
 const MetaTblColList = function(){
 	dpIngestMetaTblCol()
 	.then(function(data){
-		dpIngestErrorsSourceListTbl();
+		dpIngestErrorsSourceListTbl(data);
 	})
 	.catch(function(error){
 		console.log(error)
@@ -1402,6 +1576,7 @@ const setTableNm = function(obj){
 
 //영문명 입력
 const setEngColumn = function(engNm){
+	initDetail();
 	$("#column_eng_nm").val(engNm);
 }
 
@@ -1474,6 +1649,7 @@ const initDetail = function(){
 	$("#indvdl_info_at").val("Y").prop("selected", true);
 	$("#encpt_at").val("Y").prop("selected", true);
 	$("#crud_se").val("");
+	$("#col_save_btn").text("저장");
   	
 }
 
@@ -1514,6 +1690,23 @@ const btnUpdate = function() {
 	.catch(function(error){
 		console.log(error)
 	});
+}
+
+//메타테이블 컬럼 저장 버튼
+const colSaveBtn = function () {
+	let type = $("#btn_type").val();
+	if(type == 'U'){
+		dpIngestMetaTblUpdateCol();
+	}else{
+		dpIngestMetaTblSaveCol();
+	}
+	
+}
+
+//상세 버튼
+const btnDetail = function(){
+	$("#col_save_btn").text("수정");
+	$("#btn_type").val('U');
 }
 
 
