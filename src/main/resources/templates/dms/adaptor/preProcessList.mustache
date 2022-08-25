@@ -24,7 +24,7 @@
 													<select class="form-control" id="search_type">
 														<option value="">선 택</option>
 														<option value="pre_nm">전처리 명</option>
-														<option value="change_type">변경유형</option>
+														<option value="change_type_nm">변경유형</option>
 													</select>
 												</div>											
 												<div class="col-md-9 pr-0">
@@ -122,6 +122,7 @@ const dpIngestPre = function(page, size_per_page){
    		user_id: 'user00',	
    		menu_id: 'menu_id',
    		search: query,
+   		search_type: $("#search_type").val(),
    		page_current: page,
     };		
     $.ajax({
