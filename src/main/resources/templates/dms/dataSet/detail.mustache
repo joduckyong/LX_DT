@@ -65,7 +65,7 @@
                 <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
               </div>
               <div class="modal-body">
-	          	<div class="table_responsive">
+	          	<div class="table_responsive" style="height: 500px; overflow: auto;">
                     <table class="table table-striped">
                       <colgroup>
                       </colgroup>
@@ -101,15 +101,15 @@
                     <div class="row">
                       <div class="form-group row col-12 col-md-6">
                         <div class="control-label">데이터셋명</div>
-                        <div class="form-control_box"></div>
+                        <div class="form-control_box" id="fail_pop_dset_korean_nm"></div>
                       </div>
                       <div class="form-group row col-12 col-md-6">
                         <div class="control-label">실패건수</div>
-                        <div class="form-control_box"></div>
+                        <div class="form-control_box" id="fail_pop_cnt"></div>
                       </div>
                     </div>
                   </div>
-                  <div class="table_responsive">
+                  <div class="table_responsive" style="height: 500px; overflow: auto;">
                     <table class="table table-striped">
                       <colgroup>
                       </colgroup>
@@ -323,7 +323,7 @@ const dpLoadPopupHistory01 = function () {
   	    			insertTr += '	<td>'+el.modified_at+'</td>';
   	    			insertTr += '	<td>'+el.ingest_count+'</td>';
   	    			insertTr += '	<td>'+el.load_count+'</td>';
-  	    			insertTr += '	<td>'+el.error_count+'</td>';
+  	    			insertTr += '	<td><span class="blue bold" style="cursor:pointer" onclick="fail_addModal(\''+el.error_count+'\');">'+el.error_count+'</span></td>';
   	    			insertTr += '	<td><button class="btn btn-success btn-sm mx-0" type="button" onclick="dpLoadPopupHistoryDown01(\''+el.modified_at+'\')">다운로드</button></td>';
   	    			insertTr += '</tr>';
   	    			
@@ -387,7 +387,10 @@ const addModal = function(){
 }
 
 //실패건수 모달 추가
-const fail_addModal = function(){
+const fail_addModal = function(failCnt){
+	let dset_korean_nm = $("#dset_korean_nm").text();
+	$("#fail_pop_dset_korean_nm").text(dset_korean_nm);
+	$("#fail_pop_cnt").text(failCnt);
 	$('#fail_add_modal').modal('show');
 }
 

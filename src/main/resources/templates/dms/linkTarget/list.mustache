@@ -72,6 +72,61 @@
 	    	</div>
 		</div>
 	</div>
+	
+	<!-- 데이터 분배 설정 테스트 modal -->
+    <div class="modal fade add_modal" id="add_modal" tabindex="-1" role="dialog" aria-hidden="true">
+    	<div class="modal-dialog modal-xl">
+        	<div class="modal-content">
+          		<div class="modal-header">
+            		<h4 class="modal-title" id="table_myModalLabel">데이터 분배 설정 테스트</h4>
+            		<button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
+          		</div>
+          	<div class="modal-body">
+	          	<div class="x_content">
+	            	<div class="row"> 
+		          		<div class="metatable_box col-7">
+		          			<div class="cont_title_box">
+			                    <h3>▣ 항목</h3>
+			                </div>
+		          			<div class="row"> 
+		                		<div class="table_responsive" style="height: 500px; overflow: auto">
+		                			<div class="table_btns mt-1">
+			                      		<button class="btn-sm btn-dark" type="button" onclick="btnExecute();">실행</button>
+			                    	</div>
+			                    	<div class="talbel_total">총 <span class="red bold" id="total_count"></span>건</div>
+			                    	<table class="table table-striped" style="word-break: break-all;">
+			                      		<colgroup> 
+			                      		</colgroup>
+				                      	<thead>
+					                        <tr> 
+					                          <th>항목명</th>
+					                          <th>테스트 값</th>
+					                          <th>항목 설명</th>
+					                        </tr>
+				                      	</thead>
+				                      	<tbody id="testPopList">
+				                      	</tbody>
+			                    	</table>
+		                		</div>
+		            		</div>
+		          		</div>
+	          			<div class="metatable_box col-5 col-lg-5">
+	          				<div class="cont_title_box">
+			                    <h3>▣ 실행결과</h3>
+			                </div>
+	          				<div class="row"> 
+		                     	<div class="table_responsive" style="height: 500px; overflow: auto;">
+		                     		<pre id="execResult"></pre>
+			                    </div>
+		                    </div>
+		            	</div>
+	            	</div>
+	            </div>
+          	</div>
+        </div>
+	</div>
+</div>
+<input type="hidden" name="dstbId" id="dstbId"/>
         
 {{>layout/footer}}        
 
@@ -137,7 +192,7 @@ const distributeSetupList = function (page, size_per_page) {
 		  	    	insertTr += '	<td>'+isEmpty(el.delYn)+'</td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.schemaNm)+'</td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.tbl)+'</td>';
-		  	    	insertTr += '	<td><button class="btn btn-success btn-sm mx-0" type="button">바로가기</button></td>';
+		  	    	insertTr += '	<td><button class="btn btn-success btn-sm mx-0" type="button" onclick="addModal(\''+el.dstbId+'\');">바로가기</button></td>';
 		  	    	insertTr += '	<td>'+isEmpty(el.creatorId)+'</td>';
 		  	    	insertTr += '</tr>';
 		  	    });
@@ -150,6 +205,141 @@ const distributeSetupList = function (page, size_per_page) {
     }).fail(function (error) {
         alert(JSON.stringify(error));
     });	
+}
+
+//설정테스트팝업
+const distributeSetupPopup = function (dstbId) {
+	
+	const data = {
+   		url: '/services/distribute/setup/popup',
+   		userId: 'user00',	
+   		dstbId: dstbId,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/distributeSetupPopup',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		  
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
+	  		
+	  		$("#testPopList").empty();
+  	    	if(data.contents != ""){
+  	    		let insertTr = '';
+		  	    $.each(data.contents, function (idx, el) {
+		  	    	let cndNm = el.cndNm;
+		  	    	let testValue = isEmpty(el.testValue);
+		  	    	insertTr += '<tr>';
+		  	    	insertTr += '	<td class="pop_cndNm">'+cndNm+'</td>';
+		  	    	if(cndNm == 'rowsOfPage' || cndNm == 'nowPageNum'){
+		  	    		insertTr += '	<td class="pop_testValue"><input class="form-control" type="text" value="'+testValue+'" readonly="readonly"></td>';
+		  	    	}else{
+		  	    		insertTr += '	<td class="pop_testValue"><input class="form-control" type="text" value="'+testValue+'"></td>';
+		  	    	}
+		  	    	insertTr += '	<td class="pop_desc"><input class="form-control" type="text" value="" readonly="readonly"></td>';
+		  	    	insertTr += '</tr>';
+		  	    });
+		  	  $("#testPopList").html(insertTr);
+  	    	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//설정테스트팝업 실행
+const distributeSetupPopupTest = function (infoData) {
+	let dstbId = infoData.contents.dstbId;
+	let pgngYn = infoData.contents.pgngYn;
+	let sqlText = infoData.contents.sqlText;
+	
+	let obj = {
+		pgngYn: pgngYn,
+	};
+	
+	$("#testPopList > tr").each(function(){
+		let pop_cndNm = $(this).find('td.pop_cndNm').text();
+		let pop_testValue = $(this).find('td.pop_testValue > input').val();
+		if(pop_cndNm){
+			obj[pop_cndNm] = pop_testValue;
+		}
+		
+	});
+	
+	const t_data = {
+   		url: '/services/distribute/setup/popup/test',
+   		userId: 'user00',	
+   		sqlText: sqlText,
+   		dstbId: dstbId,
+    };
+	
+	data = Object.assign(t_data, obj);
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/distributeSetupPopupTest',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		  
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
+	  		
+    		  $("#execResult").text(JSON.stringify(data,null,2));
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//데이터 분배설정 마스터 조회
+const distributeSetupInfo = function () {
+	return new Promise(function(resolve, reject){
+	
+		let dstbId = $("#dstbId").val();
+		
+		const data = {
+	   		url: '/services/distribute/setup/info',
+	   		userId: 'user00',
+	   		dstbId: dstbId,
+	    };
+		
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/distributeSetupInfo',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	
+		  	  if (data != null) {
+		  		  
+	    		  if(errorMsg(data)){
+    	          	 return;  
+        	  	  }				
+		  		
+	  	    	if(data.contents != ""){
+					resolve(data);
+	  	    	}
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	});
 }
 
 //검색 버튼
@@ -167,6 +357,25 @@ const btnAdd = function () {
 //데이터분배 상세 조회
 const btnUpdate = function (dstbId) {
 	location.href = url+'/update/'+dstbId;
+}
+
+//모달 추가
+const addModal = function(dstbId){
+	$("#execResult").empty();
+	$("#dstbId").val(dstbId);
+	distributeSetupPopup(dstbId);
+	$('#add_modal').modal('show');
+}
+
+//데이터분배설정 테스트 팝업 실행 버튼
+const btnExecute = function(){
+	distributeSetupInfo()
+	.then(function(data){
+		distributeSetupPopupTest(data);
+	})
+	.catch(function(error){
+		console.log(error)
+	});
 }
 
 //페이징 함수 호출
