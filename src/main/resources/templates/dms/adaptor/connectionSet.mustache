@@ -268,6 +268,10 @@ const dpIngestAdapterItDt = function(){
 			  	   		
 			  	   		console.log(data.contents[0].subforder_yn);
 			  	   		
+			  	   		$("#adapter_type_id").val(data.contents[0].adapter_type_id);
+			  	   		$("#clct_mthd").val(data.contents[0].clct_mthd);
+			  	   		$("#clct_ty").val(data.contents[0].clct_ty);
+			  	   		
 			  	   		dpIngestAdapterItPp(data.contents[0].adapter_type_id, data.contents[0].clct_mthd, data.contents[0].clct_ty);
 			  	   	}
 		  	  }
@@ -292,9 +296,9 @@ const connectionSetAdd = function(){
 	    insertTr += ' <td><input type=text value="" id="item_value_'+lengthCnt+'" name="item_value"></td>';
 	    insertTr += ' <td class=type2>';
 	    insertTr += ' <input type=text value="" id="item_described_'+lengthCnt+'" name="item_described">';
-	    insertTr += ' <input type=hidden value="" id=change_able_yn_'+lengthCnt+' name="change_able_yn">';
-	    insertTr += ' <input type=hidden value='+lengthCnt2+' id=display_seq_'+lengthCnt+' name="display_seq">';
-	    insertTr += ' <input type=hidden value="" id=essential_yn_'+lengthCnt+' name="essential_yn">';		    
+	    insertTr += ' <input type=hidden value="" id="change_able_yn_'+lengthCnt+'" name="change_able_yn">';
+	    insertTr += ' <input type=hidden value="'+lengthCnt2+'" id="display_seq_'+lengthCnt+'" name="display_seq">';
+	    insertTr += ' <input type=hidden value="" id="essential_yn_'+lengthCnt+'" name="essential_yn">';		    
 	    insertTr += ' </td>';		    
         insertTr += '</tr>';
   	    $("#dpIngestAdapterItPp").append(insertTr);
@@ -336,14 +340,14 @@ const dpIngestItPp = function(adapter_type_id, clct_mthd, clct_ty){
     			  	    $.each(data.contents, function (idx, el) {
     		     	          insertTr += '<tr>';
     		     		      insertTr += ' <td><input class="tableInfo" type="checkbox" name="checkList" value="'+el.item+'"></td>';
-    		     		      insertTr += ' <td><input type=text value='+el.item+' id=item_'+i+' name=item></td>';
-    		     		      insertTr += ' <td><input type=text value='+el.item_nm+' id=item_nm_'+i+' name=item_nm '+(el.change_able_yn==="N"?"readonly":"")+'></td>';
-    		     		      insertTr += ' <td><input type=text value='+el.value+' id=item_value_'+i+' name=item_value></td>';
+    		     		      insertTr += ' <td><input type=text value="'+el.item+'" id="item_'+i+'" name="item"></td>';
+    		     		      insertTr += ' <td><input type=text value="'+el.item_nm+'" id="item_nm_'+i+'" name="item_nm" '+(el.change_able_yn==="N"?"readonly":"")+'></td>';
+    		     		      insertTr += ' <td><input type=text value="'+el.value+'" id="item_value_'+i+'" name="item_value"></td>';
     		     		      insertTr += ' <td class=type1>';
-    		     		      insertTr += ' <input type=text value='+el.item_described+' id=item_described_'+i+' name=item_described>';
-    		     		      insertTr += ' <input type=hidden value='+el.change_able_yn+' id=change_able_yn_'+i+' name=change_able_yn>';
-    		     		      insertTr += ' <input type=hidden value='+el.display_seq+' id=display_seq_'+i+' name=display_seq>';
-    		     		      insertTr += ' <input type=hidden value='+el.essential_yn+' id=essential_yn_'+i+' name=essential_yn>';
+    		     		      insertTr += ' <input type=text value="'+el.item_described+'" id="item_described_'+i+'" name="item_described">';
+    		     		      insertTr += ' <input type=hidden value="'+el.change_able_yn+'" id="change_able_yn_'+i+'" name="change_able_yn">';
+    		     		      insertTr += ' <input type=hidden value="'+el.display_seq+'" id="display_seq_'+i+'" name="display_seq">';
+    		     		      insertTr += ' <input type=hidden value="'+el.essential_yn+'" id="essential_yn_'+i+'" name="essential_yn">';
     		     		      insertTr += ' </td>';
     		                  insertTr += '</tr>';
     		                  
@@ -390,16 +394,18 @@ const dpIngestAdapterItPp = function(adapter_type_id, clct_mthd, clct_ty){
     		     	    let insertTr = '';
     		     	    let i = 0;
     			  	    $.each(data.contents, function (idx, el) {
+    			  	    	
+//    			  	    	  console.log('item : '+el.item+', item_nm : '+el.item_nm+', value : '+el.value+', item_described : '+el.item_described);
     		     	          insertTr += '<tr>';
     		     		      insertTr += ' <td><input class="tableInfo" type="checkbox" name="checkList" value="'+el.item+'"></td>';
-    		     		      insertTr += ' <td><input type=text value='+el.item+' id=item_'+i+' name=item></td>';
-    		     		      insertTr += ' <td><input type=text value='+el.item_nm+' id=item_nm_'+i+' name=item_nm></td>';
-    		     		      insertTr += ' <td><input type=text value='+el.value+' id=item_value_'+i+' name=item_value></td>';
+    		     		      insertTr += ' <td><input type=text value="'+el.item+'" id="item_'+i+'" name="item"></td>';
+    		     		      insertTr += ' <td><input type=text value="'+el.item_nm+'" id="item_nm_'+i+'" name="item_nm"></td>';
+    		     		      insertTr += ' <td><input type=text value="'+el.value+'" id="item_value_'+i+'" name="item_value"></td>';
     		     		      insertTr += ' <td class=type1>';
-    		     		      insertTr += ' <input type=text value='+el.item_described+' id=item_described_'+i+' name=item_described>';
-    		     		      insertTr += ' <input type=hidden value='+el.change_able_yn+' id=change_able_yn_'+i+' name=change_able_yn>';
-    		     		      insertTr += ' <input type=hidden value='+el.display_seq+' id=display_seq_'+i+' name=display_seq>';
-    		     		      insertTr += ' <input type=hidden value='+el.essential_yn+' id=essential_yn_'+i+' name=essential_yn>';		     		      
+    		     		      insertTr += ' <input type=text value="'+el.item_described+'" id="item_described_'+i+'" name="item_described">';
+    		     		      insertTr += ' <input type=hidden value="'+el.change_able_yn+'" id="change_able_yn_'+i+'" name="change_able_yn">';
+    		     		      insertTr += ' <input type=hidden value="'+el.display_seq+'" id="display_seq_'+i+'" name="display_seq">';
+    		     		      insertTr += ' <input type=hidden value="'+el.essential_yn+'" id="essential_yn_'+i+'" name="essential_yn">';		     		      
     		     		      insertTr += ' </td>';		     		      
     		                  insertTr += '</tr>';
     		                  
@@ -488,10 +494,10 @@ const dpIngestAdapterItPpTest = function(){
 		let itemObject = new Object();
 		$.each($("#tbDpIngestAdapterItPp tbody tr"), function(){
 			 console.log('item : '+$(this).find("#item_"+lengthCnt).val()+', item_value : '+$(this).find("#item_value_"+lengthCnt).val());
-			 if($(this).find("#item_"+lengthCnt).val() !== '' && $(this).find("#item_value_"+lengthCnt).val() !== ''){
+//			 if($(this).find("#item_"+lengthCnt).val() !== '' && $(this).find("#item_value_"+lengthCnt).val() !== ''){
 		 		 itemObject[($(this).find("#item_"+lengthCnt).val())]=$(this).find("#item_value_"+lengthCnt).val();
 				 lengthCnt++;
-			 }
+//			 }
 		});
 		
 		contentsData.push(itemObject);
@@ -566,6 +572,13 @@ const dpIngestAdapterItPpDel = function(item){
 //접속정보 설정 삭제 전 체크
 const dpIngestAdapterItPpDelChk = function(){
 	
+	
+	var len = $("input[name='checkList']:checked").length;
+	if(len === 0){
+		alert("하나이상 선택해주세요!");
+		return;
+	}
+	
 	if(confirm('삭제 하시겠습니까?')) {
 		
 		let item;
@@ -601,9 +614,12 @@ const dpIngestAdapterItPpDelChk = function(){
 		        }).fail(function (error) {
 		            alert(JSON.stringify(error));
 		        });	
-	    });	
+	    });
 	    
-	    dpIngestItPp();
+	    setTimeout(function() {
+	    	dpIngestAdapterItPp($("#adapter_type_id").val(), $("#clct_mthd").val(), $("#clct_ty").val());
+    	}, 500);	    
+	    
 	}
 }
 
