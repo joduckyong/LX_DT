@@ -199,88 +199,6 @@ const dpIngestAdapterStart = function(){
 	}
 }
 
-//Adapter 동작 확인
-const dpIngestAdapterStatus = function(){
-	
-    const data = {
-	   		url: '/dp/ingest/adapter/status',
-	   		user_id: 'user00',	
-	   		menu_id: 'menu_id',
-	   		adapter_id: "{{adapter_id}}",	
-	    };		
-	    
-	    $.ajax({
-	        type: 'POST',
-	        url: url+'/dpIngestAdapterStatus',
-	        dataType: 'json',
-	        contentType: 'application/json; charset-utf-8',
-	        data: JSON.stringify(data)
-	    }).done(function (data) {
-		  	  if (data != null) {
-		  		  
-	    		  if(errorMsg(data)){
-	  	          	 return;  
-        	  	  }	
-		  			
-			  	   	if(data.contents != ""){
-			  	   		
-			  	   		console.log('status1 : ' + data.contents[0].status);
-			  	   		$("#status_nm").text(data.contents[0].status === 'stop' ?'중지':(data.contents[0].status === 'agent does not exist' ? '':'실행'));
-			  	   		
-			  	   		$("#startStop").empty();	
-			  	   		if(data.contents[0].status === 'stop'){
-			  	   			$("#startStop").html('<button class="btn btn-primary btn-sm" onclick=dpIngestAdapterStart();>시작</button>');
-			  	   		}else if(data.contents[0].status === 'agent does not exist'){
-			  	   			$("#startStop").html('');
-			  	   		}else{
-				  	   		$("#startStop").html('<button class="btn btn-primary btn-sm" onclick=dpIngestAdapterStop();>중지</button>');
-			  	   		}
-			  	   	}
-		  	  }
-	    }).fail(function (error) {
-	        alert(JSON.stringify(error));
-	    });		
-	    
-	    dpIngestAdapterItStatus();
-}
-
-//Adapotr 상세 조회
-const dpIngestAdapterOperation = function(){
-	
-    const data = {
-	   		url: '/dp/ingest/adapter/operation',
-	   		user_id: 'user00',	
-	   		menu_id: 'menu_id',
-	   		adapter_id: "{{adapter_id}}",	
-	    };		
-	    
-	    $.ajax({
-	        type: 'POST',
-	        url: url+'/dpIngestAdapterOperation',
-	        dataType: 'json',
-	        contentType: 'application/json; charset-utf-8',
-	        data: JSON.stringify(data)
-	    }).done(function (data) {
-		  	  if (data != null) {
-		  		  
-	    		  if(errorMsg(data)){
-	  	          	 return;  
-        	  	  }	
-		  			
-			  	   	if(data.contents != ""){
-			  	   		$("#adapter_nm").text(data.contents[0].adapter_nm);
-			  	   		$("#use_yn").text(data.contents[0].use_yn === 'Y' ?'사용':'미사용');
-			  	   		$("#instance_count").text(data.contents[0].instance_count);
-			  	   	}
-		  	  }
-	    }).fail(function (error) {
-	        alert(JSON.stringify(error));
-	    });	
-	    
-	    dpIngestAdapterStatus();
-	    dpIngestAdapterOperationIt();
-}
-
 //Instance 수집 종료
 const dpIngestAdapterItStop = function(instance_id){
 	
@@ -352,7 +270,7 @@ const dpIngestAdapterItStart = function(instance_id){
 }
 
 //Instance 동작 확인
-const dpIngestAdapterItStatus = function(){
+const dpIngestAdapterItStatus = function(statusMsg){
 	
 	$.each($("#tableDpIngestAdapterOperationIt tbody tr"), function(){
 		
@@ -378,13 +296,18 @@ const dpIngestAdapterItStatus = function(){
 	        	  	  }	
 			  		
 				  	   	if(data.contents != ""){
-				  	   		console.log('status2 : '+data.contents[0].status);
-				  	   		if(data.contents[0].status === 'N' || data.contents[0].status === null){
-					  	   		$("#td_"+instance_id).html('<button class="btn btn-primary btn-sm" onclick=dpIngestAdapterItStart("'+instance_id+'");>시작</button>');
-					  	   		$("#active_yn_"+instance_id).text('중지');
+				  	   		console.log('statusMsg : '+statusMsg);
+				  	   		if(statusMsg === 'agent does not exist'){
+					  	   		$("#td_"+instance_id).html('');
+					  	   		$("#active_yn_"+instance_id).text('');
 				  	   		}else{
-					  	   		$("#td_"+instance_id).html('<button class="btn btn-primary btn-sm" onclick=dpIngestAdapterItStop("'+instance_id+'");>중지</button>');
-					  	   		$("#active_yn_"+instance_id).text('실행');
+					  	   		if(data.contents[0].status === 'N' || data.contents[0].status === null){
+						  	   		$("#td_"+instance_id).html('<button class="btn btn-primary btn-sm" onclick=dpIngestAdapterItStart("'+instance_id+'");>시작</button>');
+						  	   		$("#active_yn_"+instance_id).text('중지');
+					  	   		}else{
+						  	   		$("#td_"+instance_id).html('<button class="btn btn-primary btn-sm" onclick=dpIngestAdapterItStop("'+instance_id+'");>중지</button>');
+						  	   		$("#active_yn_"+instance_id).text('실행');
+					  	   		}
 				  	   		}
 				  	   	}
 			  	  }
@@ -392,6 +315,54 @@ const dpIngestAdapterItStatus = function(){
 		        alert(JSON.stringify(error));
 		    });		
 	});
+}
+
+//Adapter 동작 확인
+const dpIngestAdapterStatus = function(){
+	
+    const data = {
+	   		url: '/dp/ingest/adapter/status',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',
+	   		adapter_id: "{{adapter_id}}",	
+	    };		
+	    
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestAdapterStatus',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+		  	  if (data != null) {
+		  		  
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
+		  			
+			  	   	if(data.contents != ""){
+			  	   		
+				  	   	let statusMsg = data.contents[0].status;
+			  	   		console.log('status1 : ' + statusMsg);
+			  	   		$("#status_nm").text(statusMsg === 'stop' ?'중지':(statusMsg === 'agent does not exist' ? '':'실행'));
+				  	   	
+			  	   		$("#startStop").empty();	
+			  	   		if(statusMsg === 'stop'){
+			  	   			$("#startStop").html('<button class="btn btn-primary btn-sm" onclick=dpIngestAdapterStart();>시작</button>');
+			  	   		}else if(statusMsg === 'agent does not exist'){
+			  	   			$("#startStop").html('');
+			  	   		}else{
+				  	   		$("#startStop").html('<button class="btn btn-primary btn-sm" onclick=dpIngestAdapterStop();>중지</button>');
+			  	   		}
+			  	   		
+			  	   		dpIngestAdapterItStatus(statusMsg);
+			  	   	}
+		  	  }
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });		
+	    
+	    
 }
 
 //Instance 목록 조회
@@ -423,6 +394,8 @@ const dpIngestAdapterOperationIt = function(){
 			     	    let insertTr = '';
 				        let i = 0;	
 				  	    $.each(data.contents, function (idx, el) {
+				  	    	
+				  	    	  console.log('el.active_yn:'+el.active_yn);
 			     	          insertTr += '<tr>';
 			     		      insertTr += '	<td style="text-align: center;">'+(++i)+'</td>';
 			     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.instance_nm)+'<input type="hidden" value="'+el.instance_id+'" id="hidden_instance_id"></td>';
@@ -447,7 +420,45 @@ const dpIngestAdapterOperationIt = function(){
 	    }).fail(function (error) {
 	        alert(JSON.stringify(error));
 	    });		
+	    
 }
+
+//Adapotr 상세 조회
+const dpIngestAdapterOperation = function(){
+	
+    const data = {
+	   		url: '/dp/ingest/adapter/operation',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',
+	   		adapter_id: "{{adapter_id}}",	
+	    };		
+	    
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestAdapterOperation',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+		  	  if (data != null) {
+		  		  
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
+		  			
+			  	   	if(data.contents != ""){
+			  	   		$("#adapter_nm").text(data.contents[0].adapter_nm);
+			  	   		$("#use_yn").text(data.contents[0].use_yn === 'Y' ?'사용':'미사용');
+			  	   		$("#instance_count").text(data.contents[0].instance_count);
+			  	   	}
+		  	  }
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	    
+	    dpIngestAdapterOperationIt();
+}
+
 
 //목록
 const listPage = function(){
@@ -457,6 +468,9 @@ const listPage = function(){
 dpCmCodesClctTyInput('D39');
 dpIngestAdapterOperation();
 
+setTimeout(function() {
+	dpIngestAdapterStatus();
+}, 100);
 setInterval(function() {
 	dpIngestAdapterStatus();
 }, 10000);
