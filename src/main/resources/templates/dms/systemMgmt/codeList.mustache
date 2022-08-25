@@ -14,6 +14,11 @@
 	                <div class="x_content">
 	                	<div class="right_btns"> 
 		                	<div class="row port_search">
+		                	  	<select class="form-control" name="group_search_type" id="group_search_type">
+	                        		<option value="">선택</option>
+	                        		<option value="group_code">코드그룹ID</option>
+	                        		<option value="group_code_nm">코드그룹명</option>
+                        		</select>
 		                      <div class="form-group row">
 		                        <div class="form-control_box">
 		                          <input class="form-control" type="text" name="query1" id="query1" onkeypress="enterkey1(event);">
@@ -61,6 +66,13 @@
 	                <div class="x_content">
 	                	<div class="right_btns"> 
 		                	<div class="row port_search">
+		                		<select class="form-control" name="code_search_type" id="code_search_type">
+	                        		<option value="">선택</option>
+	                        		<option value="group_code">코드그룹ID</option>
+	                        		<option value="group_code_nm">코드그룹명</option>
+	                        		<option value="dtl_code">코드ID</option>
+	                        		<option value="dtl_code_nm">코드명</option>
+                        		</select>
 		                      <div class="form-group row">
 		                        <div class="form-control_box">
 		                          <input class="form-control" type="text" name="query2" id="query2" onkeypress="enterkey2(event);" >
@@ -189,7 +201,7 @@
 								<div class="form-group row col-12 col-md-6">
 			                        <div class="control-label">코드그룹ID</div>
 			                        <div class="form-control_box">
-			                        	<input class="form-control" type="text" name="group_code2" id="group_code2">
+			                        	<input class="form-control" type="text" name="group_code2" id="group_code2" readonly="readonly">
 			                        </div>
 								</div>
 								<div class="form-group row col-12 col-md-6">
@@ -273,6 +285,7 @@ const dpCmCodes = function (page, size_per_page) {
 		size_per_page = init_size_per_page;
 	}	
 	
+	let search_type = $("#group_search_type").val();
 	let query = isEmpty($("#query1").data("search"));
 	$("#query1").val(query);	//검색어 갱신(검색버튼 클릭시)
 	
@@ -280,6 +293,7 @@ const dpCmCodes = function (page, size_per_page) {
    		url: '/dp/cm/codes',
    		user_id: 'user00',
    		search: query,
+   		search_type: search_type,
    		page_current: String(page),
     };
 	
@@ -309,11 +323,12 @@ const dpCmCodes = function (page, size_per_page) {
 		  	    	let use_at = isEmpty(el.use_at);
 		  	    	let crud_dc = isEmpty(el.crud_dc);
 		  	    	let ordr = isEmpty(el.ordr);
+		  	    	let dtl_code_use_at = isEmpty(el.dtl_code_use_at);
 		  	    	
 		  	    	insertTr += '<tr>';
 		  	    	insertTr += '	<td>'+cl_nm+'</td>';
 		  	    	insertTr += '	<td>'+cl_code+'</td>';
-		  	    	insertTr += '	<td><span class="blue bold" style="cursor:pointer" onclick="dpCmCodesDetail(\''+cl_nm+'\', \''+cl_code+'\', \''+group_code+'\', \''+group_code_nm+'\', \''+use_at+'\', \''+crud_dc+'\', \''+ordr+'\');">'+group_code+'</span></td>';
+		  	    	insertTr += '	<td><span class="blue bold" style="cursor:pointer" onclick="dpCmCodesDetail(\''+cl_nm+'\', \''+cl_code+'\', \''+group_code+'\', \''+group_code_nm+'\', \''+use_at+'\', \''+crud_dc+'\', \''+ordr+'\', \''+dtl_code_use_at+'\');">'+group_code+'</span></td>';
 		  	    	insertTr += '	<td>'+group_code_nm+'</td>';
 		  	    	insertTr += '	<td>'+use_at+'</td>';
 		  	    	insertTr += '	<td>'+crud_dc+'</td>';
@@ -341,6 +356,7 @@ const dpCmCodesDt = function (page, size_per_page) {
 		size_per_page = init_size_per_page;
 	}	
 	
+	let search_type = $("#code_search_type").val();
 	let query = isEmpty($("#query2").data("search"));
 	$("#query2").val(query);	//검색어 갱신(검색버튼 클릭시)
 	
@@ -348,6 +364,7 @@ const dpCmCodesDt = function (page, size_per_page) {
    		url: '/dp/cm/codes/detail',
    		user_id: 'user00',
    		search: query,
+   		search_type: search_type,
    		page_current: String(page),
     };
 	
@@ -663,7 +680,7 @@ const dpCmCodesDtDel = function () {
 }
 
 //코드그룹 모달 상세
-const dpCmCodesDetail = function(cl_nm, cl_code, group_code, group_code_nm, use_at, crud_dc, ordr){
+const dpCmCodesDetail = function(cl_nm, cl_code, group_code, group_code_nm, use_at, crud_dc, ordr, dtl_code_use_at){
 	$("#cl_nm").val(cl_nm);
   	$("#cl_code").val(cl_code);
   	$("#group_code").val(group_code);
@@ -672,6 +689,10 @@ const dpCmCodesDetail = function(cl_nm, cl_code, group_code, group_code_nm, use_
   	$("#ordr").val(ordr);
   	$("#crud_dc").val(crud_dc);
   	$("#old_group_code").val(group_code);
+  	
+  	if(dtl_code_use_at == 'Y'){
+  		$("#group_code").attr("readonly", true);
+  	}
   	
   	codeGroup_addModal('U');
 }
