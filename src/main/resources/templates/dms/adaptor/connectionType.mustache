@@ -339,7 +339,6 @@ const checkOnlyOne = function(element, id) {
     if(id === '0'){
 	    $("#instanceSetDataConfigArea").hide();
     }else{
-		connect_id_change = id;
 	    
 		var len = $("input[name='checkList']:checked").length;
 		if(len === 0){
@@ -350,6 +349,8 @@ const checkOnlyOne = function(element, id) {
 		}
 		
     }
+    
+	connect_id_change = id;
 }
 
 //접속정보 설정 체크

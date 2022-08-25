@@ -46,6 +46,11 @@
 												<tbody id="dpIngestPpType">
 												</tbody>
 											</table>
+												
+						                    <div class="nav justify-content-center"> 
+											  <ul id="pagingul" class="pagination">
+											  </ul>                    
+						                    </div>   											
 										</div>
 									</div>
 								</div>
@@ -112,8 +117,15 @@
 const commonUrl = '/common';
 const url = '/adaptor';
 
+let init_page = 1;				//초기 페이지
+let page = 1;					//페이지
+let init_size_per_page = 10;	//초기 개수
+let size_per_page = 10;	 		//가져올 개수
+let pageCount = 10;		 		//페이징에 나타낼 페이지 수
+
 let dpIngestPpTypeCnt = 0;
 let dpIngestPpInfoCnt = 0;
+let connect_id_change;
 
 //수집방식
 const dpCmCodesClctMthdInput = function (group_code) {
@@ -280,7 +292,7 @@ const adaptorSetConfigAdd = function(){
         insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configIteNm" id="configIteNm"></td>';
         insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configValue" id="configValue"></td>';
         insertTr += ' <td style="text-align: center;"><select id="change_able_yn">';
-        insertTr += ' <option value="Y" selected>필수</option><option value="N">필수아님</option>';
+        insertTr += ' <option value="Y" selected>가능</option><option value="N">불가능</option>';
         insertTr += ' </select></td>';
         insertTr += ' <td style="text-align: center;"><select id="essential_yn">';
         insertTr += ' <option value="Y" selected>필수</option><option value="N">필수아님</option>';
@@ -336,9 +348,9 @@ const dpIngestItPpInfo = function(clct_mthd, clct_ty, connect_id){
 		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configValue" id="configValue_'+i+'"></td>';
 		     		      insertTr += ' <td style="text-align: center;"><select id="change_able_yn_'+i+'">';
 		     		      if(el.change_able_yn === 'Y'){
-    		     		      insertTr += ' <option value="Y" selected>필수</option><option value="N">필수아님</option>';
+    		     		      insertTr += ' <option value="Y" selected>가능</option><option value="N">불가능</option>';
 		     		      }else{
-    		     		      insertTr += ' <option value="Y" selected>필수</option><option value="N">필수아님</option>';
+    		     		      insertTr += ' <option value="Y" selected>가능</option><option value="N">불가능</option>';
 		     		      }
 		     		      insertTr += ' </select></td>';
 		     		      insertTr += ' <td style="text-align: center;"><select id="essential_yn_'+i+'">';
@@ -447,9 +459,9 @@ const dpIngestPpInfo = function(adapter_type_id){
     		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+isEmpty(el.value)+'" name="configValue" id="configValue_'+i+'"></td>';
     		     		      insertTr += ' <td style="text-align: center;"><select id="change_able_yn_'+i+'">';
     		     		      if(el.change_able_yn === 'Y'){
-	    		     		      insertTr += ' <option value="Y" selected>필수</option><option value="N">필수아님</option>';
+	    		     		      insertTr += ' <option value="Y" selected>가능</option><option value="N">불가능</option>';
     		     		      }else{
-	    		     		      insertTr += ' <option value="Y" selected>필수</option><option value="N">필수아님</option>';
+	    		     		      insertTr += ' <option value="Y" selected>가능</option><option value="N">불가능</option>';
     		     		      }
     		     		      insertTr += ' </select></td>';
     		     		      insertTr += ' <td style="text-align: center;"><select id="essential_yn_'+i+'">';
@@ -478,21 +490,29 @@ const dpIngestPpInfo = function(adapter_type_id){
 //접속유형 체크
 const checkOnlyOne = function(element, id) {
 
-    const checkboxes = document.getElementsByName("checkList");
-    checkboxes.forEach((cb) => {
-        cb.checked = false;
-    })
-    element.checked = true;
-	
+	if(connect_id_change !== id){
+	    const checkboxes = document.getElementsByName("checkList");
+	    checkboxes.forEach((cb) => {
+	        cb.checked = false;
+	    })
+	    element.checked = true;
+	}
     
     if(id === '0'){
 	    $("#adaptorSetDataConfigArea").hide();
     }else{
-	    $("#adaptorSetDataConfigArea").show();
-	    dpIngestPpInfo(id);
+    	
+    	var len = $("input[name='checkList']:checked").length;
+    	if(len === 0){
+		    $("#adaptorSetDataConfigArea").hide();
+    	}else{
+		    $("#adaptorSetDataConfigArea").show();
+		    dpIngestPpInfo(id);
+    	}
     }    
     
-    $("#adaptorConfigSetAddCnt").val("0");
+   	connect_id_change = id;
+    
 }
 
 //접속정보 설정 체크
@@ -528,12 +548,20 @@ const adaptorSetAdd = function(){
 }
 
 //Adapter 유형관리 리스트 조회
-const dpIngestPpType = function(){
+const dpIngestPpType = function(page, size_per_page){
+	
+	if(!page){
+		page = init_page;
+	}
+	if(!size_per_page){
+		size_per_page = init_size_per_page;
+	}
 	
     const data = {
 	   		url: '/dp/ingest/property/type',
 	   		user_id: 'user00',	
 	   		menu_id: 'menu_id',
+	   		page_current: page,	   		
 	    };		
 	    
 	    $.ajax({
@@ -565,6 +593,9 @@ const dpIngestPpType = function(){
     			  	    dpIngestPpTypeCnt = i;
     	          	    $("#dpIngestPpType").append(insertTr);		    	   			 
 			  	   	}
+			  	   	
+		  	    	//페이징 보여줌
+		  	    	paging(data.total_count, size_per_page, pageCount, page);			  	   	
 		  	  }
 	    	  
 	    }).fail(function (error) {
@@ -868,6 +899,11 @@ const dpIngestPpInfoSave = function(){
 		        alert(JSON.stringify(error));
 		    });	
 	}
+}
+
+//페이징 함수 호출
+const pagingFun = function(page, size_per_page){
+	dpIngestPpType(page, size_per_page);
 }
 
 dpCmCodesClctMthdInput('D34');

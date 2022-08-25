@@ -20,7 +20,14 @@
 										<div class="form-group row">
 											<label class="control-label">검색</label>
 											<div class="form-control_box">
-												<div class="col-md-12 pr-0">
+												<div class="col-md-3 pl-0">
+													<select class="form-control" id="search_type">
+														<option value="">선 택</option>
+														<option value="pre_nm">전처리 명</option>
+														<option value="change_type">변경유형</option>
+													</select>
+												</div>											
+												<div class="col-md-9 pr-0">
 													<input class="form-control" type="text" placeholder="" id="query" onkeypress="enterkey(event);">
 												</div>
 												<div class="col-md-1 pr-0"></div>
