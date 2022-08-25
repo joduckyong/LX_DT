@@ -350,7 +350,7 @@ const dpIngestItPpInfo = function(clct_mthd, clct_ty, connect_id){
 		     		      if(el.change_able_yn === 'Y'){
     		     		      insertTr += ' <option value="Y" selected>가능</option><option value="N">불가능</option>';
 		     		      }else{
-    		     		      insertTr += ' <option value="Y" selected>가능</option><option value="N">불가능</option>';
+    		     		      insertTr += ' <option value="Y" >가능</option><option value="N" selected>불가능</option>';
 		     		      }
 		     		      insertTr += ' </select></td>';
 		     		      insertTr += ' <td style="text-align: center;"><select id="essential_yn_'+i+'">';
@@ -461,7 +461,7 @@ const dpIngestPpInfo = function(adapter_type_id){
     		     		      if(el.change_able_yn === 'Y'){
 	    		     		      insertTr += ' <option value="Y" selected>가능</option><option value="N">불가능</option>';
     		     		      }else{
-	    		     		      insertTr += ' <option value="Y" selected>가능</option><option value="N">불가능</option>';
+	    		     		      insertTr += ' <option value="Y" >가능</option><option value="N" selected>불가능</option>';
     		     		      }
     		     		      insertTr += ' </select></td>';
     		     		      insertTr += ' <td style="text-align: center;"><select id="essential_yn_'+i+'">';
