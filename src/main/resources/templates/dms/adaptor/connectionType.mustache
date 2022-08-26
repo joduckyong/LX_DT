@@ -265,12 +265,12 @@ const instanceSetConfigAdd = function(){
 //	if($("#instanceConfigSetAddCnt").val() === '0'){
 	  let insertTr = '';
 	  let i = 0;	
-	  insertTr += '<tr id="trCheckConfig_'+instanceSetDataConfigLen+'">';
-	  insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList2"  id="checkConfig_'+instanceSetDataConfigLen+'" value="'+instanceSetDataConfigLen+'"></td>';
-	  insertTr += ' <td style="text-align: center;">'+(++instanceSetDataConfigLen)+'</td>';
-	  insertTr += ' <td style="text-align: center;"><input type="text" id="configItem" value="" oninput="this.value=this.value.replace(/[^0-9a-zA-Z_]/g, \'\')";></td>';
-	  insertTr += ' <td style="text-align: center;"><input type="text" id="configIteNm" value=""></td>';
-	  insertTr += ' <td style="text-align: center;"><input type="text" id="configItemDescribed" value=""></td>';
+	  insertTr += '<tr id="trCheckConfig_'+(instanceSetDataConfigLen+1)+'">';
+	  insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList2"  id="checkConfig_'+(instanceSetDataConfigLen+1)+'" value="'+(instanceSetDataConfigLen+1)+'"></td>';
+	  insertTr += ' <td style="text-align: center;">'+(instanceSetDataConfigLen+1)+'</td>';
+	  insertTr += ' <td style="text-align: center;"><input type="text" id="configItem_'+(instanceSetDataConfigLen+1)+'" value="" oninput="this.value=this.value.replace(/[^0-9a-zA-Z_]/g, \'\')";></td>';
+	  insertTr += ' <td style="text-align: center;"><input type="text" id="configIteNm_'+(instanceSetDataConfigLen+1)+'" value=""></td>';
+	  insertTr += ' <td style="text-align: center;"><input type="text" id="configItemDescribed_'+(instanceSetDataConfigLen+1)+'" value=""></td>';
       insertTr += '</tr>';
 	  
 	  $("#dpIngestItPpInfo").append(insertTr);
@@ -301,19 +301,21 @@ const dpIngestItPpInfo = function(connect_id){
 	    }).done(function (data) {
  	    	  $("#dpIngestItPpInfo").empty();
      	      let insertTr = '';
- 		      let i = 0;	
+ 		      let i = 1;	
 		  	  if (data != null) {
 		  		  
 			  	   	if(data.contents != ""){    	
 			  	   		dpIngestItPpInfoData = data.contents;
     			  	    $.each(data.contents, function (idx, el) {
     		     	          insertTr += '<tr>';
-    		     		      insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList" id="checkConfig_'+(i+1)+'" value="'+el.connect_id+'"></td>';
-    		     		      insertTr += ' <td style="text-align: center;">'+(++i)+'</td>';
+    		     		      insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList" id="checkConfig_'+i+'" value="'+i+'"></td>';
+    		     		      insertTr += ' <td style="text-align: center;">'+i+'</td>';
     		     		      insertTr += ' <td style="text-align: center;"><input type="text" id="configItem_'+i+'" value="'+el.item+'" oninput="this.value=this.value.replace(/[^0-9a-zA-Z_]/g, \'\')";></td>';
     		     		      insertTr += ' <td style="text-align: center;"><input type="text" id="configIteNm_'+i+'" value="'+el.item_nm+'"></td>';
     		     		      insertTr += ' <td style="text-align: center;"><input type="text" id="configItemDescribed_'+i+'" value="'+el.item_described+'"></td>';
     		                  insertTr += '</tr>';
+    		                  
+    		                  i++;
     			  	    });
     	          	    $("#dpIngestItPpInfo").append(insertTr);		    	   			 
 			  	   	}
@@ -460,6 +462,8 @@ const dpIngestItPpDtDel = function(connect_id, item){
     	
 	  	message = JSON.stringify(data.return_msg);
 	    	
+	  	dpIngestItPpInfo(connect_id);
+	  	
 	    }).fail(function (error) {
 	        alert(JSON.stringify(error));
 	    });	
@@ -473,60 +477,69 @@ const dpIngestItPpDtDel = function(connect_id, item){
 const dpIngestItPpDtDelChk = function(){
 	
 	if(confirm('삭제 하시겠습니까?')) {
-		let connect_id;
-	    $("input[name='checkList']:checked").each(function(e){
-	        connect_id = $(this).val();
-	    });
-	    
+		
 	    $("input[name='checkConfigList2']:checked").each(function(e){
 	    	let check_config = $(this).val();
 	    	$("#trCheckConfig_"+check_config).remove();
 	    });   	
 	    
-		var len = $("input[name='checkConfigList']:checked").length;
-		if(len === 0){
-			alert("하나이상 선택해주세요!");
-			return;
-		}
-		
+		let configId;
 	    $("input[name='checkConfigList']:checked").each(function(e){
-	   
-	    	let item = $(this).find("#configItem").val();
-	    	let clct_mthd = $("#clct_mthd_"+connect_id).val();
-	    	let clct_ty = $("#clct_ty_"+connect_id).val();
+	    	configId = $(this).val();
+	    });
+	    if(isEmpty(configId) !== ''){
 	    	
-			const data = {
-			   		url: '/dp/ingest/instance/property/detail/delete/check',
-			   		clct_mthd: clct_mthd,	
-			   		clct_ty: clct_ty,	
-			   		item: item,	
-			   		user_id: 'user00',	
-			   		menu_id: 'menu_id',
-			    };		
-			    $.ajax({
-			        type: 'POST',
-			        url: url+'/dpIngestItPpDtDelChk',
-			        dataType: 'json',
-			        contentType: 'application/json; charset-utf-8',
-			        data: JSON.stringify(data)
-			    }).done(function (data) {
-			  		
-			    	if (data != null) {
-				  	   	if(data.contents != ""){    	
-			    	   		 $.each(data.contents, function (idx, el) {
-			    	   			if(el.chk_yn == 'N'){
-			    	   				dpIngestItPpDtDel(connect_id, item);
-			    	   			}
-			 	     	     });
-				  	   	}
-			  	  } 
-			    	
-			    	
-			    }).fail(function (error) {
-			        alert(JSON.stringify(error));
-			    });		
+			var len = $("input[name='checkConfigList']:checked").length;
+			if(len === 0){
+				alert("하나이상 선택해주세요!");
+				return;
+			}
+			
+			let connect_id;
+		    $("input[name='checkList']:checked").each(function(e){
+		        connect_id = $(this).val();
+		    });
+		    
+		    $("input[name='checkConfigList']:checked").each(function(e){
+		   
+		    	let item = $("#configItem_"+$(this).val()).val();
+		    	let clct_mthd = $("#clct_mthd_"+connect_id).val();
+		    	let clct_ty = $("#clct_ty_"+connect_id).val();
+		    	
+				const data = {
+				   		url: '/dp/ingest/instance/property/detail/delete/check',
+				   		clct_mthd: clct_mthd,	
+				   		clct_ty: clct_ty,	
+				   		item: item,	
+				   		user_id: 'user00',	
+				   		menu_id: 'menu_id',
+				    };		
+				    $.ajax({
+				        type: 'POST',
+				        url: url+'/dpIngestItPpDtDelChk',
+				        dataType: 'json',
+				        contentType: 'application/json; charset-utf-8',
+				        data: JSON.stringify(data)
+				    }).done(function (data) {
+				  		
+				    	if (data != null) {
+					  	   	if(data.contents != ""){    	
+				    	   		 $.each(data.contents, function (idx, el) {
+				    	   			if(el.chk_yn == 'N'){
+				    	   				dpIngestItPpDtDel(connect_id, item);
+				    	   			}
+				 	     	     });
+					  	   	}
+				  	  } 
+				    	
+				    	
+				    }).fail(function (error) {
+				        alert(JSON.stringify(error));
+				    });		
+		    
+		    });   	
+	    }
 	    
-	    });   	
 	}
 }
 
@@ -565,12 +578,6 @@ const dpIngestItPpInfoDel = function(connect_id){
 //접속유형 항목관리 삭제전 체크
 const dpIngestItPpInfoDelChk = function(){
 	
-	var len = $("input[name='checkList']:checked").length;
-	if(len === 0){
-		alert("하나이상 선택해주세요!");
-		return;
-	}
-	
 	if(confirm('삭제 하시겠습니까?')) {
 		
 		let connect_id;
@@ -579,12 +586,18 @@ const dpIngestItPpInfoDelChk = function(){
 	    });
 	    
 	    console.log('connect_id:'+connect_id);
-	    if(connect_id === ''){
+	    if(isEmpty(connect_id) === ''){
 	    	
 	    	$('#instanceSetData > tbody > tr:last').remove();
 	    	$("#instanceSetAddCnt").val("0");
 	    	
 	    }else{
+	    	
+	    	var len = $("input[name='checkList']:checked").length;
+	    	if(len === 0){
+	    		alert("하나이상 선택해주세요!");
+	    		return;
+	    	}
 	    	
 			const data = {
 			   		url: '/dp/ingest/instance/property/info/delete/check',
@@ -643,9 +656,9 @@ const dpIngestItPpDtSave = function(){
 	    let i = 1;
 	    $.each($("#instanceSetDataConfig tbody tr"), function(){
 	        const contents = {
-	            item : $(this).find("#configItem").val(),
-	            item_nm : $(this).find("#configIteNm").val(),
-	            item_described : $(this).find("#configItemDescribed").val(),
+	            item : $(this).find("#configItem_"+i).val(),
+	            item_nm : $(this).find("#configIteNm_"+i).val(),
+	            item_described : $(this).find("#configItemDescribed_"+i).val(),
 	            display_seq : i
 	        };
 	        instanceSetConfigSaveData.push(contents);

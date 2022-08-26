@@ -289,8 +289,8 @@ const connectionSetAdd = function(){
 		let lengthCnt = $("#tbDpIngestAdapterItPp tbody tr").length;
 		let lengthCnt2 = lengthCnt+1;
 	    let insertTr = '';
-        insertTr += '<tr>';
-	    insertTr += ' <td><input class="tableInfo" type="checkbox" name="checkList" value=""></td>';
+        insertTr += '<tr id="trCheckConfig_'+lengthCnt+'">';
+	    insertTr += ' <td><input class="tableInfo" type="checkbox" name="checkList2" value="'+lengthCnt+'"></td>';
 	    insertTr += ' <td><input type=text value="" id="item_'+lengthCnt+'" name="item"></td>';
 	    insertTr += ' <td><input type=text value="" id="item_nm_'+lengthCnt+'" name="item_nm"></td>';
 	    insertTr += ' <td><input type=text value="" id="item_value_'+lengthCnt+'" name="item_value"></td>';
@@ -572,53 +572,65 @@ const dpIngestAdapterItPpDel = function(item){
 //접속정보 설정 삭제 전 체크
 const dpIngestAdapterItPpDelChk = function(){
 	
-	
-	var len = $("input[name='checkList']:checked").length;
-	if(len === 0){
-		alert("하나이상 선택해주세요!");
-		return;
-	}
-	
 	if(confirm('삭제 하시겠습니까?')) {
 		
-		let item;
-	    $("input[name='checkList']:checked").each(function(e){
-	    	item = $(this).val();
-		    const data = {
-			   		url: '/dp/ingest/adapter/instance/property/delete/check',
-			   		instance_id: "{{instance_id}}",	
-			   		item: item,	
-			   		user_id: 'user00',	
-			   		menu_id: 'menu_id',
-			    };			
-		        
-			    $.ajax({
-			        type: 'POST',
-			        url: url+'/dpIngestAdapterItPpDelChk',
-			        dataType: 'json',
-			        contentType: 'application/json; charset-utf-8',
-			        data: JSON.stringify(data)
-		        }).done(function (data) {
-		    	  	  if (data != null) {
-		    	  		  
-		        		  if(errorMsg(data)){
-		      	          	 return;  
-	            	  	  }	
-		    	  			
-		    		  	   	if(data.contents != ""){    	   
-			    	   			if(data.contents[0].chk_yn === 'N'){
-			    	   				dpIngestAdapterItPpDel(item);
-			    	   			}
-		    		  	   	}
-		    	  	  }
-		        }).fail(function (error) {
-		            alert(JSON.stringify(error));
-		        });	
-	    });
+	    $("input[name='checkList2']:checked").each(function(e){
+	    	let check_config = $(this).val();
+	    	$("#trCheckConfig_"+check_config).remove();
+	    });  
 	    
-	    setTimeout(function() {
-	    	dpIngestAdapterItPp($("#adapter_type_id").val(), $("#clct_mthd").val(), $("#clct_ty").val());
-    	}, 500);	    
+		let connect_id;
+	    $("input[name='checkList']:checked").each(function(e){
+	        connect_id = $(this).val();
+	    });
+
+	    if(isEmpty(connect_id) !== ''){
+	    	
+			var len = $("input[name='checkList']:checked").length;
+			if(len === 0){
+				alert("하나이상 선택해주세요!");
+				return;
+			}
+			let item;
+		    $("input[name='checkList']:checked").each(function(e){
+		    	item = $(this).val();
+			    const data = {
+				   		url: '/dp/ingest/adapter/instance/property/delete/check',
+				   		instance_id: "{{instance_id}}",	
+				   		item: item,	
+				   		user_id: 'user00',	
+				   		menu_id: 'menu_id',
+				    };			
+			        
+				    $.ajax({
+				        type: 'POST',
+				        url: url+'/dpIngestAdapterItPpDelChk',
+				        dataType: 'json',
+				        contentType: 'application/json; charset-utf-8',
+				        data: JSON.stringify(data)
+			        }).done(function (data) {
+			    	  	  if (data != null) {
+			    	  		  
+			        		  if(errorMsg(data)){
+			      	          	 return;  
+		            	  	  }	
+			    	  			
+			    		  	   	if(data.contents != ""){    	   
+				    	   			if(data.contents[0].chk_yn === 'N'){
+				    	   				dpIngestAdapterItPpDel(item);
+				    	   			}
+			    		  	   	}
+			    	  	  }
+			        }).fail(function (error) {
+			            alert(JSON.stringify(error));
+			        });	
+		    });
+		    
+		    setTimeout(function() {
+		    	dpIngestAdapterItPp($("#adapter_type_id").val(), $("#clct_mthd").val(), $("#clct_ty").val());
+	    	}, 500);	    
+		    
+	    }
 	    
 	}
 }
