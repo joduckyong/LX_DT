@@ -285,19 +285,19 @@ const adaptorSetConfigAdd = function(){
 	
 //	if($("#adaptorConfigSetAddCnt").val() === '0'){
 	    let insertTr = '';
-        insertTr += '<tr id="trCheckConfig_'+adaptorSetDataConfigLen+'">';
-        insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList2" onclick=checkConfigOnlyOne(this); id="checkConfig_'+adaptorSetDataConfigLen+'" value="'+adaptorSetDataConfigLen+'"></td>';
-        insertTr += ' <td style="text-align: center;" id="displauSeq">'+(++adaptorSetDataConfigLen)+'</td>';
-        insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configItem" id="configItem_'+adaptorSetDataConfigLen+'" oninput="this.value=this.value.replace(/[^0-9a-zA-Z_]/g, \'\')";></td>';
-        insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configIteNm" id="configIteNm_'+adaptorSetDataConfigLen+'"></td>';
-        insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configValue" id="configValue_'+adaptorSetDataConfigLen+'"></td>';
-        insertTr += ' <td style="text-align: center;"><select id="change_able_yn_'+adaptorSetDataConfigLen+'">';
+        insertTr += '<tr id="trCheckConfig_'+(adaptorSetDataConfigLen+1)+'">';
+        insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList2"  id="checkConfig_'+(adaptorSetDataConfigLen+1)+'" value="'+(adaptorSetDataConfigLen+1)+'"></td>';
+        insertTr += ' <td style="text-align: center;" id="displauSeq">'+(adaptorSetDataConfigLen+1)+'</td>';
+        insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configItem" id="configItem_'+(adaptorSetDataConfigLen+1)+'" oninput="this.value=this.value.replace(/[^0-9a-zA-Z_]/g, \'\')";></td>';
+        insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configIteNm" id="configIteNm_'+(adaptorSetDataConfigLen+1)+'"></td>';
+        insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configValue" id="configValue_'+(adaptorSetDataConfigLen+1)+'"></td>';
+        insertTr += ' <td style="text-align: center;"><select id="change_able_yn_'+(adaptorSetDataConfigLen+1)+'">';
         insertTr += ' <option value="Y" selected>가능</option><option value="N">불가능</option>';
         insertTr += ' </select></td>';
-        insertTr += ' <td style="text-align: center;"><select id="essential_yn_'+adaptorSetDataConfigLen+'">';
+        insertTr += ' <td style="text-align: center;"><select id="essential_yn_'+(adaptorSetDataConfigLen+1)+'">';
         insertTr += ' <option value="Y" selected>필수</option><option value="N">필수아님</option>';
         insertTr += ' </select></td>';
-        insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configItemDescribed" id="configItemDescribed_'+adaptorSetDataConfigLen+'"></td>';
+        insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configItemDescribed" id="configItemDescribed_'+(adaptorSetDataConfigLen+1)+'"></td>';
         insertTr += '</tr>';
   	    $("#dpIngestPpInfo").append(insertTr);		
 //  	  	$("#adaptorConfigSetAddCnt").val(adaptorSetDataConfigLen);
@@ -332,7 +332,7 @@ const dpIngestItPpInfo = function(clct_mthd, clct_ty, connect_id){
 		  		*/
 		  	   	if(data.contents != ""){    	
    		     	    let insertTr = '';
-   		     	    let i = 0;	
+   		     	    let i = 1;	
 	  			    $.each(data.contents, function (idx, el) {
 	  		  //  		el.connect_id; 	          
 	  		  //  		el.item; 	          
@@ -341,8 +341,8 @@ const dpIngestItPpInfo = function(clct_mthd, clct_ty, connect_id){
 	  		  //  		el.use_yn; 	          
 	  		    		
 		     	          insertTr += '<tr>';
-		     		      insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList" onclick=checkConfigOnlyOne(this); id="checkConfig_'+(i+1)+'" value="'+el.item+'"></td>';
-		     		      insertTr += ' <td style="text-align: center;" id="displauSeq">'+(++i)+'</td>';
+		     		      insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList"  id="checkConfig_'+i+'" value="'+i+'"></td>';
+		     		      insertTr += ' <td style="text-align: center;" id="displauSeq">'+i+'</td>';
 		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+isEmpty(el.item)+'" name="configItem" id="configItem_'+i+'" oninput="this.value=this.value.replace(/[^0-9a-zA-Z_]/g, \'\')";></td>';
 		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+isEmpty(el.item_nm)+'" name="configIteNm" id="configIteNm_'+i+'"></td>';
 		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="" name="configValue" id="configValue_'+i+'"></td>';
@@ -363,6 +363,7 @@ const dpIngestItPpInfo = function(clct_mthd, clct_ty, connect_id){
 		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+isEmpty(el.item_described)+'" name="configItemDescribed" id="configItemDescribed_'+i+'"></td>';
 		                  insertTr += '</tr>';
 	  		    		
+		                  i++;
 	  			    });
    			  	    
    			  	    dpIngestPpInfoCnt = i;
@@ -449,11 +450,11 @@ const dpIngestPpInfo = function(adapter_type_id){
 	    		    console.log('adapter_type_id:'+adapter_type_id);
 			  	   	if(data.contents != ""){    	
     		     	    let insertTr = '';
-    		     	    let i = 0;	
+    		     	    let i = 1;	
     			  	    $.each(data.contents, function (idx, el) {
     		     	          insertTr += '<tr>';
-    		     		      insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList" onclick=checkConfigOnlyOne(this); id="checkConfig_'+(i+1)+'" value="'+el.item+'"></td>';
-    		     		      insertTr += ' <td style="text-align: center;" id="displauSeq">'+(++i)+'</td>';
+    		     		      insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList"  id="checkConfig_'+i+'" value="'+i+'"></td>';
+    		     		      insertTr += ' <td style="text-align: center;" id="displauSeq">'+i+'</td>';
     		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+isEmpty(el.item)+'" name="configItem" id="configItem_'+i+'" oninput="this.value=this.value.replace(/[^0-9a-zA-Z_]/g, \'\')";></td>';
     		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+isEmpty(el.item_nm)+'" name="configIteNm" id="configIteNm_'+i+'"></td>';
     		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+isEmpty(el.value)+'" name="configValue" id="configValue_'+i+'"></td>';
@@ -473,6 +474,7 @@ const dpIngestPpInfo = function(adapter_type_id){
     		     		      insertTr += ' </select></td>';
     		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+isEmpty(el.item_described)+'" name="configItemDescribed" id="configItemDescribed_'+i+'"></td>';
     		                  insertTr += '</tr>';
+    		                  i++;
     			  	    });
     			  	    
     			  	    dpIngestPpInfoCnt = i;
@@ -629,7 +631,8 @@ const dpIngestPpDtDel = function(adapter_type_id, item){
    	  	  }	
 	    	
 	    	message = JSON.stringify(data.return_msg);
-	    	
+	    	dpIngestPpInfo(adapter_type_id);
+
 	    }).fail(function (error) {
 	        alert(JSON.stringify(error));
 	    });	
@@ -643,58 +646,69 @@ const dpIngestPpDtDel = function(adapter_type_id, item){
 const dpIngestPpDtDelChk = function(){
 	
 	if(confirm('삭제 하시겠습니까?')) {
-		let adapter_type_id;
-	    $("input[name='checkList']:checked").each(function(e){
-	    	adapter_type_id = $(this).val();
-	    });
 	    
 	    $("input[name='checkConfigList2']:checked").each(function(e){
-	    	
 	    	let check_config = $(this).val();
 	    	$("#trCheckConfig_"+check_config).remove();
-	    	
 	    });   	
 	    
-		var len = $("input[name='checkConfigList']:checked").length;
-		if(len === 0){
-			alert("하나이상 선택해주세요!");
-			return;
-		}
-		
+		let configId;
 	    $("input[name='checkConfigList']:checked").each(function(e){
-			const data = {
-			   		url: '/dp/ingest/property/detail/delete/check',
-			   		adapter_type_id: adapter_type_id,	
-			   		clct_mthd: $("#clct_mthd_"+adapter_type_id).val(),	
-			   		clct_ty: $("#clct_ty_"+adapter_type_id).val(),	
-			   		item: item,	
-			   		user_id: 'user00',	
-			   		menu_id: 'menu_id',
-			    };		
-			    $.ajax({
-			        type: 'POST',
-			        url: url+'/dpIngestPpDtDelChk',
-			        dataType: 'json',
-			        contentType: 'application/json; charset-utf-8',
-			        data: JSON.stringify(data)
-			    }).done(function (data) {
-			  		
-			    	if (data != null) {
-				  	   	if(data.contents != ""){    	
-			    	   		 $.each(data.contents, function (idx, el) {
-			    	   			if(el.chk_yn == 'N'){
-			    	   				dpIngestPpDtDel(adapter_type_id, item);
-			    	   			}
-			 	     	     });
-				  	   	}
-			  	  } 
-			    	
-			    	
-			    }).fail(function (error) {
-			        alert(JSON.stringify(error));
-			    });
-	    	
-	    });   	
+	    	configId = $(this).val();
+	    });
+	    
+	    if(isEmpty(configId) !== ''){
+			var len = $("input[name='checkConfigList']:checked").length;
+			if(len === 0){
+				alert("하나이상 선택해주세요!");
+				return;
+			}
+			
+			let adapter_type_id;
+		    $("input[name='checkList']:checked").each(function(e){
+		    	adapter_type_id = $(this).val();
+		    });
+		    $("input[name='checkConfigList']:checked").each(function(e){
+		    	let item = $("#configItem_"+$(this).val()).val();
+		    	let clct_mthd = $("#clct_mthd_"+adapter_type_id).val();
+		    	let clct_ty = $("#clct_ty_"+adapter_type_id).val();
+		    	
+				const data = {
+				   		url: '/dp/ingest/property/detail/delete/check',
+				   		adapter_type_id: adapter_type_id,	
+				   		clct_mthd: clct_mthd,	
+				   		clct_ty: clct_ty,	
+				   		item: item,	
+				   		user_id: 'user00',	
+				   		menu_id: 'menu_id',
+				    };		
+				
+				    $.ajax({
+				        type: 'POST',
+				        url: url+'/dpIngestPpDtDelChk',
+				        dataType: 'json',
+				        contentType: 'application/json; charset-utf-8',
+				        data: JSON.stringify(data)
+				    }).done(function (data) {
+				  		
+				    	if (data != null) {
+					  	   	if(data.contents != ""){    	
+				    	   		 $.each(data.contents, function (idx, el) {
+				    	   			if(el.chk_yn == 'N'){
+				    	   				dpIngestPpDtDel(adapter_type_id, item);
+				    	   			}
+				 	     	     });
+					  	   	}
+				  	  } 
+				    	
+				    	
+				    }).fail(function (error) {
+				        alert(JSON.stringify(error));
+				    });
+		    	
+		    });   	
+	    }
+	    
 	}
 }
 
@@ -731,11 +745,6 @@ const dpIngestPpInfoDel = function(adapter_type_id){
 //Adapter 유형관리 삭제전 체크
 const dpIngestPpInfoDelChk = function(){
 
-	var len = $("input[name='checkList']:checked").length;
-	if(len === 0){
-		alert("하나이상 선택해주세요!");
-		return;
-	}
 	if(confirm('삭제 하시겠습니까?')) {
 		
 		let adapter_type_id;
@@ -745,12 +754,18 @@ const dpIngestPpInfoDelChk = function(){
 	    
 	    console.log('adapter_type_id:'+adapter_type_id);
 	    
-		if(adapter_type_id === ''){
+		if(isEmpty(adapter_type_id) === ''){
 	    	
 	    	$('#adaptorSetData > tbody > tr:last').remove();
 	    	$("#adaptorSetAddCnt").val("0");
 	    	
 	    }else{
+	    	
+	    	var len = $("input[name='checkList']:checked").length;
+	    	if(len === 0){
+	    		alert("하나이상 선택해주세요!");
+	    		return;
+	    	}
 	    	
 			const data = {
 			   		url: '/dp/ingest/property/info/delete/check',
@@ -850,10 +865,9 @@ const dpIngestPpDtSave = function(){
 			        alert(JSON.stringify(error));
 			    });		
 			    
-			    ++i;
+			    i++;
 	    }); 
 	    
- 		alert("저장되었습니다.");
  		$("#adaptorConfigSetAddCnt").val("0");
 	    dpIngestPpInfo(adapter_type_id);
 	}
