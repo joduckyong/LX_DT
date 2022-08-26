@@ -65,7 +65,7 @@
                 <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
               </div>
               <div class="modal-body">
-	          	<div class="table_responsive">
+	          	<div class="table_responsive" style="height: 500px; overflow: auto;">
                     <table class="table table-striped">
                       <colgroup>
                       </colgroup>
@@ -89,7 +89,7 @@
         
     <!-- 실패건수 modal -->
 	<div class="modal fade add_modal" id="fail_add_modal" tabindex="-1" role="dialog" aria-hidden="true">
-          <div class="modal-dialog modal-lg">
+          <div class="modal-dialog modal-xl">
             <div class="modal-content">
               <div class="modal-header">
                 <h4 class="modal-title" id="fail_myModalLabel">실패건수</h4>
@@ -101,35 +101,21 @@
                     <div class="row">
                       <div class="form-group row col-12 col-md-6">
                         <div class="control-label">데이터셋명</div>
-                        <div class="form-control_box"></div>
+                        <div class="form-control_box" id="fail_pop_dset_korean_nm"></div>
                       </div>
                       <div class="form-group row col-12 col-md-6">
                         <div class="control-label">실패건수</div>
-                        <div class="form-control_box"></div>
+                        <div class="form-control_box" id="fail_pop_cnt"></div>
                       </div>
                     </div>
                   </div>
-                  <div class="table_responsive">
-                    <table class="table table-striped">
+                  <div class="table_responsive" style="height: 500px; overflow: auto;">
+                    <table class="table table-striped" style="text-align: center; width:auto; table-layout: fixed; white-space: nowrap;">
                       <colgroup>
                       </colgroup>
-                      <thead>
-                        <tr>
-                          <th>문화재명</th>
-                          <th>문화재순번</th>
-                          <th>고유번호</th>
-                          <th>주소</th>
-                          <th>체크/재적재</th>
-                        </tr>
+                      <thead id="dsetDtCtPop">
                       </thead>
-                      <tbody>
-                      	<tr>
-		              		<td><input class="form-control" type="text"></td>
-		              		<td><input class="form-control" type="text"></td>
-		              		<td><input class="form-control" type="text"></td>
-		              		<td><input class="form-control" type="text"></td>
-		              		<td><button class="btn btn-success btn-sm mx-0" type="button">체크</button></td>
-		              	</tr>
+                      <tbody id="dsetDtListPop">
                       </tbody>
                     </table>
               	</div>
@@ -151,6 +137,8 @@ let page = 1;					//페이지
 let init_size_per_page = 10;	//초기 개수
 let size_per_page = 10;	 		//가져올 개수
 let pageCount = 10;		 		//페이징에 나타낼 페이지 수
+
+let dsetObj = {};
 
 //데이터 셋 상세 조회
 const dpLoadDsetDt = function () {
@@ -217,8 +205,15 @@ const dpLoadDsetDtCt = function () {
 		  		
 	  	    	if(data.contents != ""){
 	  	    		let insertTr = '<tr>';
-	  	    		$.each(data.contents, function (idx, el) {
+	  	    		
+	  	    		let sortData = data.contents;
+	  	    		sortData.sort((a, b) => {
+	  	    		    return a.ordr - b.ordr;
+	  	    		});
+	  	    		
+	  	    		$.each(sortData, function (idx, el) {
 			  	    	insertTr += '	<th>'+el.column_korean_nm+'</th>';
+			  	    	dsetObj[el.column_eng_nm] = el.column_korean_nm;
 			  	    });
 	  	    		insertTr += '</tr>';
 	  	    		$("#dsetDtCt").html(insertTr);
@@ -323,7 +318,7 @@ const dpLoadPopupHistory01 = function () {
   	    			insertTr += '	<td>'+el.modified_at+'</td>';
   	    			insertTr += '	<td>'+el.ingest_count+'</td>';
   	    			insertTr += '	<td>'+el.load_count+'</td>';
-  	    			insertTr += '	<td>'+el.error_count+'</td>';
+  	    			insertTr += '	<td><span class="blue bold" style="cursor:pointer" onclick="fail_addModal(\''+el.error_count+'\');">'+el.error_count+'</span></td>';
   	    			insertTr += '	<td><button class="btn btn-success btn-sm mx-0" type="button" onclick="dpLoadPopupHistoryDown01(\''+el.modified_at+'\')">다운로드</button></td>';
   	    			insertTr += '</tr>';
   	    			
@@ -380,6 +375,170 @@ const dpLoadPopupHistoryDown01 = function (log_dt) {
     });	
 }
 
+//실패건수 로그데이터 조회
+const dpLoadFaileLogList = function (log_dt) {
+	
+	let table_idntfc_id = '{{table_idntfc_id}}';
+	log_dt = '2022-08-22';
+	
+	let columnTr = '<tr>';
+	for(let key in dsetObj){
+		columnTr += '	<th style="min-width:150px;">'+dsetObj[key]+'</th>';
+    };
+    columnTr += '	<th style="min-width:150px;">체크/재적재</th>';
+	columnTr += '</tr>';
+	$("#dsetDtCtPop").html(columnTr);
+	
+	const data = {
+   		url: '/dp/load/faile/log/list',
+   		user_id: 'user00',	
+   		table_idntfc_id: table_idntfc_id,
+   		log_dt: log_dt,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpLoadFaileLogList',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		  
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
+	  		
+    		let insertTr = '';
+  	    	if(data.contents != ""){
+  	    		$.each(data.contents, function (idx, el) {
+	  	    		let data_before = el.data_before;
+	  	    		let failObj = strToObject(data_before);
+	  	    		
+	  	    		insertTr += '<tr id="failTr_'+el.instance_id+'" data-dataid="'+el.data_id+'" data-id="'+el.id+'">';
+	  	    		for(let key in dsetObj){
+	  	    			let val = '';
+	  	    			if(failObj[key]){
+	  	    				val = failObj[key];
+	  	    			}
+	  	    			insertTr += '	<td id="failTd_'+key+'"><input class="form-control" type="text" value="'+val+'" data-key="'+key+'"></td>';
+	  	    		}
+	  	    		insertTr += '<td id="loadChkBtn_'+el.instance_id+'"><button class="btn btn-success btn-sm mx-0" type="button" onclick="dpLoadFaileChk(\''+el.instance_id+'\');">체크</button></td>';
+	  	    		insertTr += '</tr>';
+  	    		});
+  	    		
+  	    	}
+  	    	
+  	    	$("#dsetDtListPop").html(insertTr);
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//수집스케줄에서 오류수정상태값 조회
+const dpLoadFaileChk = function (instance_id) {
+
+	const data = {
+   		url: '/dp/load/faile/collection/check',
+   		user_id: 'user00',	
+   		instance_id: instance_id,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpLoadFaileChk',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		  
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
+	  		
+    		let insertTr = '';
+  	    	if(data.contents != ""){
+  	    		let datamodel_after = data.contents[0].datamodel_after;
+  	    		let match_process_yn = data.contents[0].match_process_yn;
+  	    		let error_yn = data.contents[0].error_yn;
+  	    		
+  	    		if(match_process_yn == 'Y' && error_yn == 'N'){
+  	    			let str = '<button class="btn btn-success btn-sm mx-0" type="button" onclick="dpLoadFaileReload(\''+instance_id+'\', \''+datamodel_after+'\');">재적재</button>';
+  	    			$("#loadChkBtn_"+instance_id).html(str);
+  	    		}else{
+  	    			alert("재적재가 불가합니다.");
+  	    			return;
+  	    		}
+  	    	}
+  	    	
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//데이터 재적재
+const dpLoadFaileReload = function (instance_id, datamodel_after) {
+	
+	let table_eng_nm = $("#table_eng_nm").text();
+	let data_id = $("#failTr_"+instance_id).data("dataid");
+	let id = $("#failTr_"+instance_id).data("id");
+	let data_after = {};
+	
+	$("#failTr_"+instance_id).find('td').each(function(idx, el){
+		let key = $(el).find('input').data('key');
+		let val = $(el).find('input').val();
+		data_after[key] = val;
+	});
+	
+	const data = {
+   		url: '/dp/load/faile/collection',
+   		user_id: 'user00',	
+   		id: id,
+   		data_id: data_id,
+   		data_after: JSON.stringify(data_after).replace(/\"/gi,""),
+   		datamodel_after: datamodel_after,
+   		table_eng_nm: table_eng_nm,
+    };
+	
+// 	console.log(data);
+	
+	if(confirm("재적재 하시겠습니까?")){
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpLoadFaileReload',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	
+		  	  if (data != null) {
+		  		  
+	    		  if(errorMsg(data)){
+	   	          	 return;  
+	       	  	  }				
+		  		
+	    		let insertTr = '';
+	  	    	if(data.contents != ""){
+	  	    		if(data.contents[0].successYN == 'Y'){
+	  	    			alert("정상적으로 적재되었습니다.");
+	  	    		}
+	  	    	}
+	  	    	
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+	}
+}
+
 //이력보기 모달 추가
 const addModal = function(){
 	dpLoadPopupHistory01();
@@ -387,7 +546,11 @@ const addModal = function(){
 }
 
 //실패건수 모달 추가
-const fail_addModal = function(){
+const fail_addModal = function(failCnt){
+	let dset_korean_nm = $("#dset_korean_nm").text();
+	$("#fail_pop_dset_korean_nm").text(dset_korean_nm);
+	$("#fail_pop_cnt").text(failCnt);
+	dpLoadFaileLogList();
 	$('#fail_add_modal').modal('show');
 }
 
@@ -409,6 +572,24 @@ const dpLoadDsetDtCall = function(page, size_per_page){
 	.catch(function(error){
 		console.log(error)
 	});
+}
+
+const strToObject = function(str){
+	let obj = {};
+	const except = ['\t', '{', '}'];
+	for(let i=0; i < except.length; i++){
+		str = str.replaceAll(except[i],'');
+	}
+	if(str.indexOf(",") > -1){
+		let arr = str.split(",");
+		for(let i=0; i < arr.length; i++){
+			let key = arr[i].split(":")[0];
+			let val = arr[i].split(":")[1];
+			obj[key] = val;
+		}
+	}
+	
+	return obj;
 }
 
 dpLoadDsetDt();
