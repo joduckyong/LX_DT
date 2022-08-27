@@ -535,8 +535,8 @@ const adaptorSetAdd = function(){
 	
 	if($("#adaptorSetAddCnt").val() === '0'){
 	    let insertTr = '';
- 	    insertTr += '<tr>';
- 		insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkList" onclick=checkOnlyOne(this,"0"); id="check_'+adaptorSetDataLen+'" value=""></td>';
+ 	    insertTr += '<tr id="trCheck_'+adaptorSetDataLen+'">';
+ 		insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkList2" onclick=checkOnlyOne(this,"0"); id="check_'+adaptorSetDataLen+'" value="'+adaptorSetDataLen+'"></td>';
  		insertTr += ' <td style="text-align: center;">'+(adaptorSetDataLen)+'</td>';
  		insertTr += ' <td style="text-align: center;"><input type="text" value="" name="adapter_type_nm" id="adapter_type_nm"></td>';
  		insertTr += ' <td style="text-align: center;"><select id="clct_mthd" onchange=clctMthdType(this.value)></select></td>';
@@ -747,6 +747,14 @@ const dpIngestPpInfoDelChk = function(){
 
 	if(confirm('삭제 하시겠습니까?')) {
 		
+	    $("input[name='checkList2']:checked").each(function(e){
+	    	let check_config = $(this).val();
+	    	$("#trCheck_"+check_config).remove();
+	    	
+	    	$("#adaptorSetAddCnt").val("0");
+	    });  
+	    
+		
 		let adapter_type_id;
 	    $("input[name='checkList']:checked").each(function(e){
 	    	adapter_type_id = $(this).val();
@@ -754,18 +762,7 @@ const dpIngestPpInfoDelChk = function(){
 	    
 	    console.log('adapter_type_id:'+adapter_type_id);
 	    
-		if(isEmpty(adapter_type_id) === ''){
-	    	
-	    	$('#adaptorSetData > tbody > tr:last').remove();
-	    	$("#adaptorSetAddCnt").val("0");
-	    	
-	    }else{
-	    	
-	    	var len = $("input[name='checkList']:checked").length;
-	    	if(len === 0){
-	    		alert("하나이상 선택해주세요!");
-	    		return;
-	    	}
+		if(isEmpty(adapter_type_id) !== ''){
 	    	
 			const data = {
 			   		url: '/dp/ingest/property/info/delete/check',
