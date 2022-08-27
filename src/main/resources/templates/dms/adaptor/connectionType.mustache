@@ -373,8 +373,8 @@ const instanceSetAdd = function(){
 	
 	if($("#instanceSetAddCnt").val() === '0'){
 		let insertTr = '';
-	    insertTr += '<tr>';
-	    insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkList" onclick=checkOnlyOne(this,"0"); id="check_'+instanceSetDataLen+'" value=""></td>';
+	    insertTr += '<tr id="trCheck_'+instanceSetDataLen+'">';
+	    insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkList2" onclick=checkOnlyOne(this,"0"); id="check_'+instanceSetDataLen+'" value="'+instanceSetDataLen+'"></td>';
 	    insertTr += ' <td style="text-align: center;">'+(instanceSetDataLen)+'</td>';
 	    insertTr += ' <td style="text-align: center;"><select id="clct_mthd" onchange=clctMthdType(this.value)></select></td>';
 	    insertTr += ' <td style="text-align: center;"><select id="clct_ty"></select></td>';
@@ -481,6 +481,7 @@ const dpIngestItPpDtDelChk = function(){
 	    $("input[name='checkConfigList2']:checked").each(function(e){
 	    	let check_config = $(this).val();
 	    	$("#trCheckConfig_"+check_config).remove();
+	    	
 	    });   	
 	    
 		let configId;
@@ -580,24 +581,21 @@ const dpIngestItPpInfoDelChk = function(){
 	
 	if(confirm('삭제 하시겠습니까?')) {
 		
+	    $("input[name='checkList2']:checked").each(function(e){
+	    	let check_config = $(this).val();
+	    	$("#trCheck_"+check_config).remove();
+	    	
+	    	$("#instanceSetAddCnt").val("0");
+	    });  
+	    
+	    
 		let connect_id;
 	    $("input[name='checkList']:checked").each(function(e){
 	        connect_id = $(this).val();
 	    });
 	    
 	    console.log('connect_id:'+connect_id);
-	    if(isEmpty(connect_id) === ''){
-	    	
-	    	$('#instanceSetData > tbody > tr:last').remove();
-	    	$("#instanceSetAddCnt").val("0");
-	    	
-	    }else{
-	    	
-	    	var len = $("input[name='checkList']:checked").length;
-	    	if(len === 0){
-	    		alert("하나이상 선택해주세요!");
-	    		return;
-	    	}
+	    if(isEmpty(connect_id) !== ''){
 	    	
 			const data = {
 			   		url: '/dp/ingest/instance/property/info/delete/check',
