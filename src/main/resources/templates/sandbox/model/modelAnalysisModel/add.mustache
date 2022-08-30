@@ -5,7 +5,7 @@
             <div class="col-md-12">
               <div class="x_panel"> 
                 <div class="x_title"> 
-                  <h2>HOME > 데이터 분석 > 분석 모델 관리 > 데이터 분석 모델  > 등록</h2>
+                  <h2>HOME > 데이터 분석 > 분석 모델 관리 > 분석 모델  > 등록</h2>
                   <div class="clearfix"> </div>
                 </div>
                 <div class="x_content"> <br>
@@ -441,21 +441,21 @@ const initBasicInfo = function (code){
   	          	 return;  
        	  	  }	
 	  		
-  	    	if(data.contents != ""){
-  	    		let insertTr = '';
-  	    		$("#basic_infos").empty();
-		  	    $.each(data.contents, function (idx, el) {
-		  	    	
-		  	    	insertTr += '<tr id="basic_info'+basicInfoNo+'" data-code='+basicInfoNo+'>';
-		  			insertTr += '	<td></td>';
-		  			insertTr += '	<td><input class="form-control" type="hidden" name="anals_model_stage'+basicInfoNo+'" id="anals_model_stage'+basicInfoNo+'" value="'+el.anals_model_stage+'">'+el.anals_model_stage+'</td>';
-		  			insertTr += '	<td><input class="form-control" type="hidden" name="anals_model_dfn'+basicInfoNo+'" id="anals_model_dfn'+basicInfoNo+'" value="'+el.anals_model_dfn+'">'+el.anals_model_dfn+'</td>';
-		  			insertTr += '	<td><input class="form-control" type="text" name="anals_model_desc'+basicInfoNo+'" id="anals_model_desc'+basicInfoNo+'" value=""></td>';
-		  			insertTr += '</tr>';
-		  			basicInfoNo++;
-		  	    });
-		  	  	$("#basic_infos").html(insertTr);
-  	    	}
+   		  if(data.contents != ""){
+   	    		let insertTr = '';
+   	    		$("#basic_infos").empty();
+ 		  	    $.each(data.contents, function (idx, el) {
+ 		  	    	
+ 		  	    	insertTr += '<tr id="basic_info'+basicInfoNo+'" data-code='+basicInfoNo+'>';
+ 		  			insertTr += '	<td><input type="checkbox" name="chk_basic_infos" value="' + basicInfoNo + '"></td>';
+ 		  			insertTr += '	<td><input class="form-control" type="hidden" name="anals_model_stage'+basicInfoNo+'" id="anals_model_stage'+basicInfoNo+'" value="'+el.anals_model_stage+'">'+el.anals_model_stage+'</td>';
+ 		  			insertTr += '	<td><input class="form-control" type="hidden" name="anals_model_dfn'+basicInfoNo+'" id="anals_model_dfn'+basicInfoNo+'" value="'+el.anals_model_dfn+'">'+el.anals_model_dfn+'</td>';
+ 		  			insertTr += '	<td><input class="form-control" type="text" name="anals_model_desc'+basicInfoNo+'" id="anals_model_desc'+basicInfoNo+'" value=""></td>';
+ 		  			insertTr += '</tr>';
+ 		  			basicInfoNo++;
+ 		  	    });
+ 		  	  	$("#basic_infos").html(insertTr);
+   	    	}
 	  	  }
     	  
     }).fail(function (error) {
