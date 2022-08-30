@@ -157,7 +157,7 @@
                 		</div>
                    </div>
           	</div>
-          	<div class="metatable_box col-5 col-lg-7">
+          	<div class="metatable_box col-5 col-lg-7" id="r_layer" style="pointer-events:none;">
           		<div class="row"> 
                      	<div class="table_responsive">
                      		<div class="table_btns mt-1">
@@ -178,7 +178,7 @@
 			                            </th>
 			                            <th>영문명</th>
 			                            <th>
-			                                <input class="form-control" type="text" name="column_eng_nm" id="column_eng_nm">
+			                                <input class="form-control" type="text" name="column_eng_nm" id="column_eng_nm" readonly="readonly">
 			                            </th>
 			                        </tr>
 			                        <tr>
@@ -290,7 +290,11 @@
 			                            </th>
 			                            <th>CRUD 구분</th>
 			                            <th>
-			                            	<input class="form-control" type="text" name="crud_se" id="crud_se">
+			                            	<select class="form-control" name="crud_se" id="crud_se">
+			                                    <option value="C">C</option>
+			                                    <option value="U">U</option>
+			                                    <option value="D">D</option>
+			                                </select>
 			                            </th>
 			                        </tr>
 			                        <tr>
@@ -672,6 +676,7 @@ const dpIngestErrorsSourceListTbl = function (colData) {
   	    			}
 		  	    	
   	    		});
+  	    		
   	    		$("#columnInfo").append(insertTr);
   	    	}
 	  	  }
@@ -682,7 +687,7 @@ const dpIngestErrorsSourceListTbl = function (colData) {
 }
 
 //메타테이블 컬럼 항목(Instance 매칭정보 변경)
-const dpIngestErrorsSourceListMatch = function (sourceData, preData) {
+const dpIngestErrorsSourceListMatch = function (ppData, sourceData, preData) {
 	
 	let instance_id = '{{instance_id}}';
 	
@@ -705,14 +710,22 @@ const dpIngestErrorsSourceListMatch = function (sourceData, preData) {
 	  		  
     		  if(errorMsg(data)){
     	          	 return;  
-       	  	  }				
-	  		
+       	  	  }
+    		  
   	    	if(data.contents != ""){
   	    		let insertTr = '';
 		  	    $.each(data.contents, function (idx, el) {
+		  	    	let column_eng_nm = '';
+		  	    	let column_stre_type = '';
+		  	    	for(let obj of ppData.contents){
+		  	    		if(obj.column_eng_nm == el.source_id){
+		  	    			column_eng_nm = obj.column_eng_nm;
+		  	    			column_stre_type = obj.column_stre_type;
+		  	    		}
+		  	    	}
 		  	    	insertTr += '<tr class="match_tr">';
-		  	    	insertTr += '	<td id="column_eng_nm" name="column_eng_nm"></td>';
-		  	    	insertTr += '	<td id="column_stre_type" name="column_stre_type"></td>';
+		  	    	insertTr += '	<td id="column_eng_nm" name="column_eng_nm">'+column_eng_nm+'</td>';
+		  	    	insertTr += '	<td id="column_stre_type" name="column_stre_type">'+column_stre_type+'</td>';
 		  	    	insertTr += '	<td>';
 		  	    	insertTr += '		<select class="form-control clct_mthd1" id="source_id" name="source_id">';
 		  	    	for(let obj of sourceData.contents){
@@ -1149,42 +1162,6 @@ const dpIngestPopupMetaTbl = function () {
     });	
 }
 
-//데이터 모델 속성 정보 조회
-const dpIngestDataModelsPp = function(){
-	
-	let table_idntfc_id = $("#table_idntfc_id").val();
-	
-    const data = {
-	   		url: '/dp/ingest/data/models/property?table_idntfc_id='+table_idntfc_id,
-	    };		
-	    
-	    $.ajax({
-	        type: 'POST',
-	        url: commonUrl+'/dpIngestDataModelsPp',
-	        dataType: 'json',
-	        contentType: 'application/json; charset-utf-8',
-	        data: JSON.stringify(data)
-	    }).done(function (data) {
-		  	  if (data != null) {
-		  		  
-	    		  if(errorMsg(data)){
-	    	          	 return;  
-        	  	  }				
-		  		
-			  	   	if(data.contents != ""){    	
-			  	   		let li = '';
-    			  	    $.each(data.contents, function (idx, el) {
-    			  	    	li += '<li class="task"><p>'+el.column_eng_nm+'</p></li>';
-    			  	    });
-    			  	 	$("#drakeLeft").append(li);
-			  	   	}
-		  	  }
-	    	  
-	    }).fail(function (error) {
-	        alert(JSON.stringify(error));
-	    });			
-}
-
 //Instance 매칭정보 리스트 조회
 const dpIngestAdapterItMatchList = function(){
 	
@@ -1209,7 +1186,7 @@ const dpIngestAdapterItMatchList = function(){
     		  if(errorMsg(data)){
     	          	 return;  
        	  	  }				
-	  		
+    		  	$("#matchList").empty();
 		  	   	if(data.contents != ""){    	
 		  	   		let insertTr = '';
    			  	    $.each(data.contents, function (idx, el) {
@@ -1345,6 +1322,37 @@ const dpIngestAdapterItProcess = function(){
     });			
 }
 
+//데이터 모델 속성 정보 조회
+const dpIngestDataModelsPp = function(){
+	return new Promise(function(resolve, reject){
+	
+	let table_idntfc_id = $("#table_idntfc_id").val();
+	
+    const data = {
+	   		url: '/dp/ingest/data/models/property?table_idntfc_id='+table_idntfc_id,
+	    };		
+	    
+	    $.ajax({
+	        type: 'POST',
+	        url: commonUrl+'/dpIngestDataModelsPp',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+		  	  if (data != null) {
+		  		  
+	    		  if(errorMsg(data)){
+	    	          	 return;  
+        	  	  }	
+	    		  resolve(data);
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });
+	});
+}
+
 //Source 조회
 const dpIngestAdapterItSource = function(){
 	return new Promise(function(resolve, reject){
@@ -1370,16 +1378,16 @@ const dpIngestAdapterItSource = function(){
 	    	          	 return;  
 	       	  	  }				
 		  		
-			  	   	if(data.contents != ""){  
-			  	   		let insertTr = '';
-			  	   	 	$.each(data.contents, function (idx, el) {
+// 			  	   	if(data.contents != ""){  
+// 			  	   		let insertTr = '';
+// 			  	   	 	$.each(data.contents, function (idx, el) {
 // 			     	      insertTr += '<tr>';
 // 		     		      insertTr += ' <td><input type=checkbox name="choice_yn" id="choice_yn" value="Y"></td>';
 // 		     		      insertTr += ' <td><input type=hidden value='+el.source_path+' name="pop_source_path" id="pop_source_path" >'+el.source_path+'</td>';
 // 		     		      insertTr += ' <td><input type=hidden value='+el.source_id+' name="pop_source_id" id="pop_source_id" >'+el.source_id+'</td>';
 // 		                  insertTr += '</tr>';
-				  	    });	  		
-			  	   	}
+// 				  	    });	  		
+// 			  	   	}
 			  	   	
 			  	   	resolve(data);
 		  	  }
@@ -1413,16 +1421,16 @@ const dpIngestAdapterItPre = function(){
 	    	          	 return;  
 	       	  	  }				
 		  		
-			  	   	if(data.contents != ""){  
-			  	   		let insertTr = '';
-			  	   	 	$.each(data.contents, function (idx, el) {
+// 			  	   	if(data.contents != ""){  
+// 			  	   		let insertTr = '';
+// 			  	   	 	$.each(data.contents, function (idx, el) {
 // 			     	      insertTr += '<tr>';
 // 		     		      insertTr += ' <td><input type=checkbox name="choice_yn" id="choice_yn" value="Y"></td>';
 // 		     		      insertTr += ' <td><input type=hidden value='+el.source_path+' name="pop_source_path" id="pop_source_path" >'+el.source_path+'</td>';
 // 		     		      insertTr += ' <td><input type=hidden value='+el.source_id+' name="pop_source_id" id="pop_source_id" >'+el.source_id+'</td>';
 // 		                  insertTr += '</tr>';
-				  	    });	  		
-			  	   	}
+// 				  	    });	  		
+// 			  	   	}
 			  	  resolve(data);
 		  	  }
 	    	  
@@ -1433,7 +1441,7 @@ const dpIngestAdapterItPre = function(){
 }
 
 //수신경로 조회(API 설정정보를 조합하여 조회)
-const dpIngestPopupPpPath = function(){
+const dpIngestPopupPpPath = function(sourceData){
 	
 	$("#dpIngestPopupPpPath").empty();	
 	
@@ -1457,17 +1465,25 @@ const dpIngestPopupPpPath = function(){
 	    		  if(errorMsg(data)){
 	  	          	 return;  
         	  	  }	
-		  			
+	    		  
 			  	   	if(data.contents != ""){    	
     		     	    let i = 0;
     		     	    let insertTr = '';
     			  	    $.each(data.contents, function (idx, el) {
-  		     	          insertTr += '<tr>';
-		     		      insertTr += ' <td><input type=checkbox name="choice_yn" id="choice_yn" value="Y"></td>';
-		     		      insertTr += ' <td><input type=hidden value='+el.source_path+' name="pop_source_path" id="pop_source_path" >'+el.source_path+'</td>';
-		     		      insertTr += ' <td><input type=hidden value='+el.source_id+' name="pop_source_id" id="pop_source_id" >'+el.source_id+'</td>';
-		                  insertTr += '</tr>';
-		                  i++;
+  		     	          	insertTr += '<tr>';
+  		     	          
+  		     	          	let chkStr = '';
+  		     	       		for(let obj of sourceData.contents){
+	  			  	    		if(obj.source_id == el.source_id){
+	  			  	    			chkStr = 'checked';
+	  			  	    		}
+  			  	    		}
+  		     	          
+  		     	       	  	insertTr += ' <td><input type=checkbox name="choice_yn" id="choice_yn" value="Y" '+chkStr+'></td>';
+		     		      	insertTr += ' <td><input type=hidden value='+el.source_path+' name="pop_source_path" id="pop_source_path" >'+el.source_path+'</td>';
+		     		      	insertTr += ' <td><input type=hidden value='+el.source_id+' name="pop_source_id" id="pop_source_id" >'+el.source_id+'</td>';
+		                  	insertTr += '</tr>';
+		                  	i++;
     			  	    });	  			  	    
 	  	          	    $("#dpIngestPopupPpPath").append(insertTr);		  
 			  	   	}
@@ -1552,8 +1568,8 @@ const MetaTblColList = function(){
 
 //Instance 매칭정보 추가 항목
 const InstanceAddList = async function(){
-	const result = await Promise.all([dpIngestAdapterItSource(), dpIngestAdapterItPre()]).then(res => {
-		dpIngestErrorsSourceListMatch(res[0], res[1]);
+	const result = await Promise.all([dpIngestDataModelsPp(), dpIngestAdapterItSource(), dpIngestAdapterItPre()]).then(res => {
+		dpIngestErrorsSourceListMatch(res[0], res[1], res[2]);
 	});
 
 }
@@ -1577,6 +1593,8 @@ const setTableNm = function(obj){
 //영문명 입력
 const setEngColumn = function(engNm){
 	initDetail();
+	$("#col_save_btn").css("display","block");
+	$("#r_layer").css("pointer-events", "auto");
 	$("#column_eng_nm").val(engNm);
 }
 
@@ -1616,9 +1634,27 @@ const addModal = function(){
 }
 
 //모달 열기
-const openModal = function(modalId){
-	dpIngestPopupPpPath();
+const openModal = function(){
+	
+	dpIngestAdapterItSource()
+	.then(function(data){
+		dpIngestPopupPpPath(data);
+	})
+	.catch(function(error){
+		console.log(error)
+	});
+	
 	$('#apiDataSet').modal('show');
+}
+
+const setApiData_addModal = function(){
+	dpIngestAdapterItSource()
+	.then(function(){
+		dpIngestAdapterItProcess();
+	})
+	.catch(function(error){
+		console.log(error)
+	});
 }
 
 //참조 테이블 식별자 모달 닫기
@@ -1648,8 +1684,10 @@ const initDetail = function(){
 	$("#ordr").val("");
 	$("#indvdl_info_at").val("Y").prop("selected", true);
 	$("#encpt_at").val("Y").prop("selected", true);
-	$("#crud_se").val("");
+	$("#crud_se").val("C").prop("selected", true);
 	$("#col_save_btn").text("저장");
+	$("#col_save_btn").css("display","none");
+	$("#r_layer").css("pointer-events", "none");
   	
 }
 
