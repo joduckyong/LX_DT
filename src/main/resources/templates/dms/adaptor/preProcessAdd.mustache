@@ -38,7 +38,7 @@
                         </div>
                       </div>
                       <div class="form-group row col-12 col-md-6" id="div_number_digit">
-                        <div class="control-label">자리수</div>
+                        <div class="control-label"><span id="div_number_digit_txt">전처리전 데이터 원본<br>자리수</span></div>
                         <div class="form-control_box">
                           <input class="form-control" type="text" name="number_digit" id="number_digit" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
                         </div>
@@ -59,7 +59,7 @@
                         </div>
                       </div>
                       <div class="form-group row col-12 col-md-6" id="div_change_shape">
-                        <label class="control-label">변경모양</label>
+                        <label class="control-label">데이터 변경모양</label>
                         <div class="form-control_box">
                           <input class="form-control" type="text" name="change_shape" id="change_shape">
                         </div>
@@ -67,13 +67,13 @@
                     </div>
                     <div class="row type2" id="div_digit"> 
                       <div class="form-group row col-12 col-md-6">
-                        <label class="control-label">시작 자리수</label>
+                        <label class="control-label">데이터 변경 시작<br>자리수</label>
                         <div class="form-control_box">
                           <input class="form-control" type="text" name="start_digit" id="start_digit" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
                         </div>
                       </div>
                       <div class="form-group row col-12 col-md-6">
-                        <label class="control-label">끝 자리수</label>
+                        <label class="control-label">변경 끝 자리수</label>
                         <div class="form-control_box">
                           <input class="form-control" type="text" name="end_digit" id="end_digit" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
                         </div>
@@ -81,15 +81,15 @@
                     </div>
                     <div class="row"> 
                       <div class="form-group row col-12 col-md-6">
-                        <div class="control-label">전처리 전</div>
+                        <div class="control-label">사용자 입력</div>
                         <div class="form-control_box repeat_box">
-                          <input class="form-control" type="text" name="pre_before" id="pre_before">
+                          <input class="form-control" type="text" name="pre_before" id="pre_before" oninput="autoAfter(this)">
                         </div>
                       </div>
                       <div class="form-group row col-12 col-md-6">
                         <label class="control-label">전처리 후</label>
                         <div class="form-control_box">
-                          <input class="form-control" type="text" name="pre_after" id="pre_after">
+                          <input class="form-control" type="text" name="pre_after" id="pre_after" readonly>
                         </div>
                       </div>
                     </div>
@@ -110,17 +110,60 @@ const url = '/adaptor';
 //선택 변경
 const changeType = function(val){
 	if(val == "D38002"){
+		$("#div_number_digit").show();
+		$("#div_change_word").hide();
 		$("#div_change_shape").hide();
 		$("#div_digit").hide();
+		$("#div_number_digit_txt").html("자리수로 자르기");
 	}else if(val == "D38001"){
+		$("#div_number_digit").show();
+		$("#div_change_word").hide();		
 		$("#div_change_shape").show();
 		$("#div_digit").show();		
+		$("#div_number_digit_txt").html("전처리전 데이터 원본<br>자리수");
 	}else if(val == "D38003"){
 		$("#div_number_digit").hide();
 		$("#div_change_word").show();
 		$("#div_change_shape").show();
 		$("#div_digit").hide();
 	}
+}
+
+//사용자 입력시 
+const autoAfter = function(){
+	let pre_before = $("#pre_before").val();
+	let start_digit = $("#start_digit").val();
+	let end_digit = $("#end_digit").val();
+	let change_shape = $("#change_shape").val();
+	
+	//D38002
+	let number_digit = $("#number_digit").val();
+	
+	//D38003
+	let change_word = $("#change_word").val();
+	
+	let change_type = $("#change_type").val();
+	
+	if(change_type === 'D38001' && isEmpty(start_digit) !== '' && isEmpty(end_digit) !== '' && isEmpty(change_shape) !== ''){
+		
+		let before = pre_before.substr(0, start_digit);
+		let after = pre_before.substr(Number(start_digit -1), end_digit);
+		
+		after += change_shape;
+		
+		console.log('before : '+before);
+		console.log('after : '+after);
+			
+		$("#pre_after").val("");
+	}else if(change_type === 'D38002' && isEmpty(number_digit) !== ''){
+		let pre_before_txt = pre_before.substr(0, number_digit);
+		console.log('pre_before : '+pre_before_txt);
+		
+		$("#pre_after").val(pre_before_txt);
+	}else if(change_type === 'D38003' && isEmpty(change_word) !== '' && isEmpty(change_shape) !== ''){
+		
+	}
+	
 }
 
 //변경유형

@@ -192,7 +192,6 @@
 					
 					<input type="hidden" name="table_nm" id="table_nm">
 					<input type="hidden" name="table_desc" id="table_desc">
-					<input type="hidden" name="clct_csv_file" id=clct_csv_file>
 					<input type="hidden" name="trf_zip_file" id="trf_zip_file">
 					<input type="hidden" name="file_nm" id="file_nm">
 					<input type="hidden" name="recv_zip_file" id="recv_zip_file">
@@ -409,9 +408,8 @@ const agentRecvLocalTable = function(){
     });		
 }
 
-const receiveCol = function(len, clct_csv_file, trf_zip_file, file_nm, recv_zip_file){
+const receiveCol = function(len, trf_zip_file, file_nm, recv_zip_file){
 	
-	$("#clct_csv_file").val(clct_csv_file);
 	$("#trf_zip_file").val(trf_zip_file);
 	$("#file_nm").val(file_nm);
 	$("#recv_zip_file").val(recv_zip_file);
@@ -575,7 +573,7 @@ const agentRecvLocalCsvList = function(){
 				insertTr += '<tr>';
 				insertTr += '	<td style="text-align: center;">'+isEmpty(el.code_nm)+'</td>';
 				insertTr += '	<td style="text-align: center;">'+isEmpty(el.recv_datetime)+'</td>';
-				insertTr += '	<td style="text-align: center;cursor:pointer;" onclick=receiveCol("'+(++i)+'","'+el.clct_csv_file+'","'+el.recv_zip_file+'","'+el.file_nm+'","'+el.recv_zip_file+'");>'+isEmpty(el.file_nm)+'</td>';
+				insertTr += '	<td style="text-align: center;cursor:pointer;" onclick=receiveCol("'+(++i)+'","'+el.recv_zip_file+'","'+el.file_nm+'","'+el.recv_zip_file+'");>'+isEmpty(el.file_nm)+'</td>';
 				insertTr += '	<td style="text-align: center;">'+isEmpty(el.recv_file_size)+'</td>';
 				insertTr += '</tr>';
 	  	    });
