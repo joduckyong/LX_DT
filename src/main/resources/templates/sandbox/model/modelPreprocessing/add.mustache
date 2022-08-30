@@ -6,7 +6,7 @@
             <div class="col-md-12">
               <div class="x_panel"> 
                 <div class="x_title"> 
-                  <h2>HOME > 데이터 분석 > 분석 모델 관리 > 데이터 전처리 모델  > 등록</h2>
+                  <h2>HOME > 데이터 분석 > 분석 모델 관리 > 전처리 모델  > 등록</h2>
                   <div class="clearfix"> </div>
                 </div>
                 <div class="x_content"> <br>
@@ -436,15 +436,15 @@ const initBasicInfo = function (code){
         data: JSON.stringify(data)
     }).done(function (data) {
     	
-	  	  if (data != null) {
+    	if (data != null) {
   	    	
-    		  if(errorMsg(data)){
-  	          	 return;  
-       	  	  }	
+  		  if(errorMsg(data)){
+	          	 return;  
+     	  	  }	
 	  		
-  	    	if(data.contents != ""){
-  	    		let insertTr = '';
-  	    		$("#basic_infos").empty();
+	    	if(data.contents != ""){
+	    		let insertTr = '';
+	    		$("#basic_infos").empty();
 		  	    $.each(data.contents, function (idx, el) {
 		  	    	
 		  	    	insertTr += '<tr id="basic_info'+basicInfoNo+'" data-code='+basicInfoNo+'>';
@@ -456,7 +456,7 @@ const initBasicInfo = function (code){
 		  			basicInfoNo++;
 		  	    });
 		  	  	$("#basic_infos").html(insertTr);
-  	    	}
+	    	}
 	  	  }
     	  
     }).fail(function (error) {

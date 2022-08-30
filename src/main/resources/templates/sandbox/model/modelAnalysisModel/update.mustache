@@ -6,7 +6,7 @@
             <div class="col-md-12">
               <div class="x_panel"> 
                 <div class="x_title"> 
-                  <h2>HOME > 데이터 분석 > 분석 모델 관리 > 데이터 분석 모델  > 수정</h2>
+                  <h2>HOME > 데이터 분석 > 분석 모델 관리 > 분석 모델  > 수정</h2>
                   <div class="clearfix"> </div>
                 </div>
                 <div class="x_content"> <br>
@@ -265,12 +265,21 @@ const analysisModelsUpdate = function (){
     formData.append("analysis_model.anals_use_prpos_cd", $('input:radio[name="anals_use_prpos_cd"]:checked').val());
     formData.append("analysis_model.anals_model_desc", $('#anals_model_desc').val());
     
-    $('#file_infos > tr').each(function(index){
-    	let isNew = $(this).data("new");
-    	if(isNew == 'N'){
-    		formData.append("file_nums["+index+"]", index);
-    	}
-    });
+    let fileNumArr = new Array();
+
+    let $fileTr = $('#file_infos > tr');
+
+    for(let i = 0 ; i < $fileTr.length ; i++){
+        let isNew = $($fileTr[i]).data("new");
+        if(isNew == 'N'){
+            let fileNum = $($fileTr[i]).find(".file_num").val();
+            fileNumArr.push(fileNum);
+        }
+    }
+
+    for(let i = 0 ; i < fileNumArr.length ; i++){
+        formData.append("file_nums["+i+"]", fileNumArr[i]);
+    }
     
     
   	//기본정보
@@ -362,6 +371,9 @@ const fileDelete = function (){
 		$("#file"+$(this).val()).remove();
 		filesArr[$(this).val()].is_delete = true;
    });
+    $('input:checkbox[name="enrolled_file"]:checked').each(function(){
+        $(this).closest("tr")[0].outerHTML = "";
+   });
 }
 
 //데이터 분석 모델 등록 - 체크박스 전체
@@ -426,23 +438,23 @@ const analysisModelsDetail = function (){
 			 let fileInfoTr = '';
    	   		 $.each(data.contents.file_infos, function (idx, el) {
 	   	   		fileInfoTr += '<tr data-new="N">';
-	   	   		fileInfoTr += '<td></td>';
+	   	   		fileInfoTr += '<td><input name="enrolled_file" type="checkbox" value="' + el.file_num + '" class="file_num"></td>';
 	   	 		fileInfoTr += '<td>'+el.file_nm+'</td>';
 	   			fileInfoTr += '<td>'+formatBytes(el.file_size,3)+'</td>';
 	   			fileInfoTr += '<td>기존</td>';
 	   			fileInfoTr += '</tr>';
      	     });
    	   		 
-			 let basicInfoTr = '';
-   	   		 $.each(data.contents.basic_infos, function (idx, el) {
-   	   			basicInfoTr += '<tr id="basic_info'+idx+'" data-code='+idx+'>';
-   	   			basicInfoTr += '	<td></td>';
-   	   			basicInfoTr += '	<td><input class="form-control" type="hidden" name="anals_model_stage'+idx+'" id="anals_model_stage'+idx+'" value="'+el.anals_model_stage+'">'+el.anals_model_stage+'</td>';
-   	   			basicInfoTr += '	<td><input class="form-control" type="hidden" name="anals_model_dfn'+idx+'" id="anals_model_dfn'+idx+'" value="'+el.anals_model_dfn+'">'+el.anals_model_dfn+'</td>';
-   	 			basicInfoTr += '	<td><input class="form-control" type="text" name="anals_model_desc'+idx+'" id="anals_model_desc'+idx+'" value="'+el.anals_model_desc+'"></td>';
-   				basicInfoTr += '</tr>';
-   				basicInfoNo++;
-     	     });
+   	   		 let basicInfoTr = '';
+	   		 $.each(data.contents.basic_infos, function (idx, el) {
+	   			basicInfoTr += '<tr id="basic_info'+idx+'" data-code='+idx+'>';
+	   			basicInfoTr += '	<td><input type="checkbox" name="chk_basic_infos" value="' + basicInfoNo + '"></td>';
+	   			basicInfoTr += '	<td><input class="form-control" type="hidden" name="anals_model_stage'+idx+'" id="anals_model_stage'+idx+'" value="'+el.anals_model_stage+'">'+el.anals_model_stage+'</td>';
+	   			basicInfoTr += '	<td><input class="form-control" type="hidden" name="anals_model_dfn'+idx+'" id="anals_model_dfn'+idx+'" value="'+el.anals_model_dfn+'">'+el.anals_model_dfn+'</td>';
+	 			basicInfoTr += '	<td><input class="form-control" type="text" name="anals_model_desc'+idx+'" id="anals_model_desc'+idx+'" value="'+el.anals_model_desc+'"></td>';
+				basicInfoTr += '</tr>';
+				basicInfoNo++;
+	     	 });
    	   		
    	   		$("#file_infos").html(fileInfoTr);
    	   		$("#basic_infos").html(basicInfoTr);
