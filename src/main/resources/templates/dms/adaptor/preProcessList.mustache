@@ -50,7 +50,6 @@
 										<div class="talbel_total mb-2">총<span id="total_count"></span>개</div>
 										<table class="table table-bordered bulk_action table_center">
 											<colgroup>
-												<col width="55px">
 											</colgroup>
 											<thead>
 												<tr>
@@ -60,8 +59,6 @@
 													<th rowspan="2" style="text-align: center;">자리수</th>
 													<th rowspan="2" style="text-align: center;">변경모양</th>
 													<th colspan="2" style="text-align: center;">자리수</th>
-													<th rowspan="2" style="text-align: center;">정수</th>
-													<th rowspan="2" style="text-align: center;">소수점</th>
 													<th rowspan="2" style="text-align: center;">변경단어</th>
 													<th colspan="2" style="text-align: center;">전처리</th>
 												</tr>
@@ -155,8 +152,6 @@ const dpIngestPre = function(page, size_per_page){
 	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.change_shape)+'</td>';
 	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.start_digit)+'</td>';
 	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.end_digit)+'</td>';
-	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.integer)+'</td>';
-	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.decimal_point)+'</td>';
 	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.change_word)+'</td>';
 	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.pre_before)+'</td>';
 	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.pre_after)+'</td>';
