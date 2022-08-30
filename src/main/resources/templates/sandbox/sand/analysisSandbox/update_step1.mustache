@@ -413,7 +413,9 @@ const sandboxSettingDetail = function(){
          		
          		$("#sandbox_nm").val(data.contents.sandbox_nm);     
          		
-         		$("#anals_use_prpos_cd").val(data.contents.anals_use_prpos_cd);        	
+         		$("#anals_use_prpos_cd").val(data.contents.anals_use_prpos_cd);
+         		analsUsePrposCd = data.contents.anals_use_prpos_cd;
+         		
          		$("#sandbox_status").text(data.contents.sandbox_status);        	
          		$("#sandbox_desc").val(data.contents.sandbox_desc);        	
          		sandboxAnalysisImagesGet(data.contents.image_id);
@@ -552,9 +554,18 @@ const portSeting = function(){
 //샌드박스명 중복 체크
 const sandboxNameDupCheck = function(){
 	
+	if($("#sandbox_nm").val() == ''){
+		alert("샌드박스 영문명을 입력해주세요!");
+		$("#sandbox_nm").focus();
+		return;
+	}
+	
 	const data = {
        		url: '/services/sandbox/sandboxes/name/dup-check',
-       		sandbox_nm: $("#sandbox_nm").val()
+       		sandbox_nm: $("#sandbox_nm").val(),
+       		user_id:'user00',
+       		menu_id:'menu_id',
+       		sandbox_id:'{{sandbox_id}}',
         };		
         $.ajax({
             type: 'POST',
@@ -686,7 +697,12 @@ const step2 = function(){
 	
 	if($("#sandbox_setup_status_cd").val() == "B06002"){
 		let image_id = $("input[name='image_id']:checked").val();
-		let anals_use_prpos_cd = $("#anals_use_prpos_cd").val();        	
+		let anals_use_prpos_cd = $("#anals_use_prpos_cd").val();      
+		
+		if(anals_use_prpos_cd === ''){
+			anals_use_prpos_cd = analsUsePrposCd;  
+		}
+		
 		location.href = url+'/update_step2/{{sandbox_id}}/'+anals_use_prpos_cd;
 	}
 }
@@ -694,6 +710,9 @@ const step2 = function(){
 const step3 = function(){
 	if($("#sandbox_setup_status_cd").val() == "B06002"){
 		let anals_use_prpos_cd = $("#anals_use_prpos_cd").val();        	
+		if(anals_use_prpos_cd === ''){
+			anals_use_prpos_cd = analsUsePrposCd;  
+		}		
 		let anals_scenario_setup_cd = $("#anals_scenario_setup_cd").val();        	
 		location.href = url+'/update_step3/{{sandbox_id}}/'+anals_use_prpos_cd+'/'+anals_scenario_setup_cd;
 	}

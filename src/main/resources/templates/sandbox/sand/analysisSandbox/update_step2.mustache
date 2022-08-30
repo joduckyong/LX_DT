@@ -576,6 +576,7 @@ const sandboxScenarioSettingUpdate = function(val){
       		
       		sandboxEnrollStatus();
 	        if(val == 'B06002'){
+	        	$("#scenario_setup_status_cd").val(val);
 		        step3();   
 	        }
         }).fail(function (error) {

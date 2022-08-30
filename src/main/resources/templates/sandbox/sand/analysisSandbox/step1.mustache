@@ -26,7 +26,7 @@
                             <input class="form-control" type="text" name="sandbox_nm" id="sandbox_nm" style="ime-mode:inactive;" oninput="handleOnInput(this)">
                             <input class="form-control" type="hidden" name="docker_image_id" id="docker_image_id">
                             <input class="form-control" type="hidden" name="hidden_progrm_seq_num" id="hidden_progrm_seq_num">
-                            <input class="form-control" type="hidden" name="idcheck" id="idcheck" value="1">
+                            <input class="form-control" type="hidden" name="idcheck" id="idcheck" value="0">
                             <button class="btn btn-danger btn-sm" onclick="sandboxNameDupCheck();">중복체크</button>
                             <div class="duple_text danger_text" id="idUse" style="display:none;">* 이미 사용중인 ID 입니다.</div>
                             <div class="duple_text success_text" id="available" style="display:none;">* 사용 가능합니다.</div>
@@ -586,9 +586,17 @@ const portSeting = function(){
 //샌드박스명 중복 체크
 const sandboxNameDupCheck = function(){
 	
+	if($("#sandbox_nm").val() == ''){
+		alert("샌드박스 영문명을 입력해주세요!");
+		$("#sandbox_nm").focus();
+		return;
+	}
+	
 	const data = {
        		url: '/services/sandbox/sandboxes/name/dup-check',
-       		sandbox_nm: $("#sandbox_nm").val()
+       		sandbox_nm: $("#sandbox_nm").val(),
+       		user_id:'user00',
+       		menu_id:'menu_id',       		
         };		
         $.ajax({
             type: 'POST',
@@ -604,6 +612,8 @@ const sandboxNameDupCheck = function(){
         	
       		let message = JSON.stringify(data.return_msg);
       		alert(message.replace(/\"/gi, ''));
+      		
+      		$("#idcheck").val("1");
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });	
