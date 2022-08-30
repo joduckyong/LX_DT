@@ -341,12 +341,12 @@ const dpIngestItPp = function(adapter_type_id, clct_mthd, clct_ty){
     		     	          insertTr += '<tr>';
     		     		      insertTr += ' <td><input class="tableInfo" type="checkbox" name="checkList" value="'+el.item+'"></td>';
     		     		      insertTr += ' <td><input type=text value="'+el.item+'" id="item_'+i+'" name="item"></td>';
-    		     		      insertTr += ' <td><input type=text value="'+el.item_nm+'" id="item_nm_'+i+'" name="item_nm" '+(el.change_able_yn==="N"?"readonly":"")+'></td>';
-    		     		      insertTr += ' <td><input type=text value="'+el.value+'" id="item_value_'+i+'" name="item_value"></td>';
+    		     		      insertTr += ' <td><input type=text value="'+isEmpty(el.item_nm)+'" id="item_nm_'+i+'" name="item_nm" '+(el.change_able_yn==="N"?"readonly":"")+'></td>';
+    		     		      insertTr += ' <td><input type=text value="'+isEmpty(el.value)+'" id="item_value_'+i+'" name="item_value"></td>';
     		     		      insertTr += ' <td class=type1>';
-    		     		      insertTr += ' <input type=text value="'+el.item_described+'" id="item_described_'+i+'" name="item_described">';
+    		     		      insertTr += ' <input type=text value="'+isEmpty(el.item_described)+'" id="item_described_'+i+'" name="item_described">';
     		     		      insertTr += ' <input type=hidden value="'+el.change_able_yn+'" id="change_able_yn_'+i+'" name="change_able_yn">';
-    		     		      insertTr += ' <input type=hidden value="'+el.display_seq+'" id="display_seq_'+i+'" name="display_seq">';
+    		     		      insertTr += ' <input type=hidden value="'+(isEmpty(el.display_seq) == ''?i+1:el.display_seq)+'" id="display_seq_'+i+'" name="display_seq">';
     		     		      insertTr += ' <input type=hidden value="'+el.essential_yn+'" id="essential_yn_'+i+'" name="essential_yn">';
     		     		      insertTr += ' </td>';
     		                  insertTr += '</tr>';
@@ -399,12 +399,12 @@ const dpIngestAdapterItPp = function(adapter_type_id, clct_mthd, clct_ty){
     		     	          insertTr += '<tr>';
     		     		      insertTr += ' <td><input class="tableInfo" type="checkbox" name="checkList" value="'+el.item+'"></td>';
     		     		      insertTr += ' <td><input type=text value="'+el.item+'" id="item_'+i+'" name="item"></td>';
-    		     		      insertTr += ' <td><input type=text value="'+el.item_nm+'" id="item_nm_'+i+'" name="item_nm" '+(el.change_able_yn==="N"?"readonly":"")+'></td>';
-    		     		      insertTr += ' <td><input type=text value="'+el.value+'" id="item_value_'+i+'" name="item_value"></td>';
+    		     		      insertTr += ' <td><input type=text value="'+isEmpty(el.item_nm)+'" id="item_nm_'+i+'" name="item_nm" '+(el.change_able_yn==="N"?"readonly":"")+'></td>';
+    		     		      insertTr += ' <td><input type=text value="'+isEmpty(el.value)+'" id="item_value_'+i+'" name="item_value"></td>';
     		     		      insertTr += ' <td class=type1>';
-    		     		      insertTr += ' <input type=text value="'+el.item_described+'" id="item_described_'+i+'" name="item_described">';
+    		     		      insertTr += ' <input type=text value="'+isEmpty(el.item_described)+'" id="item_described_'+i+'" name="item_described">';
     		     		      insertTr += ' <input type=hidden value="'+el.change_able_yn+'" id="change_able_yn_'+i+'" name="change_able_yn">';
-    		     		      insertTr += ' <input type=hidden value="'+el.display_seq+'" id="display_seq_'+i+'" name="display_seq">';
+    		     		      insertTr += ' <input type=hidden value="'+(isEmpty(el.display_seq) == ''?i+1:el.display_seq)+'" id="display_seq_'+i+'" name="display_seq">';
     		     		      insertTr += ' <input type=hidden value="'+el.essential_yn+'" id="essential_yn_'+i+'" name="essential_yn">';		     		      
     		     		      insertTr += ' </td>';		     		      
     		                  insertTr += '</tr>';
@@ -476,7 +476,8 @@ const dpIngestAdapterItPpSave = function(url_mix){
 		  	   	if(data.contents != ""){    	   
 	  	 	  		let message = JSON.stringify(data.return_msg);
 	  		  		alert(message.replace(/\"/gi, ''));	  	   				
-				    dpIngestItPp();
+				    
+				    dpIngestAdapterItPp($("#adapter_type_id").val(), $("#clct_mthd").val(), $("#clct_ty").val());
 		  	   	}
 	  	  }
         }).fail(function (error) {
