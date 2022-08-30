@@ -157,7 +157,7 @@
                 		</div>
                    </div>
           	</div>
-          	<div class="metatable_box col-5 col-lg-7">
+          	<div class="metatable_box col-5 col-lg-7" id="r_layer" style="pointer-events:none;">
           		<div class="row"> 
                      	<div class="table_responsive">
                      		<div class="table_btns mt-1">
@@ -178,7 +178,7 @@
 			                            </th>
 			                            <th>영문명</th>
 			                            <th>
-			                                <input class="form-control" type="text" name="column_eng_nm" id="column_eng_nm">
+			                                <input class="form-control" type="text" name="column_eng_nm" id="column_eng_nm" readonly="readonly">
 			                            </th>
 			                        </tr>
 			                        <tr>
@@ -290,7 +290,11 @@
 			                            </th>
 			                            <th>CRUD 구분</th>
 			                            <th>
-			                            	<input class="form-control" type="text" name="crud_se" id="crud_se">
+			                            	<select class="form-control" name="crud_se" id="crud_se">
+			                                    <option value="C">C</option>
+			                                    <option value="U">U</option>
+			                                    <option value="D">D</option>
+			                                </select>
 			                            </th>
 			                        </tr>
 			                        <tr>
@@ -672,6 +676,7 @@ const dpIngestErrorsSourceListTbl = function (colData) {
   	    			}
 		  	    	
   	    		});
+  	    		
   	    		$("#columnInfo").append(insertTr);
   	    	}
 	  	  }
@@ -1209,7 +1214,7 @@ const dpIngestAdapterItMatchList = function(){
     		  if(errorMsg(data)){
     	          	 return;  
        	  	  }				
-	  		
+    		  	$("#matchList").empty();
 		  	   	if(data.contents != ""){    	
 		  	   		let insertTr = '';
    			  	    $.each(data.contents, function (idx, el) {
@@ -1577,6 +1582,8 @@ const setTableNm = function(obj){
 //영문명 입력
 const setEngColumn = function(engNm){
 	initDetail();
+	$("#col_save_btn").css("display","block");
+	$("#r_layer").css("pointer-events", "auto");
 	$("#column_eng_nm").val(engNm);
 }
 
@@ -1648,8 +1655,10 @@ const initDetail = function(){
 	$("#ordr").val("");
 	$("#indvdl_info_at").val("Y").prop("selected", true);
 	$("#encpt_at").val("Y").prop("selected", true);
-	$("#crud_se").val("");
+	$("#crud_se").val("C").prop("selected", true);
 	$("#col_save_btn").text("저장");
+	$("#col_save_btn").css("display","none");
+	$("#r_layer").css("pointer-events", "none");
   	
 }
 
