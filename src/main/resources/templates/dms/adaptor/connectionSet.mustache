@@ -431,20 +431,26 @@ const dpIngestAdapterItPpSave = function(url_mix){
 	let contentsData = new Array();
 	$.each($("#tbDpIngestAdapterItPp tbody tr"), function(){
 		 
+		 let change_able_yn = $(this).find("#change_able_yn_"+lengthCnt).val();
+		 
 		 let itemObject = new Object();
 		 console.log('lengthCnt : '+lengthCnt);
-		 itemObject.instance_id = '{{instance_id}}';
-		 itemObject.item = $(this).find("#item_"+lengthCnt).val();
-		 itemObject.item_nm = $(this).find("#item_nm_"+lengthCnt).val();
-		 itemObject.value = $(this).find("#item_value_"+lengthCnt).val();
-		 itemObject.item_described = $(this).find("#item_described_"+lengthCnt).val();
-		 itemObject.display_seq = Number($(this).find("#display_seq_"+lengthCnt).val() === ''?i:$(this).find("#display_seq_"+lengthCnt).val());
-		 itemObject.essential_yn = $(this).find("#essential_yn_"+lengthCnt).val();
-		 itemObject.change_able_yn = $(this).find("#change_able_yn_"+lengthCnt).val();
-		 itemObject.clct_mthd = $("#clct_mthd").val();
-		 itemObject.clct_ty = $("#clct_ty").val();
-		 itemObject.user_id = 'user00';
-		 contentsData.push(itemObject);
+		 
+		 if(change_able_yn == 'Y'){
+			 itemObject.instance_id = '{{instance_id}}';
+			 itemObject.item = $(this).find("#item_"+lengthCnt).val();
+			 itemObject.item_nm = $(this).find("#item_nm_"+lengthCnt).val();
+			 itemObject.value = $(this).find("#item_value_"+lengthCnt).val();
+			 itemObject.item_described = $(this).find("#item_described_"+lengthCnt).val();
+			 itemObject.display_seq = Number($(this).find("#display_seq_"+lengthCnt).val() === ''?i:$(this).find("#display_seq_"+lengthCnt).val());
+			 itemObject.essential_yn = $(this).find("#essential_yn_"+lengthCnt).val();
+			 itemObject.change_able_yn = change_able_yn;
+			 itemObject.clct_mthd = $("#clct_mthd").val();
+			 itemObject.clct_ty = $("#clct_ty").val();
+			 itemObject.user_id = 'user00';
+			 contentsData.push(itemObject);
+		 }
+		 
 		 lengthCnt++;
 		 i++;
 	});
