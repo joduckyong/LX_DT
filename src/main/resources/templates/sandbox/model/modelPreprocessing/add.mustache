@@ -448,7 +448,7 @@ const initBasicInfo = function (code){
 		  	    $.each(data.contents, function (idx, el) {
 		  	    	
 		  	    	insertTr += '<tr id="basic_info'+basicInfoNo+'" data-code='+basicInfoNo+'>';
-		  			insertTr += '	<td></td>';
+		  	    	insertTr += '	<td><input type="checkbox" name="chk_basic_infos" value="' + basicInfoNo + '"></td>';
 		  			insertTr += '	<td><input class="form-control" type="hidden" name="anals_model_stage'+basicInfoNo+'" id="anals_model_stage'+basicInfoNo+'" value="'+el.anals_model_stage+'">'+el.anals_model_stage+'</td>';
 		  			insertTr += '	<td><input class="form-control" type="hidden" name="anals_model_dfn'+basicInfoNo+'" id="anals_model_dfn'+basicInfoNo+'" value="'+el.anals_model_dfn+'">'+el.anals_model_dfn+'</td>';
 		  			insertTr += '	<td><input class="form-control" type="text" name="anals_model_desc'+basicInfoNo+'" id="anals_model_desc'+basicInfoNo+'" value=""></td>';
