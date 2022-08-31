@@ -450,16 +450,26 @@ const receiveCol = function(len, trf_zip_file, file_nm, recv_zip_file){
     	
 			//수집 테이블 목록
 			$("#agentRecvLocalTable").empty();  
-			if(el.table_nm !== ""){
+			if(isEmpty(el.table_nm) !== ""){
 			    insertTr = '';
 				insertTr += '<tr>';
 				insertTr += '	<td style="text-align: left;cursor:pointer;" onclick=agentRecvLocalCol("'+el.table_nm+'");>'+isEmpty(el.table_nm)+'</td>';
 				insertTr += '	<td style="text-align: left;" id="table_'+el.table_nm+'">'+isEmpty(el.table_desc)+'</td>';
 				insertTr += '</tr>';
 			   	$("#agentRecvLocalTable").html(insertTr);    
+			   	
+				$("#table_nm").val(el.table_nm);
+				$("#table_desc").val(el.table_desc);
 			}
-			$("#table_nm").val(el.table_nm);
-			$("#table_desc").val(el.table_desc);
+			
+			if(isEmpty($("#table_nm").val()) !== ''){
+			    insertTr = '';
+				insertTr += '<tr>';
+				insertTr += '	<td style="text-align: left;cursor:pointer;" onclick=agentRecvLocalCol("'+$("#table_nm").val()+'");>'+$("#table_nm").val()+'</td>';
+				insertTr += '	<td style="text-align: left;" id="table_'+$("#table_nm").val()+'">'+$("#table_desc").val()+'</td>';
+				insertTr += '</tr>';
+			   	$("#agentRecvLocalTable").html(insertTr);    				
+			}
 			
 			
     		$("#target_folder_nm").val("");

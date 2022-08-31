@@ -127,41 +127,50 @@ const changeType = function(val){
 		$("#div_change_shape").show();
 		$("#div_digit").hide();
 	}
+	
+	$("#pre_before").val("");
+	$("#pre_after").val("");
 }
 
 //사용자 입력시 
 const autoAfter = function(){
 	let pre_before = $("#pre_before").val();
+	let number_digit = $("#number_digit").val();
 	let start_digit = $("#start_digit").val();
 	let end_digit = $("#end_digit").val();
 	let change_shape = $("#change_shape").val();
-	
-	//D38002
-	let number_digit = $("#number_digit").val();
-	
-	//D38003
 	let change_word = $("#change_word").val();
 	
 	let change_type = $("#change_type").val();
 	
-	if(change_type === 'D38001' && isEmpty(start_digit) !== '' && isEmpty(end_digit) !== '' && isEmpty(change_shape) !== ''){
+	if(change_type === 'D38001' && isEmpty(number_digit) !== '' && isEmpty(start_digit) !== '' && isEmpty(end_digit) !== '' && isEmpty(change_shape) !== ''){
 		
-		let before = pre_before.substr(0, start_digit);
+		pre_before = pre_before.substr(0, number_digit);
+		$("#pre_before").val(pre_before);
+		
+		let before = pre_before.substr(0, Number(start_digit-1));
 		let after = pre_before.substr(Number(start_digit -1), end_digit);
 		
-		after += change_shape;
+		var arr = []; 
+		for(var i=0; i<after.length; i++){
+			arr[i] = change_shape;
+		}
 		
-		console.log('before : '+before);
-		console.log('after : '+after);
-			
-		$("#pre_after").val("");
+		let arrString = arr.toString().replace(/\,/gi,'');
+		$("#pre_after").val(before+arrString);
+		
 	}else if(change_type === 'D38002' && isEmpty(number_digit) !== ''){
-		let pre_before_txt = pre_before.substr(0, number_digit);
-		console.log('pre_before : '+pre_before_txt);
-		
-		$("#pre_after").val(pre_before_txt);
+		pre_before = pre_before.substr(0, number_digit);
+		$("#pre_after").val(pre_before);
 	}else if(change_type === 'D38003' && isEmpty(change_word) !== '' && isEmpty(change_shape) !== ''){
+		var arr = []; 
+		arr = change_word.split(',');
+		for(var i=0; i<arr.length; i++){
+			console.log('arr['+i+']'+arr[i]);
+			pre_before = pre_before.replace(arr[i], change_shape);
+		}
 		
+		$("#pre_after").val(pre_before);
 	}
 	
 }
