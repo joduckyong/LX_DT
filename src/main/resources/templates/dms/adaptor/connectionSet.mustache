@@ -338,7 +338,7 @@ const dpIngestItPp = function(adapter_type_id, clct_mthd, clct_ty){
     		     	    let insertTr = '';
     		     	    let i = 0;
     			  	    $.each(data.contents, function (idx, el) {
-    		     	          insertTr += '<tr>';
+    		     	          insertTr += '<tr id="trCheck_'+el.item+'">';
     		     		      insertTr += ' <td><input class="tableInfo" type="checkbox" name="checkList" value="'+el.item+'" '+(isEmpty(el.essential_yn) == "Y"?"disabled":"")+'></td>';
     		     		      insertTr += ' <td><input type=text value="'+el.item+'" id="item_'+i+'" name="item"></td>';
     		     		      insertTr += ' <td><input type=text value="'+isEmpty(el.item_nm)+'" id="item_nm_'+i+'" name="item_nm" '+(el.change_able_yn==="N"?"readonly":"")+'></td>';
@@ -396,7 +396,7 @@ const dpIngestAdapterItPp = function(adapter_type_id, clct_mthd, clct_ty){
     			  	    $.each(data.contents, function (idx, el) {
     			  	    	
 //    			  	    	  console.log('item : '+el.item+', item_nm : '+el.item_nm+', value : '+el.value+', item_described : '+el.item_described);
-    		     	          insertTr += '<tr>';
+    		     	          insertTr += '<tr id="trCheck_'+el.item+'">';
     		     		      insertTr += ' <td><input class="tableInfo" type="checkbox" name="checkList" value="'+el.item+'" '+(isEmpty(el.essential_yn) == "Y"?"disabled":"")+'></td>';
     		     		      insertTr += ' <td><input type=text value="'+el.item+'" id="item_'+i+'" name="item"></td>';
     		     		      insertTr += ' <td><input type=text value="'+isEmpty(el.item_nm)+'" id="item_nm_'+i+'" name="item_nm" '+(el.change_able_yn == "N"?"readonly":"")+'></td>';
@@ -589,8 +589,9 @@ const dpIngestAdapterItPpDelChk = function(){
 		let connect_id;
 	    $("input[name='checkList']:checked").each(function(e){
 	        connect_id = $(this).val();
+	    	$("#trCheck_"+connect_id).remove();
 	    });
-
+/*
 	    if(isEmpty(connect_id) !== ''){
 	    	
 			var len = $("input[name='checkList']:checked").length;
@@ -638,7 +639,7 @@ const dpIngestAdapterItPpDelChk = function(){
 	    	}, 500);	    
 		    
 	    }
-	    
+*/	    
 	}
 }
 
