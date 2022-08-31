@@ -487,6 +487,16 @@ const distributeSetupInfo = function () {
 					$("#info_srvUrl").val(data.contents.srvUrl);
 					$("#info_srvDesc").val(data.contents.srvDesc);
 					
+					let sqlText = data.contents.sqlText;
+					sqlText = sqlText.replaceAll('SELECT','SELECT \n');
+					sqlText = sqlText.replaceAll(',',',\n');
+					sqlText = sqlText.replaceAll('FROM','\n FROM');
+					sqlText = sqlText.replaceAll('WHERE','\n WHERE');
+					sqlText = sqlText.replaceAll('AND','\n AND');
+					sqlText = sqlText.replaceAll('ORDER BY','\n ORDER BY');
+					sqlText = sqlText.replaceAll('GROUP BY','\n GROUP BY');
+					$("#sqlText").val(sqlText);
+					
 					resolve(data);
 	  	    	}
 		  	  }
