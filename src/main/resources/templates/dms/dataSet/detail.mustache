@@ -213,7 +213,11 @@ const dpLoadDsetDtCt = function () {
 	  	    		
 	  	    		$.each(sortData, function (idx, el) {
 			  	    	insertTr += '	<th>'+el.column_korean_nm+'</th>';
-			  	    	dsetObj[el.column_eng_nm] = el.column_korean_nm;
+			  	    	
+			  	    	let dsetValObj = {};
+			  	    	dsetValObj.column_korean_nm = el.column_korean_nm;
+			  	    	dsetValObj.column_eng_nm_orginl = el.column_eng_nm_orginl;
+			  	    	dsetObj[el.column_eng_nm] = dsetValObj;
 			  	    });
 	  	    		insertTr += '</tr>';
 	  	    		$("#dsetDtCt").html(insertTr);
@@ -318,7 +322,7 @@ const dpLoadPopupHistory01 = function () {
   	    			insertTr += '	<td>'+el.modified_at+'</td>';
   	    			insertTr += '	<td>'+el.ingest_count+'</td>';
   	    			insertTr += '	<td>'+el.load_count+'</td>';
-  	    			insertTr += '	<td><span class="blue bold" style="cursor:pointer" onclick="fail_addModal(\''+el.error_count+'\');">'+el.error_count+'</span></td>';
+  	    			insertTr += '	<td><span class="blue bold" style="cursor:pointer" onclick="fail_addModal(\''+el.error_count+'\', \''+el.modified_at+'\');">'+el.error_count+'</span></td>';
   	    			insertTr += '	<td><button class="btn btn-success btn-sm mx-0" type="button" onclick="dpLoadPopupHistoryDown01(\''+el.modified_at+'\')">다운로드</button></td>';
   	    			insertTr += '</tr>';
   	    			
@@ -379,11 +383,12 @@ const dpLoadPopupHistoryDown01 = function (log_dt) {
 const dpLoadFaileLogList = function (log_dt) {
 	
 	let table_idntfc_id = '{{table_idntfc_id}}';
-	log_dt = '2022-08-22';
-	
+
 	let columnTr = '<tr>';
 	for(let key in dsetObj){
-		columnTr += '	<th style="min-width:150px;">'+dsetObj[key]+'</th>';
+		if(key != 'modified_at'){
+			columnTr += '	<th style="min-width:150px;">'+dsetObj[key].column_korean_nm+'</th>';
+		}
     };
     columnTr += '	<th style="min-width:150px;">체크/재적재</th>';
 	columnTr += '</tr>';
@@ -418,11 +423,14 @@ const dpLoadFaileLogList = function (log_dt) {
 	  	    		
 	  	    		insertTr += '<tr id="failTr_'+el.instance_id+'" data-dataid="'+el.data_id+'" data-id="'+el.id+'">';
 	  	    		for(let key in dsetObj){
+	  	    			let orgn_col_eng = dsetObj[key].column_eng_nm_orginl;
 	  	    			let val = '';
-	  	    			if(failObj[key]){
-	  	    				val = failObj[key];
+	  	    			if(failObj[orgn_col_eng]){
+	  	    				val = failObj[orgn_col_eng];
 	  	    			}
-	  	    			insertTr += '	<td id="failTd_'+key+'"><input class="form-control" type="text" value="'+val+'" data-key="'+key+'"></td>';
+	  	    			if(key != 'modified_at'){
+	  	    				insertTr += '	<td id="failTd_'+key+'"><input class="form-control" type="text" value="'+val+'" data-key="'+orgn_col_eng+'"></td>';
+	  	    			}
 	  	    		}
 	  	    		insertTr += '<td id="loadChkBtn_'+el.instance_id+'"><button class="btn btn-success btn-sm mx-0" type="button" onclick="dpLoadFaileChk(\''+el.instance_id+'\');">체크</button></td>';
 	  	    		insertTr += '</tr>';
@@ -507,7 +515,7 @@ const dpLoadFaileReload = function (instance_id, datamodel_after) {
    		table_eng_nm: table_eng_nm,
     };
 	
-// 	console.log(data);
+	console.log(data);
 	
 	if(confirm("재적재 하시겠습니까?")){
 	    $.ajax({
@@ -546,11 +554,11 @@ const addModal = function(){
 }
 
 //실패건수 모달 추가
-const fail_addModal = function(failCnt){
+const fail_addModal = function(failCnt, log_dt){
 	let dset_korean_nm = $("#dset_korean_nm").text();
 	$("#fail_pop_dset_korean_nm").text(dset_korean_nm);
 	$("#fail_pop_cnt").text(failCnt);
-	dpLoadFaileLogList();
+	dpLoadFaileLogList(log_dt);
 	$('#fail_add_modal').modal('show');
 }
 
