@@ -146,34 +146,19 @@ const autoAfter = function(){
 	if(change_type === 'D38001' && isEmpty(number_digit) !== '' && isEmpty(start_digit) !== '' && isEmpty(end_digit) !== '' && isEmpty(change_shape) !== ''){
 		
 		pre_before = pre_before.substr(0, number_digit);
-		
 		$("#pre_before").val(pre_before);
 		
 		let before = pre_before.substr(0, Number(start_digit-1));
 		let after = pre_before.substr(Number(start_digit -1), end_digit);
 		
-		console.log('before : '+before);
-		console.log('after : '+after.length);
-		
 		var arr = []; 
 		for(var i=0; i<after.length; i++){
 			arr[i] = change_shape;
-			console.log('arr['+i+'] : '+arr[i]);
-			$("#pre_after").val(arr[i]);
 		}
 		
-		$("#pre_after").val(arr);
+		let arrString = arr.toString().replace(/\,/gi,'');
+		$("#pre_after").val(before+arrString);
 		
-		
-		/*
-		
-		let result = after;
-		result = result.replace(after, change_shape);
-		console.log('result : '+result);
-		*/
-		
-		
-		$("#pre_after").val(before+after);
 	}else if(change_type === 'D38002' && isEmpty(number_digit) !== ''){
 		pre_before = pre_before.substr(0, number_digit);
 		$("#pre_after").val(pre_before);
