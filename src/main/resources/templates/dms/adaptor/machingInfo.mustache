@@ -235,13 +235,18 @@ const dpIngestMetaTblCol = function(){
     		     		      });
     		     		      insertTr += ' </select></td>';
     		     		      
-    		     		      insertTr += ' <td><input type=text id="property_type_'+idx+'" name="property_type" value="" readonly></td>';
+    		     		      insertTr += ' <td><input type=text id="property_type_nm_'+idx+'" name="property_type_nm" value="" readonly><input type=hidden id="property_type_'+idx+'" name="property_type" value="" readonly></td>';
     		     		      insertTr += ' <td><input type=text id="pre_after_'+idx+'" name="pre_after" value="" readonly></td>';
     		                  insertTr += '</tr>';
     			  	    });
     			  	    
     			  	    $("#dpIngestAdapterItMatchList").append(insertTr);		
     			  	    
+			  	   	}else{
+			  	   		
+			  	 		setTimeout(function() {
+			  	 			dpIngestAdapterItMatchList();
+			  	 		}, 300);
 			  	   	}
 		  	  }
 	    	  
@@ -297,18 +302,13 @@ const dpIngestAdapterItMatchList = function(){
 		     		      });
 		     		      insertTr += ' </select></td>';
 		     		      
-		     		      insertTr += ' <td><input type=text id="property_type_'+idx+'" name="property_type" value="'+el.property_type+'"></td>';
-		     		      insertTr += ' <td><input type=text id="pre_after_'+idx+'" name="pre_after" value="'+el.pre_after+'"></td>';
+		     		      insertTr += ' <td><input type=text id="property_type_nm_'+idx+'" name="property_type_nm" value="'+el.property_type_nm+'" readonly><input type=hidden id="property_type_'+idx+'" name="property_type" value="'+el.property_type+'" readonly ></td>';
+		     		      insertTr += ' <td><input type=text id="pre_after_'+idx+'" name="pre_after" value="'+el.pre_after+'" readonly></td>';
 		                  insertTr += '</tr>';
 		                  
     			  	    });
     	          	    $("#dpIngestAdapterItMatchList").append(insertTr);		  
 			  	   		
-			  	   	}else{
-			  	   		
-			  	 		setTimeout(function() {
-			  	 			dpIngestMetaTblCol();
-			  	 		}, 300);
 			  	   	}
 		  	  }
 	    	  
@@ -380,7 +380,8 @@ const dpIngestAdapterItMatch = function(){
 	    dpIngestAdapterItPre();
 	    
  		setTimeout(function() {
- 			dpIngestAdapterItMatchList();
+ //			dpIngestAdapterItMatchList();
+ 			dpIngestMetaTblCol();
  		}, 300);
 }
 
@@ -610,6 +611,7 @@ const dpIngestAdapterItPre = function(){
 					  	    $.each(data.contents, function (idx, el) {
 		    			  		  
 				                  $("#divForm").append($("<input type='hidden' value='"+el.property_type+"' id='div_"+el.pre_id+"_property_type'>"));
+				                  $("#divForm").append($("<input type='hidden' value='"+el.property_type_nm+"' id='div_"+el.pre_id+"_property_type_nm'>"));
 				                  $("#divForm").append($("<input type='hidden' value='"+el.pre_after+"' id='div_"+el.pre_id+"_pre_after'>"));
 					  	    });
 			        //  	    $("#dpIngestAdapterItMatchList").append(insertTr);			                  
@@ -781,7 +783,8 @@ const dpIngestPopupPpPathSave = function(){
 			  		  		
 			  			    dpIngestAdapterItSource2();
 			  		 		setTimeout(function() {
-			  		 			dpIngestAdapterItMatchList();
+			  		 			//dpIngestAdapterItMatchList();
+			  		 			dpIngestMetaTblCol();
 			  		 		}, 300);			  		  		
 				  	   	}
 				  	   	
@@ -853,6 +856,7 @@ const sourceIdChange = function(idx, source_id){
 
 const preIdChange = function(idx, pre_id){
 	
+	$("#property_type_nm_"+idx).val($("#div_"+pre_id+"_property_type_nm").val());
 	$("#property_type_"+idx).val($("#div_"+pre_id+"_property_type").val());
 	$("#pre_after_"+idx).val($("#div_"+pre_id+"_pre_after").val());
 }
