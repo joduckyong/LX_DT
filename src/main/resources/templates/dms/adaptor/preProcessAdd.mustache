@@ -145,22 +145,27 @@ const autoAfter = function(){
 	
 	if(change_type === 'D38001' && isEmpty(number_digit) !== '' && isEmpty(start_digit) !== '' && isEmpty(end_digit) !== '' && isEmpty(change_shape) !== ''){
 		
-		pre_before = pre_before.substr(0, number_digit);
+		pre_before = pre_before.substring(0, number_digit);
 		$("#pre_before").val(pre_before);
-		
-		let before = pre_before.substr(0, Number(start_digit-1));
-		let after = pre_before.substr(Number(start_digit -1), end_digit);
+
+//		console.log('pre_before.length:'+pre_before.length);
 		
 		var arr = []; 
-		for(var i=0; i<after.length; i++){
-			arr[i] = change_shape;
+		for(var i=0; i<pre_before.length; i++){
+//			console.log('pre_before['+i+']:'+pre_before[i]);
+			if(i >= start_digit-1 && i <= end_digit-1){
+				arr[i] = change_shape;
+			}else{
+				arr[i] = pre_before[i];
+			}
 		}
-		
+
 		let arrString = arr.toString().replace(/\,/gi,'');
-		$("#pre_after").val(before+arrString);
+//		console.log('arrString:'+arrString);
+		$("#pre_after").val(arrString);
 		
 	}else if(change_type === 'D38002' && isEmpty(number_digit) !== ''){
-		pre_before = pre_before.substr(0, number_digit);
+		pre_before = pre_before.substring(0, number_digit);
 		$("#pre_after").val(pre_before);
 	}else if(change_type === 'D38003' && isEmpty(change_word) !== '' && isEmpty(change_shape) !== ''){
 		var arr = []; 

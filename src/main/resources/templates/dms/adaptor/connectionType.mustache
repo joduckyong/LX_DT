@@ -528,6 +528,8 @@ const dpIngestItPpDtDelChk = function(){
 				    	   		 $.each(data.contents, function (idx, el) {
 				    	   			if(el.chk_yn == 'N'){
 				    	   				dpIngestItPpDtDel(connect_id, item);
+				    	   			}else if(el.chk_yn == 'Y'){
+				    	   				alert("사용중이여서 삭제가 불가능합니다.");
 				    	   			}
 				 	     	     });
 					  	   	}
@@ -651,17 +653,20 @@ const dpIngestItPpDtSave = function(){
 	    });
 	    
 	    const instanceSetConfigSaveData = [];
-	    let i = 1;
-	    $.each($("#instanceSetDataConfig tbody tr"), function(){
+	   	$("input[name='checkConfigList2']").each(function(e){
+	   		let seq = Number($(this).val());	   	
+	   		let item = $("#configItem_"+seq).val();
+	   		let item_nm = $("#configIteNm_"+seq).val();
+	   		let item_described = $("#configItemDescribed_"+seq).val();
+	   		
 	        const contents = {
-	            item : $(this).find("#configItem_"+i).val(),
-	            item_nm : $(this).find("#configIteNm_"+i).val(),
-	            item_described : $(this).find("#configItemDescribed_"+i).val(),
-	            display_seq : i
+	            item : item,
+	            item_nm : item_nm,
+	            item_described : item_described,
+	            display_seq : seq
 	        };
 	        instanceSetConfigSaveData.push(contents);
-	        i++;
-	    });    
+	    });  	    
 	    
 		const data = {
 		   		url: '/dp/ingest/instance/property/detail/save',
@@ -674,7 +679,7 @@ const dpIngestItPpDtSave = function(){
 		    };		
 		    $.ajax({
 		        type: 'POST',
-		        url: url+'/dpIngestItPpInfoDel',
+		        url: url+'/dpIngestItPpDtSave',
 		        dataType: 'json',
 		        contentType: 'application/json; charset-utf-8',
 		        data: JSON.stringify(data)
