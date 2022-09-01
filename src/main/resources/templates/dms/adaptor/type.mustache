@@ -340,7 +340,7 @@ const dpIngestItPpInfo = function(clct_mthd, clct_ty, connect_id){
 	  		  //  		el.item_described; 	          
 	  		  //  		el.use_yn; 	          
 	  		    		
-		     	          insertTr += '<tr>';
+		     	          insertTr += '<tr id="trCheck_'+i+'">';
 		     		      insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList"  id="checkConfig_'+i+'" value="'+i+'"></td>';
 		     		      insertTr += ' <td style="text-align: center;" id="displauSeq">'+i+'</td>';
 		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+isEmpty(el.item)+'" name="configItem" id="configItem_'+i+'" oninput="this.value=this.value.replace(/[^0-9a-zA-Z_]/g, \'\')";></td>';
@@ -452,7 +452,7 @@ const dpIngestPpInfo = function(adapter_type_id){
     		     	    let insertTr = '';
     		     	    let i = 1;	
     			  	    $.each(data.contents, function (idx, el) {
-    		     	          insertTr += '<tr>';
+    		     	          insertTr += '<tr id="trCheck_'+i+'">';
     		     		      insertTr += ' <td style="text-align: center;"><input class="tableInfo" type="checkbox" name="checkConfigList"  id="checkConfig_'+i+'" value="'+i+'"></td>';
     		     		      insertTr += ' <td style="text-align: center;" id="displauSeq">'+i+'</td>';
     		     		      insertTr += ' <td style="text-align: center;"><input type="text" value="'+isEmpty(el.item)+'" name="configItem" id="configItem_'+i+'" oninput="this.value=this.value.replace(/[^0-9a-zA-Z_]/g, \'\')";></td>';
@@ -655,8 +655,10 @@ const dpIngestPpDtDelChk = function(){
 		let configId;
 	    $("input[name='checkConfigList']:checked").each(function(e){
 	    	configId = $(this).val();
+	    	$("#trCheck_"+configId).remove();
 	    });
 	    
+	    /*
 	    if(isEmpty(configId) !== ''){
 			var len = $("input[name='checkConfigList']:checked").length;
 			if(len === 0){
@@ -708,7 +710,7 @@ const dpIngestPpDtDelChk = function(){
 		    	
 		    });   	
 	    }
-	    
+	    */
 	}
 }
 
