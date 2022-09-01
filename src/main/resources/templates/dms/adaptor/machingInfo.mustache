@@ -225,10 +225,16 @@ const dpIngestMetaTblCol = function(){
     		     		      insertTr += ' <td><input type=hidden id="column_stre_type" name="column_stre_type" value="'+el.column_stre_type+'">'+el.column_stre_type+'</td>';
     		     		      insertTr += ' <td><select id="source_id" name="source_id" onchange="sourceIdChange('+idx+', this.value);"><option value="">선택</option>';
     		     		      $.each(dpIngestAdapterItSourceData, function (idx2, el2) {
-    			     		      insertTr += ' <option value="'+el2.source_id+'" '+(el2.source_id === el.source_id?"selected":"")+'>'+el2.source_id+'</option>';
+    			     		      insertTr += ' <option value="'+el2.source_id+'" '+(el2.source_id === el.column_eng_nm?"selected":"")+'>'+el2.source_id+'</option>';
     		     		      });		     		      
     		     		      insertTr += ' </select></td>';
-    		     		      insertTr += ' <td><input type=text id="source_path_'+idx+'" name="source_path" value="" readonly></td>';
+    		     		      insertTr += ' <td>';
+    		     		      $.each(dpIngestAdapterItSourceData, function (idx2, el2) {
+    		     		    	  if(el2.source_id === el.column_eng_nm){
+		    		     		      insertTr += ' <input type=text id="source_path_'+idx+'" name="source_path" value="'+el2.source_path+'" readonly>';
+    		     		    	  }
+    		     		      });		     		      
+    		     		      insertTr += ' </td>';
     		     		      insertTr += ' <td><select id="pre_id" onchange="preIdChange('+idx+', this.value);"><option value="">선택</option>';
     		     		      $.each(dpIngestAdapterItPreData, function (idx2, el2) {
     			     		      insertTr += ' <option value="'+el2.pre_id+'" '+(el2.pre_id === el.pre_id?"selected":"")+'>'+el2.pre_nm+'</option>';
@@ -296,7 +302,7 @@ const dpIngestAdapterItMatchList = function(){
 		     		      });		     		      
 		     		      insertTr += ' </select></td>';
 		     		      insertTr += ' <td><input type=text id="source_path_'+idx+'" name="source_path" value="'+el.source_path+'"></td>';
-		     		      insertTr += ' <td><select id="pre_id"><option value="">선택</option>';
+		     		      insertTr += ' <td><select id="pre_id" onchange="preIdChange('+idx+', this.value);"><option value="">선택</option>';
 		     		      $.each(dpIngestAdapterItPreData, function (idx2, el2) {
 			     		      insertTr += ' <option value="'+el2.pre_id+'" '+(el2.pre_id === el.pre_id?"selected":"")+'>'+el2.pre_nm+'</option>';
 		     		      });
