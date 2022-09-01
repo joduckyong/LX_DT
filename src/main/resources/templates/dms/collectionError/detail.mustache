@@ -1162,8 +1162,42 @@ const dpIngestPopupMetaTbl = function () {
     });	
 }
 
+//메타테이블 컬럼 항목(Instance 매칭정보)
+const dpIngestMetaTblColMatch = function () {
+	return new Promise(function(resolve, reject){
+		let table_idntfc_id = $("#table_idntfc_id").val();
+		
+		const data = {
+	   		url: '/dp/ingest/meta/tables/column',
+	   		user_id: 'user00',	
+	   		table_idntfc_id: table_idntfc_id,
+	    };
+		
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpIngestMetaTblCol',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	
+		  	  if (data != null) {
+		  		  
+	    		  if(errorMsg(data)){
+	    	          	 return;  
+	       	  	  }				
+		  		
+	  	    	resolve(data);
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });
+	});	
+}
+
 //Instance 매칭정보 리스트 조회
-const dpIngestAdapterItMatchList = function(){
+const dpIngestAdapterItMatchList = function(colData){
 	
 	let instance_id = '{{instance_id}}';
 	
@@ -1173,6 +1207,13 @@ const dpIngestAdapterItMatchList = function(){
    		menu_id: '',
    		instance_id: instance_id,
     };		
+    
+    
+    let colDataArr = new Array();
+    for(let i=0; i<colData.contents.length; i++){
+    	colDataArr.push(colData.contents[i].column_eng_nm);
+    }
+    
     
     $.ajax({
         type: 'POST',
@@ -1190,22 +1231,24 @@ const dpIngestAdapterItMatchList = function(){
 		  	   	if(data.contents != ""){    	
 		  	   		let insertTr = '';
    			  	    $.each(data.contents, function (idx, el) {
-   			  	    	insertTr += '<tr>';
-   			  	    	insertTr += '	<td id="column_eng_nm" name="column_eng_nm">'+el.column_eng_nm+'</td>';
-   			  	    	insertTr += '	<td id="column_stre_type" name="column_stre_type">'+el.column_stre_type+'</td>';
-   			  	    	insertTr += '	<td>';
-   			  	    	insertTr += '		<select class="form-control clct_mthd1" id="source_id" name="source_id" disabled>';
-   			  	    	insertTr += '			<option>'+el.source_id+'</option>';
-   			  	    	insertTr += '		</select>';
-   			  	    	insertTr += '	</td>';
-   			  	    	insertTr += '	<td><input class="form-control" type="text" id="source_path" name="source_path" value="'+el.source_path+'" readonly="readonly"></td>';
-   			  	    	insertTr += '	<td>';
-   			  	    	insertTr += '		<select class="form-control clct_mthd1" id="pre_id" disabled>';
-   			  	    	insertTr += '			<option>'+el.pre_nm+'</option>';
-   			  	    	insertTr += '		</select>';
-   			  	    	insertTr += '	</td>';
-   			  	    	insertTr += '	<td><input class="form-control" type="text" id="pre_after" name="pre_after" value="'+el.pre_after+'" readonly="readonly"></td>';
-   			  	    	insertTr += '</tr>';
+   			  	    	if(colDataArr.includes(el.column_eng_nm)){
+	   			  	    	insertTr += '<tr>';
+	   			  	    	insertTr += '	<td id="column_eng_nm" name="column_eng_nm">'+el.column_eng_nm+'</td>';
+	   			  	    	insertTr += '	<td id="column_stre_type" name="column_stre_type">'+el.column_stre_type+'</td>';
+	   			  	    	insertTr += '	<td>';
+	   			  	    	insertTr += '		<select class="form-control clct_mthd1" id="source_id" name="source_id" disabled>';
+	   			  	    	insertTr += '			<option>'+el.source_id+'</option>';
+	   			  	    	insertTr += '		</select>';
+	   			  	    	insertTr += '	</td>';
+	   			  	    	insertTr += '	<td><input class="form-control" type="text" id="source_path" name="source_path" value="'+el.source_path+'" readonly="readonly"></td>';
+	   			  	    	insertTr += '	<td>';
+	   			  	    	insertTr += '		<select class="form-control clct_mthd1" id="pre_id" disabled>';
+	   			  	    	insertTr += '			<option>'+el.pre_nm+'</option>';
+	   			  	    	insertTr += '		</select>';
+	   			  	    	insertTr += '	</td>';
+	   			  	    	insertTr += '	<td><input class="form-control" type="text" id="pre_after" name="pre_after" value="'+el.pre_after+'" readonly="readonly"></td>';
+	   			  	    	insertTr += '</tr>';
+   			  	    	}
    			  	    });
    			  	 	$("#matchList").append(insertTr);
 		  	   	}
@@ -1621,8 +1664,16 @@ const table_addModal = function(){
 
 //Instance 매칭정보 변경모달 추가
 const instance_addModal = function(){
-	dpIngestAdapterItMatchList();
-	InstanceAddList();
+	dpIngestMetaTblColMatch()
+	.then(function(data){
+		dpIngestAdapterItMatchList(data);
+		InstanceAddList();
+	})
+	.catch(function(error){
+		console.log(error)
+	});
+	
+	
 	$('#instance_add_modal').modal('show');
 }
 
