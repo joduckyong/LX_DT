@@ -487,6 +487,12 @@ const distributeSetupInfo = function () {
 					$("#info_srvUrl").val(data.contents.srvUrl);
 					$("#info_srvDesc").val(data.contents.srvDesc);
 					
+					if(data.contents.pgngYn == 'Y'){
+						$("#pgngYn").prop("checked",true);
+						$("#paging_default1").show();
+						$("#paging_default2").show();
+					}
+					
 					let sqlText = data.contents.sqlText;
 					sqlText = sqlText.replaceAll('SELECT','SELECT \n');
 					sqlText = sqlText.replaceAll(',',',\n');
@@ -871,6 +877,10 @@ const distributeSetupPopupSrvTargetUpdate = function(){
 	let seq = $(selector).val();
 	
 	if($("input:radio[name=pop_dstbSeq]:checked").length == 0){
+		return;
+	}
+	
+	if($("input:radio[name=pop_dstbSeq]:checked").val() == ''){
 		return;
 	}
 	
@@ -1404,6 +1414,7 @@ const getSortData = function(){
 const createQuery = function(){
 	
 	$("#sqlText").val('');
+	let schemaName = $("#info_schemaNm").val();
 	
 	if(validationCheck('Y')){
 		let svrData = getSvrData();
@@ -1432,7 +1443,7 @@ const createQuery = function(){
 				sqlText += '\n';
 			}
 			
-			sqlText += ' FROM ' + svrData[0]['tbl'] + '\n';
+			sqlText += ' FROM ' + schemaName + '.' + svrData[0]['tbl'] + '\n';
 			sqlText += ' WHERE 1=1' + '\n';
 			
 			if(groupByStr.indexOf(',') > -1){	//마지막 콤마 제거
@@ -1451,6 +1462,9 @@ const createQuery = function(){
 						fromToSql += ' AND ' + '#{' +cndData[i]['cndNm'] + '}';
 						fromToSql += '\n';
 					}
+				}else if(cndData[i]['cnd'] == 'like'){
+					sqlText += ' AND ' + cndData[i]['targetCol'] + ' ' + cndData[i]['cnd'] + ' ' + '\'%\' || #{' +cndData[i]['cndNm'] + '} || \'%\'';
+					sqlText += '\n';
 				}else{
 					sqlText += ' AND ' + cndData[i]['targetCol'] + ' ' + cndData[i]['cnd'] + ' ' + '#{' +cndData[i]['cndNm'] + '}';
 					sqlText += '\n';
@@ -1461,7 +1475,9 @@ const createQuery = function(){
 			sqlText += fromToSql;
 		}
 		
-		sqlText += groupByStr;
+		if($("input:checkbox[name='svr_totFncYn']:checked").length > 0){	//집합함수 사용여부 체크가 1개라도 있을 경우 
+			sqlText += groupByStr;
+		}
 		
 		if(sortData.length > 0){
 			let orderBySql = '';
@@ -1571,7 +1587,7 @@ const addSortList = function(){
 const addPopupList = function(){
 	
 	let insertTr = '<tr class="popup_list">';
-		insertTr += '	<td class="pop_dstbSeq"><input type="radio" name="pop_dstbSeq" value="" disabled></td>';
+		insertTr += '	<td class="pop_dstbSeq"><input type="radio" name="pop_dstbSeq" value=""></td>';
 		insertTr += '	<td class="pop_ctprvnCd">';
 		insertTr += '		<select class="form-control" onchange="lxpfAdministSggList(this);">';
 		insertTr +=	'			<option value="">시/도 선택</option>';
@@ -1595,27 +1611,34 @@ const addPopupList = function(){
 
 //조건항목 삭제
 const deleteCndList = function (){
-// 	$('input:checkbox[name="cnd_chk"]:checked').each(function() {
-// 		$(this).parents('tr.cnd_list').remove();
-//    });
-	$('tr.cnd_list:last').remove();
+	$('input:checkbox[name="cnd_chk"]:checked').each(function() {
+		$(this).parents('tr.cnd_list').remove();
+   });
+// 	$('tr.cnd_list:last').remove();
 }
 
 //정렬순서 삭제
 const deleteSortList = function (){
-// 	$('input:checkbox[name="sort_chk"]:checked').each(function() {
-// 		$(this).parents('tr.sort_list').remove();
-//    	});
-	$('tr.sort_list:last').remove();
+	$('input:checkbox[name="sort_chk"]:checked').each(function() {
+		$(this).parents('tr.sort_list').remove();
+   	});
+// 	$('tr.sort_list:last').remove();
 	
-// 	sortNumbering();
+	sortNumbering();
 }
 
 //데이터분배 대상 설정팝업 삭제
 const deletePopupList = function (){
-	if($('tr.popup_list:last').find('[name=pop_dstbSeq]').val() == ''){
-		$('tr.popup_list:last').remove();
+	let chk = $('input:radio[name="pop_dstbSeq"]:checked');
+	if($(chk).val() == ''){
+		$(chk).parents('tr.popup_list').remove();
+	}else{
+		alert("삭제할 수 없는 항목입니다.");
 	}
+	
+// 	if($('input:radio[name="pop_dstbSeq"]:checked').find('[name=pop_dstbSeq]').val() == ''){
+// 		$('tr.popup_list:last').remove();
+// 	}
 	
 }
 
