@@ -115,8 +115,8 @@
 			                    <h3>▣ 실행결과</h3>
 			                </div>
 	          				<div class="row"> 
-		                     	<div class="table_responsive" style="height: 500px; overflow: auto;">
-		                     		<pre id="execResult"></pre>
+		                     	<div class="table_responsive">
+		                     		<pre id="execResult" style="width:100%; height: 500px; overflow: auto;"></pre>
 			                    </div>
 		                    </div>
 		            	</div>
@@ -236,6 +236,7 @@ const distributeSetupPopup = function (dstbId) {
 		  	    $.each(data.contents, function (idx, el) {
 		  	    	let cndNm = el.cndNm;
 		  	    	let testValue = isEmpty(el.testValue);
+		  	    	let iemDesc = el.iemDesc;
 		  	    	insertTr += '<tr>';
 		  	    	insertTr += '	<td class="pop_cndNm">'+cndNm+'</td>';
 		  	    	if(cndNm == 'rowsOfPage' || cndNm == 'nowPageNum'){
@@ -243,7 +244,7 @@ const distributeSetupPopup = function (dstbId) {
 		  	    	}else{
 		  	    		insertTr += '	<td class="pop_testValue"><input class="form-control" type="text" value="'+testValue+'"></td>';
 		  	    	}
-		  	    	insertTr += '	<td class="pop_desc"><input class="form-control" type="text" value="" readonly="readonly"></td>';
+		  	    	insertTr += '	<td class="pop_desc"><input class="form-control" type="text" value="'+iemDesc+'" readonly="readonly"></td>';
 		  	    	insertTr += '</tr>';
 		  	    });
 		  	  $("#testPopList").html(insertTr);
