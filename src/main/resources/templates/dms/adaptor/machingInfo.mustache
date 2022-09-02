@@ -323,7 +323,7 @@ const dpIngestAdapterItMatchList = function(colData){
 				     		      });
 				     		      insertTr += ' </select></td>';
 				     		      
-				     		      insertTr += ' <td><input type=text id="property_type_nm_'+idx+'" name="property_type_nm" value="'+el.property_type_nm+'" readonly><input type=hidden id="property_type_'+idx+'" name="property_type" value="'+el.property_type+'" readonly ></td>';
+				     		      insertTr += ' <td><input type=text id="property_type_nm_'+idx+'" name="property_type_nm" value="'+isEmpty(el.property_type_nm)+'" readonly><input type=hidden id="property_type_'+idx+'" name="property_type" value="'+el.property_type+'" readonly ></td>';
 				     		      insertTr += ' <td><input type=text id="pre_after_'+idx+'" name="pre_after" value="'+el.pre_after+'" readonly></td>';
 				                  insertTr += '</tr>';
     			  	    	}
