@@ -189,8 +189,7 @@ const listPage = function(){
 }
 
 //Instance 매칭정보 리스트 조회
-const dpIngestMetaTblCol = function(){
-	return new Promise(function(resolve, reject){
+const dpIngestMetaTblCol = function(colData){
 		
 		$("#dpIngestAdapterItMatchList").empty();	
 		
@@ -217,19 +216,35 @@ const dpIngestMetaTblCol = function(){
 		  	          	 return;  
 	        	  	  }	
 		    		  
-		    		  resolve(data);
-			  		/*
+			  		
 				  	   	if(data.contents != ""){    	
 				  	   		
 	    		     	    let insertTr = '';
 	    			  	    $.each(data.contents, function (idx, el) {
-	    			  	    	
 	    		     	          insertTr += '<tr>';
 	    		     		      insertTr += ' <td><input type=hidden id="column_eng_nm" name="column_eng_nm" value="'+el.column_eng_nm+'">'+el.column_eng_nm+'</td>';
 	    		     		      insertTr += ' <td><input type=hidden id="column_stre_type" name="column_stre_type" value="'+el.column_stre_type+'">'+el.column_stre_type+'</td>';
 	    		     		      insertTr += ' <td><select id="source_id" name="source_id" onchange="sourceIdChange('+idx+', this.value);"><option value="">선택</option>';
 	    		     		      $.each(dpIngestAdapterItSourceData, function (idx2, el2) {
-	    			     		      insertTr += ' <option value="'+el2.source_id+'" '+(el2.source_id === el.column_eng_nm?"selected":"")+'>'+el2.source_id+'</option>';
+	    		     		    	  if(el2.source_id === el.column_eng_nm){
+	    		     		    		 insertTr += ' <option value="'+el2.source_id+'" selected>'+el2.source_id+'</option>';
+	    		     		    	  }else{
+	    		     		    		  
+	    		     		    		 if(isEmpty(colData.contents) !== ''){
+				    		     		      $.each(colData.contents, function (idx3, el3) {
+				    		     		    	 if(el3.column_eng_nm === el.column_eng_nm){
+				    		     		    		if(el3.column_eng_nm === el2.source_id){
+				    		     		    			insertTr += ' <option value="'+el2.source_id+'" selected>'+el2.source_id+'</option>';
+				    		     		    		}else{
+				    		     		    			insertTr += ' <option value="'+el2.source_id+'" >'+el2.source_id+'</option>';
+				    		     		    		}
+				    		     		    	 }
+					    		     		  });	    		     		    		  
+	    		     		    		 }else{
+	    		     		    			insertTr += ' <option value="'+el2.source_id+'" >'+el2.source_id+'</option>';
+	    		     		    		 }
+		    		     		    		 
+	    		     		    	  }
 	    		     		      });		     		      
 	    		     		      insertTr += ' </select></td>';
 	    		     		      insertTr += ' <td>';
@@ -245,97 +260,136 @@ const dpIngestMetaTblCol = function(){
 	    		     		      insertTr += ' </td>';
 	    		     		      insertTr += ' <td><select id="pre_id" onchange="preIdChange('+idx+', this.value);"><option value="">선택</option>';
 	    		     		      $.each(dpIngestAdapterItPreData, function (idx2, el2) {
-	    			     		      insertTr += ' <option value="'+el2.pre_id+'" '+(el2.pre_id === el.pre_id?"selected":"")+'>'+el2.pre_nm+'</option>';
-	    		     		      });
+	    		     		    	  if(el2.pre_id === el.pre_id){
+		    			     		      insertTr += ' <option value="'+el2.pre_id+'" selected>'+el2.pre_nm+'</option>';
+	    		     		    	  }else{
+	    		     		    		  
+	    		     		    		 if(isEmpty(colData.contents) !== ''){
+				    		     		      $.each(colData.contents, function (idx3, el3) {
+				    		     		    	 if(el3.column_eng_nm === el.column_eng_nm){
+				    		     		    		if(el3.pre_id === el2.pre_id){
+				    		     		    			insertTr += ' <option value="'+el2.pre_id+'" selected>'+el2.pre_nm+'</option>';
+				    		     		    		}else{
+				    		     		    			insertTr += ' <option value="'+el2.pre_id+'">'+el2.pre_nm+'</option>';
+				    		     		    		}
+				    		     		    	 }
+					    		     		  });	    		     		    		  
+	    		     		    		 }else{
+		    			     		      insertTr += ' <option value="'+el2.pre_id+'" >'+el2.pre_nm+'</option>';
+	    		     		    		 }
+	    		     		    	  }
+	    		     		      });	    		     		      
 	    		     		      insertTr += ' </select></td>';
 	    		     		      
-	    		     		      insertTr += ' <td><input type=text id="property_type_nm_'+idx+'" name="property_type_nm" value="" readonly><input type=hidden id="property_type_'+idx+'" name="property_type" value="" readonly></td>';
-	    		     		      insertTr += ' <td><input type=text id="pre_after_'+idx+'" name="pre_after" value="" readonly></td>';
+	    		     		      insertTr += ' <td>';
+	    		     		      if(isEmpty(colData.contents) !== ''){
+		    		     		      $.each(colData.contents, function (idx2, el2) {
+		    		     		    	 if(el2.column_eng_nm === el.column_eng_nm){
+		    		     		    	  insertTr += ' <input type=text id="property_type_nm_'+idx+'" name="property_type_nm" value="'+isEmpty(el2.property_type_nm)+'" readonly><input type=hidden id="property_type_'+idx+'" name="property_type" value="'+el2.property_type+'" readonly>';
+		    		     		    	 }
+		    		     		      });
+	    		     		      }else{
+	    		     		    	 insertTr += ' <input type=text id="property_type_nm_'+idx+'" name="property_type_nm" value="'+isEmpty(el.property_type_nm)+'" readonly><input type=hidden id="property_type_'+idx+'" name="property_type" value="'+el.property_type+'" readonly>';
+	    		     		      }
+	    		     		      insertTr += ' </td>';
+	    		     		      insertTr += ' <td>';
+	    		     		      if(isEmpty(colData.contents) !== ''){
+		    		     		      $.each(colData.contents, function (idx2, el2) {
+		    		     		    	 if(el2.column_eng_nm === el.column_eng_nm){
+		    		     		    	  insertTr += ' <input type=text id="pre_after_'+idx+'" name="pre_after" value="'+el2.pre_after+'" readonly></td>';
+		    		     		    	 }
+		    		     		      });
+	    		     		      }else{
+	    		     		    	  insertTr += ' <input type=text id="pre_after_'+idx+'" name="pre_after" value="" readonly></td>';
+	    		     		      }
+	    		     		      insertTr += ' </td>';
 	    		                  insertTr += '</tr>';
 	    			  	    });
 	    			  	    
 	    			  	    $("#dpIngestAdapterItMatchList").append(insertTr);		
 	    			  	    
-				  	   	}else{
+				  	   	}
+				  	   	/*
+				  	   	else{
 				  	   		
 				  	 		setTimeout(function() {
 				  	 			dpIngestAdapterItMatchList();
 				  	 		}, 300);
 				  	   	}
-			  		*/
+				  	   	*/
+			  		
 			  	  }
 		    	  
 		    }).fail(function (error) {
 		        alert(JSON.stringify(error));
 		    });	
 		  
-	});		    
 }
 
 //Instance 매칭정보 리스트 조회
-const dpIngestAdapterItMatchList = function(colData){
-
-	$("#dpIngestAdapterItMatchList").empty();	
+const dpIngestAdapterItMatchList = function(){
 	
-    const data = {
-	   		url: '/dp/ingest/adapter/instance/match/list',
-	   		instance_id: '{{instance_id}}',	
-	   		user_id: 'user00',	
-	   		menu_id: 'menu_id',
-	    };		
-	    
-	    let colDataArr = new Array();
-	    for(let i=0; i<colData.contents.length; i++){
-	    	colDataArr.push(colData.contents[i].column_eng_nm);
-	    }
-	    
-	    $.ajax({
-	        type: 'POST',
-	        url: url+'/dpIngestAdapterItMatchList',
-	        dataType: 'json',
-	        contentType: 'application/json; charset-utf-8',
-	        data: JSON.stringify(data)
-	    }).done(function (data) {
-	    	
-		  	  if (data != null) {
-		  		  
-	    		  if(errorMsg(data)){
-	  	          	 return;  
-        	  	  }	
-		  		
-			  	   	if(data.contents != ""){    	
-			  	   		
-    		     	    let insertTr = '';
-    			  	    $.each(data.contents, function (idx, el) {
-    			  	    	if(colDataArr.includes(el.column_eng_nm)){
-		  		     	          insertTr += '<tr>';
-				     		      insertTr += ' <td><input type=hidden id="column_eng_nm" name="column_eng_nm" value="'+el.column_eng_nm+'">'+el.column_eng_nm+'</td>';
-				     		      insertTr += ' <td><input type=hidden id="column_stre_type" name="column_stre_type" value="'+el.column_stre_type+'">'+el.column_stre_type+'</td>';
-				     		      insertTr += ' <td><select id="source_id" name="source_id"><option value="">선택</option>';
-				     		      $.each(dpIngestAdapterItSourceData, function (idx2, el2) {
-					     		      insertTr += ' <option value="'+el2.source_id+'" '+(el2.source_id === el.source_id?"selected":"")+'>'+el2.source_id+'</option>';
-				     		      });		     		      
-				     		      insertTr += ' </select></td>';
-				     		      insertTr += ' <td><input type=text id="source_path_'+idx+'" name="source_path" value="'+el.source_path+'"></td>';
-				     		      insertTr += ' <td><select id="pre_id" onchange="preIdChange('+idx+', this.value);"><option value="">선택</option>';
-				     		      $.each(dpIngestAdapterItPreData, function (idx2, el2) {
-					     		      insertTr += ' <option value="'+el2.pre_id+'" '+(el2.pre_id === el.pre_id?"selected":"")+'>'+el2.pre_nm+'</option>';
-				     		      });
-				     		      insertTr += ' </select></td>';
-				     		      
-				     		      insertTr += ' <td><input type=text id="property_type_nm_'+idx+'" name="property_type_nm" value="'+isEmpty(el.property_type_nm)+'" readonly><input type=hidden id="property_type_'+idx+'" name="property_type" value="'+el.property_type+'" readonly ></td>';
-				     		      insertTr += ' <td><input type=text id="pre_after_'+idx+'" name="pre_after" value="'+el.pre_after+'" readonly></td>';
-				                  insertTr += '</tr>';
-    			  	    	}
-    			  	    });
-    	          	    $("#dpIngestAdapterItMatchList").append(insertTr);		  
-			  	   		
-			  	   	}
-		  	  }
-	    	  
-	    }).fail(function (error) {
-	        alert(JSON.stringify(error));
-	    });	
+	return new Promise(function(resolve, reject){
+		$("#dpIngestAdapterItMatchList").empty();	
+		
+	    const data = {
+		   		url: '/dp/ingest/adapter/instance/match/list',
+		   		instance_id: '{{instance_id}}',	
+		   		user_id: 'user00',	
+		   		menu_id: 'menu_id',
+		    };		
+		    
+		    $.ajax({
+		        type: 'POST',
+		        url: url+'/dpIngestAdapterItMatchList',
+		        dataType: 'json',
+		        contentType: 'application/json; charset-utf-8',
+		        data: JSON.stringify(data)
+		    }).done(function (data) {
+		    	
+			  	  if (data != null) {
+			  		  
+		    		  if(errorMsg(data)){
+		  	          	 return;  
+	        	  	  }	
+			  		
+		    		  resolve(data);
+		    		  
+		    		  /*
+				  	   	if(data.contents != ""){    	
+				  	   		
+	    		     	    let insertTr = '';
+	    			  	    $.each(data.contents, function (idx, el) {
+	    			  	    	if(colDataArr.includes(el.column_eng_nm)){
+			  		     	          insertTr += '<tr>';
+					     		      insertTr += ' <td><input type=hidden id="column_eng_nm" name="column_eng_nm" value="'+el.column_eng_nm+'">'+el.column_eng_nm+'</td>';
+					     		      insertTr += ' <td><input type=hidden id="column_stre_type" name="column_stre_type" value="'+el.column_stre_type+'">'+el.column_stre_type+'</td>';
+					     		      insertTr += ' <td><select id="source_id" name="source_id"><option value="">선택</option>';
+					     		      $.each(dpIngestAdapterItSourceData, function (idx2, el2) {
+						     		      insertTr += ' <option value="'+el2.source_id+'" '+(el2.source_id === el.source_id?"selected":"")+'>'+el2.source_id+'</option>';
+					     		      });		     		      
+					     		      insertTr += ' </select></td>';
+					     		      insertTr += ' <td><input type=text id="source_path_'+idx+'" name="source_path" value="'+el.source_path+'"></td>';
+					     		      insertTr += ' <td><select id="pre_id" onchange="preIdChange('+idx+', this.value);"><option value="">선택</option>';
+					     		      $.each(dpIngestAdapterItPreData, function (idx2, el2) {
+						     		      insertTr += ' <option value="'+el2.pre_id+'" '+(el2.pre_id === el.pre_id?"selected":"")+'>'+el2.pre_nm+'</option>';
+					     		      });
+					     		      insertTr += ' </select></td>';
+					     		      
+					     		      insertTr += ' <td><input type=text id="property_type_nm_'+idx+'" name="property_type_nm" value="'+isEmpty(el.property_type_nm)+'" readonly><input type=hidden id="property_type_'+idx+'" name="property_type" value="'+el.property_type+'" readonly ></td>';
+					     		      insertTr += ' <td><input type=text id="pre_after_'+idx+'" name="pre_after" value="'+el.pre_after+'" readonly></td>';
+					                  insertTr += '</tr>';
+	    			  	    	}
+	    			  	    });
+	    	          	    $("#dpIngestAdapterItMatchList").append(insertTr);		  
+				  	   	}
+		    		  */
+			  	  }
+		    	  
+		    }).fail(function (error) {
+		        alert(JSON.stringify(error));
+		    });	
+    });	
 	    
 }
 
@@ -401,9 +455,10 @@ const dpIngestAdapterItMatch = function(){
 	    dpIngestAdapterItPre();
 	    
  		setTimeout(function() {
- 			dpIngestMetaTblCol()
+			dpIngestAdapterItMatchList()
  			.then(function(data){
- 				dpIngestAdapterItMatchList(data);
+	 			dpIngestMetaTblCol(data);
+// 				dpIngestAdapterItMatchList(data);
  			})
  			.catch(function(error){
  				console.log(error)
@@ -811,13 +866,14 @@ const dpIngestPopupPpPathSave = function(){
 			  			    dpIngestAdapterItSource2();
 			  		 		setTimeout(function() {
 			  		 			
-			  		 			dpIngestMetaTblCol()
+			  					dpIngestAdapterItMatchList()
 			  		 			.then(function(data){
-			  		 				dpIngestAdapterItMatchList(data);
+			  			 			dpIngestMetaTblCol(data);
+//			  		 				dpIngestAdapterItMatchList(data);
 			  		 			})
 			  		 			.catch(function(error){
 			  		 				console.log(error)
-			  		 			});			  		 			
+			  		 			});		  		 			
 			  		 			
 			  		 		}, 300);			  		  		
 				  	   	}
