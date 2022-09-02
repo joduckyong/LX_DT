@@ -367,7 +367,26 @@ const dpLoadPopupHistoryDown01 = function (log_dt) {
 	  		
   	    	if(data.contents != ""){
   	    		if(data.contents[0].down_data.length > 0){
-  	    			jsonToExcelDownload(fileNm, sheetNm, data.contents[0].down_data);
+  	    			
+  	    			let newData = [];
+  	    			let mapping = {};
+  	    			for(let key in dsetObj){
+  	    				mapping[key] = dsetObj[key].column_korean_nm;
+  	    			}
+  	    			
+  	    			for(let obj of data.contents[0].down_data){
+  	    				let newObj = {}
+  	    				for(let [oldKey, newKey] of Object.entries(mapping)){
+  	    					if(obj[oldKey]){
+  	    						newObj[newKey] = obj[oldKey];
+  	    					}
+  	    				}
+  	    				
+  	    				newData.push(newObj);
+  	    			}
+  	    			
+  	    			jsonToExcelDownload(fileNm, sheetNm, newData);
+  	    			
   	    		}else{
   	    			alert("적재 이력이 없습니다.");
   	    		}
@@ -389,7 +408,7 @@ const dpLoadFaileLogList = function (log_dt) {
 		if(key != 'modified_at'){
 			columnTr += '	<th style="min-width:150px;">'+dsetObj[key].column_korean_nm+'</th>';
 		}
-    };
+    }
     columnTr += '	<th style="min-width:150px;">체크/재적재</th>';
 	columnTr += '</tr>';
 	$("#dsetDtCtPop").html(columnTr);
