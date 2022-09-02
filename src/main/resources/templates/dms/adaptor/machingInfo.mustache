@@ -194,6 +194,7 @@ const dpIngestMetaTblCol = function(){
 	$("#dpIngestAdapterItMatchList").empty();	
 	
 	console.log('table_idntfc_id : '+$("#table_idntfc_id").val());
+	
     const data = {
 	   		url: '/dp/ingest/meta/tables/column',
 	   		table_idntfc_id: $("#table_idntfc_id").val(),	
@@ -229,11 +230,15 @@ const dpIngestMetaTblCol = function(){
     		     		      });		     		      
     		     		      insertTr += ' </select></td>';
     		     		      insertTr += ' <td>';
-    		     		      $.each(dpIngestAdapterItSourceData, function (idx2, el2) {
-    		     		    	  if(el2.source_id === el.column_eng_nm){
-		    		     		      insertTr += ' <input type=text id="source_path_'+idx+'" name="source_path" value="'+el2.source_path+'" readonly>';
-    		     		    	  }
-    		     		      });		     		      
+    		     		      if(isEmpty(dpIngestAdapterItSourceData) != ''){
+	    		     		      $.each(dpIngestAdapterItSourceData, function (idx2, el2) {
+	    		     		    	  if(el2.source_id === el.column_eng_nm){
+				    		     		  insertTr += ' <input type=text id="source_path_'+idx+'" name="source_path" value="'+el2.source_path+'" readonly>';
+	    		     		    	  }
+	    		     		      });		     		      
+    		     		      }else{
+    		     		    	 insertTr += ' <input type=text id="source_path_'+idx+'" name="source_path" value="" readonly>';
+    		     		      }
     		     		      insertTr += ' </td>';
     		     		      insertTr += ' <td><select id="pre_id" onchange="preIdChange('+idx+', this.value);"><option value="">선택</option>';
     		     		      $.each(dpIngestAdapterItPreData, function (idx2, el2) {

@@ -303,7 +303,7 @@ const dpIngestItSeach = function(page, size_per_page){
 	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.clct_mthd)+'</td>';
 	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.clct_ty)+'</td>';
 	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.dset_korean_nm)+'</td>';
-	     		      if( el.use_yn === 'N'){
+	     		      if( el.error_yn == 'Y'){
 	     		  	    insertTr += ' <td style="text-align: center;">';
 	     		  	    insertTr += '	<button class="btn btn-sm btn-primary" onclick=errorPage("'+ el.instance_id +'")>바로가기</button>';
 	     		    	insertTr += ' </td>';	
