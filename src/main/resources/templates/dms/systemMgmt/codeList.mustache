@@ -199,7 +199,7 @@
 								<div class="form-group row col-12 col-md-6">
 			                        <div class="control-label">코드그룹ID</div>
 			                        <div class="form-control_box">
-			                        	<input class="form-control" type="text" name="group_code2" id="group_code2" readonly="readonly">
+			                        	<input class="form-control" type="text" name="group_code2" id="group_code2">
 			                        </div>
 								</div>
 								<div class="form-group row col-12 col-md-6">
@@ -747,9 +747,11 @@ const code_addModal = function(type){
 	if(type == 'I'){
 		initCode();
 		$("#code_myModalLabel").text("코드 등록");
+		$("#group_code2").attr("readonly",false);
 		str += '<button class="btn btn-primary" type="button" onclick="dpCmCodesDtSave();">저장</button>';
 	}else if(type == 'U'){
 		$("#code_myModalLabel").text("코드 상세");
+		$("#group_code2").attr("readonly",true);
 		str += '<button class="btn btn-primary" type="button" onclick="dpCmCodesDtUpdate();">수정</button>';
 		str += '<button class="btn btn-danger" type="button" onclick="dpCmCodesDtDel();">삭제</button>';
 	}
