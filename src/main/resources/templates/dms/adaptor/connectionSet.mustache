@@ -341,10 +341,10 @@ const dpIngestItPp = function(adapter_type_id, clct_mthd, clct_ty){
     		     	          insertTr += '<tr id="trCheck_'+el.item+'">';
     		     		      insertTr += ' <td><input class="tableInfo" type="checkbox" name="checkList" value="'+el.item+'" '+(isEmpty(el.essential_yn) == "Y"?"disabled":"")+'></td>';
     		     		      insertTr += ' <td><input type=text value="'+el.item+'" id="item" name="item"  '+(isEmpty(el.change_able_yn) == "N"?"readonly":"")+'></td>';
-    		     		      insertTr += ' <td><input type=text value="'+isEmpty(el.item_nm)+'" id="item_nm" name="item_nm"></td>';
-    		     		      insertTr += ' <td><input type=text value="'+isEmpty(el.value)+'" id="item_value" name="item_value"></td>';
+    		     		      insertTr += ' <td><input type=text value="'+isEmpty(el.item_nm)+'" id="item_nm" name="item_nm" '+(isEmpty(el.change_able_yn) == "N"?"readonly":"")+'></td>';
+    		     		      insertTr += ' <td><input type=text value="'+isEmpty(el.value)+'" id="item_value" name="item_value" '+(isEmpty(el.change_able_yn) == "N"?"readonly":"")+'></td>';
     		     		      insertTr += ' <td class=type1>';
-    		     		      insertTr += ' <input type=text value="'+isEmpty(el.item_described)+'" id="item_described" name="item_described">';
+    		     		      insertTr += ' <input type=text value="'+isEmpty(el.item_described)+'" id="item_described" name="item_described" '+(isEmpty(el.change_able_yn) == "N"?"readonly":"")+'>';
     		     		      insertTr += ' <input type=hidden value="'+el.change_able_yn+'" id="change_able_yn" name="change_able_yn">';
     		     		      insertTr += ' <input type=hidden value="'+(isEmpty(el.display_seq) == ''?i+1:el.display_seq)+'" id="display_seq" name="display_seq">';
     		     		      insertTr += ' <input type=hidden value="'+el.essential_yn+'" id="essential_yn" name="essential_yn">';
@@ -399,10 +399,10 @@ const dpIngestAdapterItPp = function(adapter_type_id, clct_mthd, clct_ty){
     		     	          insertTr += '<tr id="trCheck_'+el.item+'">';
     		     		      insertTr += ' <td><input class="tableInfo" type="checkbox" name="checkList" value="'+el.item+'" '+(isEmpty(el.essential_yn) == "Y"?"disabled":"")+'></td>';
     		     		      insertTr += ' <td><input type=text value="'+el.item+'" id="item" name="item" '+(isEmpty(el.change_able_yn) == "N"?"readonly":"")+'></td>';
-    		     		      insertTr += ' <td><input type=text value="'+isEmpty(el.item_nm)+'" id="item_nm" name="item_nm" ></td>';
-    		     		      insertTr += ' <td><input type=text value="'+isEmpty(el.value)+'" id="item_value" name="item_value"></td>';
+    		     		      insertTr += ' <td><input type=text value="'+isEmpty(el.item_nm)+'" id="item_nm" name="item_nm" '+(isEmpty(el.change_able_yn) == "N"?"readonly":"")+'></td>';
+    		     		      insertTr += ' <td><input type=text value="'+isEmpty(el.value)+'" id="item_value" name="item_value" '+(isEmpty(el.change_able_yn) == "N"?"readonly":"")+'></td>';
     		     		      insertTr += ' <td class=type1>';
-    		     		      insertTr += ' <input type=text value="'+isEmpty(el.item_described)+'" id="item_described" name="item_described">';
+    		     		      insertTr += ' <input type=text value="'+isEmpty(el.item_described)+'" id="item_described" name="item_described" '+(isEmpty(el.change_able_yn) == "N"?"readonly":"")+'>';
     		     		      insertTr += ' <input type=hidden value="'+el.change_able_yn+'" id="change_able_yn" name="change_able_yn">';
     		     		      insertTr += ' <input type=hidden value="'+(isEmpty(el.display_seq) == ''?i+1:el.display_seq)+'" id="display_seq" name="display_seq">';
     		     		      insertTr += ' <input type=hidden value="'+el.essential_yn+'" id="essential_yn" name="essential_yn">';		     		      
