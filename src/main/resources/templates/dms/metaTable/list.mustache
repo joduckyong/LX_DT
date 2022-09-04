@@ -1073,7 +1073,6 @@ const dpIngestMetaTblMake = function (table_eng_nm){
 		table_eng_nm: table_eng_nm,
     };
 	
-	$('#loading-image').show();
     $.ajax({
         type: 'POST',
         url: url+'/dpIngestMetaTblMake',
@@ -1094,8 +1093,6 @@ const dpIngestMetaTblMake = function (table_eng_nm){
   		
     }).fail(function (error) {
         alert(JSON.stringify(error));
-    }).always(function(){
-    	$('#loading-image').hide();
     });	
 	
 }
@@ -1109,7 +1106,6 @@ const dpIngestMetaTblRemake = function (table_eng_nm){
 		table_eng_nm: table_eng_nm,
     };
 	
-	$('#loading-image').show();
     $.ajax({
         type: 'POST',
         url: url+'/dpIngestMetaTblRemake',
@@ -1130,8 +1126,6 @@ const dpIngestMetaTblRemake = function (table_eng_nm){
   		
     }).fail(function (error) {
         alert(JSON.stringify(error));
-    }).always(function(){
-    	$('#loading-image').hide();
     });	
 	
 }
