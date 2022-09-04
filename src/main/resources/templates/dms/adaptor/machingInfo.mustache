@@ -188,6 +188,25 @@ const listPage = function(){
 	location.href = url+'/detail/{{adapter_id}}';
 }
 
+const mapping = function(colData){
+	
+     if(isEmpty(dpIngestAdapterItSourceData) !== ''){
+	      $.each(dpIngestAdapterItSourceData, function (idx, el) {
+	    	  
+	    	  console.log('el.source_id : '+el.source_id);
+	    	  $('input[name=source_path_'+el.source_id+']').attr('value',el.source_path);
+	      });	
+      }
+     
+      if(isEmpty(colData.contents) !== ''){
+	      $.each(colData.contents, function (idx2, el2) {
+	    	 $('input[name=property_type_nm_'+el.column_eng_nm+']').attr('value',el.property_type_nm);
+	    	 $('input[name=property_type_'+el.column_eng_nm+']').attr('value',el.property_type);
+	    	 $('input[name=pre_after_'+el.column_eng_nm+']').attr('value',el.pre_after);
+	      });
+      }     
+}
+
 //Instance 매칭정보 리스트 조회
 const dpIngestMetaTblCol = function(colData){
 		
@@ -247,25 +266,7 @@ const dpIngestMetaTblCol = function(colData){
 	    		     		    	  }
 	    		     		      });		     		      
 	    		     		      insertTr += ' </select></td>';
-	    		     		      
-	    		     		      insertTr += ' <td>';
-	    		     		      if(isEmpty(dpIngestAdapterItSourceData) !== ''){
-		    		     		      $.each(dpIngestAdapterItSourceData, function (idx2, el2) {
-		    		     		    	 console.log('el2.source_id='+el2.source_id+', el.column_eng_nm='+el.column_eng_nm);
-		    		     		    	  if(el2.source_id === el.column_eng_nm){
-		    		     		    		 insertTr += ' <input type=text id="source_path_'+idx+'" name="source_path" value="'+el2.source_path+'" readonly>';
-		    		     		    	  }else{
-		    		     		    	//	 insertTr += ' <input type=text id="source_path_'+idx+'" name="source_path" value="" readonly>';
-		    		     		    	  }
-		    		     		      });	
-	    		     		      }else{
-	    		     		    	insertTr += ' <input type=text id="source_path_'+idx+'" name="source_path" value="" readonly>';
-	    		     		      }
-	    		     		      insertTr += ' </td>';
-	    		     		      
-	    		     		      
-	    		     		  //    insertTr += ' <td><input type=text id="source_path_'+el.column_eng_nm+'" name="source_path" value="" readonly></td>';
-	    		     		      
+	    		     		      insertTr += ' <td><input type=text id="source_path_'+idx+'" name="source_path_'+el.column_eng_nm+'"  value="" readonly></td>';
 	    		     		      insertTr += ' <td><select id="pre_id" onchange="preIdChange('+idx+', this.value);"><option value="">선택</option>';
 	    		     		      $.each(dpIngestAdapterItPreData, function (idx2, el2) {
 	    		     		    	  if(el2.pre_id === el.pre_id){
@@ -288,64 +289,24 @@ const dpIngestMetaTblCol = function(colData){
 	    		     		    	  }
 	    		     		      });	    		     		      
 	    		     		      insertTr += ' </select></td>';
-	    		     		      
-	    		     		      
-	    		     		      insertTr += ' <td>';
-	    		     		      if(isEmpty(colData.contents) !== ''){
-		    		     		      $.each(colData.contents, function (idx2, el2) {
-		    		     		    	 
-		    		     		    	 if(el2.column_eng_nm === el.column_eng_nm){
-		    		     		    	  insertTr += ' <input type=text id="property_type_nm_'+idx+'" name="property_type_nm" value="'+isEmpty(el2.property_type_nm)+'" readonly><input type=hidden id="property_type_'+idx+'" name="property_type" value="'+el2.property_type+'" readonly>';
-		    		     		    	 }else{
-			    		     		   // 	 insertTr += ' <input type=text id="property_type_nm_'+idx+'" name="property_type_nm" value="'+isEmpty(el.property_type_nm)+'" readonly><input type=hidden id="property_type_'+idx+'" name="property_type" value="'+el.property_type+'" readonly>';
-		    		     		    	 }
-		    		     		      });
-	    		     		      }else{
-	    		     		    	 insertTr += ' <input type=text id="property_type_nm_'+idx+'" name="property_type_nm" value="'+isEmpty(el.property_type_nm)+'" readonly><input type=hidden id="property_type_'+idx+'" name="property_type" value="'+el.property_type+'" readonly>';
-	    		     		      }
-	    		     		      insertTr += ' </td>';
-	    		     		      
-    		     //		    	  insertTr += ' <td><input type=text id="property_type_nm_'+el.column_eng_nm+'" name="property_type_nm" value="'+isEmpty(el.property_type_nm)+'" readonly><input type=hidden id="property_type_'+idx+'" name="property_type" value="'+el.property_type+'" readonly></td>';
-	    		     		      
-	    		     		      
-	    		     		      insertTr += ' <td>';
-	    		     		      if(isEmpty(colData.contents) !== ''){
-		    		     		      $.each(colData.contents, function (idx2, el2) {
-		    		     		    	 if(el2.column_eng_nm === el.column_eng_nm){
-		    		     		    	  insertTr += ' <input type=text id="pre_after_'+idx+'" name="pre_after" value="'+el2.pre_after+'" readonly>';
-		    		     		    	 }else{
-		    		     		  //  	  insertTr += ' <input type=text id="pre_after_'+idx+'" name="pre_after" value="'+isEmpty(el.pre_after)+'" readonly>';
-		    		     		    	 }
-		    		     		      });
-	    		     		      }else{
-	    		     		    	  insertTr += ' <input type=text id="pre_after_'+idx+'" name="pre_after" value="" readonly>';
-	    		     		      }
-	    		     		      insertTr += ' </td>';
-	    		     		      
-	    		     		      
-	    		     //		      insertTr += ' <td><input type=text id="pre_after_'+el.column_eng_nm+'" name="pre_after" value="'+isEmpty(el.pre_after)+'" readonly></td>';
+    		     		    	  insertTr += ' <td><input type=text id="property_type_nm_'+idx+'" name="property_type_nm_'+el.column_eng_nm+'"  value="'+isEmpty(el.property_type_nm)+'" readonly><input type=hidden id="property_type_'+idx+'" name="property_type_'+el.column_eng_nm+'"  value="'+el.property_type+'" readonly></td>';
+	    		     		      insertTr += ' <td><input type=text id="pre_after_'+idx+'" name="pre_after_'+el.column_eng_nm+'" value="'+isEmpty(el.pre_after)+'" readonly></td>';
 	    		                  insertTr += '</tr>';
 	    			  	    });
 	    			  	    
 	    			  	    $("#dpIngestAdapterItMatchList").append(insertTr);		
 	    			  	    
 				  	   	}
-				  	   	/*
-				  	   	else{
-				  	   		
-				  	 		setTimeout(function() {
-				  	 			dpIngestAdapterItMatchList();
-				  	 		}, 300);
-				  	   	}
-				  	   	*/
+				  	   	
+			  	 		setTimeout(function() {
+			  	 			mapping(colData);
+			  	 		}, 100);
 			  		
 			  	  }
 		    	  
 		    }).fail(function (error) {
 		        alert(JSON.stringify(error));
 		    });	
-		  
-		    
 		    
 }
 
