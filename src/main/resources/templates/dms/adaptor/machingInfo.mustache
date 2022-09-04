@@ -29,7 +29,7 @@
 	                <div class="right_btns">
 	                	<a class="btn btn-primary" href="javascript:openModal('apiDataSet');">API 데이터 설정 </a>
 	                	<a class="btn btn-success" href="javascript:listPage();">목록 </a>
-	                	<a class="btn btn-primary" href="javascript:dpIngestAdapterItMatchSave();">저장 </a>
+	                	<a class="btn btn-primary" href="javascript:dpIngestAdapterItMatchSave();" id="btnSave">저장 </a>
 	                </div>
 	              </div>
 				  <div class="border_rows">
@@ -247,17 +247,25 @@ const dpIngestMetaTblCol = function(colData){
 	    		     		    	  }
 	    		     		      });		     		      
 	    		     		      insertTr += ' </select></td>';
+	    		     		      
 	    		     		      insertTr += ' <td>';
-	    		     		      if(isEmpty(dpIngestAdapterItSourceData) != ''){
+	    		     		      if(isEmpty(dpIngestAdapterItSourceData) !== ''){
 		    		     		      $.each(dpIngestAdapterItSourceData, function (idx2, el2) {
+		    		     		    	 console.log('el2.source_id='+el2.source_id+', el.column_eng_nm='+el.column_eng_nm);
 		    		     		    	  if(el2.source_id === el.column_eng_nm){
-					    		     		  insertTr += ' <input type=text id="source_path_'+idx+'" name="source_path" value="'+el2.source_path+'" readonly>';
+		    		     		    		 insertTr += ' <input type=text id="source_path_'+idx+'" name="source_path" value="'+el2.source_path+'" readonly>';
+		    		     		    	  }else{
+		    		     		    	//	 insertTr += ' <input type=text id="source_path_'+idx+'" name="source_path" value="" readonly>';
 		    		     		    	  }
-		    		     		      });		     		      
+		    		     		      });	
 	    		     		      }else{
-	    		     		    	 insertTr += ' <input type=text id="source_path_'+idx+'" name="source_path" value="" readonly>';
+	    		     		    	insertTr += ' <input type=text id="source_path_'+idx+'" name="source_path" value="" readonly>';
 	    		     		      }
 	    		     		      insertTr += ' </td>';
+	    		     		      
+	    		     		      
+	    		     		  //    insertTr += ' <td><input type=text id="source_path_'+el.column_eng_nm+'" name="source_path" value="" readonly></td>';
+	    		     		      
 	    		     		      insertTr += ' <td><select id="pre_id" onchange="preIdChange('+idx+', this.value);"><option value="">선택</option>';
 	    		     		      $.each(dpIngestAdapterItPreData, function (idx2, el2) {
 	    		     		    	  if(el2.pre_id === el.pre_id){
@@ -281,28 +289,41 @@ const dpIngestMetaTblCol = function(colData){
 	    		     		      });	    		     		      
 	    		     		      insertTr += ' </select></td>';
 	    		     		      
+	    		     		      
 	    		     		      insertTr += ' <td>';
 	    		     		      if(isEmpty(colData.contents) !== ''){
 		    		     		      $.each(colData.contents, function (idx2, el2) {
+		    		     		    	 
 		    		     		    	 if(el2.column_eng_nm === el.column_eng_nm){
 		    		     		    	  insertTr += ' <input type=text id="property_type_nm_'+idx+'" name="property_type_nm" value="'+isEmpty(el2.property_type_nm)+'" readonly><input type=hidden id="property_type_'+idx+'" name="property_type" value="'+el2.property_type+'" readonly>';
+		    		     		    	 }else{
+			    		     		   // 	 insertTr += ' <input type=text id="property_type_nm_'+idx+'" name="property_type_nm" value="'+isEmpty(el.property_type_nm)+'" readonly><input type=hidden id="property_type_'+idx+'" name="property_type" value="'+el.property_type+'" readonly>';
 		    		     		    	 }
 		    		     		      });
 	    		     		      }else{
 	    		     		    	 insertTr += ' <input type=text id="property_type_nm_'+idx+'" name="property_type_nm" value="'+isEmpty(el.property_type_nm)+'" readonly><input type=hidden id="property_type_'+idx+'" name="property_type" value="'+el.property_type+'" readonly>';
 	    		     		      }
 	    		     		      insertTr += ' </td>';
+	    		     		      
+    		     //		    	  insertTr += ' <td><input type=text id="property_type_nm_'+el.column_eng_nm+'" name="property_type_nm" value="'+isEmpty(el.property_type_nm)+'" readonly><input type=hidden id="property_type_'+idx+'" name="property_type" value="'+el.property_type+'" readonly></td>';
+	    		     		      
+	    		     		      
 	    		     		      insertTr += ' <td>';
 	    		     		      if(isEmpty(colData.contents) !== ''){
 		    		     		      $.each(colData.contents, function (idx2, el2) {
 		    		     		    	 if(el2.column_eng_nm === el.column_eng_nm){
-		    		     		    	  insertTr += ' <input type=text id="pre_after_'+idx+'" name="pre_after" value="'+el2.pre_after+'" readonly></td>';
+		    		     		    	  insertTr += ' <input type=text id="pre_after_'+idx+'" name="pre_after" value="'+el2.pre_after+'" readonly>';
+		    		     		    	 }else{
+		    		     		  //  	  insertTr += ' <input type=text id="pre_after_'+idx+'" name="pre_after" value="'+isEmpty(el.pre_after)+'" readonly>';
 		    		     		    	 }
 		    		     		      });
 	    		     		      }else{
-	    		     		    	  insertTr += ' <input type=text id="pre_after_'+idx+'" name="pre_after" value="" readonly></td>';
+	    		     		    	  insertTr += ' <input type=text id="pre_after_'+idx+'" name="pre_after" value="" readonly>';
 	    		     		      }
 	    		     		      insertTr += ' </td>';
+	    		     		      
+	    		     		      
+	    		     //		      insertTr += ' <td><input type=text id="pre_after_'+el.column_eng_nm+'" name="pre_after" value="'+isEmpty(el.pre_after)+'" readonly></td>';
 	    		                  insertTr += '</tr>';
 	    			  	    });
 	    			  	    
@@ -324,7 +345,11 @@ const dpIngestMetaTblCol = function(colData){
 		        alert(JSON.stringify(error));
 		    });	
 		  
+		    
+		    
 }
+
+
 
 //Instance 매칭정보 리스트 조회
 const dpIngestAdapterItMatchList = function(){
@@ -477,62 +502,66 @@ const dpIngestAdapterItMatchSave = function(){
 		alert("ID설정을 해주세요");
 		return;
 	}
-	$.each($("#tableDpIngestAdapterItMatchList tbody tr"), function(){
-		 let itemObject = new Object();
-		 itemObject.instance_id = '{{instance_id}}';
-		 itemObject.column_eng_nm = $(this).find("#column_eng_nm").val();
-		 itemObject.column_stre_type = $(this).find("#column_stre_type").val();
-		 itemObject.source_id = $(this).find("#source_id").val();
-		 itemObject.source_path = $("#source_path_"+lengthCnt).val();
-		 itemObject.pre_nm = $(this).find("#pre_id option:checked").text();
-		 itemObject.property_type = $("#property_type_"+lengthCnt).val();
-		 itemObject.pre_after = $("#pre_after_"+lengthCnt).val();
-		 itemObject.pre_id = $(this).find("#pre_id").val();
-		 contentsData.push(itemObject);
-		 
-		 ++lengthCnt;
-	});
-	
-    const data = {
-	   		url: '/dp/ingest/adapter/instance/match/save',
-	   		instance_id: '{{instance_id}}',	
-	   		id_mix: $("#pk_data_set").val(),
-	   		dset_idntfc_id: $("#dset_idntfc_id").val(),
-	   		clct_mthd: $("#clct_mthd").val(),
-	   		clct_ty: $("#clct_ty").val(),
-	   		subfolder_yn: $("#subfolder_yn").val(),
-	   		table_eng_nm: $("#table_eng_nm").val(),
-	   		user_id: 'user00',	
-	   		menu_id: 'menu_id',
-	   		contents: contentsData,
-	    };			
-        
-    	console.log(JSON.stringify(data));
-    	
-	    $.ajax({
-	        type: 'POST',
-	        url: url+'/dpIngestAdapterItMatchSave',
-	        dataType: 'json',
-	        contentType: 'application/json; charset-utf-8',
-	        data: JSON.stringify(data)
-        }).done(function (data) {
-  	  	  if (data != null) {
-  	  		  
-    		  if(errorMsg(data)){
-  	          	 return;  
-       	  	  }	
-  	  		
-		  	   	if(data.contents != ""){    	   
-	  	   			if(data.contents[0].successYn === 'Y'){
-		  	 	  		let message = JSON.stringify(data.return_msg);
-		  		  		alert(message.replace(/\"/gi, ''));
-	  	   			}
-		  	   	}
-	  	  }
-        }).fail(function (error) {
-            alert(JSON.stringify(error));
-        });	
-	    
+	if(confirm('등록 하시겠습니까?')) {
+		
+		$.each($("#tableDpIngestAdapterItMatchList tbody tr"), function(){
+			 let itemObject = new Object();
+			 itemObject.instance_id = '{{instance_id}}';
+			 itemObject.column_eng_nm = $(this).find("#column_eng_nm").val();
+			 itemObject.column_stre_type = $(this).find("#column_stre_type").val();
+			 itemObject.source_id = $(this).find("#source_id").val();
+			 itemObject.source_path = $("#source_path_"+lengthCnt).val();
+			 itemObject.pre_nm = $(this).find("#pre_id option:checked").text();
+			 itemObject.property_type = $("#property_type_"+lengthCnt).val();
+			 itemObject.pre_after = $("#pre_after_"+lengthCnt).val();
+			 itemObject.pre_id = $(this).find("#pre_id").val();
+			 contentsData.push(itemObject);
+			 
+			 ++lengthCnt;
+		});
+		
+	    const data = {
+		   		url: '/dp/ingest/adapter/instance/match/save',
+		   		instance_id: '{{instance_id}}',	
+		   		id_mix: $("#pk_data_set").val(),
+		   		dset_idntfc_id: $("#dset_idntfc_id").val(),
+		   		clct_mthd: $("#clct_mthd").val(),
+		   		clct_ty: $("#clct_ty").val(),
+		   		subfolder_yn: $("#subfolder_yn").val(),
+		   		table_eng_nm: $("#table_eng_nm").val(),
+		   		user_id: 'user00',	
+		   		menu_id: 'menu_id',
+		   		contents: contentsData,
+		    };			
+	        
+	    	console.log(JSON.stringify(data));
+	    	
+//	    	$('#loading-image').show();
+	    	
+		    $.ajax({
+		        type: 'POST',
+		        url: url+'/dpIngestAdapterItMatchSave',
+		        dataType: 'json',
+		        contentType: 'application/json; charset-utf-8',
+		        data: JSON.stringify(data)
+	        }).done(function (data) {
+	  	  	  if (data != null) {
+	  	  		  
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+	       	  	  }	
+	  	  		
+			  	   	if(data.contents != ""){    	   
+		  	   			if(data.contents[0].successYn === 'Y'){
+			  	 	  		let message = JSON.stringify(data.return_msg);
+			  		  		alert(message.replace(/\"/gi, ''));
+		  	   			}
+			  	   	}
+		  	  }
+	        }).fail(function (error) {
+	            alert(JSON.stringify(error));
+	        });	
+	}
 }
 
 //데이터 모델 속성 정보 조회 초기화
@@ -672,6 +701,7 @@ const idSetIdMix = function(){
 
 const dpIngestAdapterItPre = function(){
 	
+	$("#divForm").empty();
     const data = {
 	   		url: '/dp/ingest/adapter/instance/pre',
 	   		user_id: 'user00',	
@@ -742,6 +772,8 @@ const dpIngestAdapterItPath = function(){
 //ID 설정 Source 조회
 const dpIngestAdapterItSource = function(){
 	
+	$("#divForm").empty();
+	
     const data = {
 	   		url: '/dp/ingest/adapter/instance/source',
 	   		instance_id: '{{instance_id}}',	
@@ -749,6 +781,8 @@ const dpIngestAdapterItSource = function(){
 	   		menu_id: 'menu_id',
 	    };		
 	    
+//    	$('#loading-image').show();
+    
 	    $.ajax({
 	        type: 'POST',
 	        url: url+'/dpIngestAdapterItSource',
@@ -771,7 +805,7 @@ const dpIngestAdapterItSource = function(){
 	    	  
 	    }).fail(function (error) {
 	        alert(JSON.stringify(error));
-	    });		
+	    });	
 	    
 	    dpIngestPopupPpPath();
 }
@@ -779,6 +813,7 @@ const dpIngestAdapterItSource = function(){
 //ID 설정 Source 조회
 const dpIngestAdapterItSource2 = function(){
 	
+	$("#divForm").empty();
     const data = {
 	   		url: '/dp/ingest/adapter/instance/source',
 	   		instance_id: '{{instance_id}}',	
@@ -864,6 +899,7 @@ const dpIngestPopupPpPathSave = function(){
 			  		  		alert(message.replace(/\"/gi, ''));
 			  		  		
 			  			    dpIngestAdapterItSource2();
+				  			dpIngestAdapterItPre();
 			  		 		setTimeout(function() {
 			  		 			
 			  					dpIngestAdapterItMatchList()
@@ -902,6 +938,8 @@ const dpIngestPopupPpPath = function(){
 	   		menu_id: 'menu_id',
 	    };		
 	    
+//    	$('#loading-image').show();
+    
 	    $.ajax({
 	        type: 'POST',
 	        url: url+'/dpIngestPopupPpPath',

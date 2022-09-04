@@ -154,6 +154,8 @@ const dpIngestAdapterStop = function(){
 				  	   	if(data.contents != ""){
 				  	   		//data.contents[0].successYn;
 				  	   		$("#startStop").html('<button class="btn btn-primary btn-sm" onclick=dpIngestAdapterStart();>시작</button>');
+				  	   		
+				  	  	 	dpIngestAdapterOperationIt();
 				  	   	}
 			  	  }
 		    }).fail(function (error) {
@@ -191,6 +193,8 @@ const dpIngestAdapterStart = function(){
 				  	   	if(data.contents != ""){
 				  	   		//data.contents[0].successYn;
 				  	   		$("#startStop").html('<button class="btn btn-primary btn-sm" onclick=dpIngestAdapterStop();>중지</button>');
+				  	   		
+				  	 	  	dpIngestAdapterOperationIt();
 				  	   	}
 			  	  }
 		    }).fail(function (error) {
@@ -237,6 +241,10 @@ const dpIngestAdapterItStop = function(instance_id){
 //Instance 수집 시작
 const dpIngestAdapterItStart = function(instance_id){
 	
+	if($("#startStop").text() === '시작'){
+		alert('Adapter 시작을 하여야 합니다.');
+		return;
+	}
 	if(confirm('시작 하시겠습니까?')) {
 	    const data = {
 		   		url: '/dp/ingest/adapter/instance/start',
