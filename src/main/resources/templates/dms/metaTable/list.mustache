@@ -56,7 +56,7 @@
 		            </div>
 		            <div class="x_content">
 	                    <div class="table_btns mt-4">
-	                    	<button class="btn btn btn-success" type="button" onclick="metaTblMakeBtn();">테이블 생성</button>
+	                    	<button class="btn btn btn-success" type="button" id="btnCreateTbl" onclick="metaTblMakeBtn();">테이블 생성</button>
 	                    	<button class="btn btn-primary" type="button" onclick="btnAdd();">추가</button>
 	                    	<button class="btn btn-danger" type="button" onclick="btnDelete();">삭제</button>
                     	</div>
@@ -318,6 +318,16 @@ let duplicateYn = '';		//중복 체크 여부
 //테이블 영문명 변경시 중복 체크 값 초기화
 $('#table_eng_nm').on('keyup', function(){
 	duplicateYn = '';
+});
+
+//테이블 생성, 테이블 수정 버튼 명칭 변경
+$(document).on('click', 'input:radio[name=tbl_chk]', function(){
+	let creat_table_at = $(this).data("createyn");
+	if(creat_table_at == 'Y'){
+		$("#btnCreateTbl").text("테이블 수정");
+	}else{
+		$("#btnCreateTbl").text("테이블 생성");
+	}
 });
 
 //분류 조회(검색 영역)
@@ -1063,6 +1073,7 @@ const dpIngestMetaTblMake = function (table_eng_nm){
 		table_eng_nm: table_eng_nm,
     };
 	
+	$('#loading-image').show();
     $.ajax({
         type: 'POST',
         url: url+'/dpIngestMetaTblMake',
@@ -1083,6 +1094,8 @@ const dpIngestMetaTblMake = function (table_eng_nm){
   		
     }).fail(function (error) {
         alert(JSON.stringify(error));
+    }).always(function(){
+    	$('#loading-image').hide();
     });	
 	
 }
@@ -1096,6 +1109,7 @@ const dpIngestMetaTblRemake = function (table_eng_nm){
 		table_eng_nm: table_eng_nm,
     };
 	
+	$('#loading-image').show();
     $.ajax({
         type: 'POST',
         url: url+'/dpIngestMetaTblRemake',
@@ -1116,6 +1130,8 @@ const dpIngestMetaTblRemake = function (table_eng_nm){
   		
     }).fail(function (error) {
         alert(JSON.stringify(error));
+    }).always(function(){
+    	$('#loading-image').hide();
     });	
 	
 }
