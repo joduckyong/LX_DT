@@ -118,6 +118,10 @@
                       <tbody id="dsetDtListPop">
                       </tbody>
                     </table>
+                    <div class="nav justify-content-center"> 
+                      <ul id="pagingul2" class="pagination">
+					  	</ul> 
+                    </div>
               	</div>
               	</div>
               </div>
@@ -399,7 +403,14 @@ const dpLoadPopupHistoryDown01 = function (log_dt) {
 }
 
 //실패건수 로그데이터 조회
-const dpLoadFaileLogList = function (log_dt) {
+const dpLoadFaileLogList = function (log_dt, page, size_per_page) {
+	
+	if(!page){
+		page = init_page;
+	}
+	if(!size_per_page){
+		size_per_page = init_size_per_page;
+	}	
 	
 	let table_idntfc_id = '{{table_idntfc_id}}';
 
@@ -418,6 +429,7 @@ const dpLoadFaileLogList = function (log_dt) {
    		user_id: 'user00',	
    		table_idntfc_id: table_idntfc_id,
    		log_dt: log_dt,
+   		page_current: String(page),
     };
 	
     $.ajax({
@@ -455,9 +467,12 @@ const dpLoadFaileLogList = function (log_dt) {
 	  	    		insertTr += '</tr>';
   	    		});
   	    		
+  	    		$("#dsetDtListPop").html(insertTr);
+  	    		
   	    	}
   	    	
-  	    	$("#dsetDtListPop").html(insertTr);
+  	    	//페이징 보여줌
+  	    	paging2(data.totalcount, size_per_page, pageCount, page);
 	  	  }
     	  
     }).fail(function (error) {
@@ -589,6 +604,11 @@ const pagingFun = function(page, size_per_page){
 	dpLoadDsetDtCall(page, size_per_page);
 }
 
+//실패 건수 모달 페이징 함수 호출
+const pagingFun2 = function(page, size_per_page){
+	dpLoadFaileLogList(page, size_per_page);
+}
+
 const dpLoadDsetDtCall = function(page, size_per_page){
 	dpLoadDsetDtCt()
 	.then(function(data){
@@ -608,9 +628,13 @@ const strToObject = function(str){
 	if(str.indexOf(",") > -1){
 		let arr = str.split(",");
 		for(let i=0; i < arr.length; i++){
-			let key = arr[i].split(":")[0];
-			let val = arr[i].split(":")[1];
+// 			let key = arr[i].split(":")[0];
+// 			let val = arr[i].split(":")[1];
+			let index = arr[i].indexOf(":");
+			let key = arr[i].slice(0, index);
+			let val = arr[i].slice(index+1);
 			obj[key] = val;
+			
 		}
 	}
 	
