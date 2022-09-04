@@ -199,7 +199,7 @@ const mapping = function(colData){
       }
      
       if(isEmpty(colData.contents) !== ''){
-	      $.each(colData.contents, function (idx2, el2) {
+	      $.each(colData.contents, function (idx, el) {
 	    	 $('input[name=property_type_nm_'+el.column_eng_nm+']').attr('value',el.property_type_nm);
 	    	 $('input[name=property_type_'+el.column_eng_nm+']').attr('value',el.property_type);
 	    	 $('input[name=pre_after_'+el.column_eng_nm+']').attr('value',el.pre_after);
