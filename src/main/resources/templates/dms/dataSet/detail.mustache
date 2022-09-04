@@ -446,6 +446,7 @@ const dpLoadFaileLogList = function (log_dt, page, size_per_page) {
    	          	 return;  
        	  	  }				
 	  		
+    		  $("#dsetDtListPop").empty();
     		let insertTr = '';
   	    	if(data.contents != ""){
   	    		$.each(data.contents, function (idx, el) {
