@@ -247,19 +247,25 @@ const dpIngestMetaTblCol = function(colData){
 	    		     		    	  }
 	    		     		      });		     		      
 	    		     		      insertTr += ' </select></td>';
-	    		     		      insertTr += ' <td>';
 	    		     		      
+	    		     		      insertTr += ' <td>';
 	    		     		      if(isEmpty(dpIngestAdapterItSourceData) !== ''){
 		    		     		      $.each(dpIngestAdapterItSourceData, function (idx2, el2) {
+		    		     		    	 console.log('el2.source_id='+el2.source_id+', el.column_eng_nm='+el.column_eng_nm);
 		    		     		    	  if(el2.source_id === el.column_eng_nm){
 		    		     		    		 insertTr += ' <input type=text id="source_path_'+idx+'" name="source_path" value="'+el2.source_path+'" readonly>';
+		    		     		    	  }else{
+		    		     		    	//	 insertTr += ' <input type=text id="source_path_'+idx+'" name="source_path" value="" readonly>';
 		    		     		    	  }
 		    		     		      });	
 	    		     		      }else{
-	    		     		          insertTr += ' <input type=text id="source_path_'+idx+'" name="source_path" value="" readonly>';
- 	    		     		      }
-	    		     		     
+	    		     		    	insertTr += ' <input type=text id="source_path_'+idx+'" name="source_path" value="" readonly>';
+	    		     		      }
 	    		     		      insertTr += ' </td>';
+	    		     		      
+	    		     		      
+	    		     		  //    insertTr += ' <td><input type=text id="source_path_'+el.column_eng_nm+'" name="source_path" value="" readonly></td>';
+	    		     		      
 	    		     		      insertTr += ' <td><select id="pre_id" onchange="preIdChange('+idx+', this.value);"><option value="">선택</option>';
 	    		     		      $.each(dpIngestAdapterItPreData, function (idx2, el2) {
 	    		     		    	  if(el2.pre_id === el.pre_id){
@@ -283,28 +289,41 @@ const dpIngestMetaTblCol = function(colData){
 	    		     		      });	    		     		      
 	    		     		      insertTr += ' </select></td>';
 	    		     		      
+	    		     		      
 	    		     		      insertTr += ' <td>';
 	    		     		      if(isEmpty(colData.contents) !== ''){
 		    		     		      $.each(colData.contents, function (idx2, el2) {
+		    		     		    	 
 		    		     		    	 if(el2.column_eng_nm === el.column_eng_nm){
 		    		     		    	  insertTr += ' <input type=text id="property_type_nm_'+idx+'" name="property_type_nm" value="'+isEmpty(el2.property_type_nm)+'" readonly><input type=hidden id="property_type_'+idx+'" name="property_type" value="'+el2.property_type+'" readonly>';
+		    		     		    	 }else{
+			    		     		   // 	 insertTr += ' <input type=text id="property_type_nm_'+idx+'" name="property_type_nm" value="'+isEmpty(el.property_type_nm)+'" readonly><input type=hidden id="property_type_'+idx+'" name="property_type" value="'+el.property_type+'" readonly>';
 		    		     		    	 }
 		    		     		      });
 	    		     		      }else{
 	    		     		    	 insertTr += ' <input type=text id="property_type_nm_'+idx+'" name="property_type_nm" value="'+isEmpty(el.property_type_nm)+'" readonly><input type=hidden id="property_type_'+idx+'" name="property_type" value="'+el.property_type+'" readonly>';
 	    		     		      }
 	    		     		      insertTr += ' </td>';
+	    		     		      
+    		     //		    	  insertTr += ' <td><input type=text id="property_type_nm_'+el.column_eng_nm+'" name="property_type_nm" value="'+isEmpty(el.property_type_nm)+'" readonly><input type=hidden id="property_type_'+idx+'" name="property_type" value="'+el.property_type+'" readonly></td>';
+	    		     		      
+	    		     		      
 	    		     		      insertTr += ' <td>';
 	    		     		      if(isEmpty(colData.contents) !== ''){
 		    		     		      $.each(colData.contents, function (idx2, el2) {
 		    		     		    	 if(el2.column_eng_nm === el.column_eng_nm){
-		    		     		    	  insertTr += ' <input type=text id="pre_after_'+idx+'" name="pre_after" value="'+el2.pre_after+'" readonly></td>';
+		    		     		    	  insertTr += ' <input type=text id="pre_after_'+idx+'" name="pre_after" value="'+el2.pre_after+'" readonly>';
+		    		     		    	 }else{
+		    		     		  //  	  insertTr += ' <input type=text id="pre_after_'+idx+'" name="pre_after" value="'+isEmpty(el.pre_after)+'" readonly>';
 		    		     		    	 }
 		    		     		      });
 	    		     		      }else{
-	    		     		    	  insertTr += ' <input type=text id="pre_after_'+idx+'" name="pre_after" value="" readonly></td>';
+	    		     		    	  insertTr += ' <input type=text id="pre_after_'+idx+'" name="pre_after" value="" readonly>';
 	    		     		      }
 	    		     		      insertTr += ' </td>';
+	    		     		      
+	    		     		      
+	    		     //		      insertTr += ' <td><input type=text id="pre_after_'+el.column_eng_nm+'" name="pre_after" value="'+isEmpty(el.pre_after)+'" readonly></td>';
 	    		                  insertTr += '</tr>';
 	    			  	    });
 	    			  	    
@@ -326,7 +345,11 @@ const dpIngestMetaTblCol = function(colData){
 		        alert(JSON.stringify(error));
 		    });	
 		  
+		    
+		    
 }
+
+
 
 //Instance 매칭정보 리스트 조회
 const dpIngestAdapterItMatchList = function(){
@@ -513,6 +536,8 @@ const dpIngestAdapterItMatchSave = function(){
 	        
 	    	console.log(JSON.stringify(data));
 	    	
+//	    	$('#loading-image').show();
+	    	
 		    $.ajax({
 		        type: 'POST',
 		        url: url+'/dpIngestAdapterItMatchSave',
@@ -676,6 +701,7 @@ const idSetIdMix = function(){
 
 const dpIngestAdapterItPre = function(){
 	
+	$("#divForm").empty();
     const data = {
 	   		url: '/dp/ingest/adapter/instance/pre',
 	   		user_id: 'user00',	
@@ -746,6 +772,8 @@ const dpIngestAdapterItPath = function(){
 //ID 설정 Source 조회
 const dpIngestAdapterItSource = function(){
 	
+	$("#divForm").empty();
+	
     const data = {
 	   		url: '/dp/ingest/adapter/instance/source',
 	   		instance_id: '{{instance_id}}',	
@@ -753,6 +781,8 @@ const dpIngestAdapterItSource = function(){
 	   		menu_id: 'menu_id',
 	    };		
 	    
+//    	$('#loading-image').show();
+    
 	    $.ajax({
 	        type: 'POST',
 	        url: url+'/dpIngestAdapterItSource',
@@ -775,7 +805,7 @@ const dpIngestAdapterItSource = function(){
 	    	  
 	    }).fail(function (error) {
 	        alert(JSON.stringify(error));
-	    });		
+	    });	
 	    
 	    dpIngestPopupPpPath();
 }
@@ -783,6 +813,7 @@ const dpIngestAdapterItSource = function(){
 //ID 설정 Source 조회
 const dpIngestAdapterItSource2 = function(){
 	
+	$("#divForm").empty();
     const data = {
 	   		url: '/dp/ingest/adapter/instance/source',
 	   		instance_id: '{{instance_id}}',	
@@ -907,6 +938,8 @@ const dpIngestPopupPpPath = function(){
 	   		menu_id: 'menu_id',
 	    };		
 	    
+//    	$('#loading-image').show();
+    
 	    $.ajax({
 	        type: 'POST',
 	        url: url+'/dpIngestPopupPpPath',
