@@ -29,13 +29,20 @@
 	                            </select>
 	                          </div>
 	                          <div class="col-md-2 pl-0">
+	                            <select class="form-control" name="search_use_at" id="search_use_at">
+	                                <option value="">사용 여부</option>
+	                                <option value="Y">예</option>
+	                                <option value="N">아니오</option>
+	                            </select>
+	                          </div>
+	                          <div class="col-md-2 pl-0">
 	                            <select class="form-control" name="search_type" id="search_type">
 	                                <option value="dset_korean_nm">데이터셋명</option>
 	                                <option value="table_korean_nm">테이블 한글명</option>
 	                                <option value="table_eng_nm">테이블 영문명</option>
 	                            </select>
 	                          </div>
-	                          <div class="col-md-4 pr-0">
+	                          <div class="col-md-2 pr-0">
 	                            <input class="form-control" type="text" name="query" id="query" onkeypress="enterkey(event);">
 	                          </div>
 	                        </div>
@@ -470,6 +477,7 @@ const dpIngestMetaTbl = function (page, size_per_page) {
 	let l_clsf = $("#l_clsf").val();
 	let m_clsf = $("#m_clsf").val();
 	let s_clsf = $("#s_clsf").val();
+	let search_use_at = $("#search_use_at").val();
 	
 	$("#query").val(query);	//검색어 갱신(검색버튼 클릭시)
 	
@@ -481,6 +489,7 @@ const dpIngestMetaTbl = function (page, size_per_page) {
    		dset_lclas: l_clsf,
    		dset_mclas: m_clsf,
    		dset_sclas: s_clsf,
+   		use_at: search_use_at,
    		page_current: String(page),
     };
 	
