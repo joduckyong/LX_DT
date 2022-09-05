@@ -1287,11 +1287,14 @@ const enterkey = function(e) {
 }
 
 // 데이터 셋 값 셋팅
-const dataSetId = function(dset_idntfc_id, dset_korean_nm){
+const dataSetId = function(obj){
 	
-	$("#dset_idntfc_id").val(dset_idntfc_id);		    
-	$("#dset_korean_nm").val(dset_korean_nm);		 
+	let rl_dset_idntfc_id = $(obj).data("idntfc_id");
+	let dset_korean_nm = $(obj).data("korean_nm");
 	
+	$("#dset_idntfc_id").val(rl_dset_idntfc_id);
+	$("#dset_korean_nm").val(dset_korean_nm);
+
 	closeModal('dataSet');
 	$('footer').show();
 	
@@ -1325,7 +1328,7 @@ const dpIngestPopupDset01 = function(){
     		     	    let insertTr = '';
     			  	    $.each(data.contents, function (idx, el) {
     		     	          insertTr += '<tr>';
-    		     		      insertTr += ' <td style="text-align: center;cursor:pointer" ondblclick=dataSetId("'+ el.rl_dset_idntfc_id +'","'+ el.dset_korean_nm +'")>'+isEmpty(el.dset_korean_nm)+'</td>';
+    		     		      insertTr += ' <td style="text-align: center;cursor:pointer" data-idntfc_id="'+el.rl_dset_idntfc_id+'" data-korean_nm="'+el.dset_korean_nm+'" ondblclick=dataSetId(this); >'+isEmpty(el.dset_korean_nm)+'</td>';
     		     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.table_korean_nm)+'</td>';
     		     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.table_eng_nm)+'</td>';
     		                  insertTr += '</tr>';
