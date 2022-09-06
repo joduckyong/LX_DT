@@ -180,6 +180,7 @@
 const commonUrl = '/common';
 const url = '/adaptor';
 
+let dpIngestMetaTblColData;
 let dpIngestAdapterItSourceData;
 let dpIngestAdapterItPreData;
 
@@ -237,7 +238,8 @@ const dpIngestMetaTblCol = function(colData){
 		    		  
 			  		
 				  	   	if(data.contents != ""){    	
-				  	   		
+				  	   		dpIngestMetaTblColData = data.contents;
+				  	   	
 	    		     	    let insertTr = '';
 	    			  	    $.each(data.contents, function (idx, el) {
 	    		     	          insertTr += '<tr>';
@@ -919,12 +921,16 @@ const dpIngestPopupPpPath = function(){
 	   		     	    let insertTr = '';
     			  	    $.each(data.contents, function (idx, el) {
     			  	    	
-	  		     	          insertTr += '<tr>';
-			     		      insertTr += ' <td><input type=checkbox name="choice_yn" id="choice_yn" value="Y" '+($("#div_"+el.source_id.replace(/\./gi, '_')+"_"+el.source_path.replace(/\./gi, '_')).val() === 'Y'?'checked':'')+'></td>';
-			     		      insertTr += ' <td><input type=hidden value='+el.source_path+' name="source_path" id="source_path" >'+el.source_path+'</td>';
-			     		      insertTr += ' <td><input type=hidden value='+el.source_id+' name="source_id" id="source_id" >'+el.source_id+'</td>';
-			                  insertTr += '</tr>';
-		    			  	    
+    			  	    	$.each(dpIngestMetaTblColData, function (idx2, el2) {
+    			  	    	  if(el2.column_eng_nm === el.source_id){
+		  		     	          insertTr += '<tr>';
+				     		      insertTr += ' <td><input type=checkbox name="choice_yn" id="choice_yn" value="Y" '+($("#div_"+el.source_id.replace(/\./gi, '_')+"_"+el.source_path.replace(/\./gi, '_')).val() === 'Y'?'checked':'')+'></td>';
+				     		      insertTr += ' <td><input type=hidden value='+el.source_path+' name="source_path" id="source_path" >'+el.source_path+'</td>';
+				     		      insertTr += ' <td><input type=hidden value='+el.source_id+' name="source_id" id="source_id" >'+el.source_id+'</td>';
+				                  insertTr += '</tr>';
+    			  	    	  }
+    			  	    	});	 
+    			  	    	
     			  	    });	  			  	    
      			  	   $("#dpIngestPopupPpPath").append(insertTr);		 
     			  	    
