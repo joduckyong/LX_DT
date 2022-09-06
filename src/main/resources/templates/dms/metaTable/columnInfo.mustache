@@ -452,9 +452,9 @@ const dpIngestMetaTblColDt = function (column_idntfc_id) {
     			$("#refrn_table_idntfc_id_nm").val(data.contents[0].refrn_table_idntfc_id_nm);
     			$("#data_type").val(data.contents[0].data_type).prop("selected", true);
     			if(data.contents[0].data_type == 'VARCHAR' || data.contents[0].data_type == 'NUMERIC'){
-    				$('#data_lt').prop('disabled', false);
+    				$('#data_lt').prop('readonly', false);
     			}else{
-    				$('#data_lt').prop('disabled', true);
+    				$('#data_lt').prop('readonly', true);
     			}
     			$("#data_lt").val(data.contents[0].data_lt);
 //     			$("#refrn_column_idntfc_id").val(data.contents[0].refrn_column_idntfc_id).prop("selected", true);
@@ -825,19 +825,19 @@ const initDetail = function(){
 	$("#data_lt").val("");
 	$("#data_lt").prop("disabled",false);
 	$("#refrn_column_idntfc_id").find("option:gt(0)").remove();
-	$("#not_null_at").val("Y").prop("selected", true);
+	$("#not_null_at").val("N").prop("selected", true);
 	$("#dset_knd").val("D").prop("selected", true);
 	$("#refrn_column_idntfc_id_eng_nm").val("");
-	$("#pk_info").val("Y").prop("selected", true);
-	$("#fk_info").val("Y").prop("selected", true);
+	$("#pk_info").val("N").prop("selected", true);
+	$("#fk_info").val("N").prop("selected", true);
 	$("#creat_table_at").val("");
 	$("#use_at").val("Y").prop("selected", true);
 	$("#column_stre_type").val("");
 	$("#column_dc").val("");
 	$("#crud_dc").val("");
 	$("#ordr").val("");
-	$("#indvdl_info_at").val("Y").prop("selected", true);
-	$("#encpt_at").val("Y").prop("selected", true);
+	$("#indvdl_info_at").val("N").prop("selected", true);
+	$("#encpt_at").val("N").prop("selected", true);
 	$("#crud_se").val("C").prop("selected", true);
   	
 }
