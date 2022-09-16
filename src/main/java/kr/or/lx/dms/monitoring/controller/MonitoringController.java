@@ -30,8 +30,13 @@ public class MonitoringController {
 	@GetMapping("/list")
 	public String list(ModelMap model) throws Exception{
 		
-		
 		return "dms/monitoring/list";
+	}	
+	
+	@GetMapping("/log")
+	public String log(ModelMap model) throws Exception{
+		
+		return "dms/monitoring/log";
 	}	
 	
 	@ResponseBody

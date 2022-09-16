@@ -5,57 +5,86 @@
 		<div class="col-md-12">
 			<div class="x_panel">
 				<div class="x_title">
-					<h2>HOME > Adapter 관리 > Instance 조회</h2>
+					<h2>HOME > 모니터링 > 로그 검색</h2>
 					<div class="clearfix"></div>
 				</div>
 				<div class="x_content">
+				    <div class="row">
+						<div class="col-md-12">
+							<div class="x_content">
+								<div class="table_btns mb-2">
+									<label style="text-align: center;color: red;">※최대 검색일은 1달을 넘을수 없습니다.</label>
+								</div>  
+							</div>
+						</div>
+				    </div>     				
 					<div class="row">
 						<div class="col-md-12">
 							<div class="x_panel">
 								<div class="x_content">
-									<div class="col-12 col-md-11">
+									<div class="col-12 col-md-10">
 										<div class="form-group row">
 											<label class="control-label">검색</label>
 											<div class="form-control_box">
-												<div class="col-md-2 pl-0">
-						                            <select class="form-control" name="l_clsf" id="l_clsf" onchange="dpCmCategory('1', this.value);">
-						                                <option value="">대분류</option>
+												<div class="col-md-4 pl-0">
+						                            <select class="form-control" name="l_clsf" id="l_clsf" >
+						                                <option value="">선택</option>
 						                            </select>
 												</div>
-												<div class="col-md-2 pl-0">
-						                            <select class="form-control" name="m_clsf" id="m_clsf" onchange="dpCmCategory('2', this.value);">
-						                                <option value="">중분류</option>
+												<div class="col-md-4 pl-0">
+						                            <select class="form-control" name="m_clsf" id="m_clsf" >
+						                                <option value="">선택</option>
+						                                <option value="">어댑터</option>
 						                            </select>
 												</div>
-												<div class="col-md-2 pl-0">
-						                            <select class="form-control" name="s_clsf" id="s_clsf" onchange="dpCmCategory('3', this.value);">
-						                                <option value="">소분류</option>
+												<div class="col-md-4 pl-0">
+						                            <select class="form-control" name="s_clsf" id="s_clsf" >
+						                                <option value="">선택</option>
+						                                <option value="">인스턴스</option>
 						                            </select>
 												</div>
-												<div class="col-md-2 pl-0">
-						                            <select class="form-control" name="search_type" id="search_type">
-						                                <option value="adapter_nm">Adapter 명</option>
-						                                <option value="instance_nm">Instance 명</option>
-						                                <option value="clct_mthd">수집 방식</option>
-						                                <option value="clct_ty">수집유형</option>
-						                                <option value="dset_korean_nm">데이터셋명</option>
-						                            </select>
+											</div>
+										</div>
+										<div class="form-group row">
+											<label class="control-label"></label>
+											<div class="form-control_box">
+												<div class="col-md-7 pl-0">
+												  <table>
+					                              <tbody> 
+					                                <tr> 
+					                                  <td>시작일&nbsp;</td>
+					                                  <td> 
+					                                    <div class="form-control_box">
+					                                      <div class="input-prepend input-group"><span class="add-on input-group-addon"><i class="fa fa-calendar"></i></span>
+					                                        <input class="form-control" id="single_cal1" type="text" name="reservation" value="">
+					                                      </div>
+					                                    </div>
+					                                  </td>
+					                                  <td>&nbsp;</td>
+					                                  <td>종료일&nbsp;</td>
+					                                  <td> 
+					                                    <div class="form-control_box">
+					                                      <div class="input-prepend input-group"><span class="add-on input-group-addon"><i class="fa fa-calendar"></i></span>
+					                                        <input class="form-control" id="single_cal2" type="text" name="reservation" value="">
+					                                      </div>
+					                                    </div>
+					                                  </td>
+					                                </tr>
+					                              </tbody>
+					                              </table>
 												</div>
-												<div class="col-md-4 pr-0">
+												<div class="col-md-5 pr-0">
 													<input class="form-control" type="text" placeholder="" id="query" onkeypress="enterkey(event);">
 												</div>
-												<div class="col-md-1 pr-0"></div>
 											</div>
 										</div>
 									</div>
-									<div class="col-12 col-md-1 btn_search_box">
-										<button class="btn btn-primary" onclick="btnSearch();">
-											<i class="glyphicon glyphicon-search"></i>
-										</button>
-									</div>
+				                    <div class="col-12 col-md-2 btn_search_box">
+				                      <button class="btn btn-primary btn_search" onclick="btnSearch();"><i class="glyphicon glyphicon-search"></i></button>
+				                    </div>									
 								</div>
 								<div class="x_title col-md-11 mb-4">
-									<h2>Instance 정보</h2>
+									<h2>적재로그</h2>
 								</div>
 								<div class="x_content">
 									<div class="table_responsive">
@@ -67,16 +96,16 @@
 											<thead>
 												<tr>
 													<th style="text-align: center;">순번</th>
-													<th style="text-align: center;">대분류</th>
-													<th style="text-align: center;">중분류</th>
-													<th style="text-align: center;">소분류</th>
-													<th style="text-align: center;">Adapter 명</th>
-													<th style="text-align: center;">Instance 명</th>
-													<th style="text-align: center;">수집방식</th>
-													<th style="text-align: center;">수집유형</th>
-													<th style="text-align: center;">데이터셋 명</th>
-													<th style="text-align: center;">수집오류</th>
+													<th style="text-align: center;">적재시간</th>
+													<th style="text-align: center;">단계</th>
+													<th style="text-align: center;">테이블</th>
+													<th style="text-align: center;">데이터 아이디</th>
 													<th style="text-align: center;">상태</th>
+													<th style="text-align: center;">어댑터 명</th>
+													<th style="text-align: center;">인스턴스 명</th>
+													<th style="text-align: center;">수신 데이터</th>
+													<th style="text-align: center;">재적재 여부</th>
+													<th style="text-align: center;">재적재 데이터</th>
 												</tr>
 											</thead>
 											<tbody id="dpIngestItSeach">
@@ -103,7 +132,7 @@
 
 <script>
 const commonUrl = '/common';
-const url = '/adaptor';
+const url = '/monitoring';
 
 let init_page = 1;				//초기 페이지
 let page = 1;					//페이지
@@ -171,74 +200,6 @@ const dpCmCategory = function (clsf_type, clsf_id) {
     }).fail(function (error) {
         alert(JSON.stringify(error));
     });	
-}
-
-//수집방식
-const dpCmCodesClctMthdInput = function (group_code) {
-	
-    const data = {
-   		url: '/dp/cm/codes/clct_mthd?group_code='+group_code,
-    };		
-    
-    $.ajax({
-        type: 'POST',
-        url: commonUrl+'/dpCmCodesClctMthdInput',
-        dataType: 'json',
-        contentType: 'application/json; charset-utf-8',
-        data: JSON.stringify(data)
-    }).done(function (data) {
-	  	  if (data != null) {
-	  		  
-    		  if(errorMsg(data)){
-  	          	 return;  
-       	  	  }	
-	  		
-		  	   	if(data.contents != ""){    	   
-	    	   		 $.each(data.contents, function (idx, el) {
-		    	   		 $("#divForm").append($("<input type='hidden' value='"+el.dtl_code_nm+"' id='"+el.dtl_code+"'>"));
-		    	   		 
-		    	   		 dpCmCodesClctTyInput(el.etc_code);
-	 	     	     });
-		  	   	}
-	  	  }
-    }).fail(function (error) {
-        alert(JSON.stringify(error));
-    });
-    
-}
-
-//수집유형
-const dpCmCodesClctTyInput = function (group_code) {
-	
-    const data = {
-   		url: '/dp/cm/codes/clct_ty?group_code='+group_code,
-    };		
-    
-    $.ajax({
-        type: 'POST',
-        url: commonUrl+'/dpCmCodesClctTyInput',
-        dataType: 'json',
-        contentType: 'application/json; charset-utf-8',
-        data: JSON.stringify(data)
-    }).done(function (data) {
-    	
-	  	  if (data != null) {
-	  		  
-    		  if(errorMsg(data)){
-  	          	 return;  
-       	  	  }	
-	  		
-		  	   	if(data.contents != ""){    	    	
-	    	   		 $.each(data.contents, function (idx, el) {
-	    	   			$("#divForm").append($("<input type='hidden' value='"+el.dtl_code_nm+"' id='"+el.dtl_code+"'>"));
-	 	     	     });
-		  	   	}
-	  	  }
-    	  
-    }).fail(function (error) {
-        alert(JSON.stringify(error));
-    });
-    
 }
 
 const dpIngestItSeach = function(page, size_per_page){
@@ -330,11 +291,6 @@ const dpIngestItSeach = function(page, size_per_page){
     });	
 }
 
-//수집오류 바로가기
-const errorPage = function(instance_id){
-	location.href="/collectionError/detail/"+instance_id;
-}
-
 //페이징 함수 호출
 const pagingFun = function(page, size_per_page){
 	dpIngestItSeach(page, size_per_page);
@@ -354,13 +310,7 @@ const enterkey = function(e) {
     }
 }
 
-//분류 조회
-dpCmCategory();
 
-//수집방식
-dpCmCodesClctMthdInput('D34');
-
-setTimeout(btnSearch, 300);
 </script>
 
 

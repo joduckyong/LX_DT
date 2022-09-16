@@ -12,7 +12,7 @@
                   <div class="progress_tab">
                     <div class="tab_item" id="tab-0">
                       <div class="row">
-                        <div class="col-12 col-md-4 mx-0">
+                        <div class="col-12 col-md-6 mx-0">
                           <h4 class="center_title">수집현황
 							<select class="" id="daytype" name="daytype" onchange="dpCmMoniteringIngest(this.value);">
 								<option value="M">월</option>
@@ -41,7 +41,7 @@
                             </table>
                           </div>                          
                         </div>
-                        <div class="col-12 col-md-4 mx-0">
+                        <div class="col-12 col-md-6 mx-0" id="divPieChart1">
                           <h4 class="center_title">수집동작현황(Adapter)</h4>
                           <canvas id="pieChart1"></canvas>
 						  <div class="table_responsive scroll_y">
@@ -65,7 +65,7 @@
                             </table>
                           </div>                              
                         </div>
-                        <div class="col-12 col-md-4 mx-0">
+                        <div class="col-12 col-md-6 mx-0" id="divPieChart2" style="display:none;">
                           <h4 class="center_title">수집동작현황(Instance)</h4>
                           <canvas id="pieChart2"></canvas>
 						  <div class="table_responsive scroll_y">
@@ -95,6 +95,15 @@
                         </div>
                       </div>
                       
+					  <div class="row">
+						<div class="col-md-12">
+							<div class="x_content">
+								<div class="table_btns mb-2">
+									<button class="btn btn-success" onclick="logPage();">로그 바로가기</button>
+								</div>  
+							</div>
+						</div>
+					  </div>                  
                       <div class="row">
                         <div class="col-12 col-md-12 mx-0">
                           <div class="table_responsive scroll_y">
@@ -259,7 +268,30 @@ const barChart = function(chartTitle, data1, data2, data3){
 		                }
 		            }
 		        ]
-		    }
+		    },
+		    onClick: (e) => {
+		    	/*
+				 var activePoints = myChart.getElementsAtEvent(e);
+				 if(activePoints.length > 0)
+				 {
+				     //get the internal index of slice in pie chart
+				     var clickedElementindex = activePoints[0]["_index"];
+				
+				     //get specific label by index 
+				     var label = myChart.data.labels[clickedElementindex];
+				     console.log('label:'+label);
+				     
+				     //get value by index      
+				     var value = myChart.data.datasets[0].data[clickedElementindex];
+				     var value1 = myChart.data.datasets[1].data[clickedElementindex];
+				     var value2 = myChart.data.datasets[2].data[clickedElementindex];
+				     // label and value Process
+				     console.log('value:'+value);			     
+				     console.log('value1:'+value1);			     
+				     console.log('value2:'+value2);			     
+				}
+				 */
+		    }    
 		}
 	});
 }
@@ -303,6 +335,28 @@ const pieChart1 = function(datas){
 		                }
 		            }
 		        ]
+		    },
+		    onClick: (e) => {
+				 var activePoints = myChart.getElementsAtEvent(e);
+//				 console.log('activePoints:'+activePoints);
+				 if(activePoints.length > 0)
+				 {
+				     //get the internal index of slice in pie chart
+				     var clickedElementindex = activePoints[0]["_index"];
+				
+				     //get specific label by index 
+				     var label = myChart.data.labels[clickedElementindex];
+				     console.log('label:'+label);
+				     
+				     //get value by index      
+				     var value = myChart.data.datasets[0].data[clickedElementindex];
+				     // label and value Process
+				     console.log('value:'+value);			     
+				     
+			    	$("#divPieChart1").hide();
+			    	$("#divPieChart2").show();
+				     
+				}
 		    }
 		}
 	});
@@ -349,10 +403,34 @@ const pieChart2 = function(datas){
 		                }
 		            }
 		        ]
+		    },
+/*		    
+		    onClick: (e) => {
+				 var activePoints = myChart.getElementsAtEvent(e);
+				 if(activePoints.length > 0)
+				 {
+				     //get the internal index of slice in pie chart
+				     var clickedElementindex = activePoints[0]["_index"];
+				
+				     //get specific label by index 
+				     var label = myChart.data.labels[clickedElementindex];
+				     console.log('label:'+label);
+				     
+				     //get value by index      
+				     var value = myChart.data.datasets[0].data[clickedElementindex];
+				     // label and value Process
+				     console.log('value:'+value);			     
+				     
+			    	$("#divPieChart1").show();
+			    	$("#divPieChart2").hide();
+				     
+				}
 		    }
+*/		    
 		}
 	});
 }
+
 
 //데이터로그 상세팝업
 const dpCmMoniteringLogsPopup = function(id, log_type){
@@ -560,6 +638,11 @@ const dpCmMoniteringIngest = function(daytype){
 	    }).fail(function (error) {
 	        alert(JSON.stringify(error));
 	    });			
+}
+
+//로그 바로가기
+const logPage = function(){
+	location.href = url + "/log";
 }
 
 //수집현황
