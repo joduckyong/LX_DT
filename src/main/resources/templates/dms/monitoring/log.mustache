@@ -27,20 +27,20 @@
 											<label class="control-label">검색</label>
 											<div class="form-control_box">
 												<div class="col-md-4 pl-0">
-						                            <select class="form-control" name="l_clsf" id="l_clsf" >
+						                            <select class="form-control" name="log_type" id="log_type" onchange="selLogType(this.value)">
+						                                <option value="">선택</option>
+						                                <option value="load_log">적재로그</option>
+						                                <option value="error_log">에러로그</option>
+						                            </select>
+												</div>
+												<div class="col-md-4 pl-0">
+						                            <select class="form-control" name="adapter_id" id="adapter_id" onchange="dpCmMonitoringLogsIt(this.value);">
 						                                <option value="">선택</option>
 						                            </select>
 												</div>
 												<div class="col-md-4 pl-0">
-						                            <select class="form-control" name="m_clsf" id="m_clsf" >
+						                            <select class="form-control" name="instance_id" id="instance_id">
 						                                <option value="">선택</option>
-						                                <option value="">어댑터</option>
-						                            </select>
-												</div>
-												<div class="col-md-4 pl-0">
-						                            <select class="form-control" name="s_clsf" id="s_clsf" >
-						                                <option value="">선택</option>
-						                                <option value="">인스턴스</option>
 						                            </select>
 												</div>
 											</div>
@@ -104,8 +104,8 @@
 													<th style="text-align: center;">어댑터 명</th>
 													<th style="text-align: center;">인스턴스 명</th>
 													<th style="text-align: center;">수신 데이터</th>
-													<th style="text-align: center;">재적재 여부</th>
-													<th style="text-align: center;">재적재 데이터</th>
+													<th style="text-align: center;display:none;" class="logTypeView">재적재 여부</th>
+													<th style="text-align: center;display:none;" class="logTypeView">재적재 데이터</th>
 												</tr>
 											</thead>
 											<tbody id="dpIngestItSeach">
@@ -140,21 +140,18 @@ let init_size_per_page = 10;	//초기 개수
 let size_per_page = 10;	 		//가져올 개수
 let pageCount = 10;		 		//페이징에 나타낼 페이지 수
 
-//분류 조회(검색 영역)
-const dpCmCategory = function (clsf_type, clsf_id) {
-	
-	let paramStr = '';
-	if(clsf_id){
-		paramStr = 'clsf_id='+clsf_id;
-	}
+//적재로그 어댑터 리스트
+const dpCmMonitoringLogsAdapter = function () {
 	
 	const data = {
-   		url: '/dp/cm/category?'+paramStr,
+   		url: '/dp/cm/monitoring/logs/adapter',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',   		
     };
 	
     $.ajax({
         type: 'POST',
-        url: commonUrl+'/dpCmCategory',
+        url: url+'/dpCmMonitoringLogsAdapter',
         dataType: 'json',
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify(data)
@@ -162,39 +159,18 @@ const dpCmCategory = function (clsf_type, clsf_id) {
     	
 	  	  if (data != null) {
 	  		  
-    		  if(errorMsg(data)){
-  	          	 return;  
-       	  	  }	
+    		if(errorMsg(data)){
+  	           return;  
+       	  	}	
 	  		
-	  		 if(clsf_type == '1'){	//대분류 선택시
-		  		$("#m_clsf option:gt(0)").remove();
-		  		$("#s_clsf option:gt(0)").remove();
-		  	  }else if(clsf_type == '2'){	//중분류 선택시
-		  		$("#s_clsf option:gt(0)").remove();
-		  	  }else if(clsf_type == '3'){	//소분류 선택시
-		  	  }else{	//초기 호출
-		  		$("#l_clsf option:gt(0)").remove();
-		  		$("#m_clsf option:gt(0)").remove();
-		  		$("#s_clsf option:gt(0)").remove();
-		  	  }
   	    	if(data.contents != ""){
   	    		let insertTr = '';
 		  	    $.each(data.contents, function (idx, el) {
-		  	    	insertTr += '<option value="'+el.clsf_id+'">'+el.clsf_nm+'</option>';
+		  	    	insertTr += '<option value="'+el.adapter_id+'">'+el.adapter_nm+'</option>';
 		  	    });
-		  	  if(clsf_type == '1'){	//대분류 선택시
-		  		if(clsf_id){
-		  	  		$("#m_clsf").append(insertTr);
-		  		}
-		  	  }else if(clsf_type == '2'){	//중분류 선택시
-		  		if(clsf_id){
-		  			$("#s_clsf").append(insertTr);
-		  		}
-		  	  }else if(clsf_type == '3'){	//소분류 선택시
-		  	  }else{
-		  		$("#l_clsf").append(insertTr);
-		  	  }
+		  	  	$("#adapter_id").append(insertTr);
   	    	}
+  	    	
 	  	  }
     	  
     }).fail(function (error) {
@@ -202,7 +178,49 @@ const dpCmCategory = function (clsf_type, clsf_id) {
     });	
 }
 
-const dpIngestItSeach = function(page, size_per_page){
+//적재로그 인스턴스 리스트
+const dpCmMonitoringLogsIt = function (adapter_id) {
+	
+	$("#instance_id").empty();
+	
+	const data = {
+   		url: '/dp/cm/monitoring/logs/instance',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',   		
+   		adapter_id: adapter_id,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpCmMonitoringLogsIt',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		  
+    		if(errorMsg(data)){
+  	           return;  
+       	  	}	
+	  		
+    		let insertTr = '<option value="">선택</option>';
+  	    	if(data.contents != ""){
+		  	    $.each(data.contents, function (idx, el) {
+		  	    	insertTr += '<option value="'+el.instance_id+'">'+el.instance_nm+'</option>';
+		  	    });
+  	    	}
+	  	  	$("#instance_id").append(insertTr);
+  	    	
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//적재로그 검색
+const dpCmMonitoringLogsList = function(page, size_per_page){
 	
 	if(!page){
 		page = init_page;
@@ -213,33 +231,26 @@ const dpIngestItSeach = function(page, size_per_page){
 	
 	console.log('page : '+page+' , size_per_page : '+size_per_page );
 	
-	let search_type = $("#search_type").val();
-	let l_clsf = $("#l_clsf").val();
-	let m_clsf = $("#m_clsf").val();
-	let s_clsf = $("#s_clsf").val();
-	let query = $("#query").data("search");
-	$("#query").val(query);	//검색어 갱신(검색버튼 클릭시)
-	
 	const data = {
-   		url: '/dp/ingest/instance/search',
+   		url: '/dp/cm/monitoring/logs/list',
    		user_id: 'user00',	
    		menu_id: 'menu_id',
-   		search_type: search_type,
-   		search: query,
-   		dset_lclas: l_clsf,
-   		dset_mclas: m_clsf,
-   		dset_sclas: s_clsf,
+   		log_type: $("#log_type").val(),
+   		adapter_id: $("#adapter_id").val(),
+   		instance_id: $("#instance_id").val(),
+   		start_date: $("#single_cal1").val(),
+   		end_date: $("#single_cal2").val(),
    		page_current: page,
     };		
     $.ajax({
         type: 'POST',
-        url: url+'/dpIngestItSeach',
+        url: url+'/dpCmMonitoringLogsList',
         dataType: 'json',
         contentType: 'application/json; charset-utf-8',
         data: JSON.stringify(data)
     }).done(function (data) {
     	
-		  $("#dpIngestItSeach").empty();
+		  $("#dpCmMonitoringLogsList").empty();
 	  	  if (data != null) {
 	  		  
     		  if(errorMsg(data)){
@@ -255,30 +266,22 @@ const dpIngestItSeach = function(page, size_per_page){
 		  	    $.each(data.contents, function (idx, el) {
 
 	     	          insertTr += '<tr>';
-	     		      insertTr += '	<td style="text-align: center;">'+(++i)+'</td>';
-	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.l_code_nm)+'</td>';
-	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.m_code_nm)+'</td>';
-	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.s_code_nm)+'</td>';
-	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.adapter_nm)+'</td>';
+	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.id)+'</td>';
+	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.log_dt)+'</td>';
+	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.step)+'</td>';
+	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.st_datamodel)+'</td>';
+	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.data_id)+'</td>';
+	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.log_desc)+'</td>';
+	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.adapter_nm)+'</td>';
 	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.instance_nm)+'</td>';
-	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.clct_mthd)+'</td>';
-	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.clct_ty)+'</td>';
-	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.dset_korean_nm)+'</td>';
-	     		      if( el.error_yn == 'Y'){
-	     		  	    insertTr += ' <td style="text-align: center;">';
-	     		  	    insertTr += '	<button class="btn btn-sm btn-primary" onclick=errorPage("'+ el.instance_id +'")>바로가기</button>';
-	     		    	insertTr += ' </td>';	
-	     		      }else{
-	     		  	    insertTr += ' <td style="text-align: center;"></td>';	
-	     		      }
-	     		      if( el.active_yn === 'Y'){
-		                  insertTr += ' <td style="text-align: center;">실행</td>';
-	     		      }else{
-		                  insertTr += ' <td style="text-align: center;">중지</td>';
+	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.data_before)+'</td>';
+	     		      if( $("#log_type").val() == 'error_log'){
+	     		    	 insertTr += ' <td style="text-align: center;">'+isEmpty(el.process_yn)+'</td>';
+	     		    	 insertTr += ' <td style="text-align: center;">'+isEmpty(el.data_after)+'</td>';
 	     		      }
 	                  insertTr += '</tr>';
 		  	    });
-          	    $("#dpIngestItSeach").append(insertTr);
+          	    $("#dpCmMonitoringLogsList").append(insertTr);
   	    	}
   	    	
   	    	//페이징 보여줌
@@ -291,16 +294,23 @@ const dpIngestItSeach = function(page, size_per_page){
     });	
 }
 
+//로그 선택 유무
+const selLogType = function(log_type){
+	if(log_type == 'load_log'){
+		$('.logTypeView').hide();
+	}else if(log_type == 'error_log'){
+		$('.logTypeView').show();
+	}
+}
+
 //페이징 함수 호출
 const pagingFun = function(page, size_per_page){
-	dpIngestItSeach(page, size_per_page);
+	dpCmMonitoringLogsList(page, size_per_page);
 }
 
 //검색 버튼
 const btnSearch = function(){
-	let query = $("#query").val();
-	$("#query").data("search", query);
-	dpIngestItSeach();
+	dpCmMonitoringLogsList();
 }
 
 //엔터키가 눌렸을 때
@@ -310,7 +320,10 @@ const enterkey = function(e) {
     }
 }
 
+//적재로그 어댑터 리스트
+dpCmMonitoringLogsAdapter();
 
+//setTimeout(dpCmMonitoringLogsList, 300);
 </script>
 
 

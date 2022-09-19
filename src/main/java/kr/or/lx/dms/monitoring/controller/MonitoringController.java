@@ -33,6 +33,12 @@ public class MonitoringController {
 		return "dms/monitoring/list";
 	}	
 	
+	@GetMapping("/serverStatus")
+	public String serverStatus(ModelMap model) throws Exception{
+		
+		return "dms/monitoring/serverStatus";
+	}	
+	
 	@GetMapping("/log")
 	public String log(ModelMap model) throws Exception{
 		

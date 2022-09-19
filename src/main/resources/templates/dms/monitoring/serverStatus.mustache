@@ -1,0 +1,461 @@
+{{>layout/header}}
+
+<div class="right_col" role="main">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="x_panel">
+				<div class="x_content">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="x_panel">
+								<div class="x_title col-md-11 mb-4">
+									<h2>서버현황</h2>
+								</div>							
+								<div class="x_content">
+									<div class="col-12 col-md-11">
+										<div class="form-group row">
+											<label class="control-label">검색</label>
+											<div class="form-control_box">
+												<div class="col-md-3 pl-0">
+													<select class="form-control" id="search_type">
+														<option value="">선 택</option>
+														<option value="Y">사용</option>
+														<option value="N">미사용</option>
+													</select>
+												</div>											
+												<div class="col-md-9 pr-0">
+												</div>
+												<div class="col-md-1 pr-0"></div>
+											</div>
+										</div>
+									</div>
+									<div class="col-12 col-md-1 btn_search_box">
+										<button class="btn btn-primary" onclick="btnSearch();">
+											<i class="glyphicon glyphicon-search"></i>
+										</button>
+									</div>
+								</div>
+								<div class="col-md-11 mb-4">
+								</div>
+								<div class="clearfix col-md-1">
+									<button class="btn btn-sm btn-primary col-md" onclick="openModal();">등록</button>
+								</div>
+								<div class="x_content">
+									<div class="table_responsive">
+										<div class="talbel_total mb-2">총<span id="total_count"></span>건</div>
+										<table class="table table-bordered bulk_action table_center">
+											<colgroup>
+												<col width="10%">
+												<col width="35%">
+												<col width="25%">
+												<col width="10%">
+												<col width="10%">
+												<col width="10%">
+											</colgroup>
+											<thead>
+												<tr>
+													<th style="text-align: center;">순번</th>
+													<th style="text-align: center;">서버명칭</th>
+													<th style="text-align: center;">IP</th>
+													<th style="text-align: center;">PORT</th>
+													<th style="text-align: center;">상태</th>
+													<th style="text-align: center;">사용여부</th>
+												</tr>
+											</thead>
+											<tbody id="dpIngestPre">
+											</tbody>
+										</table>
+					                    <div class="nav justify-content-center"> 
+										  <ul id="pagingul" class="pagination">
+										  </ul>                    
+					                    </div>    
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+        <div class="modal fade add_modal" id="add_modal" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-lg" style="max-width: 1000px;">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h2 class="modal-title" id="myModalLabel"><span id="modelLabel">서버 등록</span></h2>
+                <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
+              </div>
+              <div class="modal-body">
+				<div class="x_content">
+                  <div class="cont_title_box">
+                    <h3></h3>
+                    <div class="right_btns">
+                    	<a class="btn btn-primary" id="btnAdd" href="javascript:dpIngestAdapterItSave('A');">저장 </a>
+                    	<a class="btn btn-success" id="btnUpdate" href="javascript:dpIngestAdapterItSave('U');">수정 </a>
+                    	<a class="btn btn-danger"  id="btnDel" href="javascript:dpIngestAdapterItDelChk();">삭제 </a>
+                    </div>
+                  </div>
+                  <div class="border_rows">
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label" style="text-align: center;">서버 명칭</div>
+                        <div class="form-control_box">
+							<input class="form-control" type="text" id="server_nm" name="server_nm" >                      
+                        </div>
+                      </div>
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label" style="text-align: center;">상태</div>
+                        <div class="form-control_box">
+                            <select class="form-control" id="use_yn" name="use_yn">
+                            </select>                          
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label" style="text-align: center;">IP</div>
+                        <div class="form-control_box">
+                        	<input class="form-control" type="text" id="ip" name="ip" oninput="this.value = this.value.replace(/[^0-9.]/g, '');">                 
+                        </div>
+                      </div>
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label" style="text-align: center;">PORT</div>
+	 				    <div class="form-control_box">
+                            <input class="form-control" type="text" id="port" name="port" oninput="this.value = this.value.replace(/[^0-9]/g, '');">                 
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label" style="text-align: center;">사용여부</div>
+                        <div class="form-control_box">
+                            <select class="form-control" id="use_yn" name="use_yn" disabled>
+                            	<option value="Y">사용</option>
+                            	<option value="N">미사용</option>
+                            </select>                          
+                        </div>
+                      </div>
+                    </div>                    
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <input type="hidden" name="seq" id="seq">
+        
+{{>layout/footer}}
+
+<script>
+const commonUrl = '/common';
+const url = '/monitoring';
+
+let init_page = 1;				//초기 페이지
+let page = 1;					//페이지
+let init_size_per_page = 10;	//초기 개수
+let size_per_page = 10;	 		//가져올 개수
+let pageCount = 10;		 		//페이징에 나타낼 페이지 수
+
+//헬스체크 리스트
+const dpCmMonitoringHealthList = function(page, size_per_page){
+	
+	if(!page){
+		page = init_page;
+	}
+	if(!size_per_page){
+		size_per_page = init_size_per_page;
+	}
+	
+	const data = {
+   		url: '/dp/cm/monitoring/health/list',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+   		use_yn: $("#search_type").val(),
+   		page_current: page,
+    };		
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpCmMonitoringHealthList',
+        dataType: 'json',
+        contentType: 'application/json; charset-utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+		  $("#dpCmMonitoringHealthList").empty();
+	  	  if (data != null) {
+	  		  
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
+	  		
+  	    	$("#total_count").text(data.total_count);
+  	    	
+  	    	if(data.contents != ""){
+  	    		
+	     	    let insertTr = '';
+		  	    $.each(data.contents, function (idx, el) {
+
+	     	          insertTr += '<tr style="cursor:pointer;" onclick=detailModal("'+el.seq+'");>';
+	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.seq)+'</td>';
+	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.server_nm)+'</td>';
+	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.ip)+'</td>';
+	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.port)+'</td>';
+	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.status)+'</td>';
+	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.use_yn)+'</td>';
+	                  insertTr += '</tr>';
+		  	    });
+          	    $("#dpCmMonitoringHealthList").append(insertTr);
+  	    	}
+  	    	
+  	    	//페이징 보여줌
+  	    	paging(data.total_count, size_per_page, pageCount, page);
+  	    	
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//헬스체크 상세
+const dpCmMonitoringHealthDt = function(){
+	
+    const data = {
+	   		url: '/dp/cm/monitoring/health/detail',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',
+	   		seq: $("#seq").val(),	
+	    };		
+	    
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpCmMonitoringHealthDt',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+		  	  if (data != null) {
+		  		  
+	    		  if(errorMsg(data)){
+	  	          	 return;  
+        	  	  }	
+		  		
+			  	  if(data.contents != ""){    	
+				   	$("#server_nm").val(data.contents[0].server_nm);
+				   	$("#ip").val(data.contents[0].ip);
+				   	$("#port").val(data.contents[0].port);
+				   	$("#status").val(data.contents[0].status);
+				   	$("#use_yn").val(data.contents[0].use_yn);
+			  	  }
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });
+}
+
+//헬스체크 등록
+const dpCmMonitoringHealthSave = function(){
+	
+    if($("#server_nm").val() == '') {
+        alert('서버 명칭을 입력하세요!');
+        $("#server_nm").focus();
+        return;
+    }
+    if($("#ip").val() == '') {
+        alert('IP를 입력하세요!');
+        $("#ip").focus();
+        return;
+    }
+    if($("#port").val() == '') {
+        alert('PORT를 입력하세요!');
+        $("#port").focus();
+        return;
+    }
+    
+	const data = {
+	   		url: '/dp/cm/monitoring/health/save',
+	   		server_nm: $("#server_nm").val(),	
+	   		ip: $("#ip").val(),	
+	   		port: $("#port").val(),	
+	   		use_yn: 'Y',	
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',
+	    };		
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpCmMonitoringHealthUpdate',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	  		
+	  	    if(errorMsg(data)){
+		    	return;  
+	   	    }	
+	    	
+	  		let message = JSON.stringify(data.return_msg);
+	  		alert(message.replace(/\"/gi, ''));
+	  		dpCmMonitoringHealthList();
+	    	
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });		
+}
+
+//헬스체크 수정
+const dpCmMonitoringHealthUpdate = function(){
+	
+	const data = {
+	   		url: '/dp/cm/monitoring/health/update',
+	   		seq: $("#seq").val(),	
+	   		server_nm: $("#server_nm").val(),	
+	   		ip: $("#ip").val(),	
+	   		port: $("#port").val(),	
+	   		use_yn: $("#use_yn").val(),	
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',
+	    };		
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpCmMonitoringHealthUpdate',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	  		
+	  	    if(errorMsg(data)){
+		    	return;  
+	   	    }	
+	    	
+	  		let message = JSON.stringify(data.return_msg);
+	  		alert(message.replace(/\"/gi, ''));
+	  		dpCmMonitoringHealthList();
+	    	
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });		
+}
+
+//헬스체크 삭제
+const dpCmMonitoringHealthDel = function(){
+	
+	const data = {
+	   		url: '/dp/cm/monitoring/health/delete',
+	   		seq: $("#seq").val(),	
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',
+	    };		
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpCmMonitoringHealthDel',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	  		
+	  	    if(errorMsg(data)){
+		    	return;  
+	   	    }	
+	    	
+	  		let message = JSON.stringify(data.return_msg);
+	  		alert(message.replace(/\"/gi, ''));
+	  		dpCmMonitoringHealthList();
+	    	
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });		
+}
+
+//헬스체크 체크(상태업데이트)
+const dpCmMonitoringHealthChk = function(){
+	
+	const data = {
+	   		url: '/dp/cm/monitoring/health/chk',
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	   	
+	   		seq: $("#seq").val(),
+	    };		
+	    
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpCmMonitoringHealthChk',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	
+		  	  if (data != null) {
+		  		  
+        		  if(errorMsg(data)){
+	          	 	 return;  
+          	  	  }		  
+        		  
+       	    	  if(data.contents != ""){
+         	    		
+         	      }
+          	    	
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });	
+}
+
+//검색 버튼
+const btnSearch = function(){
+	dpCmMonitoringHealthList();
+}
+
+//엔터키가 눌렸을 때
+const enterkey = function(e) {
+	if (e.keyCode == 13) {
+		btnSearch();
+    }
+}
+
+//페이징 함수 호출
+const pagingFun = function(page, size_per_page){
+	dpCmMonitoringHealthList(page, size_per_page);
+}
+
+//모달 열기
+const openModal = function(modalId){
+	
+	$("#modelLabel").text("서버 등록");
+	$("#btnAdd").show();
+	$("#btnUpdate").hide();
+	$("#btnDel").hide();
+	$("#use_yn").prop('disabled',true);
+	
+	$('#add_modal').modal('show');
+	
+}
+
+//모달 수정
+const detailModal = function(seq){
+	
+	$("#modelLabel").text("서버 상세");
+	$("#btnAdd").hide();
+	$("#btnUpdate").show();
+	$("#btnDel").show();	
+	$('#add_modal').modal('show');
+	$("#seq").val(seq);
+	$("#server_nm").val("");
+	$("#port").val("");
+	$("#status").val("");
+	$("#use_yn").prop('disabled',false);
+	
+	dpCmMonitoringHealthDt();
+}
+
+dpCmMonitoringHealthList();
+</script>
+
+
+

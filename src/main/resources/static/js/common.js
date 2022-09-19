@@ -83,6 +83,9 @@ function errorMsg(data){
 	if(data.status === 500){
 		alert(JSON.stringify(data.error).replace(/\"/gi, ''));
 		return true;
+	}else if(data.status === 404){
+		alert(JSON.stringify(data.error).replace(/\"/gi, ''));
+		return true;
 	}else if(isEmpty(data.return_code).indexOf("40") >= 0){
 		alert(JSON.stringify(data.return_msg).replace(/\"/gi, ''));
 		return true;
