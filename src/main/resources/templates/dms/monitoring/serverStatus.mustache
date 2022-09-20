@@ -62,7 +62,7 @@
 													<th style="text-align: center;">사용여부</th>
 												</tr>
 											</thead>
-											<tbody id="dpIngestPre">
+											<tbody id="dpCmMonitoringHealthList">
 											</tbody>
 										</table>
 					                    <div class="nav justify-content-center"> 
@@ -93,9 +93,9 @@
                   <div class="cont_title_box">
                     <h3></h3>
                     <div class="right_btns">
-                    	<a class="btn btn-primary" id="btnAdd" href="javascript:dpIngestAdapterItSave('A');">저장 </a>
-                    	<a class="btn btn-success" id="btnUpdate" href="javascript:dpIngestAdapterItSave('U');">수정 </a>
-                    	<a class="btn btn-danger"  id="btnDel" href="javascript:dpIngestAdapterItDelChk();">삭제 </a>
+                    	<a class="btn btn-primary" id="btnAdd" href="javascript:dpCmMonitoringHealthSave();">저장 </a>
+                    	<a class="btn btn-success" id="btnUpdate" href="javascript:dpCmMonitoringHealthUpdate();">수정 </a>
+                    	<a class="btn btn-danger"  id="btnDel" href="javascript:dpCmMonitoringHealthDel();">삭제 </a>
                     </div>
                   </div>
                   <div class="border_rows">
@@ -109,7 +109,7 @@
                       <div class="form-group row col-12 col-md-6">
                         <div class="control-label" style="text-align: center;">상태</div>
                         <div class="form-control_box">
-                            <select class="form-control" id="use_yn" name="use_yn">
+                            <select class="form-control" id="status" name="status">
                             </select>                          
                         </div>
                       </div>
@@ -210,10 +210,12 @@ const dpCmMonitoringHealthList = function(page, size_per_page){
 	                  insertTr += '</tr>';
 		  	    });
           	    $("#dpCmMonitoringHealthList").append(insertTr);
+          	    
   	    	}
-  	    	
   	    	//페이징 보여줌
-  	    	paging(data.total_count, size_per_page, pageCount, page);
+  	    	if(isEmpty(data.total_count) !== ''){
+	  	    	paging(data.total_count, size_per_page, pageCount, page);
+  	    	}
   	    	
 	  	  }
     	  

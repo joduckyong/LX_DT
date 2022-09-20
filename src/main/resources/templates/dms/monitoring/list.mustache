@@ -225,6 +225,76 @@
           </div>
         </div>        
         
+        <div class="modal fade add_modal" id="server_start_modal" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-md">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel"><span id="modelLabel">동작현황</span></h4>
+                <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
+              </div>
+              <div class="modal-body">
+                <div class="x_content"> 
+                  <div class="table_responsive" style="height: 300px; overflow: auto">
+                    <table class="table table-striped">
+                      <colgroup> 
+                        <col width="60%">
+                        <col width="40%">
+                      </colgroup>
+                      <thead>
+                        <tr> 
+                          <th style="text-align: center;">서버 명칭</th>
+                          <th style="text-align: center;">상태</th>
+                        </tr>
+                      </thead>
+                      <tbody id="dpCmMonitoringHealthStart">
+                      </tbody>
+                    </table>
+                    <div class="nav justify-content-center"> 
+                      <ul id="pagingul" class="pagination">
+					  	</ul> 
+                    </div>                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>   
+        
+        <div class="modal fade add_modal" id="server_end_modal" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-md">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel"><span id="modelLabel">중지현황</span></h4>
+                <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
+              </div>
+              <div class="modal-body">
+                <div class="x_content"> 
+                  <div class="table_responsive" style="height: 300px; overflow: auto">
+                    <table class="table table-striped">
+                      <colgroup> 
+                        <col width="60%">
+                        <col width="40%">
+                      </colgroup>
+                      <thead>
+                        <tr> 
+                          <th style="text-align: center;">서버 명칭</th>
+                          <th style="text-align: center;">상태</th>
+                        </tr>
+                      </thead>
+                      <tbody id="dpCmMonitoringHealthStop">
+                      </tbody>
+                    </table>
+                    <div class="nav justify-content-center"> 
+                      <ul id="pagingul2" class="pagination">
+					  	</ul> 
+                    </div>                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>   
+        
 {{>layout/footer}}        
 
 <script>
@@ -505,6 +575,30 @@ const pieChart3 = function(datas){
 		            }
 		        ]
 		    },
+		    onClick: (e) => {
+				 var activePoints = myChart.getElementsAtEvent(e);
+				 if(activePoints.length > 0)
+				 {
+				     //get the internal index of slice in pie chart
+				     var clickedElementindex = activePoints[0]["_index"];
+				
+				     //get specific label by index 
+				     var label = myChart.data.labels[clickedElementindex];
+				     console.log('label:'+label);
+				     
+				     //get value by index      
+				     var value = myChart.data.datasets[0].data[clickedElementindex];
+				     // label and value Process
+				     console.log('value:'+value);			     
+				     
+				     if(label == '동작건수'){
+				    	 dpCmMonitoringHealthStart();
+				     }else if(label == '중지건수'){
+				    	 dpCmMonitoringHealthStop();
+				     }
+				}
+		    }		    
+		    
 		}
 	});
 }
@@ -689,6 +783,8 @@ const dpCmMonitoringHealthStatus = function(){
 //헬스체크 동작
 const dpCmMonitoringHealthStart = function(page, size_per_page){
 	
+	$('#server_start_modal').modal('show');
+	
 	if(!page){
 		page = init_page;
 	}
@@ -743,6 +839,8 @@ const dpCmMonitoringHealthStart = function(page, size_per_page){
 
 //헬스체크 중지
 const dpCmMonitoringHealthStop = function(page, size_per_page){
+	
+	$('#server_end_modal').modal('show');
 	
 	if(!page){
 		page = init_page;
@@ -843,10 +941,10 @@ const dpCmMonitoringIngestYear = function(moniteringYear){
     			  	    	let load_count = isEmpty(el.load_count) === '' ? 0:isEmpty(el.load_count);
     			  	    	let error_count = isEmpty(el.error_count) === '' ? 0:isEmpty(el.error_count);
     			  	    	
-    			  	    	insertTh += '<th>'+year_month+'</th>';
-    			  	    	insertTd1 += '<td>'+ingest_count+'</td>';
-    			  	    	insertTd2 += '<td>'+load_count+'</td>';
-    			  	    	insertTd3 += '<td>'+error_count+'</td>';
+    			  	    	insertTh += '<th style="text-align: center;">'+year_month+'</th>';
+    			  	    	insertTd1 += '<td style="text-align: center;">'+ingest_count+'</td>';
+    			  	    	insertTd2 += '<td style="text-align: center;">'+load_count+'</td>';
+    			  	    	insertTd3 += '<td style="text-align: center;">'+error_count+'</td>';
     			  	    	
     			  	    	chartTitle.push(year_month);
     			  	    	
@@ -1092,6 +1190,10 @@ dpCmMonitoringYear();
 
 //수집동작현황
 dpCmMoniteringStatus();
+
+//헬스체크 상태
+dpCmMonitoringHealthStatus();
+
 //데이터로그
 dpCmMoniteringLogs();
 

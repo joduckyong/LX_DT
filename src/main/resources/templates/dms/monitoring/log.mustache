@@ -22,66 +22,60 @@
 						<div class="col-md-12">
 							<div class="x_panel">
 								<div class="x_content">
-									<div class="col-12 col-md-10">
+									<div class="col-12 col-md-11">
 										<div class="form-group row">
 											<label class="control-label">검색</label>
 											<div class="form-control_box">
-												<div class="col-md-4 pl-0">
+												<div class="col-md-2 pl-0">
 						                            <select class="form-control" name="log_type" id="log_type" onchange="selLogType(this.value)">
-						                                <option value="">선택</option>
+						                            	<option value="">선택</option>
 						                                <option value="load_log">적재로그</option>
 						                                <option value="error_log">에러로그</option>
 						                            </select>
 												</div>
-												<div class="col-md-4 pl-0">
+												<div class="col-md-2 pl-0">
 						                            <select class="form-control" name="adapter_id" id="adapter_id" onchange="dpCmMonitoringLogsIt(this.value);">
 						                                <option value="">선택</option>
 						                            </select>
 												</div>
-												<div class="col-md-4 pl-0">
+												<div class="col-md-2 pl-0">
 						                            <select class="form-control" name="instance_id" id="instance_id">
 						                                <option value="">선택</option>
 						                            </select>
 												</div>
-											</div>
-										</div>
-										<div class="form-group row">
-											<label class="control-label"></label>
-											<div class="form-control_box">
-												<div class="col-md-7 pl-0">
+												<div class="col-md-6 pl-0">
 												  <table>
 					                              <tbody> 
 					                                <tr> 
 					                                  <td>시작일&nbsp;</td>
 					                                  <td> 
 					                                    <div class="form-control_box">
-					                                      <div class="input-prepend input-group"><span class="add-on input-group-addon"><i class="fa fa-calendar"></i></span>
+					                                      <!-- div class="input-prepend input-group"><span class="add-on input-group-addon"><i class="fa fa-calendar"></i></span>
+					                                      </div-->
 					                                        <input class="form-control" id="single_cal1" type="text" name="reservation" value="">
-					                                      </div>
 					                                    </div>
 					                                  </td>
 					                                  <td>&nbsp;</td>
 					                                  <td>종료일&nbsp;</td>
 					                                  <td> 
 					                                    <div class="form-control_box">
-					                                      <div class="input-prepend input-group"><span class="add-on input-group-addon"><i class="fa fa-calendar"></i></span>
+					                                      <!-- div class="input-prepend input-group"><span class="add-on input-group-addon"><i class="fa fa-calendar"></i></span>
+					                                      </div-->
 					                                        <input class="form-control" id="single_cal2" type="text" name="reservation" value="">
-					                                      </div>
 					                                    </div>
 					                                  </td>
 					                                </tr>
 					                              </tbody>
 					                              </table>
 												</div>
-												<div class="col-md-5 pr-0">
-													<input class="form-control" type="text" placeholder="" id="query" onkeypress="enterkey(event);">
-												</div>
 											</div>
 										</div>
 									</div>
-				                    <div class="col-12 col-md-2 btn_search_box">
-				                      <button class="btn btn-primary btn_search" onclick="btnSearch();"><i class="glyphicon glyphicon-search"></i></button>
-				                    </div>									
+									<div class="col-1 col-md-1 btn_search_box">
+										<button class="btn btn-primary" onclick="btnSearch();">
+											<i class="glyphicon glyphicon-search"></i>
+										</button>
+									</div>							
 								</div>
 								<div class="x_title col-md-11 mb-4">
 									<h2>적재로그</h2>
@@ -222,6 +216,7 @@ const dpCmMonitoringLogsIt = function (adapter_id) {
 //적재로그 검색
 const dpCmMonitoringLogsList = function(page, size_per_page){
 	
+	
 	if(!page){
 		page = init_page;
 	}
@@ -230,6 +225,37 @@ const dpCmMonitoringLogsList = function(page, size_per_page){
 	}
 	
 	console.log('page : '+page+' , size_per_page : '+size_per_page );
+	
+	let date1 = new Date($("#single_cal1").val().substring(0,4), $("#single_cal1").val().substring(4,6), $("#single_cal1").val().substring(6,8));
+	let date2 = new Date($("#single_cal2").val().substring(0,4), $("#single_cal2").val().substring(4,6), $("#single_cal2").val().substring(6,8));
+
+	let elapsedMSec = date2.getTime() - date1.getTime(); // 172800000
+	let elapsedDay = elapsedMSec / 1000 / 60 / 60 / 24; // 2
+
+	console.log('=='+elapsedDay);
+	
+	var date = new Date();
+	
+	if($("#log_type").val() == ''){
+		alert("로그종류를 선택해주세요!");
+		return;
+	}	
+	if($("#single_cal1").val() > getDateStr(date)){
+		alert("시작일이 현재날짜 이후로 선택할수없습니다.");
+		return;
+	}
+	if($("#single_cal2").val() > getDateStr(date)){
+		alert("시작일이 현재날짜 이후로 선택할수없습니다.");
+		return;
+	}
+	if($("#single_cal1").val() >= $("#single_cal2").val()){
+		alert("시작일이 종료일 보다 작은 날짜를 선택해주세요!");
+		return;
+	}
+	if(elapsedDay > 30){
+		alert("최대 검색일은 1달을 넘을수 없습니다.");
+		return;
+	}
 	
 	const data = {
    		url: '/dp/cm/monitoring/logs/list',
@@ -313,16 +339,11 @@ const btnSearch = function(){
 	dpCmMonitoringLogsList();
 }
 
-//엔터키가 눌렸을 때
-const enterkey = function(e) {
-	if (e.keyCode == 13) {
-		btnSearch();
-    }
-}
 
 //적재로그 어댑터 리스트
 dpCmMonitoringLogsAdapter();
 
+prevDay(-31, 0, 'single_cal1','single_cal2');
 //setTimeout(dpCmMonitoringLogsList, 300);
 </script>
 
