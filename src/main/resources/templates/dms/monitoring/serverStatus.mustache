@@ -303,8 +303,9 @@ const dpCmMonitoringHealthSave = function(){
 	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));
+	  		$('#add_modal').modal('hide');
 	  		dpCmMonitoringHealthList();
-	    	
+	  		
 	    }).fail(function (error) {
 	        alert(JSON.stringify(error));
 	    });		
@@ -337,6 +338,7 @@ const dpCmMonitoringHealthUpdate = function(){
 	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));
+	  		$('#add_modal').modal('hide');
 	  		dpCmMonitoringHealthList();
 	    	
 	    }).fail(function (error) {
@@ -367,6 +369,7 @@ const dpCmMonitoringHealthDel = function(){
 	    	
 	  		let message = JSON.stringify(data.return_msg);
 	  		alert(message.replace(/\"/gi, ''));
+	  		$('#add_modal').modal('hide');
 	  		dpCmMonitoringHealthList();
 	    	
 	    }).fail(function (error) {
