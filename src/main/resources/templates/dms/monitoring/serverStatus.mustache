@@ -45,9 +45,9 @@
 										<div class="talbel_total mb-2">총<span id="total_count"></span>건</div>
 										<table class="table table-bordered bulk_action table_center">
 											<colgroup>
-												<col width="10%">
-												<col width="35%">
-												<col width="25%">
+												<col width="20%">
+												<col width="30%">
+												<col width="20%">
 												<col width="10%">
 												<col width="10%">
 												<col width="10%">
@@ -110,6 +110,8 @@
                         <div class="control-label" style="text-align: center;">상태</div>
                         <div class="form-control_box">
                             <select class="form-control" id="status" name="status">
+                            	<option value="Y" selected>Y</option>
+                            	<option value="N">N</option>                            
                             </select>                          
                         </div>
                       </div>
@@ -202,7 +204,7 @@ const dpCmMonitoringHealthList = function(page, size_per_page){
 
 	     	          insertTr += '<tr style="cursor:pointer;" onclick=detailModal("'+el.seq+'");>';
 	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.seq)+'</td>';
-	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.server_nm)+'</td>';
+	                  insertTr += ' <td style="text-align: left;">'+isEmpty(el.server_nm)+'</td>';
 	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.ip)+'</td>';
 	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.port)+'</td>';
 	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.status)+'</td>';
@@ -433,6 +435,10 @@ const openModal = function(modalId){
 	$("#btnAdd").show();
 	$("#btnUpdate").hide();
 	$("#btnDel").hide();
+	
+	$("#server_nm").val("");
+	$("#ip").val("");
+	$("#port").val("");
 	$("#use_yn").prop('disabled',true);
 	
 	$('#add_modal').modal('show');
@@ -449,6 +455,7 @@ const detailModal = function(seq){
 	$('#add_modal').modal('show');
 	$("#seq").val(seq);
 	$("#server_nm").val("");
+	$("#ip").val("");
 	$("#port").val("");
 	$("#status").val("");
 	$("#use_yn").prop('disabled',false);
