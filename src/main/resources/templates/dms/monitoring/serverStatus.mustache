@@ -215,9 +215,7 @@ const dpCmMonitoringHealthList = function(page, size_per_page){
           	    
   	    	}
   	    	//페이징 보여줌
-  	    	if(isEmpty(data.total_count) !== ''){
-	  	    	paging(data.total_count, size_per_page, pageCount, page);
-  	    	}
+  	    	paging(data.total_count, size_per_page, pageCount, page);
   	    	
 	  	  }
     	  
