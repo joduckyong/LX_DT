@@ -32,7 +32,7 @@
 	                            			
 								<div class="x_content">
 									<div class="table_responsive" style="height: 185px; overflow: auto">
-										<table class="table table-striped" style="width: 100%">
+										<table class="table table-striped tableData" style="width: 100%">
 											<colgroup>
 												<col width="15px">
 												<col width="30px">
@@ -65,7 +65,7 @@
 								</div>
 								<div class="x_content">
 									<div class="table_responsive" style="height: 260px; overflow: auto">
-										<table class="table table-striped" style="width: 100%">
+										<table class="table table-striped tableData" style="width: 100%">
 											<colgroup>
 											</colgroup>
 											<thead>
@@ -105,7 +105,7 @@
 									</div>
 									<div class="table_responsive"
 										style="height: 185px; overflow: auto">
-										<table class="table table-striped" style="width: 100%">
+										<table class="table table-striped tableData" style="width: 100%">
 											<colgroup>
 											</colgroup>
 											<thead>
@@ -130,7 +130,7 @@
 									</div>
 									<div class="table_responsive"
 										style="height: 185px; overflow: auto">
-										<table class="table table-striped" style="width: 100%">
+										<table class="table table-striped tableData" style="width: 100%">
 											<colgroup>
 											</colgroup>
 											<thead>
@@ -155,7 +155,7 @@
 								<div class="x_content">
 									<div class="table_responsive"
 										style="height: 193px; overflow: auto">
-										<table class="table table-striped" style="width: 100%">
+										<table class="table table-striped tableData" style="width: 100%">
 											<colgroup>
 												<col width="23px">
 												<col width="23px">
@@ -183,8 +183,8 @@
 						<div class="metatable_box col-12 col-lg-12" >
 							<div class="right_btns mt-4">
 								<button class="btn btn-primary" id="btnSave" style="display:none;" onclick="agentRecvData('S');">저장</button>
-								<button class="btn btn-primary" id="btnAdd" style="display:none;" onclick="agentRecvData('A');">추가</button>
-								<button class="btn btn-primary" id="btnUp"  style="display:none;" onclick="agentRecvData('U');">갱신</button>
+								<!-- button class="btn btn-primary" id="btnAdd" style="display:none;" onclick="agentRecvData('A');">추가</button>
+								<button class="btn btn-primary" id="btnUp"  style="display:none;" onclick="agentRecvData('U');">갱신</button-->
 								<button class="btn btn-primary" id="btnMove" style="display:none;" onclick="agentRecvDataMov();">이동</button>
 							</div>
 						</div>
@@ -427,7 +427,7 @@ const receiveCol = function(len, trf_zip_file, file_nm, recv_zip_file){
 	    	$.each(el.col_info, function (idx2, el2) {
 	    		if(isEmpty(el2.file_col_nm) !== ''){
 					insertTr += '<tr id="tr'+isEmpty(el2.file_col_nm)+'">';
-					insertTr += '	<td style="text-align: left;cursor:pointer;" ><span draggable="true" ondragstart="drag(event)" id="'+isEmpty(el2.file_col_nm)+'">'+isEmpty(el2.file_col_nm)+'</span></td>';
+					insertTr += '	<td style="text-align: left;cursor:pointer;" ><span draggable="true" ondragstart="drag(event)" id='+isEmpty(el2.file_col_nm)+'>'+isEmpty(el2.file_col_nm)+'</span></td>';
 					insertTr += '</tr>';
 	    		}
 	    	});
@@ -449,6 +449,7 @@ const receiveCol = function(len, trf_zip_file, file_nm, recv_zip_file){
 			$("#fileList").html(insertTr);        	
     	
 			//수집 테이블 목록
+			/*
 			$("#agentRecvLocalTable").empty();  
 			if(isEmpty(el.table_nm) !== ""){
 			    insertTr = '';
@@ -470,11 +471,11 @@ const receiveCol = function(len, trf_zip_file, file_nm, recv_zip_file){
 				insertTr += '</tr>';
 			   	$("#agentRecvLocalTable").html(insertTr);    				
 			}
+			*/
 			
-			
-    		$("#target_folder_nm").val("");
-    		$("#dirName").text("");
-    		
+    //		$("#target_folder_nm").val("");
+    //		$("#dirName").text("");
+    /*		
 	    	if(isEmpty(el.mapped_col_info) !== ''){
 	    		
 	    		dataList = el.mapped_col_info;
@@ -525,7 +526,6 @@ const receiveCol = function(len, trf_zip_file, file_nm, recv_zip_file){
 	    				insertTr += '</tr>';
 		    	}); 	    	
 	   	    	$("#agentRecvLocalCol").html(insertTr);
-	   	    	
 	    	}else{
 	    		
 	    		if(method_cd === 'A01003'){
@@ -540,6 +540,14 @@ const receiveCol = function(len, trf_zip_file, file_nm, recv_zip_file){
 		    		$("#btnMove").hide();   
 	    		}
 	    	}
+	    	*/
+    		if(method_cd === 'A01003'){
+	    		$("#btnSave").hide();
+	    		$("#btnMove").show();   
+    		}else{
+	    		$("#btnSave").show();
+	    		$("#btnMove").hide();   
+    		}
     	
     	}
     });
@@ -645,6 +653,14 @@ const drop= function(dropevent) {
 //데이터 이동
 const agentRecvDataMov = function(){
 	
+	if($("#file_nm").val() == ""){
+		alert("파일목록을 선택하세요!");
+		return;
+	}
+	if($("#target_folder_nm").val() == ""){
+		alert("디렉토리 지정하세요!");
+		return;
+	}
 	const data = {
 	   		url: '/recv/data/mov',
 	   		user_id: 'user00',
