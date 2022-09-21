@@ -91,7 +91,6 @@
 												<tr>
 													<th style="text-align: center;">순번</th>
 													<th style="text-align: center;">적재시간</th>
-													<th style="text-align: center;">단계</th>
 													<th style="text-align: center;">테이블</th>
 													<th style="text-align: center;">데이터 아이디</th>
 													<th style="text-align: center;">상태</th>
@@ -102,7 +101,7 @@
 													<th style="text-align: center;display:none;" class="logTypeView">재적재 데이터</th>
 												</tr>
 											</thead>
-											<tbody id="dpIngestItSeach">
+											<tbody id="dpCmMonitoringLogsList">
 											</tbody>
 										</table>
 					                    <div class="nav justify-content-center"> 
@@ -122,6 +121,86 @@
 </div>
 <div id="divForm"></div>
 
+        <!-- modal -->        
+		<div class="modal fade add_modal" id="log_modal" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-lg" style="max-width: 800px;">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h2 class="modal-title" id="myModalLabel"><span id="modelLabel">로그상세</span></h2>
+                <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
+              </div>
+              <div class="modal-body">
+				<div class="x_content">
+                  <div class="border_rows">
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-12">
+                        <div class="control-label" style="text-align: center;">적재시간</div>
+                        <div class="form-control_box" style="text-align: center;"><span id="log_dt_txt"></span></div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label" style="text-align: center;">Adapter명</div>
+                        <div class="form-control_box"><span id="adapter_nm_txt"></span></div>
+                      </div>
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label" style="text-align: center;">인스턴스명</div>
+                        <div class="form-control_box"><span id="instance_nm_txt"></span></div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label" style="text-align: center;">수집방식</div>
+                        <div class="form-control_box"><span id="clct_mthd_txt"></span></div>
+                      </div>
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label" style="text-align: center;">수집유형</div>
+	  					   <div class="form-control_box"><span id="clct_ty_txt"></span></div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label" style="text-align: center;">상태</div>
+                        <div class="form-control_box"><span id="log_desc_txt"></span></div>
+                      </div>
+                      <div class="form-group row col-12 col-md-6">
+                        <div class="control-label" style="text-align: center;">적재테이블</div>
+	 					   <div class="form-control_box"><span id="st_datamodel_txt"></span></div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-12">
+                        <div class="control-label" style="text-align: center;">수신데이터</div>
+                        <div class="form-control_box"><textarea id="data_before_txt" style="height: 140px;width:600px;"></textarea></div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group row col-12 col-md-12">
+                        <div class="control-label" style="text-align: center;">데이터아이디</div>
+                        <div class="form-control_box"><span id="payload_txt"></span></div>
+                      </div>
+                    </div>
+                    
+                    <div class="row error">
+                      <div class="form-group row col-12 col-md-12">
+                        <div class="control-label" style="text-align: center;">재적재</div>
+	 					   <div class="form-control_box"><span id="process_yn_txt"></span></div>
+                      </div>
+                    </div>
+                    <div class="row error">
+                      <div class="form-group row col-12 col-md-12">
+                        <div class="control-label" style="text-align: center;">재적재 데이터</div>
+                        <div class="form-control_box"><textarea id="data_after_txt" style="height: 140px;width:600px;"></textarea></div>
+                      </div>
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>  
+        
 {{>layout/footer}}
 
 <script>
@@ -133,6 +212,72 @@ let page = 1;					//페이지
 let init_size_per_page = 10;	//초기 개수
 let size_per_page = 10;	 		//가져올 개수
 let pageCount = 10;		 		//페이징에 나타낼 페이지 수
+
+$('#log_modal').modal('show');
+
+//데이터로그 상세팝업
+const dpCmMoniteringLogsPopup = function(id, log_type){
+	
+	$('#log_modal').modal('show');
+	
+	$("#log_dt_txt").text("");
+  	$("#adapter_nm_txt").text("");
+  	$("#instance_nm_txt").text("");
+  	$("#clct_mthd_txt").text("");
+  	$("#clct_ty_txt").text("");
+  	$("#log_desc_txt").text("");
+  	$("#st_datamodel_txt").text("");
+  	$("#data_before_txt").text("");
+  	$("#payload_txt").text("");
+  	$("#process_yn_txt").text("");
+  	$("#data_after_txt").text("");
+  	   	
+    const data = {
+	   		url: '/dp/cm/monitoring/logs/popup',
+	   		id: id,	
+	   		log_type: log_type,	
+	   		user_id: 'user00',	
+	   		menu_id: 'menu_id',	 
+	    };		
+	    
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/dpCmMoniteringLogsPopup',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+		  	  if (data != null) {
+		  		  
+       			if(errorMsg(data)){
+           			return;  
+          		}	
+	  		
+		  	   	if(data.contents != ""){    	
+			  	   	$("#log_dt_txt").text(isEmpty(data.contents[0].log_dt));
+			  	   	$("#adapter_nm_txt").text(isEmpty(data.contents[0].adapter_nm));
+			  	   	$("#instance_nm_txt").text(isEmpty(data.contents[0].instance_nm));
+			  	   	$("#clct_mthd_txt").text(isEmpty(data.contents[0].clct_mthd));
+			  	   	$("#clct_ty_txt").text(isEmpty(data.contents[0].clct_ty));
+			  	   	$("#log_desc_txt").text(isEmpty(data.contents[0].log_desc));
+			  	   	$("#st_datamodel_txt").text(isEmpty(data.contents[0].st_datamodel));
+			  	   	$("#data_before_txt").text(isEmpty(data.contents[0].data_before));
+			  	   	$("#payload_txt").text(isEmpty(data.contents[0].payload));
+			  	   	
+			  	   	if(log_type == 'connectivity_log'){
+			  	   		$(".error").hide();
+			  	   	}else{
+				  	   	$("#process_yn_txt").text(isEmpty(data.contents[0].process_yn));
+				  	   	$("#data_after_txt").text(isEmpty(data.contents[0].data_after));				  	   		
+			  	   		$(".error").show();
+			  	   	}
+		  	   	}
+		  	 }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });			
+}
 
 //적재로그 어댑터 리스트
 const dpCmMonitoringLogsAdapter = function () {
@@ -291,10 +436,9 @@ const dpCmMonitoringLogsList = function(page, size_per_page){
 	     	    let i = 0;	
 		  	    $.each(data.contents, function (idx, el) {
 
-	     	          insertTr += '<tr>';
+	     	          insertTr += '<tr style="cursor:pointer" onclick=dpCmMoniteringLogsPopup('+isEmpty(el.id)+','+isEmpty(el.log_type)+')>';
 	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.id)+'</td>';
 	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.log_dt)+'</td>';
-	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.step)+'</td>';
 	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.st_datamodel)+'</td>';
 	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.data_id)+'</td>';
 	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.log_desc)+'</td>';
