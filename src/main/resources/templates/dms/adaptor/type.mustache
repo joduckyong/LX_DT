@@ -403,11 +403,12 @@ const dpIngestItPpType = function(adapter_type_id){
 		  		
 		  	   	if(data.contents != ""){    	
 	  			    $.each(data.contents, function (idx, el) {
-	  			    		
-	  			    		let clct_mthd = el.clct_mthd;
-	  			    		let clct_ty = el.clct_ty;
-	  			    		let connect_id = el.connect_id;
+  			    		let clct_mthd = el.clct_mthd;
+  			    		let clct_ty = el.clct_ty;
+  			    		let connect_id = el.connect_id;
+  			    		if($("#clct_mthd_"+adapter_type_id).val() == clct_mthd && $("#clct_ty_"+adapter_type_id).val() == clct_ty){
 	  			    		dpIngestItPpInfo(clct_mthd, clct_ty, connect_id);
+  			    		}
 	  			    	
 	  			    });
 			  	}

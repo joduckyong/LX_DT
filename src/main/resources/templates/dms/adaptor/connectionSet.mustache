@@ -98,11 +98,11 @@
                     </div>                    
                     <table class="table table-striped" id="tbDpIngestAdapterItPp">
                       <colgroup> 
-                        <col width="9px">                      
-                        <col width="17px">                      
-                        <col width="17px">                      
-                        <col width="40px">                      
-                        <col width="17px" class="type1">                      
+                        <col>                      
+                        <col>                      
+                        <col>                      
+                        <col>                      
+                        <col class="type1">                      
                       </colgroup>
                       <thead>
                         <tr> 
@@ -294,7 +294,7 @@ const connectionSetAdd = function(){
 	    insertTr += ' <td><input type=text value="" id="item" name="item"></td>';
 	    insertTr += ' <td><input type=text value="" id="item_nm" name="item_nm"></td>';
 	    insertTr += ' <td><input type=text value="" id="item_value" name="item_value"></td>';
-	    insertTr += ' <td class=type2>';
+	    insertTr += ' <td class=type1>';
 	    insertTr += ' <input type=text value="" id="item_described" name="item_described">';
 	    insertTr += ' <input type=hidden value="N" id="change_able_yn" name="change_able_yn">';
 	    insertTr += ' <input type=hidden value="'+lengthCnt2+'" id="display_seq" name="display_seq">';
@@ -303,6 +303,13 @@ const connectionSetAdd = function(){
         insertTr += '</tr>';
   	    $("#dpIngestAdapterItPp").append(insertTr);
   	    
+   		if($("#clct_mthd").val() === 'D34003'){
+  			$(".type1").hide();
+   			$(".type2").show();
+   		}else{
+   			$(".type1").show();
+   			$(".type2").hide();
+   		}  	    
 }
 
 //Adapter 유형별 접속정보 조회
