@@ -180,7 +180,7 @@ const dpCmMonitoringHealthList = function(page, size_per_page){
    		user_id: 'user00',	
    		menu_id: 'menu_id',
    		use_yn: $("#search_type").val(),
-   		page_current: page,
+   		page_current: String(page),
     };		
     $.ajax({
         type: 'POST',
