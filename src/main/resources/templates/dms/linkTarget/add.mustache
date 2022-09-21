@@ -193,7 +193,7 @@
 						                        		<td><input type="text" value="" disabled="disabled"></td>
 						                        		<td><input type="text" value="rowsOfPage" disabled="disabled"></td>
 						                        		<td><input type="text" value="페이지 표시줄" disabled="disabled"></td>
-						                        		<td><input type="text" value="" id="rowsOfPageTest" oninput="handleOnInputNumber(this);"></td>
+						                        		<td><input type="text" value="10" id="rowsOfPageTest" oninput="handleOnInputNumber(this);"></td>
 						                        	</tr>
 						                        	<tr class="cnd_default" id="paging_default2" style="display: none;">
 						                        		<td><input type="checkbox" disabled="disabled"></td>
@@ -203,7 +203,7 @@
 						                        		<td><input type="text" value="" disabled="disabled"></td>
 						                        		<td><input type="text" value="nowPageNum" disabled="disabled"></td>
 						                        		<td><input type="text" value="현재 페이지" disabled="disabled"></td>
-						                        		<td><input type="text" value="" id="nowPageNumTest" oninput="handleOnInputNumber(this);"></td>
+						                        		<td><input type="text" value="1" id="nowPageNumTest" oninput="handleOnInputNumber(this);"></td>
 						                        	</tr>
 						                        	<tr class="cnd_default">
 						                        		<td><input type="checkbox" disabled="disabled"></td>
@@ -1214,8 +1214,8 @@ const init = function(){
 	$("#cndList tr#paging_default1").hide();
 	$("#cndList tr#paging_default2").hide();
 	$("#pgngYn").prop("checked", false);
-	$("#rowsOfPageTest").val('');
-	$("#nowPageNumTest").val('');
+	$("#rowsOfPageTest").val('10');
+	$("#nowPageNumTest").val('1');
 	
 	/*정렬순서 초기화*/
 	$("#sortList").empty();

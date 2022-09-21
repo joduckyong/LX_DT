@@ -27,7 +27,7 @@
 	              <div class="cont_title_box">
 	                <h3></h3>
 	                <div class="right_btns">
-	                	<a class="btn btn-primary" href="javascript:openModal('apiDataSet');">API 데이터 설정 </a>
+	                	<a class="btn btn-primary apiDataSetView" href="javascript:openModal('apiDataSet');">API 데이터 설정 </a>
 	                	<a class="btn btn-success" href="javascript:listPage();">목록 </a>
 	                	<a class="btn btn-primary" href="javascript:dpIngestAdapterItMatchSave();" id="btnSave">저장 </a>
 	                </div>
@@ -54,7 +54,7 @@
 					<table class="table table-bordered bulk_action table_center" id="tableDpIngestAdapterItMatchList">
                       <colgroup> 
                       </colgroup>
-                      <thead>
+                      <thead id="apiDataSetGrid">
                         <tr> 
                           <th colspan="2">데이터 모델</th>
                           <th colspan="2">Source</th>
@@ -268,7 +268,9 @@ const dpIngestMetaTblCol = function(colData){
 	    		     		    	  }
 	    		     		      });		     		      
 	    		     		      insertTr += ' </select></td>';
-	    		     		      insertTr += ' <td><input type=text id="source_path_'+idx+'" name="source_path_'+el.column_eng_nm+'"  value="" readonly></td>';
+	    		     		      if($("#clct_mthd").val() === 'D34001' && $("#clct_ty").val() === 'D35001'){
+	    		     		      	insertTr += ' <td class="apiDataSetView"><input type=text id="source_path_'+idx+'" name="source_path_'+el.column_eng_nm+'"  value="" readonly></td>';
+	    		     		      }
 	    		     		      insertTr += ' <td><select id="pre_id" onchange="preIdChange('+idx+', this.value);"><option value="">선택</option>';
 	    		     		      $.each(dpIngestAdapterItPreData, function (idx2, el2) {
 	    		     		    	  if(el2.pre_id === el.pre_id){
@@ -432,6 +434,44 @@ const dpIngestAdapterItMatch = function(){
 			  	   		$("#api_mix").val(data.contents[0].api_mix);
 			  	   		$("#table_idntfc_id").val(data.contents[0].table_idntfc_id);
 			  	   		
+			  	   		if($("#clct_mthd").val() === 'D34001' && $("#clct_ty").val() === 'D35001'){
+			  	   			$(".apiDataSetView").show();
+			  	   			
+			  	   			let thData = '<tr>';
+			  	   				thData += '	<th colspan="2">데이터 모델</th>';
+			  	   				thData += '	<th colspan="2">Source</th>';
+			  	   				thData += '	<th colspan="3">전처리</th>';
+			  	   				thData += '</tr>';
+			  	   				thData += '<tr>';
+			  	   				thData += '	<th>속성ID</th>';
+			  	   				thData += '	<th>속성값</th>';
+			  	   				thData += '	<th>ID</th>';
+			  	   				thData += '	<th>수신경로</th>';
+			  	   				thData += '	<th>전처리명</th>';
+			  	   				thData += '	<th>속성유형</th>';
+			  	   				thData += '	<th>예시</th>';
+			  	   				thData += '</tr>';
+			  	   				
+				  	   			$("#apiDataSetGrid").html(thData);    
+			  	   		}else{
+			  	   			
+			  	   			$(".apiDataSetView").hide();
+			  	   			let thData = '<tr>';
+			  	   				thData += '	<th colspan="2">데이터 모델</th>';
+			  	   				thData += '	<th colspan="1">Source</th>';
+			  	   				thData += '	<th colspan="3">전처리</th>';
+			  	   				thData += '</tr>';
+			  	   				thData += '<tr>';
+			  	   				thData += '	<th>속성ID</th>';
+			  	   				thData += '	<th>속성값</th>';
+			  	   				thData += '	<th>ID</th>';
+			  	   				thData += '	<th>전처리명</th>';
+			  	   				thData += '	<th>속성유형</th>';
+			  	   				thData += '	<th>예시</th>';
+			  	   				thData += '</tr>';
+		  	   				
+			  	   			$("#apiDataSetGrid").html(thData);    			  	   			
+			  	   		}
 			  	   	}
 		  	  }
 	    	  

@@ -1,4 +1,4 @@
-package kr.or.lx.dms.monitoring.controller;
+package kr.or.lx.server;
 
 import java.util.Map;
 
@@ -16,45 +16,39 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import kr.or.lx.common.ApiService;
 import lombok.extern.slf4j.Slf4j;
 
-@RequestMapping("monitoring")
+
+@RequestMapping("server/mappingList")
 @Slf4j
 @Controller
-public class MonitoringController {
+public class MappingListController {
 	
-    @Value("${dms.api.url}")
-    private String dmsApiUrl;	
-    
-	@Autowired
+	@Value("${agent.server.api.url}")
+    private String agentApiUrl;    
+	
+    @Autowired
 	private ApiService<?> apiService;
 	
 	@GetMapping("/list")
-	public String list(ModelMap model) throws Exception{
+	public String mappingList(ModelMap model) throws Exception{
 		
-		return "dms/monitoring/list";
-	}	
-	
-	@GetMapping("/serverStatus")
-	public String serverStatus(ModelMap model) throws Exception{
-		
-		return "dms/monitoring/serverStatus";
-	}	
-	
-	@GetMapping("/log")
-	public String log(ModelMap model) throws Exception{
-		
-		return "dms/monitoring/log";
-	}	
-	
+		return "server/mappingList/list";
+	}
+
 	@ResponseBody
 	@PostMapping("{apiId}")
-	public Object monitoringApi(@RequestBody Map<String, Object> param, ModelMap model) throws Exception{
-		log.info("monitoringApi");
+	public Object mappingListPost(@RequestBody Map<String, Object> param, ModelMap model) throws Exception{
 		
-		String url = dmsApiUrl+param.get("url");
+		String url = agentApiUrl+param.get("url");
 		
 		ResponseEntity<?> responseEntity = apiService.post(url, param);
 		Object object = responseEntity.getBody();
 		
+		if(object == null) {
+			object = responseEntity.getStatusCode();
+		}
+		
 		return object;
-	}	
+	}
+
+	
 }

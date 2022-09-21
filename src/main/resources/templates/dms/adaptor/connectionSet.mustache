@@ -523,15 +523,19 @@ const dpIngestAdapterItPpTest = function(){
 		});
 		
 		contentsData.push(itemObject);
-		console.log('contentsData:'+JSON.stringify(contentsData));
+//		console.log('contentsData:'+JSON.stringify(contentsData));
 		
 	    const data = {
 		   		url: '/dp/ingest/adapter/instance/property/test',
 		   		user_id: 'user00',	
 		   		menu_id: 'menu_id',
+		   		clct_mthd: $("#clct_mthd").val(),
+		   		clct_ty: $("#clct_ty").val(),
 		   		contents: contentsData,
 		    };			
-	        
+	       
+	    	console.log('data : '+JSON.stringify(data));
+	    	
 		    $.ajax({
 		        type: 'POST',
 		        url: url+'/dpIngestAdapterItPpTest',

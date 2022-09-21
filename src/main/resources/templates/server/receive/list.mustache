@@ -37,6 +37,7 @@
                           <th>Port</th>
                           <th>수신일자</th>
                           <th>수신파일목록</th>
+                          <th>파일다운로드</th>
                           <th>수신파일(개수)</th>
                         </tr>
                       </thead>
@@ -153,6 +154,9 @@ const agentRecvZipList = function(page, size_per_page){
 					insertTr += '	<td>'+el.recv_datetime+'</td>';
 					insertTr += ' 	<td>';
 					insertTr += '		<ol><li><a class="btn btn-dark btn-sm mx-0" href="#" onclick="agentRecvCsvList(\''+el.recv_zip_file+'\');">파일목록</a></li></ol>';
+					insertTr += '	</td>';
+					insertTr += ' 	<td>';
+					insertTr += '		<ol><li><a class="btn btn-primary btn-sm mx-0" href="#" onclick="agentRecvCsvList(\''+el.file+'\');">다운로드</a></li></ol>';
 					insertTr += '	</td>';
 					insertTr += '	<td>'+el.recv_file_count+'</td>';
 					insertTr += '</tr>';

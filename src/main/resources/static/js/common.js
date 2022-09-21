@@ -79,9 +79,16 @@ function errorMsg(data){
 	
 	console.log(data.status);
 	console.log(data.return_code);
+	console.log(data.type);
 	
 	if(data.status === 500){
 		alert(JSON.stringify(data.error).replace(/\"/gi, ''));
+		return true;
+	}else if(data.status === 404){
+		alert(JSON.stringify(data.error).replace(/\"/gi, ''));
+		return true;
+	}else if(data.type === "5000"){
+		alert(JSON.stringify(data.title).replace(/\"/gi, ''));
 		return true;
 	}else if(isEmpty(data.return_code).indexOf("40") >= 0){
 		alert(JSON.stringify(data.return_msg).replace(/\"/gi, ''));

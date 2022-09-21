@@ -1,0 +1,351 @@
+{{>layout/header}}
+
+<div class="right_col" role="main">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="x_panel">
+				<div class="x_title">
+					<h2>HOME > 모니터링 > 로그 검색</h2>
+					<div class="clearfix"></div>
+				</div>
+				<div class="x_content">
+				    <div class="row">
+						<div class="col-md-12">
+							<div class="x_content">
+								<div class="table_btns mb-2">
+									<label style="text-align: center;color: red;">※최대 검색일은 1달을 넘을수 없습니다.</label>
+								</div>  
+							</div>
+						</div>
+				    </div>     				
+					<div class="row">
+						<div class="col-md-12">
+							<div class="x_panel">
+								<div class="x_content">
+									<div class="col-12 col-md-11">
+										<div class="form-group row">
+											<label class="control-label">검색</label>
+											<div class="form-control_box">
+												<div class="col-md-2 pl-0">
+						                            <select class="form-control" name="log_type" id="log_type" onchange="selLogType(this.value)">
+						                            	<option value="">선택</option>
+						                                <option value="load_log">적재로그</option>
+						                                <option value="error_log">에러로그</option>
+						                            </select>
+												</div>
+												<div class="col-md-2 pl-0">
+						                            <select class="form-control" name="adapter_id" id="adapter_id" onchange="dpCmMonitoringLogsIt(this.value);">
+						                                <option value="">선택</option>
+						                            </select>
+												</div>
+												<div class="col-md-2 pl-0">
+						                            <select class="form-control" name="instance_id" id="instance_id">
+						                                <option value="">선택</option>
+						                            </select>
+												</div>
+												<div class="col-md-6 pl-0">
+												  <table>
+					                              <tbody> 
+					                                <tr> 
+					                                  <td>시작일&nbsp;</td>
+					                                  <td> 
+					                                    <div class="form-control_box">
+					                                      <!-- div class="input-prepend input-group"><span class="add-on input-group-addon"><i class="fa fa-calendar"></i></span>
+					                                      </div-->
+					                                        <input class="form-control" id="single_cal1" type="text" name="reservation" value="">
+					                                    </div>
+					                                  </td>
+					                                  <td>&nbsp;</td>
+					                                  <td>종료일&nbsp;</td>
+					                                  <td> 
+					                                    <div class="form-control_box">
+					                                      <!-- div class="input-prepend input-group"><span class="add-on input-group-addon"><i class="fa fa-calendar"></i></span>
+					                                      </div-->
+					                                        <input class="form-control" id="single_cal2" type="text" name="reservation" value="">
+					                                    </div>
+					                                  </td>
+					                                </tr>
+					                              </tbody>
+					                              </table>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-1 col-md-1 btn_search_box">
+										<button class="btn btn-primary" onclick="btnSearch();">
+											<i class="glyphicon glyphicon-search"></i>
+										</button>
+									</div>							
+								</div>
+								<div class="x_title col-md-11 mb-4">
+									<h2>적재로그</h2>
+								</div>
+								<div class="x_content">
+									<div class="table_responsive">
+										<div class="talbel_total mb-2">총<span id="total_count"></span>건</div>
+										<table class="table table-striped" >
+											<colgroup>
+												<col width="55px">
+											</colgroup>
+											<thead>
+												<tr>
+													<th style="text-align: center;">순번</th>
+													<th style="text-align: center;">적재시간</th>
+													<th style="text-align: center;">단계</th>
+													<th style="text-align: center;">테이블</th>
+													<th style="text-align: center;">데이터 아이디</th>
+													<th style="text-align: center;">상태</th>
+													<th style="text-align: center;">어댑터 명</th>
+													<th style="text-align: center;">인스턴스 명</th>
+													<th style="text-align: center;">수신 데이터</th>
+													<th style="text-align: center;display:none;" class="logTypeView">재적재 여부</th>
+													<th style="text-align: center;display:none;" class="logTypeView">재적재 데이터</th>
+												</tr>
+											</thead>
+											<tbody id="dpIngestItSeach">
+											</tbody>
+										</table>
+					                    <div class="nav justify-content-center"> 
+										  <ul id="pagingul" class="pagination">
+										  </ul>                    
+					                    </div>   
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="divForm"></div>
+
+{{>layout/footer}}
+
+<script>
+const commonUrl = '/common';
+const url = '/monitoring';
+
+let init_page = 1;				//초기 페이지
+let page = 1;					//페이지
+let init_size_per_page = 10;	//초기 개수
+let size_per_page = 10;	 		//가져올 개수
+let pageCount = 10;		 		//페이징에 나타낼 페이지 수
+
+//적재로그 어댑터 리스트
+const dpCmMonitoringLogsAdapter = function () {
+	
+	const data = {
+   		url: '/dp/cm/monitoring/logs/adapter',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',   		
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpCmMonitoringLogsAdapter',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		  
+    		if(errorMsg(data)){
+  	           return;  
+       	  	}	
+	  		
+  	    	if(data.contents != ""){
+  	    		let insertTr = '';
+		  	    $.each(data.contents, function (idx, el) {
+		  	    	insertTr += '<option value="'+el.adapter_id+'">'+el.adapter_nm+'</option>';
+		  	    });
+		  	  	$("#adapter_id").append(insertTr);
+  	    	}
+  	    	
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//적재로그 인스턴스 리스트
+const dpCmMonitoringLogsIt = function (adapter_id) {
+	
+	$("#instance_id").empty();
+	
+	const data = {
+   		url: '/dp/cm/monitoring/logs/instance',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',   		
+   		adapter_id: adapter_id,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpCmMonitoringLogsIt',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		  
+    		if(errorMsg(data)){
+  	           return;  
+       	  	}	
+	  		
+    		let insertTr = '<option value="">선택</option>';
+  	    	if(data.contents != ""){
+		  	    $.each(data.contents, function (idx, el) {
+		  	    	insertTr += '<option value="'+el.instance_id+'">'+el.instance_nm+'</option>';
+		  	    });
+  	    	}
+	  	  	$("#instance_id").append(insertTr);
+  	    	
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//적재로그 검색
+const dpCmMonitoringLogsList = function(page, size_per_page){
+	
+	
+	if(!page){
+		page = init_page;
+	}
+	if(!size_per_page){
+		size_per_page = init_size_per_page;
+	}
+	
+	console.log('page : '+page+' , size_per_page : '+size_per_page );
+	
+	let date1 = new Date($("#single_cal1").val().substring(0,4), $("#single_cal1").val().substring(4,6), $("#single_cal1").val().substring(6,8));
+	let date2 = new Date($("#single_cal2").val().substring(0,4), $("#single_cal2").val().substring(4,6), $("#single_cal2").val().substring(6,8));
+
+	let elapsedMSec = date2.getTime() - date1.getTime(); // 172800000
+	let elapsedDay = elapsedMSec / 1000 / 60 / 60 / 24; // 2
+
+	console.log('=='+elapsedDay);
+	
+	var date = new Date();
+	
+	if($("#log_type").val() == ''){
+		alert("로그종류를 선택해주세요!");
+		return;
+	}	
+	if($("#single_cal1").val() > getDateStr(date)){
+		alert("시작일이 현재날짜 이후로 선택할수없습니다.");
+		return;
+	}
+	if($("#single_cal2").val() > getDateStr(date)){
+		alert("시작일이 현재날짜 이후로 선택할수없습니다.");
+		return;
+	}
+	if($("#single_cal1").val() >= $("#single_cal2").val()){
+		alert("시작일이 종료일 보다 작은 날짜를 선택해주세요!");
+		return;
+	}
+	if(elapsedDay > 30){
+		alert("최대 검색일은 1달을 넘을수 없습니다.");
+		return;
+	}
+	
+	const data = {
+   		url: '/dp/cm/monitoring/logs/list',
+   		user_id: 'user00',	
+   		menu_id: 'menu_id',
+   		log_type: $("#log_type").val(),
+   		adapter_id: $("#adapter_id").val(),
+   		instance_id: $("#instance_id").val(),
+   		start_date: $("#single_cal1").val(),
+   		end_date: $("#single_cal2").val(),
+   		page_current: page,
+    };		
+    $.ajax({
+        type: 'POST',
+        url: url+'/dpCmMonitoringLogsList',
+        dataType: 'json',
+        contentType: 'application/json; charset-utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+		  $("#dpCmMonitoringLogsList").empty();
+	  	  if (data != null) {
+	  		  
+    		  if(errorMsg(data)){
+  	          	 return;  
+       	  	  }	
+	  		
+  	    	$("#total_count").text(data.total_count);
+  	    	
+  	    	if(data.contents != ""){
+  	    		
+	     	    let insertTr = '';
+	     	    let i = 0;	
+		  	    $.each(data.contents, function (idx, el) {
+
+	     	          insertTr += '<tr>';
+	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.id)+'</td>';
+	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.log_dt)+'</td>';
+	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.step)+'</td>';
+	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.st_datamodel)+'</td>';
+	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.data_id)+'</td>';
+	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.log_desc)+'</td>';
+	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.adapter_nm)+'</td>';
+	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.instance_nm)+'</td>';
+	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.data_before)+'</td>';
+	     		      if( $("#log_type").val() == 'error_log'){
+	     		    	 insertTr += ' <td style="text-align: center;">'+isEmpty(el.process_yn)+'</td>';
+	     		    	 insertTr += ' <td style="text-align: center;">'+isEmpty(el.data_after)+'</td>';
+	     		      }
+	                  insertTr += '</tr>';
+		  	    });
+          	    $("#dpCmMonitoringLogsList").append(insertTr);
+  	    	}
+  	    	
+  	    	//페이징 보여줌
+  	    	paging(data.total_count, size_per_page, pageCount, page);
+  	    	
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//로그 선택 유무
+const selLogType = function(log_type){
+	if(log_type == 'load_log'){
+		$('.logTypeView').hide();
+	}else if(log_type == 'error_log'){
+		$('.logTypeView').show();
+	}
+}
+
+//페이징 함수 호출
+const pagingFun = function(page, size_per_page){
+	dpCmMonitoringLogsList(page, size_per_page);
+}
+
+//검색 버튼
+const btnSearch = function(){
+	dpCmMonitoringLogsList();
+}
+
+
+//적재로그 어댑터 리스트
+dpCmMonitoringLogsAdapter();
+
+prevDay(-31, 0, 'single_cal1','single_cal2');
+//setTimeout(dpCmMonitoringLogsList, 300);
+</script>
+
+
+
