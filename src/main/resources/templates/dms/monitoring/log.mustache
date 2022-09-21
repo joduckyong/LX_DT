@@ -29,7 +29,7 @@
 												<div class="col-md-2 pl-0">
 						                            <select class="form-control" name="log_type" id="log_type" onchange="selLogType(this.value)">
 						                            	<option value="">선택</option>
-						                                <option value="load_log">적재로그</option>
+						                                <option value="connectivity_log">적재로그</option>
 						                                <option value="error_log">에러로그</option>
 						                            </select>
 												</div>
@@ -85,7 +85,14 @@
 										<div class="talbel_total mb-2">총<span id="total_count"></span>건</div>
 										<table class="table table-striped" >
 											<colgroup>
-												<col width="55px">
+				                                <col width="5%">
+				                                <col width="16%">
+				                                <col width="7%">
+				                                <col width="8%">
+				                                <col width="14%">
+				                                <col width="10%">
+				                                <col width="11%">
+				                                <col width="*">
 											</colgroup>
 											<thead>
 												<tr>
@@ -177,7 +184,7 @@
                     <div class="row">
                       <div class="form-group row col-12 col-md-12">
                         <div class="control-label" style="text-align: center;">데이터아이디</div>
-                        <div class="form-control_box"><span id="payload_txt"></span></div>
+                        <div class="form-control_box"><span id="data_id_txt"></span></div>
                       </div>
                     </div>
                     
@@ -213,10 +220,8 @@ let init_size_per_page = 10;	//초기 개수
 let size_per_page = 10;	 		//가져올 개수
 let pageCount = 10;		 		//페이징에 나타낼 페이지 수
 
-$('#log_modal').modal('show');
-
 //데이터로그 상세팝업
-const dpCmMoniteringLogsPopup = function(id, log_type){
+const dpCmMoniteringLogsPopup = function(id, log_type, data_id){
 	
 	$('#log_modal').modal('show');
 	
@@ -228,7 +233,7 @@ const dpCmMoniteringLogsPopup = function(id, log_type){
   	$("#log_desc_txt").text("");
   	$("#st_datamodel_txt").text("");
   	$("#data_before_txt").text("");
-  	$("#payload_txt").text("");
+  	$("#data_id_txt").text("");
   	$("#process_yn_txt").text("");
   	$("#data_after_txt").text("");
   	   	
@@ -262,7 +267,7 @@ const dpCmMoniteringLogsPopup = function(id, log_type){
 			  	   	$("#log_desc_txt").text(isEmpty(data.contents[0].log_desc));
 			  	   	$("#st_datamodel_txt").text(isEmpty(data.contents[0].st_datamodel));
 			  	   	$("#data_before_txt").text(isEmpty(data.contents[0].data_before));
-			  	   	$("#payload_txt").text(isEmpty(data.contents[0].payload));
+			  	   	$("#data_id_txt").text(isEmpty(data_id));
 			  	   	
 			  	   	if(log_type == 'connectivity_log'){
 			  	   		$(".error").hide();
@@ -411,7 +416,7 @@ const dpCmMonitoringLogsList = function(page, size_per_page){
    		instance_id: $("#instance_id").val(),
    		start_date: $("#single_cal1").val(),
    		end_date: $("#single_cal2").val(),
-   		page_current: page,
+   		page_current: String(page),
     };		
     $.ajax({
         type: 'POST',
@@ -428,7 +433,7 @@ const dpCmMonitoringLogsList = function(page, size_per_page){
   	          	 return;  
        	  	  }	
 	  		
-  	    	$("#total_count").text(data.total_count);
+  	    	$("#total_count").text(data.totalcount);
   	    	
   	    	if(data.contents != ""){
   	    		
@@ -436,7 +441,7 @@ const dpCmMonitoringLogsList = function(page, size_per_page){
 	     	    let i = 0;	
 		  	    $.each(data.contents, function (idx, el) {
 
-	     	          insertTr += '<tr style="cursor:pointer" onclick=dpCmMoniteringLogsPopup('+isEmpty(el.id)+','+isEmpty(el.log_type)+')>';
+	     	          insertTr += '<tr style="cursor:pointer" onclick=dpCmMoniteringLogsPopup('+isEmpty(el.id)+',"'+isEmpty(el.log_type)+'","'+isEmpty(el.data_id)+'")>';
 	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.id)+'</td>';
 	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.log_dt)+'</td>';
 	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.st_datamodel)+'</td>';
@@ -444,10 +449,10 @@ const dpCmMonitoringLogsList = function(page, size_per_page){
 	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.log_desc)+'</td>';
 	                  insertTr += ' <td style="text-align: center;">'+isEmpty(el.adapter_nm)+'</td>';
 	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.instance_nm)+'</td>';
-	     		      insertTr += ' <td style="text-align: center;">'+isEmpty(el.data_before)+'</td>';
+	     		      insertTr += ' <td style="text-align: center;">'+(isEmpty(el.data_before) !== ""?isEmpty(el.data_before.substring(0, 15))+"...":"")+'</td>';
 	     		      if( $("#log_type").val() == 'error_log'){
 	     		    	 insertTr += ' <td style="text-align: center;">'+isEmpty(el.process_yn)+'</td>';
-	     		    	 insertTr += ' <td style="text-align: center;">'+isEmpty(el.data_after)+'</td>';
+	     		    	 insertTr += ' <td style="text-align: center;">'+(isEmpty(el.data_after) !== ""?isEmpty(el.data_after.substring(0, 15))+"...":"")+'</td>';
 	     		      }
 	                  insertTr += '</tr>';
 		  	    });
@@ -455,7 +460,7 @@ const dpCmMonitoringLogsList = function(page, size_per_page){
   	    	}
   	    	
   	    	//페이징 보여줌
-  	    	paging(data.total_count, size_per_page, pageCount, page);
+  	    	paging(data.totalcount, size_per_page, pageCount, page);
   	    	
 	  	  }
     	  
@@ -466,7 +471,7 @@ const dpCmMonitoringLogsList = function(page, size_per_page){
 
 //로그 선택 유무
 const selLogType = function(log_type){
-	if(log_type == 'load_log'){
+	if(log_type == 'connectivity_log'){
 		$('.logTypeView').hide();
 	}else if(log_type == 'error_log'){
 		$('.logTypeView').show();
