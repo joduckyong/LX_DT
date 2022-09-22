@@ -275,6 +275,8 @@
                         </div>
                       </div>
                       <div class="right_btns mt-6">
+                        <button class="btn btn-primary" id="btn_B06002_1" style="display:none;" onclick="sandboxCreate();">승인</button>
+                        <button class="btn btn-danger" id="btn_B06002_2" style="display:none;" >반려</button>                      
                         <button class="btn btn-warning" id="btn_B06001" style="display:none;" onclick="sandboxAnalysisMethodUpdate('B06001');">임시저장</button>
                         <button class="btn btn-primary" id="btn_B06002" style="display:none;" onclick="sandboxAnalysisMethodUpdate('B06002');">저장</button>
                         <button class="btn btn-danger" onclick="sandboxDelete();">삭제</button>
@@ -298,7 +300,7 @@
 
 <script>
 const commonUrl = '/sandbox/common';
-const url = '/sandbox/sand/analysisSandbox';
+const url = '/admin/sandbox/sand/analysisSandbox';
 let contents;
 let codeContents;
 
@@ -512,107 +514,9 @@ const commonCodeImagesDatasetsCode = function(){
         });		
 }
 
-//분석 방식 선택 - 시계열 분석 데이터 일자 조회
-const sandboxAnalysisTableDatasetDetail = function(){
-
-	const data = {
-       		url: '/services/sandbox/sandboxes/{{sandbox_id}}/analysis-method/table-datasets/detail',
-	   		user_id: 'user00',	
-	   		menu_id: 'menu_id',	            		
-        };		
-        $.ajax({
-            type: 'POST',
-            url: url+'/sandboxAnalysisTableDatasetDetail',
-            dataType: 'json',
-            contentType: 'application/json; charset-utf-8',
-            data: JSON.stringify(data)
-        }).done(function (data) {
- 		  	if (data != null) {
- 		  		
- 	    		  if(errorMsg(data)){
- 	 	          	 return;  
- 	       	  	  }	
- 		  		
- 		  	   	if(data.contents != ""){    
- 		  	   		$.each(data.contents, function (idx, el) {
-	 		  	   		if(el.anals_data_sect_cd == 'B16001'){
-	 		  	   			
-	 		  	   			if(el.period_begin_date != null && el.period_end_date != null){
-			  		  	   		$("#B16001_period_begin").val(el.period_begin_date);
-			  		  	   		$("#B16001_period_end").val(el.period_end_date);
-	 		  	   			}else if(el.period_begin_day != null && el.period_end_day != null){
-			  		  	   		$("#B16001_period_begin").val(el.period_begin_day);
-			  		  	   		$("#B16001_period_end").val(el.period_end_day);
-	 		  	   			}else if(el.period_begin_time != null && el.period_end_time != null){
-			  		  	   		$("#B16001_period_begin").val(el.period_begin_time);
-			  		  	   		$("#B16001_period_end").val(el.period_end_time);
-	 		  	   			}else if(el.period_begin_ymd != null && el.period_end_ymd != null){
-			  		  	   		$("#single_cal1").val(el.period_begin_ymd);
-			  		  	   		$("#single_cal2").val(el.period_end_ymd);
-		 		  	   		}
-	 		  	   			
-	 		  	   		}else if(el.anals_data_sect_cd == 'B17001'){
-	 		  	   			
-	 		  	   			if(el.period_begin_date != null && el.period_end_date != null){
-			  		  	   		$("#B17001_period_begin").val(el.period_begin_date);
-			  		  	   		$("#B17001_period_end").val(el.period_end_date);
-	 		  	   			}else if(el.period_begin_day != null && el.period_end_day != null){
-			  		  	   		$("#B17001_period_begin").val(el.period_begin_day);
-			  		  	   		$("#B17001_period_end").val(el.period_end_day);
-	 		  	   			}else if(el.period_begin_time != null && el.period_end_time != null){
-			  		  	   		$("#B17001_period_begin").val(el.period_begin_time);
-			  		  	   		$("#B17001_period_end").val(el.period_end_time);
-	 		  	   			}else if(el.period_begin_ymd != null && el.period_end_ymd != null){
-			  		  	   		$("#single_cal3").val(el.period_begin_ymd);
-			  		  	   		$("#single_cal4").val(el.period_end_ymd);
-		 		  	   		}	 		  	   			
-	 		  	   			
-	 		  	   		}else if(el.anals_data_sect_cd == 'B17002'){
-	 		  	   			
-	 		  	   			if(el.period_begin_date != null && el.period_end_date != null){
-			  		  	   		$("#B17002_period_begin").val(el.period_begin_date);
-			  		  	   		$("#B17002_period_end").val(el.period_end_date);
-	 		  	   			}else if(el.period_begin_day != null && el.period_end_day != null){
-			  		  	   		$("#B17002_period_begin").val(el.period_begin_day);
-			  		  	   		$("#B17002_period_end").val(el.period_end_day);
-	 		  	   			}else if(el.period_begin_time != null && el.period_end_time != null){
-			  		  	   		$("#B17002_period_begin").val(el.period_begin_time);
-			  		  	   		$("#B17002_period_end").val(el.period_end_time);
-	 		  	   			}else if(el.period_begin_ymd != null && el.period_end_ymd != null){
-			  		  	   		$("#single_cal5").val(el.period_begin_ymd);
-			  		  	   		$("#single_cal6").val(el.period_end_ymd);
-		 		  	   		}
-		 		  	   		
-	 		  	   		}else if(el.anals_data_sect_cd == 'B17003'){
-	 		  	   			
-	 		  	   			if(el.period_begin_date != null && el.period_end_date != null){
-			  		  	   		$("#B17003_period_begin").val(el.period_begin_date);
-			  		  	   		$("#B17003_period_end").val(el.period_end_date);
-	 		  	   			}else if(el.period_begin_day != null && el.period_end_day != null){
-			  		  	   		$("#B17003_period_begin").val(el.period_begin_day);
-			  		  	   		$("#B17003_period_end").val(el.period_end_day);
-	 		  	   			}else if(el.period_begin_time != null && el.period_end_time != null){
-			  		  	   		$("#B17003_period_begin").val(el.period_begin_time);
-			  		  	   		$("#B17003_period_end").val(el.period_end_time);
-	 		  	   			}else if(el.period_begin_ymd != null && el.period_end_ymd != null){
-			  		  	   		$("#single_cal7").val(el.period_begin_ymd);
-			  		  	   		$("#single_cal8").val(el.period_end_ymd);
-		 		  	   		}
-		 		  	   		
-	 		  	   		}
- 		  	   		});    
- 		  	   	}
-	  	   		
- 		  	}
-        }).fail(function (error) {
-            alert(JSON.stringify(error));
-        });	
-        
-}
 
 //샌드박스 분석방식 상세조회
 const sandboxAnalysisMethodDetail = function(){
-	
 	const data = {
        		url: '/services/sandbox/sandboxes/{{sandbox_id}}/analysis-method/detail',
 	   		user_id: 'user00',	
@@ -631,24 +535,15 @@ const sandboxAnalysisMethodDetail = function(){
  	 	          	 return;  
  	       	  	  }	
  		  		
- 		  	   	if(data.contents != ""){    
- 		  	   		$("input:radio[id='"+data.contents.anals_period_dfn_cd+"']").prop("checked", true); 
- 		  	   		div_show(data.contents.anals_period_dfn_cd);
- 		  	   		
- 		  	   		$("#commonCodeBatchCycle").val(data.contents.anals_period_cd);
- 		  	   		selCodeBatchCycle(data.contents.anals_period_cd);
- 		  	   		$("#anals_period_dtl_value").val(data.contents.anals_period_dtl_value);
- 		  	   		
- 		  	   		$("#single_cal").val(data.contents.batch_exec_begin_date);
- 		  	   		$("input:radio[id='"+data.contents.anals_kind_cd+"']").prop("checked", true); 
-	 		  	   	div_sub_show(data.contents.anals_kind_cd);
+ 		  	   	if(data.contents != ""){    	    
+			  	    $.each(data.contents, function (idx, el) {
+				    });     	
  		  	   	}
+ 		  	   	
  		  	}
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });	
-        
-        sandboxAnalysisTableDatasetDetail();
 }
 
 //샌드박스 분석방식 상세조회 - 학습 데이터 개수 조회
@@ -991,9 +886,9 @@ const sandboxAnalysisMethodUpdate = function(val){
             data: JSON.stringify(data)
         }).done(function (data) {
         	
-	  		  if(errorMsg(data)){
+  		  if(errorMsg(data)){
 	          	 return;  
-    	  	  }	
+   	  	  }	
         	
       		let message = JSON.stringify(data.return_msg);
       		alert(message.replace(/\"/gi, ''));    	  
@@ -1004,6 +899,43 @@ const sandboxAnalysisMethodUpdate = function(val){
 	}
 }
 
+//샌드박스 생성
+const sandboxCreate = function(){
+	
+	let regstCd = '';
+	let confirmMsg = '생성 요청 하시겠습니까?';
+	
+	const data = {
+       		url: '/services/sandbox/sandboxes/{{sandbox_id}}/create-request',
+       		modifier_id: 'modifier_id',		
+       		approver_id: 'approver_id',		
+       		user_id: 'user00',		
+       		menu_id: 'menu_id',	 	
+        };		
+	
+	console.log(JSON.stringify(data));
+	
+	if(confirm(confirmMsg)){
+        $.ajax({
+            type: 'POST',
+            url: url+'/sandboxCreate',
+            dataType: 'json',
+            contentType: 'application/json; charset-utf-8',
+            data: JSON.stringify(data)
+        }).done(function (data) {
+        	
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
+        	
+      		let message = JSON.stringify(data.return_msg);
+      		alert(message.replace(/\"/gi, ''));    	  
+
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });		
+	}
+}
 
 //샌드박스 삭제
 const sandboxDelete = function () {
@@ -1134,6 +1066,14 @@ const progressBar = function(){
 		$("#ps3").addClass("now_depth");
 	}
 	
+	//반려
+	if(last_status_cd == progressCd2 && sandbox_status_cd == 'B07002'){
+		$("#btn_B06002_2").show();
+	}
+	//승인
+	if((last_status_cd == progressCd2 && sandbox_status_cd == 'B07002') || (last_status_cd == progressCd2 && sandbox_status_cd == 'B07006')){
+		$("#btn_B06002_1").show();
+	}
 	//임시저장, 등록
 	if(sandbox_status_cd != 'B07005'){
 		$("#btn_B06001").show();
@@ -1166,7 +1106,7 @@ const sandboxEnrollStatus = function(){
    	    		$("#scenario_setup_status_cd").val(data.contents.scenario_setup_status_cd);
    	    		$("#anals_method_status_cd").val(data.contents.anals_method_status_cd);
    	    		$("#last_status_cd").val(data.contents.last_status_cd);
-   	    		$("#sandbox_status_cd").val(data.contents.sandbox_status_cd);      	    		
+   	    		$("#sandbox_status_cd").val(data.contents.sandbox_status_cd);   	    		
    	    		progressBar();
    	    	}
    	    	
@@ -1207,5 +1147,4 @@ const initMain = function(){
 
 initMain();
 sandboxEnrollStatus();
-sandboxAnalysisMethodDetail();
 </script>
