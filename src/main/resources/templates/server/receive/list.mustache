@@ -91,6 +91,34 @@
           </div>
         </div>
 
+        <div class="modal fade code_modal" id="fileDownLoadModal" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-lg" style="max-width: 500px;">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">파일 다운로드</h4>
+                <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
+              </div>
+              <div class="modal-body">
+                <div class="form-horizontal form-label-left">
+                  <div class="row">
+                    <div class="form-group row col-12 col-md-12">
+                      <label class="control-label">다운로드 경로</label>
+                      <div class="form-control_box">
+                        <input class="form-control" type="text" name="file_path" id="file_path">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-primary" type="button" onclick="commFileDownload();">확인</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+		<input type="hidden" name="file" id="file">
+		
 {{>layout/footer}}
 
 <script>
@@ -156,7 +184,7 @@ const agentRecvZipList = function(page, size_per_page){
 					insertTr += '		<ol><li><a class="btn btn-dark btn-sm mx-0" href="#" onclick="agentRecvCsvList(\''+el.recv_zip_file+'\');">파일목록</a></li></ol>';
 					insertTr += '	</td>';
 					insertTr += ' 	<td>';
-					insertTr += '		<ol><li><a class="btn btn-primary btn-sm mx-0" href="#" onclick="fileDownload(\''+el.file+'\');">다운로드</a></li></ol>';
+					insertTr += '		<ol><li><a class="btn btn-primary btn-sm mx-0" href="#" onclick="fileDownModal(\''+el.file+'\');">다운로드</a></li></ol>';
 					insertTr += '	</td>';
 					insertTr += '	<td>'+el.recv_file_count+'</td>';
 					insertTr += '</tr>';
@@ -174,32 +202,25 @@ const agentRecvZipList = function(page, size_per_page){
     });	
 }
 
-//파일 다운로드
-const fileDownload = function(file){
+const fileDownModal = function(file){
+	detailModal('fileDownLoadModal');
+	$("#file").val(file);
+}
 
-	/*
-	const data = {
-			url: '/recv/file/download',
-	   		user_id: 'user00',	
-	   		file: file,	   				
-	   		file_path: 'C:\\Users\\USER\\Desktop',	   				
-	    };		
-	    $.ajax({
-	        type: 'POST',
-	        url: commonUrl+'/download/fileDownload',
-	        dataType: 'json',
-	        contentType: 'application/json; charset-utf-8',
-	        data: JSON.stringify(data),
-	    }).done(function (data) {
-	    }).fail(function (error) {
-		    location.href = commonUrl+'/urlDownload/'+file;
-	    });	
-	  */  
+//파일 다운로드
+const fileDownload = function(){
+
+	  if($("#file_path").val() == ''){
+		  alert("다운로드 경로를 입력해주세요!");
+		  $("#file_path").focus();
+		  return;
+	  }	
+	  
 		const data = {
 				url: '/recv/file/download',
 		   		user_id: 'user00',	
-		   		file: file,	   				
-		   		file_path: 'C:\\Users\\USER\\Desktop',	  
+		   		file: $("#file").val(),	   				
+		   		file_path: $("#file_path").val(), 
 		    };	
 			
 		    $.ajax({
@@ -210,7 +231,11 @@ const fileDownload = function(file){
 		        data: JSON.stringify(data)
 		    }).done(function (data) {
 		    	
-		    	  
+		  		if(errorMsg(data)){
+		  			return;  
+		  		}
+		  		
+		    	$('#fileDownLoadModal').modal('hide');
 		    }).fail(function (error) {
 		        alert(JSON.stringify(error));
 		    });		    
