@@ -437,7 +437,7 @@ const dpCmMonitoringLogsList = function(page, size_per_page){
   	          	 return;  
        	  	  }	
 	  		
-  	    	$("#total_count").text(data.totalcount);
+  	    	$("#total_count").text(data.total_count);
   	    	
   	    	if(data.contents != ""){
   	    		
@@ -464,7 +464,7 @@ const dpCmMonitoringLogsList = function(page, size_per_page){
   	    	}
   	    	
   	    	//페이징 보여줌
-  	    	paging(data.totalcount, size_per_page, pageCount, page);
+  	    	paging(data.total_count, size_per_page, pageCount, page);
   	    	
 	  	  }
     	  
