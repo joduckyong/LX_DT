@@ -197,7 +197,7 @@ const dpCmMonitoringHealthList = function(page, size_per_page){
   	          	 return;  
        	  	  }	
 	  		
-  	    	$("#total_count").text(data.total_count);
+  	    	$("#total_count").text(data.totalcount);
   	    	
   	    	if(data.contents != ""){
   	    		
@@ -217,7 +217,7 @@ const dpCmMonitoringHealthList = function(page, size_per_page){
           	    
   	    	}
   	    	//페이징 보여줌
-  	    	paging(data.total_count, size_per_page, pageCount, page);
+  	    	paging(data.totalcount, size_per_page, pageCount, page);
   	    	
 	  	  }
     	  
