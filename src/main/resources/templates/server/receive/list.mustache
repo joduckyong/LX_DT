@@ -94,7 +94,7 @@
 {{>layout/footer}}
 
 <script>
-
+const commonUrl = '/server/common';
 const url = '/server/receive';
 let init_page = 1;				//초기 페이지
 let page = 1;					//페이지
@@ -156,7 +156,7 @@ const agentRecvZipList = function(page, size_per_page){
 					insertTr += '		<ol><li><a class="btn btn-dark btn-sm mx-0" href="#" onclick="agentRecvCsvList(\''+el.recv_zip_file+'\');">파일목록</a></li></ol>';
 					insertTr += '	</td>';
 					insertTr += ' 	<td>';
-					insertTr += '		<ol><li><a class="btn btn-primary btn-sm mx-0" href="#" onclick="agentRecvCsvList(\''+el.file+'\');">다운로드</a></li></ol>';
+					insertTr += '		<ol><li><a class="btn btn-primary btn-sm mx-0" href="#" onclick="fileDownload(\''+el.file+'\');">다운로드</a></li></ol>';
 					insertTr += '	</td>';
 					insertTr += '	<td>'+el.recv_file_count+'</td>';
 					insertTr += '</tr>';
@@ -173,6 +173,49 @@ const agentRecvZipList = function(page, size_per_page){
         alert(JSON.stringify(error));
     });	
 }
+
+//파일 다운로드
+const fileDownload = function(file){
+
+	/*
+	const data = {
+			url: '/recv/file/download',
+	   		user_id: 'user00',	
+	   		file: file,	   				
+	   		file_path: 'C:\\Users\\USER\\Desktop',	   				
+	    };		
+	    $.ajax({
+	        type: 'POST',
+	        url: commonUrl+'/download/fileDownload',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data),
+	    }).done(function (data) {
+	    }).fail(function (error) {
+		    location.href = commonUrl+'/urlDownload/'+file;
+	    });	
+	  */  
+		const data = {
+				url: '/recv/file/download',
+		   		user_id: 'user00',	
+		   		file: file,	   				
+		   		file_path: 'C:\\Users\\USER\\Desktop',	  
+		    };	
+			
+		    $.ajax({
+		        type: 'POST',
+		        url: url+'/fileDownload',
+		        dataType: 'json',
+		        contentType: 'application/json; charset=utf-8',
+		        data: JSON.stringify(data)
+		    }).done(function (data) {
+		    	
+		    	  
+		    }).fail(function (error) {
+		        alert(JSON.stringify(error));
+		    });		    
+}
+
 //데이터 수신 csv파일 목록 조회
 const agentRecvCsvList = function(file_name){
 	

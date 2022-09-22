@@ -55,7 +55,7 @@
 {{>layout/footer}}
 
 <script>
-
+const commonUrl = '/server/common';
 const url = '/server/mappingList';
 let init_page = 1;				//초기 페이지
 let page = 1;					//페이지
@@ -109,7 +109,7 @@ const recvMappedList = function(page, size_per_page){
 					insertTr += '	<td>'+isEmpty(el.no)+'</td>';
 					insertTr += '	<td>'+isEmpty(el.code_nm)+'</td>';
 					insertTr += '	<td>'+isEmpty(el.file_nm)+'</td>';
-					insertTr += '	<td><a class="btn btn-primary btn-sm mx-0" href="#" onclick="fileDown(\''+el.recv_file_nm+'\');">다운로드</a></td>';
+					insertTr += '	<td><a class="btn btn-primary btn-sm mx-0" href="#" onclick="fileDownload(\''+el.recv_file_nm+'\');">다운로드</a></td>';
 					insertTr += '	<td>'+isEmpty(el.table_nm)+'</td>';
 					insertTr += '	<td>'+isEmpty(el.save_datetime)+'</td>';
 					insertTr += '</tr>';
@@ -125,6 +125,50 @@ const recvMappedList = function(page, size_per_page){
     }).fail(function (error) {
         alert(JSON.stringify(error));
     });	
+}
+
+//파일 다운로드
+const fileDownload = function(recv_file_nm){
+	/*
+	const data = {
+			url: '/recv/file/download',
+	   		user_id: 'user00',	
+	   		file: recv_file_nm,	   				
+	   		file_path: 'C:\\Users\\USER\\Desktop',	   				
+	    };		
+	    $.ajax({
+	        type: 'POST',
+	        url: commonUrl+'/download/fileDownload',
+	        dataType: 'json',
+	        contentType: 'application/json; charset-utf-8',
+	        data: JSON.stringify(data),
+	    }).done(function (data) {
+	    }).fail(function (error) {
+		    location.href = commonUrl+'/urlDownload/'+recv_file_nm;
+	    });		
+	  */  
+	  
+		const data = {
+				url: '/recv/file/download',
+		   		user_id: 'user00',	
+		   		file: recv_file_nm,	   				
+		   		file_path: 'C:\\Users\\USER\\Desktop',	  
+		    };	
+			
+		    $.ajax({
+		        type: 'POST',
+		        url: url+'/fileDownload',
+		        dataType: 'json',
+		        contentType: 'application/json; charset=utf-8',
+		        data: JSON.stringify(data)
+		    }).done(function (data) {
+		    	
+		    	  
+		    }).fail(function (error) {
+		        alert(JSON.stringify(error));
+		    });	
+	    
+	    
 }
 
 //엔터키가 눌렸을 때
