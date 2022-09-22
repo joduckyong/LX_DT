@@ -91,7 +91,7 @@
 		          			<div class="row"> 
 		                		<div class="table_responsive" style="height: 500px; overflow: auto">
 		                			<div class="table_btns mt-1">
-			                      		<button class="btn-sm btn-dark" type="button" onclick="btnURL();">대상URL</button>
+			                      		<button class="btn-sm btn-dark" type="button" onclick="addUrlModal();">대상URL</button>
 			                      		<button class="btn-sm btn-dark" type="button" onclick="btnExecute();">실행</button>
 			                    	</div>
 			                    	<div class="talbel_total">총 <span class="red bold" id="total_count"></span>건</div>
@@ -127,7 +127,39 @@
         </div>
 	</div>
 </div>
+<!-- 데이터 분배 대상 URL modal -->
+    <div class="modal fade add_modal" id="addUrl_modal" tabindex="-1" role="dialog" aria-hidden="true">
+	      <div class="modal-dialog modal-xl">
+	        <div class="modal-content">
+	          <div class="modal-header">
+	            <h4 class="modal-title" id="myModalLabel">데이터분배 대상 URL</h4>
+	            <button class="close" type="button" data-dismiss="modal"></button><span aria-hidden="true">&times;</span>
+	          </div>
+	          <div class="modal-body">
+	       		<div class="table_responsive" style="height: 600px; overflow: auto;">
+	                <table class="table table-striped">
+	                  <colgroup>
+	                  	<col width="20%">
+	                  	<col width="20%">
+	                  	<col width="60%">
+	                  </colgroup>
+	                  <thead>
+	                    <tr>
+	                      <th>시/도</th>
+	                      <th>시/군/구</th>
+	                      <th>URL</th>
+	                    </tr>
+	                  </thead>
+	                  <tbody id="popupUrlList">
+	                  </tbody>
+	                </table>
+	          	</div>
+	          </div>
+	      </div>
+	    </div>
+	</div> 
 <input type="hidden" name="dstbId" id="dstbId"/>
+<input type="hidden" name="pgngYn" id="pgngYn"/>
         
 {{>layout/footer}}        
 
@@ -141,6 +173,8 @@ let page = 1;					//페이지
 let init_size_per_page = 10;	//초기 개수
 let size_per_page = 10;	 		//가져올 개수
 let pageCount = 10;		 		//페이징에 나타낼 페이지 수
+
+let ctprvnCdArr = new Array();	//시도 리스트 배열
 
 //데이터분배 설정 리스트
 const distributeSetupList = function (page, size_per_page) {
@@ -344,6 +378,228 @@ const distributeSetupInfo = function () {
 	});
 }
 
+//데이터분배 대상 설정팝업 리스트
+const distributeSetupPopupSrvTargetList = function(info_data){
+	return new Promise(function(resolve, reject){
+		let originUrl = window.location.origin;
+		let dstbId = $("#dstbId").val();
+		let pgngYn = info_data.contents.pgngYn;
+		
+		const data = {
+	   		url: '/services/distribute/setup/popup/srv/target/list',
+	   		userId: 'user00',
+	   		dstbId: dstbId,
+	    };
+		
+	    $.ajax({
+	        type: 'POST',
+	        url: url+'/distributeSetupPopupSrvTargetList',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data)
+	    }).done(function (data) {
+	    	
+		  	  if (data != null) {
+		  		  
+	    		  if(errorMsg(data)){
+    	          	 return;  
+        	  	  }				
+		  		
+		  		let insertTr = '';
+	  	    	if(data.contents != ""){
+	  	    		
+					$.each(data.contents, function (idx, el) {
+						let s_url = originUrl + '?';
+						if(pgngYn == 'Y'){
+							s_url += 'rowsOfPage=10&nowPageNum=1&';
+						}
+						
+						s_url += 'ctprvnCd='+el.ctprvnCd;
+						s_url += '&signguCd='+el.signguCd;
+						s_url += '&srvkey='+el.srvkey;
+						s_url += '&userId=test';
+						
+						if(el.delYn == 'N'){	//삭제되지 않은 항목
+							insertTr += '<tr class="popup_list">';
+				  	  		insertTr += '	<input type="hidden" name="pop_dstbSeq" value="'+el.seq+'" data-delyn="'+el.delYn+'">';
+				  	  		insertTr += '	<td class="pop_ctprvnCd">';
+				  	  		insertTr += '		<select class="form-control" onchange="lxpfAdministSggList(this);" disabled>';
+				  	  		insertTr +=	'			<option value="">시/도 선택</option>';
+				  	  		for(let i=0; i<ctprvnCdArr.length; i++){
+				  	  			if(ctprvnCdArr[i]['korNm']){
+				  	  				if(ctprvnCdArr[i]['cd'] == el.ctprvnCd){
+				  	  					insertTr +=	'			<option value="'+ctprvnCdArr[i]['cd']+'" selected>'+ctprvnCdArr[i]['korNm']+'</option>';
+				  	  				}else{
+				  	  					insertTr +=	'			<option value="'+ctprvnCdArr[i]['cd']+'">'+ctprvnCdArr[i]['korNm']+'</option>';
+				  	  				}
+				  	  			}
+				  	  		}
+				  	  		insertTr +=	'		</select>';
+				  	  		insertTr += '	</td>';
+				  	  		insertTr += '	<td class="pop_signguCd">';
+				  	  		insertTr += '		<select class="form-control" disabled>';
+				  	  		insertTr +=	'			<option value="">시/군/구 선택</option>';
+				  	  		insertTr +=	'		</select>';
+				  	  		insertTr += '	</td>';
+				  	  		insertTr += '	<td class="pop_srvkey"><input type="text" value="'+s_url+'" readonly="readonly"></td>';
+						}
+			  	    });
+					
+					resolve(data);
+	  	    	}
+	  	    	$("#popupUrlList").html(insertTr);
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });
+	});
+}
+
+//시도 리스트 검색
+const lxpfAdministCtpvList = function(){
+	ctprvnCdArr.length = 0;
+	
+	const data = {
+   		url: '/services/lxpf/administ/ctpv/list?serviceKey=test',
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: commonUrl+'/lxpfAdministCtpvList',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data),
+        async: false,
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		  
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
+	  		
+	  		$("#ctprvnCd option:gt(0)").remove();
+  	    	if(data.contents != ""){
+  	    		
+  	    		ctprvnCdArr = data.contents;
+  	    	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });
+}
+
+//시군구 리스트 검색
+const lxpfAdministSggList = function(obj, target_data){
+	
+	let ctprvnCd = $(obj).val();
+	let seq = $(obj).parents('tr.popup_list').find('input[name=pop_dstbSeq]').val();
+	$(obj).parents('tr.popup_list').find('td.pop_signguCd > select option:gt(0)').remove();
+	let insertTr = '';
+	let signguCd = '';
+	if(target_data != null){
+		if(target_data.contents != ""){
+			for(let i=0; i<target_data.contents.length; i++){
+				if(target_data.contents[i]['seq'] == seq){
+					signguCd = target_data.contents[i]['signguCd']
+				}
+			}
+		}
+	}
+	
+	if(ctprvnCd){
+		const data = {
+	   		url: '/services/lxpf/administ/sgg/list?serviceKey=test&ctprvnCd='+ctprvnCd,
+	    };
+			
+	    $.ajax({
+	        type: 'POST',
+	        url: commonUrl+'/lxpfAdministSggList',
+	        dataType: 'json',
+	        contentType: 'application/json; charset=utf-8',
+	        data: JSON.stringify(data),
+	    }).done(function (data) {
+	    	
+		  	  if (data != null) {
+		  		  
+	    		  if(errorMsg(data)){
+    	          	 return;  
+        	  	  }				
+		  		
+	  	    	if(data.contents != ""){
+	  	    		$.each(data.contents, function (idx, el) {
+	  	    			if(typeof el.korNm != "undefined"){
+	  	    				if(el.cd == signguCd){
+	  	    					insertTr += '<option value="'+el.cd+'" selected>'+el.korNm+'</option>';
+	  	    				}else{
+	  	    					insertTr += '<option value="'+el.cd+'">'+el.korNm+'</option>';
+	  	    				}
+	  		    			
+	  	    			}
+	  	    		});
+	  	    	}
+	  	    	$(obj).parents('tr.popup_list').find('td.pop_signguCd > select').append(insertTr);
+		  	  }
+	    	  
+	    }).fail(function (error) {
+	        alert(JSON.stringify(error));
+	    });
+	}
+	
+}
+
+//조건항목 조회
+const distributeSetupCndList = function () {
+	let dstbId = $("#dstbId").val();
+	
+	const data = {
+   		url: '/services/distribute/setup/cnd/list',
+   		userId: 'user00',
+   		dstbId: dstbId,
+    };
+	
+    $.ajax({
+        type: 'POST',
+        url: url+'/distributeSetupCndList',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+    	
+	  	  if (data != null) {
+	  		  
+    		  if(errorMsg(data)){
+   	          	 return;  
+       	  	  }				
+	  		
+  	    	if(data.contents != ""){
+  	    		let s_url = '';
+		  	    $.each(data.contents, function (idx, el) {
+		  			s_url += '&' + el.cndNm + '=' + el.testValue;
+		  	    });
+		  	    
+		  	  	$("#popupUrlList > tr.popup_list").each(function (idx, el) {
+		  	  		let val = $(el).find(".pop_srvkey > input").val() + s_url;
+		  	  		$(el).find(".pop_srvkey > input").val(val);
+		  	  	});
+		  	    
+  	    	}
+	  	  }
+    	  
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+    });	
+}
+
+//시군구 리스트 selected
+const setSggList = function(data){
+	$(".pop_ctprvnCd > select").each(function(idx, el){
+		lxpfAdministSggList($(this), data);
+	});
+}
+
 //검색 버튼
 const btnSearch = function(){
 	let query = $("#query").val();
@@ -367,6 +623,30 @@ const addModal = function(dstbId){
 	$("#dstbId").val(dstbId);
 	distributeSetupPopup(dstbId);
 	$('#add_modal').modal('show');
+}
+
+//모달 추가
+const addUrlModal = function(){
+	
+	lxpfAdministCtpvList();
+	
+	distributeSetupInfo()
+	.then(function(info){
+		distributeSetupPopupSrvTargetList(info)
+		.then(function(data){
+			setSggList(data);
+			distributeSetupCndList();
+		})
+		.catch(function(error){
+			console.log(error)
+		});
+		
+	})
+	.catch(function(error){
+		console.log(error)
+	});
+	
+	$('#addUrl_modal').modal('show');
 }
 
 //데이터분배설정 테스트 팝업 실행 버튼
