@@ -310,7 +310,7 @@ const dpCmCodes = function (page, size_per_page) {
        	  	  }				
 	  		
 	  		$("#codeGroupList").empty();
-	  		$("#total_count1").text(data.totalcount);
+	  		$("#total_count1").text(data.total_count);
   	    	if(data.contents != ""){
   	    		let insertTr = '';
 		  	    $.each(data.contents, function (idx, el) {
@@ -336,7 +336,7 @@ const dpCmCodes = function (page, size_per_page) {
 		  	  $("#codeGroupList").html(insertTr);
   	    	}
   	    	//페이징 보여줌
-  	    	paging(data.totalcount, size_per_page, pageCount, page);
+  	    	paging(data.total_count, size_per_page, pageCount, page);
 	  	  }
     	  
     }).fail(function (error) {
@@ -381,7 +381,7 @@ const dpCmCodesDt = function (page, size_per_page) {
        	  	  }				
 	  		
 	  		$("#codeList").empty();
-	  		$("#total_count2").text(data.totalcount);
+	  		$("#total_count2").text(data.total_count);
   	    	if(data.contents != ""){
   	    		let insertTr = '';
 		  	    $.each(data.contents, function (idx, el) {
@@ -406,7 +406,7 @@ const dpCmCodesDt = function (page, size_per_page) {
 		  	  $("#codeList").html(insertTr);
   	    	}
   	    	//페이징 보여줌
-  	    	paging2(data.totalcount, size_per_page, pageCount, page);
+  	    	paging2(data.total_count, size_per_page, pageCount, page);
 	  	  }
     	  
     }).fail(function (error) {
