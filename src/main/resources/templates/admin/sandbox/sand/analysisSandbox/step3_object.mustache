@@ -104,6 +104,8 @@
                         </div>
                       </div>
                       <div class="right_btns mt-6">
+                        <button class="btn btn-primary" id="btn_B06002_1" style="display:none;" onclick="sandboxCreate();">승인</button>
+                        <button class="btn btn-danger" id="btn_B06002_2" style="display:none;" >반려</button>                      
                         <button class="btn btn-warning" id="btn_B06001" style="display:none;" onclick="sandboxAnalysisMethodUpdate('B06001');">임시저장</button>
                         <button class="btn btn-primary" id="btn_B06002" style="display:none;" onclick="sandboxAnalysisMethodUpdate('B06002');">저장</button>
                         <button class="btn btn-danger" onclick="sandboxDelete();">삭제</button>
@@ -127,7 +129,7 @@
 
 <script>
 const commonUrl = '/sandbox/common';
-const url = '/sandbox/sand/analysisSandbox';
+const url = '/admin/sandbox/sand/analysisSandbox';
 let contents;
 
 const progressCd1 = 'B06001';	//등록 중
@@ -404,6 +406,43 @@ const sandboxAnalysisMethodUpdate = function(val){
 	}
 }
 
+//샌드박스 생성
+const sandboxCreate = function(){
+	
+	let regstCd = '';
+	let confirmMsg = '생성 요청 하시겠습니까?';
+	
+	const data = {
+       		url: '/services/sandbox/sandboxes/{{sandbox_id}}/create-request',
+       		modifier_id: 'modifier_id',		
+       		approver_id: 'approver_id',		
+       		user_id: 'user00',		
+       		menu_id: 'menu_id',	 	
+        };		
+	
+	console.log(JSON.stringify(data));
+	
+	if(confirm(confirmMsg)){
+        $.ajax({
+            type: 'POST',
+            url: url+'/sandboxCreate',
+            dataType: 'json',
+            contentType: 'application/json; charset-utf-8',
+            data: JSON.stringify(data)
+        }).done(function (data) {
+        	
+  		  if(errorMsg(data)){
+	          	 return;  
+   	  	  }	
+        	
+      		let message = JSON.stringify(data.return_msg);
+      		alert(message.replace(/\"/gi, ''));    	  
+
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });		
+	}
+}
 
 //샌드박스 삭제
 const sandboxDelete = function () {
@@ -527,6 +566,14 @@ const progressBar = function(){
 		$("#ps3").addClass("now_depth");
 	}
 	
+	//반려
+	if(last_status_cd == progressCd2 && sandbox_status_cd == 'B07002'){
+		$("#btn_B06002_2").show();
+	}
+	//승인
+	if((last_status_cd == progressCd2 && sandbox_status_cd == 'B07002') || (last_status_cd == progressCd2 && sandbox_status_cd == 'B07006')){
+		$("#btn_B06002_1").show();
+	}
 	//임시저장, 등록
 	if(sandbox_status_cd != 'B07005'){
 		$("#btn_B06001").show();
