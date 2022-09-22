@@ -508,7 +508,7 @@ const dpIngestMetaTbl = function (page, size_per_page) {
        	  	  }				
 	  		
 	  		$("#metaList").empty();
-	  		$("#total_count").text(data.totalcount);
+	  		$("#total_count").text(data.total_count);
   	    	if(data.contents != ""){
   	    		let insertTr = '';
 		  	    $.each(data.contents, function (idx, el) {
@@ -533,7 +533,7 @@ const dpIngestMetaTbl = function (page, size_per_page) {
 		  	  $("#metaList").html(insertTr);
   	    	}
   	    	//페이징 보여줌
-  	    	paging(data.totalcount, size_per_page, pageCount, page);
+  	    	paging(data.total_count, size_per_page, pageCount, page);
 	  	  }
     	  
     }).fail(function (error) {

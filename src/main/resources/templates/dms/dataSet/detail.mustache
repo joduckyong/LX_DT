@@ -270,7 +270,7 @@ const dpLoadDsetDtList = function (fieldData, page, size_per_page) {
        	  	  }				
 	  		
 	  		$("#dsetDtList").empty();
-  	    	$("#total_count").text(data.totalcount);
+  	    	$("#total_count").text(data.total_count);
   	    	
   	    	if(data.contents != ""){
   	    		let insertTr = '';
@@ -284,7 +284,7 @@ const dpLoadDsetDtList = function (fieldData, page, size_per_page) {
   	    		$("#dsetDtList").html(insertTr);
   	    	}
   	    	//페이징 보여줌
-  	    	paging(data.totalcount, size_per_page, pageCount, page);
+  	    	paging(data.total_count, size_per_page, pageCount, page);
   	    	
 	  	  }
     	  
