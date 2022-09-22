@@ -337,20 +337,7 @@
 	                    <table class="table" style="text-align: center;" id="tableDpIngestAdapterItMatchList">
 	                      <colgroup> 
 	                      </colgroup>
-	                      <thead>
-	                      	<tr> 
-	                          <th colspan="2">데이터 모델</th>
-	                          <th colspan="2">Source</th>
-	                          <th colspan="2">전처리</th>
-	                        </tr>
-	                        <tr> 
-	                          <th>속성ID</th>
-	                          <th>속성값</th>
-	                          <th>ID</th>
-	                          <th>수신경로</th>
-	                          <th>속성</th>
-	                          <th>예시</th>
-	                        </tr>
+	                      <thead id="matchListHeader">
 	                      </thead>
 	                      <tbody id="matchList">
 	                      </tbody>
@@ -416,12 +403,7 @@
 	            	<div class="row">
 	            		<div class="table_responsive" style="max-height:500px; overflow-y:auto;">
 		                    <table class="table" style="text-align: center;" id="tableDpIngestPopupPpPath" >
-		                      <thead>
-		                        <tr> 
-		                          <th>선택</th>
-		                          <th>수신 경로</th>
-		                          <th>항목명</th>
-		                        </tr>
+		                      <thead id="dpIngestPopupPpPathHeader">
 		                      </thead>
 		                      <tbody id="dpIngestPopupPpPath" >
 		                      </tbody>
@@ -1200,6 +1182,30 @@ const dpIngestMetaTblColMatch = function () {
 const dpIngestAdapterItMatchList = function(colData){
 	
 	let instance_id = '{{instance_id}}';
+	let clct_ty = $("#clct_ty").text()+'1';
+	
+	let insertHeader = '';
+	insertHeader += '<tr>';
+	insertHeader += '	<th colspan="2">데이터 모델</th>';
+	if(clct_ty == 'Open API'){
+		insertHeader += '	<th colspan="2">Source</th>';
+	}else{
+		insertHeader += '	<th>Source</th>';
+	}
+	insertHeader += '	<th colspan="2">전처리</th>';
+	insertHeader += '</tr>';
+	insertHeader += '<tr>';
+	insertHeader += '	<th>속성ID</th>';
+	insertHeader += '	<th>속성값</th>';
+	insertHeader += '	<th>ID</th>';
+	if(clct_ty == 'Open API'){
+		insertHeader += '	<th>수신경로</th>';
+	}
+	insertHeader += '	<th>속성</th>';
+	insertHeader += '	<th>예시</th>';
+	insertHeader += '</tr>';
+	
+	$("#matchListHeader").html(insertHeader);
 	
     const data = {
    		url: '/dp/ingest/adapter/instance/match/list',
@@ -1240,7 +1246,9 @@ const dpIngestAdapterItMatchList = function(colData){
 	   			  	    	insertTr += '			<option>'+el.source_id+'</option>';
 	   			  	    	insertTr += '		</select>';
 	   			  	    	insertTr += '	</td>';
-	   			  	    	insertTr += '	<td><input class="form-control" type="text" id="source_path" name="source_path" value="'+el.source_path+'" readonly="readonly"></td>';
+	   			  	   		if(clct_ty == 'Open API'){
+	   			  	    		insertTr += '	<td><input class="form-control" type="text" id="source_path" name="source_path" value="'+el.source_path+'" readonly="readonly"></td>';
+	   			  	   		}
 	   			  	    	insertTr += '	<td>';
 	   			  	    	insertTr += '		<select class="form-control clct_mthd1" id="pre_id" disabled>';
 	   			  	    	insertTr += '			<option>'+el.pre_nm+'</option>';
@@ -1487,6 +1495,18 @@ const dpIngestAdapterItPre = function(){
 const dpIngestPopupPpPath = function(sourceData){
 	
 	$("#dpIngestPopupPpPath").empty();	
+	let clct_ty = $("#clct_ty").text();
+	
+	let insertHeader = '';
+	insertHeader += '<tr>';
+	insertHeader += '	<th>선택</th>';
+	if(clct_ty == 'Open API'){
+		insertHeader += '	<th>수신경로</th>';
+	}
+	insertHeader += '	<th>항목명</th>';
+	insertHeader += '</tr>';
+	
+	$("#dpIngestPopupPpPathHeader").html(insertHeader);
 	
     const data = {
 	   		url: '/dp/ingest/popup/property_path',
@@ -1523,7 +1543,9 @@ const dpIngestPopupPpPath = function(sourceData){
   			  	    		}
   		     	          
   		     	       	  	insertTr += ' <td><input type=checkbox name="choice_yn" id="choice_yn" value="Y" '+chkStr+'></td>';
-		     		      	insertTr += ' <td><input type=hidden value='+el.source_path+' name="pop_source_path" id="pop_source_path" >'+el.source_path+'</td>';
+  		     	       		if(clct_ty == 'Open API'){
+		     		      		insertTr += ' <td><input type=hidden value='+el.source_path+' name="pop_source_path" id="pop_source_path" >'+el.source_path+'</td>';
+  		     	       		}
 		     		      	insertTr += ' <td><input type=hidden value='+el.source_id+' name="pop_source_id" id="pop_source_id" >'+el.source_id+'</td>';
 		                  	insertTr += '</tr>';
 		                  	i++;
