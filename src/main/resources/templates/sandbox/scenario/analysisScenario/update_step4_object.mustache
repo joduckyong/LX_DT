@@ -55,7 +55,7 @@
                          <div class="metatable_box col-5">
                           	<div class="form-group row">
 	                          <div class="table_responsive" style="height: 300px; overflow: auto">
-	                            <table class="table table-striped table-bordered bulk_action">
+	                            <table class="table table-striped table-bordered bulk_action result-table">
 	                              <colgroup>
 	                                <col width="55px">
 	                                <col width="20%">
@@ -66,15 +66,15 @@
 	                              </colgroup>
 	                              <thead>
 	                                <tr>
-	                                  <th rowspan="2">등록여부</th>
-	                                  <th rowspan="2">이미지 데이터셋 이름</th>
-	                                  <th rowspan="2">설명</th>
-	                                  <th colspan="3">파일 수(용량)</th>
+	                                  <th class="sticky-th" rowspan="2">등록여부</th>
+	                                  <th class="sticky-th" rowspan="2">이미지 데이터셋 이름</th>
+	                                  <th class="sticky-th" rowspan="2">설명</th>
+	                                  <th class="sticky-th" colspan="3">파일 수(용량)</th>
 	                                </tr>
 	                                <tr>
-	                                  <th>학습</th>
-	                                  <th>검증</th>
-	                                  <th>테스트</th>
+	                                  <th class="sticky-th-two">학습</th>
+	                                  <th class="sticky-th-two">검증</th>
+	                                  <th class="sticky-th-two">테스트</th>
 	                                </tr>
 	                              </thead>
 	                              <tbody class="left_tbl" id="imageDataset">
@@ -94,7 +94,7 @@
                    	  	<div class="metatable_box col-5 col-lg-6">
                           <div class="form-group row">
 	                          <div class="table_responsive" style="height: 300px; overflow: auto">
-	                            <table class="table table-striped table-bordered bulk_action">
+	                            <table class="table table-striped table-bordered bulk_action result-table">
 	                              <colgroup>
 	                                <col width="55px">
 	                                <col width="">
@@ -104,14 +104,14 @@
 	                              </colgroup>
 	                              <thead>
 	                                <tr>
-	                                  <th rowspan="2">선택</th>
-	                                  <th rowspan="2">이미지 데이터셋 이름</th>
-	                                  <th colspan="3">파일 수(용량)</th>
+	                                  <th class="sticky-th" rowspan="2">선택</th>
+	                                  <th class="sticky-th" rowspan="2">이미지 데이터셋 이름</th>
+	                                  <th class="sticky-th" colspan="3">파일 수(용량)</th>
 	                                </tr>
 	                                <tr>
-	                                  <th>학습</th>
-	                                  <th>검증</th>
-	                                  <th>테스트</th>
+	                                  <th class="sticky-th-two">학습</th>
+	                                  <th class="sticky-th-two">검증</th>
+	                                  <th class="sticky-th-two">테스트</th>
 	                                </tr>
 	                              </thead>
 	                              <tbody id="selected_imageDataset">
@@ -485,13 +485,12 @@ const analysisTargetImagesDetail = function(){
   		  if(errorMsg(data)){
 	          	 return;  
    	  	  }	
-    		
   	    	if(data.contents != ""){
   	    		$('#anals_dataset_nm').val(data.contents.anals_dataset_nm);
   	    		$('#anals_dataset_desc').val(data.contents.anals_dataset_desc);
   	    		
-  	    		for(let i=0; i<data.contents.image_dataset_ids.length; i++){
-  	    			imageDatasetIds.push(data.contents.image_dataset_ids[i]);
+  	    		for(let i=0; i<data.contents.image_datasets.length; i++){
+  	    			imageDatasetIds.push(data.contents.image_datasets[i]);
   	    		}
   	    		
   	    		detailImageDataset(imageDatasetIds);
@@ -506,14 +505,15 @@ const analysisTargetImagesDetail = function(){
 //이미지 데이터셋 모음 상세
 const detailImageDataset = function(imageDatasetIds){
 	for(let i=0; i<imageDatasetIds.length; i++){
-		imageObj[imageDatasetIds[i]] = $("#d_nm"+imageDatasetIds[i]).text();
-		$('input:checkbox[name="image_dataset_id"][value="'+imageDatasetIds[i]+'"]').prop("checked",true);
+		let imageDatasetId = imageDatasetIds[i].image_dataset_id;
+		imageObj[imageDatasetId] = $("#d_nm"+imageDatasetId).text();
+		$('input:checkbox[name="image_dataset_id"][value="'+imageDatasetId+'"]').prop("checked",true);
 		let insertTr = '<tr>';
-			insertTr += '	<td><input type="checkbox" name="selected_image_dataset_id" value="'+imageDatasetIds[i]+'" checked></td>';
-			insertTr += '	<td>'+$("#d_nm"+imageDatasetIds[i]).text()+'</td>';
-			insertTr += '	<td>'+$("#train"+imageDatasetIds[i]).text()+'</td>';
-			insertTr += '	<td>'+$("#valid"+imageDatasetIds[i]).text()+'</td>';
-			insertTr += '	<td>'+$("#test"+imageDatasetIds[i]).text()+'</td>';
+			insertTr += '	<td><input type="checkbox" name="selected_image_dataset_id" value="'+imageDatasetId+'" checked></td>';
+			insertTr += '	<td>'+$("#d_nm"+imageDatasetId).text()+'</td>';
+			insertTr += '	<td>'+$("#train"+imageDatasetId).text()+'</td>';
+			insertTr += '	<td>'+$("#valid"+imageDatasetId).text()+'</td>';
+			insertTr += '	<td>'+$("#test"+imageDatasetId).text()+'</td>';
 			insertTr += '</tr>';
 		
 		$("#selected_imageDataset").append(insertTr);
