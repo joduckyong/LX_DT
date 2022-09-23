@@ -110,6 +110,7 @@ function jsonToExcelDownload(fileNm, sheetNm, data){
 	return false;
 }
 
+/* 메뉴처리 */
 const targetUrl = window.location.pathname;
 
 let arrSplitUrl = [];
