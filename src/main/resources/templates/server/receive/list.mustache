@@ -282,15 +282,15 @@ const agentRecvCsvList = function(file_name){
  	    	
 		}
 	  	  
-	  	detailModal();
+	  	detailModal('add_modal');
 	  	
     }).fail(function (error) {
         alert(JSON.stringify(error));
     });	
 }
 //모달 상세정보
-const detailModal = function(){
-	$('#add_modal').modal('show');
+const detailModal = function(id){
+	$('#'+id).modal('show');
 }
 //엔터키가 눌렸을 때
 const enterkey = function(e) {
