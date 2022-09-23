@@ -592,7 +592,7 @@ const agentRecvLocalCsvList = function(){
 				insertTr += '	<td style="text-align: center;">'+isEmpty(el.code_nm)+'</td>';
 				insertTr += '	<td style="text-align: center;">'+isEmpty(el.recv_datetime)+'</td>';
 				insertTr += '	<td style="text-align: center;cursor:pointer;" onclick=receiveCol("'+(++i)+'","'+el.recv_zip_file+'","'+el.file_nm+'","'+el.recv_zip_file+'");>'+isEmpty(el.file_nm)+'</td>';
-				insertTr += '	<td style="text-align: center;">'+isEmpty(el.recv_file_size)+'</td>';
+				insertTr += '	<td style="text-align: center;">'+el.recv_file_size+'</td>';
 				insertTr += '</tr>';
 	  	    });
 			  	    
