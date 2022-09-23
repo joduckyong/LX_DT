@@ -410,7 +410,7 @@ const distributeSetupPopupSrvTargetList = function(info_data){
 	  	    	if(data.contents != ""){
 	  	    		
 					$.each(data.contents, function (idx, el) {
-						let s_url = originUrl + '/service/distribute/srv/' + dstbId + '?';
+						let s_url = originUrl + '/services/distribute/srv/' + dstbId + '?';
 						if(pgngYn == 'Y'){
 							s_url += 'rowsOfPage=10&nowPageNum=1&';
 						}
