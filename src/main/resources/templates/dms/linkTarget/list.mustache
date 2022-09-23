@@ -381,7 +381,8 @@ const distributeSetupInfo = function () {
 //데이터분배 대상 설정팝업 리스트
 const distributeSetupPopupSrvTargetList = function(info_data){
 	return new Promise(function(resolve, reject){
-		let originUrl = window.location.origin;
+// 		let originUrl = window.location.origin;
+		let originUrl = '{{targetUrl}}';
 		let dstbId = $("#dstbId").val();
 		let pgngYn = info_data.contents.pgngYn;
 		
@@ -409,7 +410,7 @@ const distributeSetupPopupSrvTargetList = function(info_data){
 	  	    	if(data.contents != ""){
 	  	    		
 					$.each(data.contents, function (idx, el) {
-						let s_url = originUrl + '?';
+						let s_url = originUrl + '/service/distribute/srv/' + dstbId + '?';
 						if(pgngYn == 'Y'){
 							s_url += 'rowsOfPage=10&nowPageNum=1&';
 						}

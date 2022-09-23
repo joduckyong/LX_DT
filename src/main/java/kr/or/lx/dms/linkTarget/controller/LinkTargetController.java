@@ -25,11 +25,16 @@ public class LinkTargetController {
     @Value("${linkTarget.api.url}")
     private String apiUrl;	
     
+    @Value("${linkTarget.target.url}")
+    private String targetUrl;	
+    
 	@Autowired
 	private ApiService<?> apiService;
 	
 	@GetMapping("/list")
 	public String list(ModelMap model) throws Exception{
+		
+		model.addAttribute("targetUrl", targetUrl);
 		
 		return "dms/linkTarget/list";
 	}
