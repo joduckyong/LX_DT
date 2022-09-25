@@ -195,7 +195,6 @@
 					<input type="hidden" name="trf_zip_file" id="trf_zip_file">
 					<input type="hidden" name="file_nm" id="file_nm">
 					<input type="hidden" name="recv_zip_file" id="recv_zip_file">
-					<input type="hidden" name="target_folder_nm" id="target_folder_nm">
 
 				</div>
 			</div>
@@ -213,6 +212,7 @@ const url = '/server/mapping';
 
 let dataList;
 let colInfoData;
+let targetFolderNm = ''; 
 
 //데이터 수집 관리 
 const jsList = function(){
@@ -657,7 +657,8 @@ const agentRecvDataMov = function(){
 		alert("파일목록을 선택하세요!");
 		return;
 	}
-	if($("#target_folder_nm").val() == ""){
+	
+	if(isEmpty(targetFolderNm) == ""){
 		alert("디렉토리 지정하세요!");
 		return;
 	}
@@ -665,7 +666,7 @@ const agentRecvDataMov = function(){
 	   		url: '/recv/data/mov',
 	   		user_id: 'user00',
 	   		file_nm: $("#file_nm").val(),
-	   		target_folder_nm: $("#target_folder_nm").val(),
+	   		target_folder_nm: targetFolderNm,
 	   		recv_zip_file: $("#recv_zip_file").val(),
 	    };	
 	    $.ajax({
@@ -720,14 +721,13 @@ const agentRecvDir = function(){
   	          	 return;  
        	  	  }	
 	  		
-	  		rootDir = data.root.replace('/root/','');
-	  	    insertLi += rootDir;
+//	  		rootDir = data.root.replace('/root/','');
+//	  	    insertLi += rootDir;
 	  	    insertLi += '<ul>';
 	  	    $.each(data.directory, function (idx, el) {
 	  	    	let dataDir = el.replace(data.root+'/','');
 				console.log('dataDir : '+dataDir);	 	    
 		  	    insertLi += '<li class="folder" >'+dataDir+'</li>';
-		  	  	$("#divForm").append($("<input type='hidden' value='"+el+"' id='dir_"+dataDir+"'>"));
 	  	    });
 	  	    insertLi += '</ul></li></ul>';
 	  	  }
@@ -744,7 +744,7 @@ agentRecvDir();
 setTimeout(function() {
    $("#tree").fancytree({
    	  activate: function(event, data) {
-	    $("#target_folder_nm").val($("#dir_"+data.node.title).val());
+   		targetFolderNm = data.node.title;
 	  },   
    });
 }, 500);
