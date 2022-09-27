@@ -135,3 +135,24 @@
         <div class="loading-bar" id="loading-image">
 			<img src="/img/loadingbar.gif"/>
 		</div>
+		
+		
+		<script>
+		  function getMenu() {
+		      const xhr = new XMLHttpRequest();
+		      xhr.onload = () => {
+		    	  if(xhr.status === 200 || xhr.status === 201){
+		    		  console.log(xhr.response);
+		    	  }
+		      };
+		      
+		      xhr.onerror = () => {
+		            console.log(xhr.response);
+		      };
+		      
+		      xhr.responseType="json";
+		      xhr.open('POST', "/getMenuByAccount");
+		      xhr.send();
+		    }
+		  getMenu();
+  </script>

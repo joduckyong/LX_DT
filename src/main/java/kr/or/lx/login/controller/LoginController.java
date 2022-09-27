@@ -38,11 +38,17 @@ public class LoginController {
 	
 	@Autowired
 	private LoginService loginService;
+	
+	@GetMapping("/loginTest")
+	public String loginTest(ModelMap model) throws Exception{
+		
+		return "login/loginTest";
+	}	
 
 	//로그인 계정 받기
 	@ResponseBody
 	@PostMapping("/postLogin")
-	public void postLogin(@RequestBody Map<String, Object> param, ModelMap model, HttpServletRequest request) throws Exception{
+	public String postLogin(@RequestBody Map<String, Object> param, ModelMap model, HttpServletRequest request) throws Exception{
 		log.info("postLogin");
 		
 		String url = loginApiUrl+"/korea-admin-1.0.0/api/ko-user/get";
@@ -50,17 +56,20 @@ public class LoginController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("account", userId);
 		
-//		System.out.println(map.get("account"));
-		
 		HttpSession session = request.getSession();
 		session.removeAttribute("userId");
     	
-		Map<String, Object> mapper = loginService.getLoginUser(url, session.getId(), map);
+		String body = loginService.getLoginUser(url, session.getId(), map);
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		Map<String, Object> mapper = objectMapper.readValue(body, new TypeReference<Map<String, Object>>() {});
 		
 		if(mapper.get("data") != null) {
 //			System.out.println(mapper.get("data").toString());
-			session.setAttribute("userId1", userId);
+			session.setAttribute("userId", userId);
 		}
+		
+		return userId;
 	}
 	
 	//회원메뉴
@@ -74,20 +83,14 @@ public class LoginController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		HttpSession session = request.getSession();
-		
 		map.put("account", session.getAttribute("userId"));
+//		map.put("account", "pine01");
+		map.put("sysType", 1);
 		
-		System.out.println(session.getAttribute("userId1"));
+		System.out.println(session.getAttribute("userId"));
 		
-		HttpHeaders httpHeaders = new HttpHeaders();
-    	httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-    	httpHeaders.set("Cookie", "JSESSIONID="+session.getId());
-    	
-    	RestTemplate restTemplate = new RestTemplate();
-    	
-    	ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.POST, new HttpEntity<>(map, httpHeaders), String.class);
-		
-		String body = responseEntity.getBody();
+		String body = loginService.getLoginUser(url, session.getId(), map);
+//		System.out.println(body);
 		
 		return body;
 		

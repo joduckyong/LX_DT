@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>LX DT</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  </head>
+  <body>
+  	<div>
+  		테스트
+  	</div>
+  	
+  	<script src="/vendors/jquery/dist/jquery.min.js"></script>
+    <script src="/vendors/jquery/dist/jquery-ui.min.js"></script>
+    
+    <script type="text/javascript">
+  //데이터분배 설정 리스트
+    const loginTest = function () {
+    	
+    	const data = {
+   	   		userId: 'pine01',	
+   	    };
+	  
+        $.ajax({
+            type: 'POST',
+            url: '/postLogin',
+            dataType: 'text',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function (data) {
+        	
+    	  	  if (data != null) {
+    	  		  
+        		  if(errorMsg(data)){
+       	          	 return;  
+           	  	  }				
+    	  	  }
+        	  
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });	
+    }
+  
+    loginTest();
+    </script>
+  </body>
+</html>
