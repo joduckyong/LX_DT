@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -30,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
+@EnableCaching
 @Controller
 public class LoginController {
 	
@@ -59,6 +61,7 @@ public class LoginController {
 		HttpSession session = request.getSession();
 		session.removeAttribute("userId");
     	
+		loginService.clearLoginUserCache();
 		String body = loginService.getLoginUser(url, session.getId(), map);
 		
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -85,8 +88,6 @@ public class LoginController {
 		map.put("account", session.getAttribute("userId"));
 //		map.put("account", "pine01");
 		map.put("sysType", 1);
-		
-		System.out.println(session.getAttribute("userId"));
 		
 		String body = loginService.getLoginUser(url, session.getId(), map);
 		

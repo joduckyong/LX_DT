@@ -56,6 +56,13 @@
 	});
 	
 	const getMenu = function() {
+		
+		let targetUrl = window.location.pathname;
+		if(targetUrl == '/'){
+			targetUrl = '/server/receive/list';
+			sessionStorage.removeItem("menuId");
+		}
+		
 			$.ajax({
 		        type: 'POST',
 		        url: '/getMenuByAccount',
@@ -68,135 +75,73 @@
 		          	 return;  
 	   	  	  }	
 	  		  
-	  		  let l_menu = res.data[0].children;
-	  		  
-	  		  let str = '';
-	  		  str += '<ul class="nav side-menu">';
-	  		  
-	  			$.each(l_menu, function (l_idx, l_item) {
-	  			  let m_menu = l_item.children;
-	  			  str += '	<li>'
-	  			  str += '		<a><i class="'+l_item.icon+'"></i>'+l_item.menuName+'<span class="fa fa-chevron-down"> </span></a>';
+	  		  if(res.data != null && res.data.length > 0){
+	  			  let l_menu = res.data[0].children;
+		  		  
+		  		  let str = '';
+		  		  str += '<ul class="nav side-menu">';
+		  		  
+		  			$.each(l_menu, function (l_idx, l_item) {
+		  			  let m_menu = l_item.children;
+		  			  str += '	<li>'
+		  			  str += '		<a><i class="'+l_item.icon+'"></i>'+l_item.menuName+'<span class="fa fa-chevron-down"> </span></a>';
+		  			  
+		  			  if(m_menu.length > 0){
+		  				  str += '	<ul class="nav child_menu">';
+		  					$.each(m_menu, function (m_idx, m_item) {
+		  						let s_menu = m_item.children;
+		  						if(s_menu.length > 0){
+		  							str += '		<li><a>'+m_item.menuName+'<span class="fa fa-chevron-down"> </span></a>';
+		  							str += '			<ul class="nav child_menu">';
+		  							$.each(s_menu, function (s_idx, s_item) {
+		  								str += '			<li id="'+s_item.id+'">';
+		  								if(s_item.menuPath){
+			  		    					  str += '			<a href="'+s_item.menuPath+'" onclick="clickMenu(\''+s_item.id+'\');">'+s_item.menuName+'</a>';
+			  		    				  }else{
+			  		    					  str += '			<a>'+s_item.menuName+'</a>';
+			  		    				  }
+		  								str += '			</li>';
+		  							});
+		  							str += '			</ul>';
+		  						}else{
+			    				  str += '		<li id="'+m_item.id+'">';
+			    				  if(m_item.menuPath){
+			    					  str += '			<a href="'+m_item.menuPath+'" onclick="clickMenu(\''+m_item.id+'\');">'+m_item.menuName+'</a>';
+			    				  }else{
+			    					  str += '			<a>'+m_item.menuName+'</a>';
+			    				  }
+			    				  str += '		</li>';
+		  						}
+			    			  });
+			    			  str += '	</ul>';
+		  			  }
+			    		  str += '	</li>';
 	  			  
-	  			  if(m_menu.length > 0){
-	  				  str += '	<ul class="nav child_menu">';
-	  					$.each(m_menu, function (m_idx, m_item) {
-	  						let s_menu = m_item.children;
-	  						if(s_menu.length > 0){
-	  							str += '		<li><a>'+m_item.menuName+'<span class="fa fa-chevron-down"> </span></a>';
-	  							str += '			<ul class="nav child_menu">';
-	  							$.each(s_menu, function (s_idx, s_item) {
-	  								str += '			<li>';
-	  								if(s_item.menuPath){
-		  		    					  str += '			<a href="'+s_item.menuPath+'">'+s_item.menuName+'</a>';
-		  		    				  }else{
-		  		    					  str += '			<a>'+s_item.menuName+'</a>';
-		  		    				  }
-	  								str += '			</li>';
-	  							});
-	  							str += '			</ul>';
-	  						}else{
-		    				  str += '		<li>';
-		    				  if(m_item.menuPath){
-		    					  str += '			<a href="'+m_item.menuPath+'">'+m_item.menuName+'</a>';
-		    				  }else{
-		    					  str += '			<a>'+m_item.menuName+'</a>';
-		    				  }
-		    				  str += '		</li>';
-	  						}
-		    			  });
-		    			  str += '	</ul>';
-	  			  }
-		    		  str += '	</li>';
-	  			  
-	  		  });
+	  		  		});
   		  
-	  		  str += '</ul>';
-	  		  $("#menu_selection").html(str);
-// 	  		  doSelectedMenu();
+			  		  str += '</ul>';
+			  		  $("#menu_selection").html(str);
+			  		  selectedMenu();
+				}else{
+					$(".right_col").empty();
+				}
 		    }).fail(function (error) {
 		        alert(JSON.stringify(error));
 		    });	
 	    }
 	
-	const doSelectedMenu = function() {
-		 let targetUrl = window.location.pathname;
-		 
-		 if(targetUrl == '/'){
-			 targetUrl = '/server/receive/list';
-		 }
-		 
-		 let tUrl = '';
-		 $("ul.child_menu > li").each(function(idx, item){
-// 			 console.log(item);
-			 
-			 let menuUrl = '';
-			 if($(this).find("ul").length > 0){
-				 menuUrl = $(this).find("ul > li > a").attr("href");
-// 				 console.log("!!! > "+ menuUrl);
-			 }else{
-				 menuUrl = $(this).find("a").attr("href");
-// 				 console.log("@@@ > "+ menuUrl);
-			 }
-			 
-			 let mUrl = '';
-			 if(menuUrl){
- 			    let menuArr = menuUrl.split("/");
- 			    let targetArr = targetUrl.split("/");
- 			 	mUrl = menuArr.slice(0, menuArr.length-1);
- 			 	tUrl = targetArr.slice(0, menuArr.length-1);
- 			 }
-			 
-			 if($(this).find("ul").length > 0){
-				 
-				 if(targetUrl == menuUrl){
-					 console.log(targetUrl)
-					 console.log(menuUrl)
-					 console.log("=============================")
-					 $(this).find("ul").css("display","block");
-					 $(this).attr("class","active");
-					 $(this).find("ul > li").attr("class","current-page");
-				 }
-				
-			 }else{
-				 if(tUrl.toString() == mUrl.toString()){
-					 $(this).parent().css("display","block");
-					 $(this).parent().parent().attr("class","active");
-					 $(this).attr("class","current-page");
-				 }
-			 }
-			 
-// 			 if(tUrl.toString() == mUrl.toString()){
-// 				 if($(this).find("ul").length > 0){
-// 					 $(this).find("ul").css("display","block");
-// 					 $(this).attr("class","active");
-// 					 $(this).find("ul > li").attr("class","current-page");
-// 				 }else{
-// 					 $(this).parent().css("display","block");
-// 					 $(this).parent().parent().attr("class","active");
-// 					 $(this).attr("class","current-page");
-// 				 }
-				 
-// 			 }
-			 
-// 			 let menuUrl = item.querySelector("a").getAttribute("href");
-			
-// 			 let mUrl = '';
-// 			 if(menuUrl){
-// 			    let menuArr = menuUrl.split("/");
-// 			    let targetArr = targetUrl.split("/");
-// 			 	mUrl = menuArr.slice(0, menuArr.length-1);
-// 			 	tUrl = targetArr.slice(0, menuArr.length-1);
-// 			 }
-// 			 if(tUrl.toString() == mUrl.toString()){
-// 				 item.parentNode.style.display='block';
-// 				 item.parentNode.parentNode.className='active';
-// 				 item.className='current-page';
-// 			 }
-		 });
-		 
-		 
-	 }
+	const clickMenu = function(menuId) {
+		sessionStorage.setItem('menuId', menuId);
+	}
+	
+	const selectedMenu = function(){
+		let menuId = sessionStorage.getItem('menuId');
+		
+		$("#"+menuId).parents(".child_menu").css("display","block");
+		$("#"+menuId).parent().parent().attr("class","active");
+		$("#"+menuId).attr("class","current-page");
+		
+	}
 	
 	getMenu();
 	</script>        

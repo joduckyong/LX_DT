@@ -2,6 +2,8 @@ package kr.or.lx.login.service;
 
 import java.util.Map;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -13,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class LoginService {
 	
+	@Cacheable(value="userMenuCache", key="#map")
 	public String getLoginUser(String url, String sessionId, Map<String, Object> map) throws Exception{
 		
 		HttpHeaders httpHeaders = new HttpHeaders();
@@ -29,6 +32,11 @@ public class LoginService {
 //		
 //		Map<String, Object> mapper = objectMapper.readValue(body, new TypeReference<Map<String, Object>>() {});
 		return body;
+	}
+	
+	@CacheEvict(value="userMenuCache", allEntries=true)
+	public void clearLoginUserCache() {
+		
 	}
 	
 }
