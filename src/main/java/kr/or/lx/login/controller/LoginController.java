@@ -65,7 +65,6 @@ public class LoginController {
 		Map<String, Object> mapper = objectMapper.readValue(body, new TypeReference<Map<String, Object>>() {});
 		
 		if(mapper.get("data") != null) {
-//			System.out.println(mapper.get("data").toString());
 			session.setAttribute("userId", userId);
 		}
 		
@@ -90,7 +89,6 @@ public class LoginController {
 		System.out.println(session.getAttribute("userId"));
 		
 		String body = loginService.getLoginUser(url, session.getId(), map);
-//		System.out.println(body);
 		
 		return body;
 		

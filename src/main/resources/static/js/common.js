@@ -111,94 +111,94 @@ function jsonToExcelDownload(fileNm, sheetNm, data){
 }
 
 /* 메뉴처리 */
-const targetUrl = window.location.pathname;
-
-let arrSplitUrl = [];
-arrSplitUrl = targetUrl.split('/');
-
-let firstUrl;
-let twoUrl;
-let threeUrl;
-let fourUrl;
-let arrSplitUrlAdd;
-
-for(var i = 1; i < arrSplitUrl.length; i++){
-	console.log('['+i+'] : '+arrSplitUrl[i]);
-	
-	if( i == 1){
-		firstUrl = arrSplitUrl[i];
-		arrSplitUrlAdd = arrSplitUrl[i];
-	}else if( i == 2){
-		twoUrl = arrSplitUrl[i];
-		arrSplitUrlAdd += "_"+arrSplitUrl[i];
-	}else if( i == 3){
-		threeUrl = arrSplitUrl[i];
-		arrSplitUrlAdd += "_"+arrSplitUrl[i];
-	}else if( i == 4){
-		fourUrl = arrSplitUrl[i];
-		arrSplitUrlAdd += "_"+arrSplitUrl[i];
-	}else{
-		arrSplitUrlAdd += "_"+arrSplitUrl[i];
-	}
-}
-
-
-if(isEmpty(firstUrl) == ''){
-	$("#menu_server").addClass("active");
-	$("#menu_sub_server").css("display","block");
-	$("#server_receive").addClass("current-page");	
-}else{
-	if(firstUrl == 'server'){
-		$("#menu_"+firstUrl).addClass("active");
-		$("#menu_sub_"+firstUrl).css("display","block");
-		$("#"+firstUrl+"_"+twoUrl).addClass("current-page");	
-	}else if(firstUrl == 'sandbox'){
-		$("#menu_"+firstUrl).addClass("active");
-		$("#menu_sub_"+firstUrl).css("display","block");
-		if(twoUrl == 'env' || twoUrl == 'info' || twoUrl == 'model'){
-			$("#sub_"+firstUrl+"_"+twoUrl).addClass("active");
-			$("#menu_sub_"+firstUrl+"_"+twoUrl).css("display","block");
-		}
-		$("#"+firstUrl+"_"+twoUrl+"_"+threeUrl).addClass("current-page");	
-	}else if(firstUrl == 'admin'){
-		firstUrl = twoUrl;
-		twoUrl = threeUrl;
-		threeUrl = fourUrl;
-		$("#menu_"+firstUrl).addClass("active");
-		$("#menu_sub_"+firstUrl).css("display","block");
-		if(twoUrl == 'env' || twoUrl == 'info' || twoUrl == 'model'){
-			$("#sub_"+firstUrl+"_"+twoUrl).addClass("active");
-			$("#menu_sub_"+firstUrl+"_"+twoUrl).css("display","block");
-		}
-		$("#admin_"+firstUrl+"_"+twoUrl+"_"+threeUrl).addClass("current-page");			
-	}else{
-		$("#menu_dms").addClass("active");
-		$("#menu_sub_dms").css("display","block");
-		if(firstUrl == 'metaTable' || firstUrl == 'systemMgmt' || firstUrl == 'dataMgmt'){
-			$("#sub_"+firstUrl+"_"+twoUrl).addClass("active");
-			$("#menu_sub_dms_"+firstUrl).css("display","block");
-			$("#"+firstUrl+"_"+twoUrl).addClass("current-page");
-		}else if(firstUrl == 'adaptor' || firstUrl == 'linkTarget'){
-			
-			if(twoUrl == "operate" || twoUrl == "detail" || twoUrl == "connectionSet" || twoUrl == "machingInfo"){
-				twoUrl = "config";
-			}else if(twoUrl == "preProcessAdd"){
-				twoUrl = "preProcessList";
-			}else if(twoUrl == "update" || twoUrl == "add"){
-				twoUrl = "list";
-			}
-			$("#sub_dms_"+firstUrl).addClass("active");
-			$("#menu_sub_dms_"+firstUrl).css("display","block");
-			$("#"+firstUrl+"_"+twoUrl).addClass("current-page");			
-		}else{
-			if(firstUrl == 'collectionError' || firstUrl == 'dataSet' || firstUrl == 'monitoring'){
-				twoUrl = "list";
-			}
-			$("#"+firstUrl+"_"+twoUrl).addClass("current-page");
-		}
-		
-	}
-}
+//const targetUrl = window.location.pathname;
+//
+//let arrSplitUrl = [];
+//arrSplitUrl = targetUrl.split('/');
+//
+//let firstUrl;
+//let twoUrl;
+//let threeUrl;
+//let fourUrl;
+//let arrSplitUrlAdd;
+//
+//for(var i = 1; i < arrSplitUrl.length; i++){
+//	console.log('['+i+'] : '+arrSplitUrl[i]);
+//	
+//	if( i == 1){
+//		firstUrl = arrSplitUrl[i];
+//		arrSplitUrlAdd = arrSplitUrl[i];
+//	}else if( i == 2){
+//		twoUrl = arrSplitUrl[i];
+//		arrSplitUrlAdd += "_"+arrSplitUrl[i];
+//	}else if( i == 3){
+//		threeUrl = arrSplitUrl[i];
+//		arrSplitUrlAdd += "_"+arrSplitUrl[i];
+//	}else if( i == 4){
+//		fourUrl = arrSplitUrl[i];
+//		arrSplitUrlAdd += "_"+arrSplitUrl[i];
+//	}else{
+//		arrSplitUrlAdd += "_"+arrSplitUrl[i];
+//	}
+//}
+//
+//
+//if(isEmpty(firstUrl) == ''){
+//	$("#menu_server").addClass("active");
+//	$("#menu_sub_server").css("display","block");
+//	$("#server_receive").addClass("current-page");	
+//}else{
+//	if(firstUrl == 'server'){
+//		$("#menu_"+firstUrl).addClass("active");
+//		$("#menu_sub_"+firstUrl).css("display","block");
+//		$("#"+firstUrl+"_"+twoUrl).addClass("current-page");	
+//	}else if(firstUrl == 'sandbox'){
+//		$("#menu_"+firstUrl).addClass("active");
+//		$("#menu_sub_"+firstUrl).css("display","block");
+//		if(twoUrl == 'env' || twoUrl == 'info' || twoUrl == 'model'){
+//			$("#sub_"+firstUrl+"_"+twoUrl).addClass("active");
+//			$("#menu_sub_"+firstUrl+"_"+twoUrl).css("display","block");
+//		}
+//		$("#"+firstUrl+"_"+twoUrl+"_"+threeUrl).addClass("current-page");	
+//	}else if(firstUrl == 'admin'){
+//		firstUrl = twoUrl;
+//		twoUrl = threeUrl;
+//		threeUrl = fourUrl;
+//		$("#menu_"+firstUrl).addClass("active");
+//		$("#menu_sub_"+firstUrl).css("display","block");
+//		if(twoUrl == 'env' || twoUrl == 'info' || twoUrl == 'model'){
+//			$("#sub_"+firstUrl+"_"+twoUrl).addClass("active");
+//			$("#menu_sub_"+firstUrl+"_"+twoUrl).css("display","block");
+//		}
+//		$("#admin_"+firstUrl+"_"+twoUrl+"_"+threeUrl).addClass("current-page");			
+//	}else{
+//		$("#menu_dms").addClass("active");
+//		$("#menu_sub_dms").css("display","block");
+//		if(firstUrl == 'metaTable' || firstUrl == 'systemMgmt' || firstUrl == 'dataMgmt'){
+//			$("#sub_"+firstUrl+"_"+twoUrl).addClass("active");
+//			$("#menu_sub_dms_"+firstUrl).css("display","block");
+//			$("#"+firstUrl+"_"+twoUrl).addClass("current-page");
+//		}else if(firstUrl == 'adaptor' || firstUrl == 'linkTarget'){
+//			
+//			if(twoUrl == "operate" || twoUrl == "detail" || twoUrl == "connectionSet" || twoUrl == "machingInfo"){
+//				twoUrl = "config";
+//			}else if(twoUrl == "preProcessAdd"){
+//				twoUrl = "preProcessList";
+//			}else if(twoUrl == "update" || twoUrl == "add"){
+//				twoUrl = "list";
+//			}
+//			$("#sub_dms_"+firstUrl).addClass("active");
+//			$("#menu_sub_dms_"+firstUrl).css("display","block");
+//			$("#"+firstUrl+"_"+twoUrl).addClass("current-page");			
+//		}else{
+//			if(firstUrl == 'collectionError' || firstUrl == 'dataSet' || firstUrl == 'monitoring'){
+//				twoUrl = "list";
+//			}
+//			$("#"+firstUrl+"_"+twoUrl).addClass("current-page");
+//		}
+//		
+//	}
+//}
 
 
 
