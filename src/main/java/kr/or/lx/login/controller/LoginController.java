@@ -65,6 +65,8 @@ public class LoginController {
 		
 		if(mapper.get("data") != null) {
 			session.setAttribute("userId", userId);
+		}else {
+			session.setAttribute("userId", "noUser");
 		}
 		
 		return userId;
@@ -81,14 +83,34 @@ public class LoginController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		HttpSession session = request.getSession();
-		map.put("account", session.getAttribute("userId"));
-//		map.put("account", "pine01");
+		String userId = (String) session.getAttribute("userId");
+		map.put("account", userId);
 		map.put("sysType", 1);
 		
-		String body = loginService.getLoginUser(url, session.getId(), map);
+		String body = "";
+		if(userId != null && !"".equals(userId)) {
+			if("noUser".equals(userId)) {	//사용자 없을 경우
+				body = "{\"data\":\"noUser\"}";
+			}else {
+				body = loginService.getLoginUser(url, session.getId(), map);
+			}
+			
+		}else {	//로그인 안했을 경우
+			body = "{\"data\":\"noLogin\"}";
+		}
 		
 		return body;
 		
+	}
+	
+	//로그인 계정 받기
+	@GetMapping("/noLogin")
+	public String noLogin(ModelMap model, HttpSession session) throws Exception{
+		log.info("noLogin");
+		
+		session.removeAttribute("userId");
+		
+		return "/";
 	}
 	
 }

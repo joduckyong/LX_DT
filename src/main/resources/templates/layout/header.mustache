@@ -38,86 +38,86 @@
             </div><br-->
             <div class="main_menu_side hidden-print main_menu" id="sidebar-menu">
               <div class="menu_section" id="menu_selection">
-<!--                 <ul class="nav side-menu"> -->
+                <ul class="nav side-menu" id="side_menu" style="display: none;">
                 
-<!--                   <li id="menu_server"> <a><i class="fa fa-list-alt"></i>AgentServer<span class="fa fa-chevron-down"> </span></a> -->
-<!--                     <ul id="menu_sub_server" class="nav child_menu"> -->
-<!--                       <li id="server_receive"><a href="/server/receive/list">수신 데이터 목록</a></li> -->
-<!--                       <li id="server_mapping"><a href="/server/mapping/list">수신 데이터 매핑</a></li> -->
-<!--                       <li id="server_mappingList"><a href="/server/mappingList/list">수신 데이터 매핑목록</a></li> -->
-<!--                       <li id="server_agent"><a href="/server/agent/list">에이전트 관리</a></li> -->
-<!--                     </ul> -->
-<!--                   </li> -->
+                  <li id="menu_server"> <a><i class="fa fa-list-alt"></i>AgentServer<span class="fa fa-chevron-down"> </span></a>
+                    <ul id="menu_sub_server" class="nav child_menu">
+                      <li id="server_receive"><a href="/server/receive/list" onclick="clickMenu('server_receive');">수신 데이터 목록</a></li>
+                      <li id="server_mapping"><a href="/server/mapping/list" onclick="clickMenu('server_mapping');">수신 데이터 매핑</a></li>
+                      <li id="server_mappingList"><a href="/server/mappingList/list" onclick="clickMenu('server_mappingList');">수신 데이터 매핑목록</a></li>
+                      <li id="server_agent"><a href="/server/agent/list" onclick="clickMenu('server_agent');">에이전트 관리</a></li>
+                    </ul>
+                  </li>
                   
-<!--                   <li id="menu_sandbox"> <a><i class="fa fa-list-alt"></i>SandBox<span class="fa fa-chevron-down"> </span></a> -->
-<!--                     <ul id="menu_sub_sandbox" class="nav child_menu"> -->
-<!-- 	                  <li id="sub_sandbox_env"><a>분석 환경 관리<span class="fa fa-chevron-down"> </span></a> -->
-<!-- 	                    <ul id="menu_sub_sandbox_env" class="nav child_menu"> -->
-<!-- 	                      <li id="sandbox_env_dockerImage"><a href="/sandbox/env/dockerImage/list">Docker Image 관리</a></li> -->
-<!-- 	                      <li id="sandbox_env_analysisImage"><a href="/sandbox/env/analysisImage/list">분석 Image 관리</a></li> -->
-<!-- 	                      <li id="sandbox_env_server"><a href="/sandbox/env/server/list">서버 관리</a></li> -->
-<!-- 	                    </ul> -->
-<!-- 	                  </li> -->
-<!-- 	                  <li id="sub_sandbox_info"><a>분석 모델 정보 관리<span class="fa fa-chevron-down"> </span></a> -->
-<!-- 	                    <ul id="menu_sub_sandbox_info" class="nav child_menu"> -->
-<!-- 	                      <li id="sandbox_info_infoPreprocessing"><a href="/sandbox/info/infoPreprocessing/list">전처리 모델</a></li> -->
-<!-- 	                      <li id="sandbox_info_infoAnalysisModel"><a href="/sandbox/info/infoAnalysisModel/list">분석 모델</a></li> -->
-<!-- 	                    </ul> -->
-<!-- 	                  </li> -->
-<!-- 	                  <li id="sub_sandbox_model"><a>분석 모델 관리<span class="fa fa-chevron-down"> </span></a> -->
-<!-- 	                    <ul id="menu_sub_sandbox_model" id="menu_sub_3_sandbox" class="nav child_menu"> -->
-<!-- 	                      <li id="sandbox_model_modelPreprocessing"><a href="/sandbox/model/modelPreprocessing/list">전처리 모델</a></li> -->
-<!-- 	                      <li id="sandbox_model_modelAnalysisModel"><a href="/sandbox/model/modelAnalysisModel/list">분석 모델</a></li> -->
-<!-- 	                    </ul> -->
-<!-- 	                  </li> -->
-<!-- 	                  <li id="sandbox_dataset_imageDataset"><a href="/sandbox/dataset/imageDataset/list">이미지 데이터셋 관리</a></li> -->
-<!-- 	                  <li id="sandbox_scenario_analysisScenario"><a href="/sandbox/scenario/analysisScenario/list">분석 시나리오 관리</a></li> -->
-<!-- 	                  <li id="sandbox_sand_analysisSandbox"><a href="/sandbox/sand/analysisSandbox/list">분석 샌드박스 관리</a></li> -->
-<!-- 	                  <li id="admin_sandbox_sand_analysisSandbox"><a href="/admin/sandbox/sand/analysisSandbox/list">분석 샌드박스 관리(관리자)</a></li> -->
-<!--                     </ul> -->
-<!--                   </li> -->
+                  <li id="menu_sandbox"> <a><i class="fa fa-list-alt"></i>SandBox<span class="fa fa-chevron-down"> </span></a>
+                    <ul id="menu_sub_sandbox" class="nav child_menu">
+	                  <li id="sub_sandbox_env"><a>분석 환경 관리<span class="fa fa-chevron-down"> </span></a>
+	                    <ul id="menu_sub_sandbox_env" class="nav child_menu">
+	                      <li id="sandbox_env_dockerImage"><a href="/sandbox/env/dockerImage/list" onclick="clickMenu('sandbox_env_dockerImage');">Docker Image 관리</a></li>
+	                      <li id="sandbox_env_analysisImage"><a href="/sandbox/env/analysisImage/list" onclick="clickMenu('sandbox_env_analysisImage');">분석 Image 관리</a></li>
+	                      <li id="sandbox_env_server"><a href="/sandbox/env/server/list" onclick="clickMenu('sandbox_env_server');">서버 관리</a></li>
+	                    </ul>
+	                  </li>
+	                  <li id="sub_sandbox_info"><a>분석 모델 정보 관리<span class="fa fa-chevron-down"> </span></a>
+	                    <ul id="menu_sub_sandbox_info" class="nav child_menu">
+	                      <li id="sandbox_info_infoPreprocessing"><a href="/sandbox/info/infoPreprocessing/list" onclick="clickMenu('sandbox_info_infoPreprocessing');">전처리 모델</a></li>
+	                      <li id="sandbox_info_infoAnalysisModel"><a href="/sandbox/info/infoAnalysisModel/list" onclick="clickMenu('sandbox_info_infoAnalysisModel');">분석 모델</a></li>
+	                    </ul>
+	                  </li>
+	                  <li id="sub_sandbox_model"><a>분석 모델 관리<span class="fa fa-chevron-down"> </span></a>
+	                    <ul id="menu_sub_sandbox_model" id="menu_sub_3_sandbox" class="nav child_menu">
+	                      <li id="sandbox_model_modelPreprocessing"><a href="/sandbox/model/modelPreprocessing/list" onclick="clickMenu('sandbox_model_modelPreprocessing');">전처리 모델</a></li>
+	                      <li id="sandbox_model_modelAnalysisModel"><a href="/sandbox/model/modelAnalysisModel/list" onclick="clickMenu('sandbox_model_modelAnalysisModel');">분석 모델</a></li>
+	                    </ul>
+	                  </li>
+	                  <li id="sandbox_dataset_imageDataset"><a href="/sandbox/dataset/imageDataset/list" onclick="clickMenu('sandbox_dataset_imageDataset');">이미지 데이터셋 관리</a></li>
+	                  <li id="sandbox_scenario_analysisScenario"><a href="/sandbox/scenario/analysisScenario/list" onclick="clickMenu('sandbox_scenario_analysisScenario');">분석 시나리오 관리</a></li>
+	                  <li id="sandbox_sand_analysisSandbox"><a href="/sandbox/sand/analysisSandbox/list" onclick="clickMenu('sandbox_sand_analysisSandbox');">분석 샌드박스 관리</a></li>
+	                  <li id="admin_sandbox_sand_analysisSandbox"><a href="/admin/sandbox/sand/analysisSandbox/list" onclick="clickMenu('admin_sandbox_sand_analysisSandbox');">분석 샌드박스 관리(관리자)</a></li>
+                    </ul>
+                  </li>
                   
-<!--                   <li id="menu_dms"> <a><i class="fa fa-list-alt"></i>Dms<span class="fa fa-chevron-down"> </span></a> -->
-<!--                     <ul id="menu_sub_dms" class="nav child_menu"> -->
-<!-- 	                  <li id="sub_dms_metaTable"><a>메타테이블 관리<span class="fa fa-chevron-down"> </span></a> -->
-<!-- 	                    <ul id="menu_sub_dms_metaTable" class="nav child_menu"> -->
-<!-- 	                      <li id="metaTable_list"><a href="/metaTable/list">메타테이블 관리</a></li> -->
-<!-- 	                      <li id="metaTable_metaInfo"><a href="/metaTable/metaInfo">메타정보 항목관리</a></li> -->
-<!-- 	                    </ul> -->
-<!-- 	                  </li> -->
-<!-- 	                  <li id="sub_dms_adaptor"><a>Adapter 관리<span class="fa fa-chevron-down"> </span></a> -->
-<!-- 	                    <ul id="menu_sub_dms_adaptor" class="nav child_menu"> -->
-<!-- 	                      <li id="adaptor_config"><a href="/adaptor/config">Adapter 설정</a></li> -->
-<!-- 	                      <li id="adaptor_instance"><a href="/adaptor/instance">Instance 조회</a></li> -->
-<!-- 	                      <li id="adaptor_connectionType"><a href="/adaptor/connectionType">접속유형 항목관리</a></li> -->
-<!-- 	                      <li id="adaptor_type"><a href="/adaptor/type">Adapter 유형관리</a></li> -->
-<!-- 	                      <li id="adaptor_preProcessList"><a href="/adaptor/preProcessList">전처리 리스트</a></li> -->
-<!-- 	                    </ul> -->
-<!-- 	                  </li> -->
-<!-- 	                  <li id="collectionError_list"><a href="/collectionError/list">수집오류</a></li> -->
-<!-- 	                  <li id="dataSet_list"><a href="/dataSet/list">데이터 셋</a></li> -->
-<!-- 	                  <li id="monitoring_list"><a href="/monitoring/list">모니터링</a></li> -->
-<!-- 	                  <li id="sub_dms_systemMgmt"><a>시스템 관리<span class="fa fa-chevron-down"> </span></a> -->
-<!-- 	                    <ul id="menu_sub_dms_systemMgmt" class="nav child_menu"> -->
-<!-- 	                      <li id="systemMgmt_codeList"><a href="/systemMgmt/codeList">코드관리</a></li> -->
-<!-- 	                      <li id="systemMgmt_classificationMgmt"><a href="/systemMgmt/classificationMgmt">분류관리</a></li> -->
-<!-- 	                    </ul> -->
-<!-- 	                  </li> -->
-<!-- 	                  <li id="sub_dms_linkTarget"><a>연계대상 관리<span class="fa fa-chevron-down"> </span></a> -->
-<!-- 	                    <ul id="menu_sub_dms_linkTarget" class="nav child_menu"> -->
-<!-- 	                      <li id="linkTarget_list"><a href="/linkTarget/list">데이터 분배설정</a></li> -->
-<!-- 	                    </ul> -->
-<!-- 	                  </li> -->
-<!-- 	                  <li id="sub_dms_dataMgmt"><a>데이터 관리<span class="fa fa-chevron-down"> </span></a> -->
-<!-- 	                    <ul id="menu_sub_dms_dataMgmt" class="nav child_menu"> -->
-<!-- 	                      <li id="dataMgmt_matchKey"><a href="/dataMgmt/matchKey">Match Key</a></li> -->
-<!-- 	                      <li id="dataMgmt_table"><a href="/dataMgmt/table">Table 조회</a></li> -->
-<!-- 	                    </ul> -->
-<!-- 	                  </li> -->
-<!--                     </ul> -->
-<!--                   </li> -->
+                  <li id="menu_dms"> <a><i class="fa fa-list-alt"></i>Dms<span class="fa fa-chevron-down"> </span></a>
+                    <ul id="menu_sub_dms" class="nav child_menu">
+	                  <li id="sub_dms_metaTable"><a>메타테이블 관리<span class="fa fa-chevron-down"> </span></a>
+	                    <ul id="menu_sub_dms_metaTable" class="nav child_menu">
+	                      <li id="metaTable_list"><a href="/metaTable/list" onclick="clickMenu('metaTable_list');">메타테이블 관리</a></li>
+	                      <li id="metaTable_metaInfo"><a href="/metaTable/metaInfo" onclick="clickMenu('metaTable_metaInfo');">메타정보 항목관리</a></li>
+	                    </ul>
+	                  </li>
+	                  <li id="sub_dms_adaptor"><a>Adapter 관리<span class="fa fa-chevron-down"> </span></a>
+	                    <ul id="menu_sub_dms_adaptor" class="nav child_menu">
+	                      <li id="adaptor_config"><a href="/adaptor/config" onclick="clickMenu('adaptor_config');">Adapter 설정</a></li>
+	                      <li id="adaptor_instance"><a href="/adaptor/instance" onclick="clickMenu('adaptor_instance');">Instance 조회</a></li>
+	                      <li id="adaptor_connectionType"><a href="/adaptor/connectionType" onclick="clickMenu('adaptor_connectionType');">접속유형 항목관리</a></li>
+	                      <li id="adaptor_type"><a href="/adaptor/type" onclick="clickMenu('adaptor_type');">Adapter 유형관리</a></li>
+	                      <li id="adaptor_preProcessList"><a href="/adaptor/preProcessList" onclick="clickMenu('adaptor_preProcessList');">전처리 리스트</a></li>
+	                    </ul>
+	                  </li>
+	                  <li id="collectionError_list"><a href="/collectionError/list" onclick="clickMenu('collectionError_list');">수집오류</a></li>
+	                  <li id="dataSet_list"><a href="/dataSet/list" onclick="clickMenu('dataSet_list');">데이터 셋</a></li>
+	                  <li id="monitoring_list"><a href="/monitoring/list" onclick="clickMenu('monitoring_list');">모니터링</a></li>
+	                  <li id="sub_dms_systemMgmt"><a>시스템 관리<span class="fa fa-chevron-down"> </span></a>
+	                    <ul id="menu_sub_dms_systemMgmt" class="nav child_menu">
+	                      <li id="systemMgmt_codeList"><a href="/systemMgmt/codeList" onclick="clickMenu('systemMgmt_codeList');">코드관리</a></li>
+	                      <li id="systemMgmt_classificationMgmt"><a href="/systemMgmt/classificationMgmt" onclick="clickMenu('systemMgmt_classificationMgmt');">분류관리</a></li>
+	                    </ul>
+	                  </li>
+	                  <li id="sub_dms_linkTarget"><a>연계대상 관리<span class="fa fa-chevron-down"> </span></a>
+	                    <ul id="menu_sub_dms_linkTarget" class="nav child_menu">
+	                      <li id="linkTarget_list"><a href="/linkTarget/list" onclick="clickMenu('linkTarget_list');">데이터 분배설정</a></li>
+	                    </ul>
+	                  </li>
+	                  <li id="sub_dms_dataMgmt"><a>데이터 관리<span class="fa fa-chevron-down"> </span></a>
+	                    <ul id="menu_sub_dms_dataMgmt" class="nav child_menu">
+	                      <li id="dataMgmt_matchKey"><a href="/dataMgmt/matchKey" onclick="clickMenu('dataMgmt_matchKey');">Match Key</a></li>
+	                      <li id="dataMgmt_table"><a href="/dataMgmt/table" onclick="clickMenu('dataMgmt_table');">Table 조회</a></li>
+	                    </ul>
+	                  </li>
+                    </ul>
+                  </li>
                   
-<!--                 </ul> -->
+                </ul>
               </div>
             </div>
             <div class="sidebar-footer hidden-small"><a data-toggle="tooltip" data-placement="top" title="로그아웃"><span class="glyphicon glyphicon-off" aria-hidden="Logout"></span></a></div>
