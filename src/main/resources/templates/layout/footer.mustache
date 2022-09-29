@@ -75,48 +75,53 @@
 	   	  	  }	
 	  		  
 	  		  if(res.data != null && res.data.length > 0){
-	  			  let l_menu = res.data[0].children;
+	  			  let root_menu = res.data;
 		  		  
 		  		  let str = '';
 		  		  str += '<ul class="nav side-menu">';
-		  		  
-		  			$.each(l_menu, function (l_idx, l_item) {
-		  			  let m_menu = l_item.children;
-		  			  str += '	<li>'
-		  			  str += '		<a><i class="'+l_item.icon+'"></i>'+l_item.menuName+'<span class="fa fa-chevron-down"> </span></a>';
-		  			  
-		  			  if(m_menu.length > 0){
-		  				  str += '	<ul class="nav child_menu">';
-		  					$.each(m_menu, function (m_idx, m_item) {
-		  						let s_menu = m_item.children;
-		  						if(s_menu.length > 0){
-		  							str += '		<li><a>'+m_item.menuName+'<span class="fa fa-chevron-down"> </span></a>';
-		  							str += '			<ul class="nav child_menu">';
-		  							$.each(s_menu, function (s_idx, s_item) {
-		  								str += '			<li id="'+s_item.id+'">';
-		  								if(s_item.menuPath){
-			  		    					  str += '			<a href="'+s_item.menuPath+'" onclick="clickMenu(\''+s_item.id+'\');">'+s_item.menuName+'</a>';
-			  		    				  }else{
-			  		    					  str += '			<a>'+s_item.menuName+'</a>';
-			  		    				  }
-		  								str += '			</li>';
-		  							});
-		  							str += '			</ul>';
-		  						}else{
-			    				  str += '		<li id="'+m_item.id+'">';
-			    				  if(m_item.menuPath){
-			    					  str += '			<a href="'+m_item.menuPath+'" onclick="clickMenu(\''+m_item.id+'\');">'+m_item.menuName+'</a>';
-			    				  }else{
-			    					  str += '			<a>'+m_item.menuName+'</a>';
-			    				  }
-			    				  str += '		</li>';
-		  						}
-			    			  });
-			    			  str += '	</ul>';
-		  			  }
-			    		  str += '	</li>';
-	  			  
-	  		  		});
+		  			$.each(root_menu, function (idx, item) {
+		  				let l_menu = item.children;
+		  				console.log(item.orderNum);
+		  				if(item.orderNum == 99){
+				  			$.each(l_menu, function (l_idx, l_item) {
+				  			  let m_menu = l_item.children;
+				  			  str += '	<li>'
+				  			  str += '		<a><i class="'+l_item.icon+'"></i>'+l_item.menuName+'<span class="fa fa-chevron-down"> </span></a>';
+				  			  
+				  			  if(m_menu.length > 0){
+				  				  str += '	<ul class="nav child_menu">';
+				  					$.each(m_menu, function (m_idx, m_item) {
+				  						let s_menu = m_item.children;
+				  						if(s_menu.length > 0){
+				  							str += '		<li><a>'+m_item.menuName+'<span class="fa fa-chevron-down"> </span></a>';
+				  							str += '			<ul class="nav child_menu">';
+				  							$.each(s_menu, function (s_idx, s_item) {
+				  								str += '			<li id="'+s_item.id+'">';
+				  								if(s_item.menuPath){
+					  		    					  str += '			<a href="'+s_item.menuPath+'" onclick="clickMenu(\''+s_item.id+'\');">'+s_item.menuName+'</a>';
+					  		    				  }else{
+					  		    					  str += '			<a>'+s_item.menuName+'</a>';
+					  		    				  }
+				  								str += '			</li>';
+				  							});
+				  							str += '			</ul>';
+				  						}else{
+					    				  str += '		<li id="'+m_item.id+'">';
+					    				  if(m_item.menuPath){
+					    					  str += '			<a href="'+m_item.menuPath+'" onclick="clickMenu(\''+m_item.id+'\');">'+m_item.menuName+'</a>';
+					    				  }else{
+					    					  str += '			<a>'+m_item.menuName+'</a>';
+					    				  }
+					    				  str += '		</li>';
+				  						}
+					    			  });
+					    			  str += '	</ul>';
+				  			  }
+					    		  str += '	</li>';
+			  			  
+			  		  		});
+		  				}
+		  			});
   		  
 			  		  str += '</ul>';
 			  		  $("#menu_selection").html(str);
