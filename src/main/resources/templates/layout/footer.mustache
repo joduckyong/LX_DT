@@ -70,7 +70,6 @@
 		        async: false,
 		    }).done(function (res) {
 		    	
-		    	console.log(res)
 	  		  if(errorMsg(res)){
 		          	 return;  
 	   	  	  }	
@@ -78,7 +77,7 @@
 	  		  if(res.data != null && res.data.length > 0){
 	  			  if(res.data == 'noLogin'){	//로그인 안했을 경우
 	  				  $("#side_menu").show();
-	  			  }else if(res.data == 'noUser'){
+	  			  }else if(res.data == 'noUser'){	//사용자 없을 경우
 	  					$(".right_col").empty();
 	  			  }else{
 	  				let root_menu = res.data;
