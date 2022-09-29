@@ -19,6 +19,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
@@ -42,7 +43,9 @@ public class LoginController {
 	private LoginService loginService;
 	
 	@GetMapping("/loginTest")
-	public String loginTest(ModelMap model) throws Exception{
+	public String loginTest(ModelMap model, @RequestParam String userMenuId) throws Exception{
+		
+		model.addAttribute("userId", userMenuId);
 		
 		return "login/loginTest";
 	}	
