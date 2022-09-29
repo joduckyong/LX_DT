@@ -88,15 +88,14 @@ public class LoginController {
 		map.put("sysType", 1);
 		
 		String body = "";
-		if(userId != null && !"".equals(userId)) {
-			if("noUser".equals(userId)) {	//사용자 없을 경우
-				body = "{\"data\":\"noUser\"}";
-			}else {
-				body = loginService.getLoginUser(url, session.getId(), map);
-			}
-			
-		}else {	//로그인 안했을 경우
+		
+		
+		if("noUser".equals(userId)) {	//사용자 없을 경우
+			body = "{\"data\":\"noUser\"}";
+		}else if("noLogin".equals(userId)){
 			body = "{\"data\":\"noLogin\"}";
+		}else {
+			body = loginService.getLoginUser(url, session.getId(), map);
 		}
 		
 		return body;
@@ -108,7 +107,7 @@ public class LoginController {
 	public String noLogin(ModelMap model, HttpSession session) throws Exception{
 		log.info("noLogin");
 		
-		session.removeAttribute("userId");
+		session.setAttribute("userId", "noLogin");
 		
 		return "/";
 	}
