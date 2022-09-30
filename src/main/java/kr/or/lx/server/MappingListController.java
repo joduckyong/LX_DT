@@ -45,7 +45,7 @@ public class MappingListController {
 		
 		String userId = (String) session.getAttribute("userId");
 		
-		if(userId == null) {
+		if(userId == "noLogin") {
 			userId = nonUserId;
 		}
 		
