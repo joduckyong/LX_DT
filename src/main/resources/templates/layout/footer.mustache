@@ -79,6 +79,7 @@
 	  				  $("#side_menu").show();
 	  			  }else if(res.data == 'noUser'){	//사용자 없을 경우
 	  					$(".right_col").empty();
+	  					$("#menu_selection").empty();
 	  			  }else{
 	  				let root_menu = res.data;
 			  		  
@@ -129,12 +130,17 @@
 	  		  
 				  		  str += '</ul>';
 				  		  $("#menu_selection").html(str);
+				  		  
+// 				  		if(targetUrl == '/'){
+// 				  			firstMenu();
+// 						}
 	  			  }
 	  			  
 	  				selectedMenu();
 	  			  
 				}else{
 					$(".right_col").empty();
+					$("#menu_selection").empty();
 				}
 		    }).fail(function (error) {
 		        alert(JSON.stringify(error));
@@ -151,6 +157,25 @@
 		$("#"+menuId).parents(".child_menu").css("display","block");
 		$("#"+menuId).parent().parent().attr("class","active");
 		$("#"+menuId).attr("class","current-page");
+		
+	}
+	
+	//초기 페이지 선택(메뉴권한)
+	const firstMenu = function(){
+		let menuId = '';
+		let menuUrl = '';
+		$(".child_menu").find("li").each(function(){
+			let aId = $(this).attr("id");
+			if(aId){
+				menuId = aId;
+				menuUrl = $(this).find("a").attr("href");
+				return false;
+			}
+		});
+		sessionStorage.setItem('menuId', menuId);
+		if(menuUrl){
+			location.href=menuUrl;
+		}
 		
 	}
 	
