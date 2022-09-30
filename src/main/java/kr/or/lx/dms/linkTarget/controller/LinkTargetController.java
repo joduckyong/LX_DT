@@ -2,6 +2,8 @@ package kr.or.lx.dms.linkTarget.controller;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,9 @@ public class LinkTargetController {
     
     @Value("${linkTarget.target.url}")
     private String targetUrl;	
+    
+    @Value("${login.userId}")
+    private String nonUserId;
     
 	@Autowired
 	private ApiService<?> apiService;
@@ -55,10 +60,17 @@ public class LinkTargetController {
 	
 	@ResponseBody
 	@PostMapping("{apiId}")
-	public Object linkTargetApi(@RequestBody Map<String, Object> param, ModelMap model) throws Exception{
+	public Object linkTargetApi(@RequestBody Map<String, Object> param, HttpSession session, ModelMap model) throws Exception{
 		log.info("dataSetApi");
 		
+		String userId = (String) session.getAttribute("userId");
+		
+		if(userId == null) {
+			userId = nonUserId;
+		}
+		
 		String url = apiUrl+param.get("url");
+		param.put("userId", String.valueOf(userId));
 		
 		ResponseEntity<?> responseEntity = apiService.post(url, param);
 		Object object = responseEntity.getBody();

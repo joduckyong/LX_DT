@@ -2,6 +2,8 @@ package kr.or.lx.dms.systemMgmt.controller;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +24,10 @@ import lombok.extern.slf4j.Slf4j;
 public class SystemMgmtController {
 	
     @Value("${dms.api.url}")
-    private String dmsApiUrl;	
+    private String dmsApiUrl;
+    
+    @Value("${login.userId}")
+    private String nonUserId;
     
 	@Autowired
 	private ApiService<?> apiService;
@@ -43,10 +48,17 @@ public class SystemMgmtController {
 	
 	@ResponseBody
 	@PostMapping("{apiId}")
-	public Object systemMgmtApi(@RequestBody Map<String, Object> param, ModelMap model) throws Exception{
+	public Object systemMgmtApi(@RequestBody Map<String, Object> param, HttpSession session, ModelMap model) throws Exception{
 		log.info("systemMgmtApi");
 		
+		String userId = (String) session.getAttribute("userId");
+		
+		if(userId == null) {
+			userId = nonUserId;
+		}
+		
 		String url = dmsApiUrl+param.get("url");
+		param.put("user_id", String.valueOf(userId));
 		
 		ResponseEntity<?> responseEntity = apiService.post(url, param);
 		Object object = responseEntity.getBody();

@@ -2,6 +2,8 @@ package kr.or.lx.dms.common.controller;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,9 @@ public class CommonController {
     
     @Value("${linkTarget.api.url}")
     private String linkTargetApiUrl;
+    
+    @Value("${login.userId}")
+    private String nonUserId;
 
 	@Autowired
 	private ApiService<?> apiService;
@@ -33,10 +38,17 @@ public class CommonController {
 	//공통코드
 	@ResponseBody
 	@PostMapping("{apiId}")
-	public Object commonCode(@RequestBody Map<String, Object> param, ModelMap model) throws Exception{
+	public Object commonCode(@RequestBody Map<String, Object> param, HttpSession session, ModelMap model) throws Exception{
 		log.info("commonCode");
 		
+		String userId = (String) session.getAttribute("userId");
+		
+		if(userId == null) {
+			userId = nonUserId;
+		}
+		
 		String url = dmsApiUrl+param.get("url");
+		param.put("user_id", String.valueOf(userId));
 		
 		ResponseEntity<?> responseEntity = apiService.get(url);
 		Object object = responseEntity.getBody();
@@ -47,10 +59,17 @@ public class CommonController {
 	//연계대상 관리 공통코드
 	@ResponseBody
 	@PostMapping("/linkTarget/{apiId}")
-	public Object linkTargetCommonCode(@RequestBody Map<String, Object> param, ModelMap model) throws Exception{
+	public Object linkTargetCommonCode(@RequestBody Map<String, Object> param, HttpSession session, ModelMap model) throws Exception{
 		log.info("linkTargetCommonCode");
 		
+		String userId = (String) session.getAttribute("userId");
+		
+		if(userId == null) {
+			userId = nonUserId;
+		}
+		
 		String url = linkTargetApiUrl+param.get("url");
+		param.put("userId", String.valueOf(userId));
 		
 		ResponseEntity<?> responseEntity = apiService.get(url);
 		Object object = responseEntity.getBody();

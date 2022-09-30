@@ -2,6 +2,8 @@ package kr.or.lx.dms.dataMgmt.controller;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,9 @@ public class DataMgmtController {
 	
     @Value("${linkTarget.api.url}")
     private String apiUrl;	
+    
+    @Value("${login.userId}")
+    private String nonUserId;
     
 	@Autowired
 	private ApiService<?> apiService;
@@ -55,9 +60,16 @@ public class DataMgmtController {
      */
 	@ResponseBody
 	@PostMapping("{apiId}")
-	public Object dataMgmtApi(@RequestBody Map<String, Object> param, ModelMap model) throws Exception{
+	public Object dataMgmtApi(@RequestBody Map<String, Object> param, HttpSession session, ModelMap model) throws Exception{
+		
+		String userId = (String) session.getAttribute("userId");
+		
+		if(userId == null) {
+			userId = nonUserId;
+		}
 		
 		String url = apiUrl+param.get("url");
+		param.put("userId", String.valueOf(userId));
 		
 		ResponseEntity<?> responseEntity = apiService.post(url, param);
 		Object object = responseEntity.getBody();
