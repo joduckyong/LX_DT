@@ -58,7 +58,8 @@
 	const getMenu = function() {
 		
 		let targetUrl = window.location.pathname;
-		if(targetUrl == '/' || targetUrl == '/noLogin'){
+		let prevUrl = document.referrer;
+		if(targetUrl == '/' || targetUrl == '/noLogin' || prevUrl == ''){
 			sessionStorage.removeItem("menuId");
 		}
 		
@@ -177,6 +178,10 @@
 			location.href=menuUrl;
 		}
 		
+	}
+	
+	const removeMenuIdSession = function(){
+		sessionStorage.removeItem("menuId");
 	}
 	
 	getMenu();
