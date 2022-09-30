@@ -4,6 +4,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +35,9 @@ public class AnalysisSandboxController {
     @Value("${sandbox.api.url}")
     private String sandboxApiUrl;	
     
+	@Value("${login.userId}")
+    private String nonUserId;
+	
 	@Autowired
 	private ApiService<?> apiService;
 	
@@ -52,9 +57,16 @@ public class AnalysisSandboxController {
      */	
 	@ResponseBody
 	@PostMapping("{apiId}")
-	public Object analysisSandboxs(@RequestBody Map<String, Object> param, ModelMap model) throws Exception{
+	public Object analysisSandboxs(@RequestBody Map<String, Object> param, HttpSession session, ModelMap model) throws Exception{
+		
+		String userId = (String) session.getAttribute("userId");
+		
+		if(userId == null) {
+			userId = nonUserId;
+		}
 		
 		String url = sandboxApiUrl+param.get("url");
+		param.put("user_id", String.valueOf(userId));		
 		
 		ResponseEntity<?> responseEntity = apiService.post(url, param);
 		Object object = responseEntity.getBody();
@@ -68,21 +80,24 @@ public class AnalysisSandboxController {
 	 */	
 	@ResponseBody
 	@PostMapping("/file/{apiId}")
-	public Object analysisSandboxsFileUpload(MultipartHttpServletRequest multipartRequest, ModelMap model) throws Exception{
+	public Object analysisSandboxsFileUpload(MultipartHttpServletRequest multipartRequest, HttpSession session, ModelMap model) throws Exception{
 		log.info("param : "+ObjectUtils.isEmpty(multipartRequest));
 		
+		String userId = (String) session.getAttribute("userId");
+		
+		if(userId == null) {
+			userId = nonUserId;
+		}
+		
 		String url = sandboxApiUrl+multipartRequest.getParameter("url");
-		String creator_id = multipartRequest.getParameter("creator_id");
-		String modifier_id = multipartRequest.getParameter("modifier_id");
-		String user_id = multipartRequest.getParameter("user_id");
 		String menu_id = multipartRequest.getParameter("menu_id");
 		String image_dataset_id = multipartRequest.getParameter("image_dataset_id");
 		String anals_data_sect_cd = multipartRequest.getParameter("anals_data_sect_cd");
 		
 		MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-		body.add("creator_id", creator_id);
-		body.add("modifier_id", modifier_id);
-		body.add("user_id", user_id);
+		body.add("creator_id", userId);
+		body.add("modifier_id", userId);
+		body.add("user_id", userId);
 		body.add("menu_id", menu_id);
 		body.add("image_dataset_id", image_dataset_id);
 		body.add("anals_data_sect_cd", anals_data_sect_cd);
