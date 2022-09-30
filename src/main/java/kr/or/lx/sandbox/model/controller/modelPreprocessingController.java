@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +39,9 @@ public class modelPreprocessingController {
 	@Value("${sandbox.api.url}")
     private String sandboxApiUrl;	
     
+	@Value("${login.userId}")
+    private String nonUserId;
+	
 	@Autowired
 	private ApiService<?> apiService;
 	
@@ -77,10 +82,16 @@ public class modelPreprocessingController {
      */		
 	@ResponseBody
 	@PostMapping("{apiId}")
-	public Object pretreatModelsMng(@RequestBody Map<String, Object> param, ModelMap model) throws Exception{
-		log.info("analysisModelsMng");
+	public Object pretreatModelsMng(@RequestBody Map<String, Object> param, HttpSession session, ModelMap model) throws Exception{
+		
+		String userId = (String) session.getAttribute("userId");
+		
+		if(userId == null) {
+			userId = nonUserId;
+		}
 		
 		String url = sandboxApiUrl+param.get("url");
+		param.put("user_id", String.valueOf(userId));		
 		
 		ResponseEntity<?> responseEntity = apiService.post(url, param);
 		Object object = responseEntity.getBody();
@@ -94,10 +105,15 @@ public class modelPreprocessingController {
 	 */	
 	@ResponseBody
 	@PostMapping("/add/{apiId}")
-	public Object pretreatModelsEnroll(MultipartHttpServletRequest multipartRequest, ModelMap model) throws Exception{
+	public Object pretreatModelsEnroll(MultipartHttpServletRequest multipartRequest, HttpSession session, ModelMap model) throws Exception{
 		log.info("pretreatModelsEnroll");
 		log.info("param : "+ObjectUtils.isEmpty(multipartRequest));
 		
+		String userId = (String) session.getAttribute("userId");
+		
+		if(userId == null) {
+			userId = nonUserId;
+		}		
 		String url = sandboxApiUrl+multipartRequest.getParameter("url");
 		log.info("url : " + url);
 		
@@ -107,7 +123,11 @@ public class modelPreprocessingController {
 		while(params.hasMoreElements()) {
 			String name = (String)params.nextElement();
 			if(!"url".equals(name)) {
-				body.add(name, multipartRequest.getParameter(name));
+				if("creator".equals(name) || "modifier".equals(name) || "user_id".equals(name)) {
+					body.add(name, userId);
+				}else {
+					body.add(name, multipartRequest.getParameter(name));
+				}
 			}
 //		    System.out.println(name + " : " +multipartRequest.getParameter(name));
 		}

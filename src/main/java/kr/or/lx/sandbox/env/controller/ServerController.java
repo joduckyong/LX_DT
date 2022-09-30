@@ -2,6 +2,8 @@ package kr.or.lx.sandbox.env.controller;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,9 @@ public class ServerController {
 	@Value("${sandbox.api.url}")
     private String sandboxApiUrl;	
     
+	@Value("${login.userId}")
+    private String nonUserId;
+	
 	@Autowired
 	private ApiService<?> apiService;
 	
@@ -56,10 +61,17 @@ public class ServerController {
      */		
 	@ResponseBody
 	@PostMapping("{apiId}")
-	public Object serverMng(@RequestBody Map<String, Object> param, ModelMap model) throws Exception{
+	public Object serverMng(@RequestBody Map<String, Object> param, HttpSession session, ModelMap model) throws Exception{
 		log.info("serverMng");
 		
+		String userId = (String) session.getAttribute("userId");
+		
+		if(userId == null) {
+			userId = nonUserId;
+		}
+		
 		String url = sandboxApiUrl+param.get("url");
+		param.put("user_id", String.valueOf(userId));
 		
 		ResponseEntity<?> responseEntity = apiService.post(url, param);
 		Object object = responseEntity.getBody();
