@@ -2,6 +2,8 @@ package kr.or.lx.server;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,9 @@ public class AgentController {
 	
 	@Value("${agent.server.api.url}")
     private String agentApiUrl;    
+	
+	@Value("${login.userId}")
+    private String nonUserId;
 	
     @Autowired
 	private ApiService<?> apiService;
@@ -50,9 +55,16 @@ public class AgentController {
 
 	@ResponseBody
 	@PostMapping("{apiId}")
-	public Object agentPost(@RequestBody Map<String, Object> param, ModelMap model) throws Exception{
+	public Object agentPost(@RequestBody Map<String, Object> param, HttpSession session, ModelMap model) throws Exception{
+		
+		String userId = (String) session.getAttribute("userId");
+		
+		if(userId == null) {
+			userId = nonUserId;
+		}
 		
 		String url = agentApiUrl+param.get("url");
+		param.put("user_id", String.valueOf(userId));
 		
 		ResponseEntity<?> responseEntity = apiService.post(url, param);
 		Object object = responseEntity.getBody();
