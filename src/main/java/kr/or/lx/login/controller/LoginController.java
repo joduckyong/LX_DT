@@ -70,7 +70,7 @@ public class LoginController {
 		}
 		
 //		return userId;
-		return "/";
+		return "redirect:/";
 	}
 	
 	//회원메뉴
