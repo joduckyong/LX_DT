@@ -44,7 +44,7 @@ public class LoginController {
 	}	
 
 	//로그인 계정 받기
-//	@ResponseBody
+	@ResponseBody
 	@PostMapping("/postLogin")
 	public String postLogin(@RequestBody Map<String, Object> param, ModelMap model, HttpServletRequest request) throws Exception{
 		log.info("postLogin");
