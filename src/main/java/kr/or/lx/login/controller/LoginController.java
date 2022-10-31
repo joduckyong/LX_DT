@@ -1,9 +1,11 @@
 package kr.or.lx.login.controller;
 
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +46,9 @@ public class LoginController {
 	}	
 
 	//로그인 계정 받기
-//	@ResponseBody
+	@ResponseBody
 	@PostMapping("/postLogin")
-	public String postLogin(@RequestBody Map<String, Object> param, ModelMap model, HttpServletRequest request) throws Exception{
+	public String postLogin(@RequestBody Map<String, Object> param, ModelMap model, HttpServletRequest request, HttpServletResponse response) throws Exception{
 		log.info("postLogin");
 		
 		String url = loginApiUrl+"/korea-admin-1.0.0/api/ko-user/get";
@@ -69,8 +71,12 @@ public class LoginController {
 			session.setAttribute("userId", "noUser");
 		}
 		
-//		return userId;
-		return "/";
+        response.setContentType("text/html; charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        out.println("<script>window.location.replace(\"http://220.120.28.20:8811\");</script>");
+        out.flush(); 
+        
+		return userId;
 	}
 	
 	//회원메뉴
