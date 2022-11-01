@@ -77,7 +77,8 @@ public class LoginController {
         response.setContentType("text/html; charset=UTF-8");
         
         PrintWriter out = response.getWriter();
-        out.println("<script>window.location.href='/'</script>");
+        String domain = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort();
+        out.println("<script>window.location.replace(\""+domain+"\");</script>");
         out.flush(); 
         
 		return out;
