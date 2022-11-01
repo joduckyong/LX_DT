@@ -34,6 +34,9 @@ public class LoginController {
 	@Value("${login.api.url}")
     private String loginApiUrl;
 	
+	@Value("${cross.domain.link2}")
+	private String crossDomainLink2;
+	
 	@Autowired
 	private LoginService loginService;
 	
@@ -78,7 +81,9 @@ public class LoginController {
         
         PrintWriter out = response.getWriter();
         String domain = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort();
-        out.println("<script>window.location.replace(\""+domain+"\");</script>");
+        log.info("domain:"+domain);
+        log.info("crossDomainLink2:"+crossDomainLink2);
+        out.println("<script>window.location.replace('"+domain+"');</script>");
         out.flush(); 
         
 		return out;
