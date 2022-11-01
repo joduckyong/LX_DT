@@ -48,7 +48,7 @@ public class LoginController {
 	//로그인 계정 받기
 	@ResponseBody
 	@PostMapping("/postLogin")
-	public String postLogin(@RequestBody Map<String, Object> param, ModelMap model, HttpServletRequest request, HttpServletResponse response) throws Exception{
+	public PrintWriter postLogin(@RequestBody Map<String, Object> param, ModelMap model, HttpServletRequest request, HttpServletResponse response) throws Exception{
 		log.info("postLogin");
 		
 		String url = loginApiUrl+"/korea-admin-1.0.0/api/ko-user/get";
@@ -71,12 +71,16 @@ public class LoginController {
 			session.setAttribute("userId", "noUser");
 		}
 		
+		response.setHeader("Cache-Control","no-cache");
+		response.setHeader("Pragma","no-cache");
+	    response.setDateHeader("Expires",0);
         response.setContentType("text/html; charset=UTF-8");
+        
         PrintWriter out = response.getWriter();
-        out.println("<script>window.location.replace(\"http://220.120.28.20:8811\");</script>");
+        out.println("<script>window.location.href='/'</script>");
         out.flush(); 
         
-		return userId;
+		return out;
 	}
 	
 	//회원메뉴
