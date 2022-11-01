@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -51,7 +52,7 @@ public class LoginController {
 	//로그인 계정 받기
 	@ResponseBody
 	@PostMapping("/postLogin")
-	public PrintWriter postLogin(@RequestBody Map<String, Object> param, ModelMap model, HttpServletRequest request, HttpServletResponse response) throws Exception{
+	public void postLogin(@RequestBody Map<String, Object> param, ModelMap model, HttpServletRequest request, HttpServletResponse response) throws Exception{
 		log.info("postLogin");
 		
 		String url = loginApiUrl+"/korea-admin-1.0.0/api/ko-user/get";
@@ -83,8 +84,7 @@ public class LoginController {
         log.info("myDomainLink:"+myDomainLink);
         out.println("<script>window.location.replace(\""+myDomainLink+"\");</script>");
         out.flush(); 
-        
-		return out;
+        out.close();
 	}
 	
 	//회원메뉴
