@@ -25,14 +25,14 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 	@Value("${cross.domain.link1}")
 	private String crossDomainLink1;
 	
-	@Value("${cross.domain.link2}")
-	private String crossDomainLink2;
+	@Value("${my.domain.link}")
+	private String myDomainLink;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
       // 모든 uri에 대해 http://220.120.28.20:8087, http://220.120.28.20:8811 도메인은 접근을 허용한다.
         registry.addMapping("/**")
-                .allowedOrigins(crossDomainLink1, crossDomainLink2);
+                .allowedOrigins(crossDomainLink1, myDomainLink);
     }
     
 	@Override
